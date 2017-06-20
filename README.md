@@ -1,2 +1,2 @@
 # gisidia
-A dashboard builder for map visualizations
+A dashboard builder library for map visualizations
