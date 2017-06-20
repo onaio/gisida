@@ -31,8 +31,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                use: ['react-hot-loader', 'jsx-loader', 'babel-loader'], exclude: /node_modules/
+                test: /\.jsx?$/,
+                use: ['react-hot-loader', 'jsx-loader', 'babel-loader'],
+                exclude: /node_modules/
             },
             {
                 test: /\.png$/,
@@ -67,7 +68,11 @@ module.exports = {
                 use: 'dsv-loader'
             }
         ]
-    }
+    },
+    
+    resolve: {
+        extensions: ['.js', '.jsx', '.css', '.scss']
+    }, 
 
 };
 

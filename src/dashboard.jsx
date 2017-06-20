@@ -1,16 +1,17 @@
 import React from 'react';
 window.React = React;
+
 import { render } from 'react-dom';
 import jQuery from 'jquery';
 window.$ = jQuery;
 window.jQuery = jQuery;
+
 import App from './components/App/App';
 import Login from './components/Login/Login';
 import { isLoggedIn } from './components/Login/Login';
 import config from './config';
 
 require('bootstrap-loader');
-
 
 const layerData = config.LAYERS;
 const sectorJson = config.SECTORS;
@@ -26,7 +27,10 @@ class Dashboard {
     }
 
     if (isLoggedIn()) {
-      render(<App sectorData={sectorData} layerData={layerData} styles={styles} />, document.getElementById('app'));
+      render(
+        <App sectorData={sectorData} layerData={layerData} styles={styles} />,
+        document.getElementById('app'),
+      );
     } else {
       render(<Login />, document.getElementById('app'));
     }
