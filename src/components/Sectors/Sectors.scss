@@ -1,0 +1,106 @@
+.sectors-menu {
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  color: #555;
+  z-index: 1000;
+  overflow-y: scroll;
+  background: #F7F6EF;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+
+  .close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 1000;
+    color: #555;
+    display: block;
+  }
+    
+  ul {
+    list-style-type: none;
+  }
+  
+  .sectors {
+    padding: 0;
+    overflow-y: scroll;
+    
+    li.sector a {
+      color: #555;
+      display: block;
+      font-weight: 600;
+      padding: 25px 15px;
+      background: rgba(255,255,255, 0.4);
+      border-bottom: 1px solid #eee;
+      
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        color: #555;
+      }
+    }
+    
+  }
+  
+ .layers {
+   padding: 20px 0 20px 20px;
+   display: none;
+   
+    li.layer {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+ }
+  
+  label {
+    color: #555;
+    font-weight: normal;
+    font-size: 12px;
+    width: 80%;
+    display: block;
+    margin: 0 0 10px 20px;
+  }
+  
+  input[type='checkbox'] {
+    position: absolute;
+    left: 0;
+    top: -2px;
+  }
+  
+}
+
+.open-btn {
+  position: fixed;
+  display: block;
+  color: #333;
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 32px;
+  line-height:2;
+  font-size: 15px;
+  text-align: center;
+  top: 10px;
+  display: none;
+}
+
+#sector-menu-1-wrapper .open-btn {
+  left: 90px;
+}
+#sector-menu-2-wrapper .open-btn {
+  left: 53%;
+}
+
+
+#sector-menu-1 {
+  height: 100%;
+  top: 0;
+  left: 80px;
+}
+#sector-menu-2 {
+  height: 100%;
+  top: 0;
+  left: 52%;
+  display: none;
+}
