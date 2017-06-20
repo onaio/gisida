@@ -1,12 +1,12 @@
 require('./FilterSelector.scss');
-import { Component } from 'react'
+import { Component } from 'react';
 
 class FilterSelector extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.layerObj && nextProps.layerObj.filterOptions) {
       let filterOptions = nextProps.layerObj.filterOptions.map((opt) => {
-        let optVal = {};
+        const optVal = {};
         optVal[opt] = true;
         return optVal;
       });
@@ -18,9 +18,9 @@ class FilterSelector extends Component {
   }
 
   updateOptions(val) {
-    let options = this.state.options;
+    const options = this.state.options;
     options[val] = !options[val];
-    this.setState({ options: options });
+    this.setState({ options });
     this.props.filterData(options);
   }
 
@@ -29,27 +29,27 @@ class FilterSelector extends Component {
       return (
         <nav id="filter-group" className="filter-group">
           {Object.keys(this.state.options).map((val, i) =>
-            <span key={"label_" + i}>
+            (<span key={`label_${i}`}>
               <input
                 type="checkbox"
                 id={val}
-                key={"input_" + i}
+                key={`input_${i}`}
                 value={val}
                 onChange={(e) => {
                   this.updateOptions(e.target.value);
                 }}
-                checked={this.state.options[val]}></input>
-              <label htmlFor={val} key={"label_" + i}>
+                checked={this.state.options[val]}
+              />
+              <label htmlFor={val} key={`label_${i}`}>
                 {val}
               </label>
-            </span>)
+            </span>))
           }
         </nav>
       );
-    } else {
-      return (<nav></nav>);
     }
+    return (<nav />);
   }
 }
 
-export default FilterSelector
+export default FilterSelector;

@@ -1,4 +1,4 @@
-var gisida = module.exports = {};
+const gisida = module.exports = {};
 
 
 gisida.version = require('../package.json').version;
@@ -9,9 +9,9 @@ gisida.Dashboard = require('./dashboard.js');
 const config = require('./config');
 mapboxgl.config = config;
 
-gisida.config = ""
+gisida.config = '';
 
 Object.defineProperty(gisida, 'accessToken', {
-    get: function () { return config.ACCESS_TOKEN; },
-    set: function (token) { config.ACCESS_TOKEN = token; }
-});   
+  get() { return config.ACCESS_TOKEN; },
+  set(token) { config.ACCESS_TOKEN = token; },
+});
