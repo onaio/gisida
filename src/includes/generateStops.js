@@ -11,7 +11,7 @@ const radius = [
   '21',
 ];
 
-const defaultColor = "transparent";
+const defaultColor = 'transparent';
 const getColorBrewerColor = function (c, numColors) {
   if (colorbrewer[c]) {
     return colorbrewer[c][numColors];
@@ -26,8 +26,8 @@ const getColor = function (c, i) {
 };
 
 function getStops(layer) {
-  let colorsStops = [];
-  let radiusStops = [];
+  const colorsStops = [];
+  const radiusStops = [];
   let breaks = [];
 
   // Sort data based on data value
@@ -53,17 +53,17 @@ function getStops(layer) {
   const rangePeriod = dataList.map(l => l.periods);
 
   // Split the data into nClusters
-  let cluster = layer.clusters ? ss.ckmeans(sortedData, layer.clusters) : null;
-  breaks = layer.limit ? layer.limit : cluster.map((cluster) => cluster[cluster.length - 1]);
+  const cluster = layer.clusters ? ss.ckmeans(sortedData, layer.clusters) : null;
+  breaks = layer.limit ? layer.limit : cluster.map(cluster => cluster[cluster.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
-  let data = layer.limit ? rangeData : sortedData;
-  let osmIDs = layer.limit ? rangeID : osmID; 
+  const data = layer.limit ? rangeData : sortedData;
+  const osmIDs = layer.limit ? rangeID : osmID;
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
-        colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i),]);
+        colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
         if (!OSMIDsExist) {
           radiusStops.push([data[k], (Number(radius[i]))]);
         } else {
@@ -75,14 +75,14 @@ function getStops(layer) {
   }
 
   if (layer.periods) {
-    let uniqPeriods = [...new Set(layer.periods)];
-    let periodStops = [];
-    let periodRadius = [];
+    const uniqPeriods = [...new Set(layer.periods)];
+    const periodStops = [];
+    const periodRadius = [];
     for (let j = 0; j < uniqPeriods.length; j += 1) {
       periodStops[j] = [];
       periodRadius[j] = [];
     }
-    let periodProp = layer.limit ? rangePeriod : period;
+    const periodProp = layer.limit ? rangePeriod : period;
     for (let m = 0; m < periodProp.length; m += 1) {
       for (let n = 0; n < uniqPeriods.length; n += 1) {
         if (periodProp[m] === uniqPeriods[n]) {
@@ -119,5 +119,5 @@ export default function (layer, timefield) {
     }
   }
 
-  return getStops({data, colors, osmIDs, periods, limit, clusters});
+  return getStops({ data, colors, osmIDs, periods, limit, clusters });
 }
