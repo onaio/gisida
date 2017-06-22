@@ -75,14 +75,12 @@ class App extends Component {
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
     const styles = this.props.styles;
+    const appName = this.props.appConfig.appName
+    const appNameCaps = this.props.appConfig.appNameCaps
 
     return (
       <div>
-        <div className="brand">
-          <a className="brand-icon">UKAID</a>
-          <div className="brand-title"><span className="white">Somalia</span>&nbsp;&nbsp; Integrated Response Platform</div>
-        </div>
-        <Menu toggleSingleScreen={singleScreen} toggleSplitScreen={splitScreen} />
+        <Menu toggleSingleScreen={singleScreen} toggleSplitScreen={splitScreen} appConfig={this.props.appConfig}/>
         <Map mapId="map-1" layerData={layerData} layers={layers} styles={styles} />
         <Map mapId="map-2" layerData={layerData} layers={layers} styles={styles} />
         <Sectors sectorMenuId="sector-menu-1" mapTargetId="map-1" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />

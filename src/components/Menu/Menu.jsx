@@ -9,11 +9,12 @@ const logOut = (e) => {
   location.reload();
 };
 
-const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f }) =>
+const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConfig = f =>f }) =>
   (<div className="menu">
     <div className="brand">
-      <a className="brand-icon">UKAID</a>
-      <div className="brand-title"><span className="white">Somalia</span>&nbsp;&nbsp; Integrated Response Platform</div>
+      <img src={appConfig.appIcon} alt="UKAID" className="brand-icon" />
+      <div className="brand-title">
+        <span className="white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appName}</div>
     </div>
     <ul>
       <li><a href="#" onClick={toggleSingleScreen}><span className="glyphicon glyphicon-home" /></a></li>

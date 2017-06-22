@@ -1,4 +1,10 @@
 const config = {
+  APP: {
+    container: 'app',
+    appIcon: 'gisida-sample.png',
+    appName: 'Gisida',
+    appNameDesc: 'Dashboard',
+  },
   LOCATIONS: {},
   LAYERS: {},
   SECTORS: {
@@ -12,7 +18,6 @@ const config = {
     label: 'Satelitte Streets',
     style: 'mapbox://styles/mapbox/satellite-streets-v9',
   }],
-  ACCESS_TOKEN: '',
 };
 
 export default config;
