@@ -24,19 +24,19 @@ class Map extends Component {
     this.state = {
       layers: props.layers.layers,
       layersObj: [],
-      style: 'mapbox://styles/ona/cj13lidxb00062rpd2o5vph3q',
+      style: this.props.mapConfig.mapDefaultStyle,
       styles: props.styles,
     };
   }
 
   componentDidMount() {
     const _self = this;
-    mapboxgl.accessToken = 'pk.eyJ1Ijoib25hIiwiYSI6IlVYbkdyclkifQ.0Bz-QOOXZZK01dq4MuMImQ';
+    mapboxgl.accessToken = this.props.mapConfig.mapAccessToken;
     this.map = new mapboxgl.Map({
       container: this.props.mapId,
       style: this.state.style,
-      center: [42.516, 5.550],
-      zoom: 5,
+      center: this.props.mapConfig.mapCenter,
+      zoom: this.props.mapConfig.mapZoom,
     });
     window.maps.push(this.map);
     this.map.addControl(new mapboxgl.NavigationControl());
@@ -351,19 +351,31 @@ class Map extends Component {
      * CHART ==========================================================
      */
     if (layer.type === 'chart') {
-      const population = layer.source.data.map(d => d[layer.property.population]);
-      const clusters = ss.ckmeans(population, 6);
-      const dimensions = [40, 45, 50, 55, 60, 65];
+      const population = layer.source.data.map(d => d[layer.categories.total]);
+      const clusters = ss.ckmeans(population, layer.categories.clusters);
+      const dimensions = layer.categories.dimension;
 
       // create a DOM element for the marker
-      layer.source.data.forEach((district, index) => {
-        const total = district[layer.property.population];
-        const stressed = district[layer.property['ipc-2']] / total * 100;
-        const crisis = district[layer.property['ipc-3']] / total * 100;
-        const emergency = district[layer.property['ipc-4']] / total * 100;
-        const catastrophic = district[layer.property['ipc-5']] / total * 100;
-        const normal = 100 - (stressed + crisis + emergency + catastrophic);
+      layer.source.data.forEach((district) => {
+        const total = district[layer.categories.total];
+        let chartArr = [];
+        let chartProp = '';
+        let propTotal = 0;
         let dimension;
+
+        for (let i = 0; i < layer.categories.property.length; i += 1) {
+          chartArr.push({ color: layer.categories.color[i], y: parseInt(district[layer.categories.property[i]] / total * 100), label: layer.categories.label[i] });
+          propTotal += parseInt(district[layer.categories.property[i]] / total * 100);
+          chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: ${layer.categories.color[i]};"></span>${layer.categories.label[i]}: <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
+        }
+
+        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #DDDDDD;"></span>
+        Normal: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+        chartArr.splice(0, 0, {
+          color: '#DDDDDD',
+          y: (100 - propTotal),
+          label: 'Normal',
+        });
 
         for (let i = 0; i < clusters.length; i += 1) {
           if (clusters[i].includes(total)) {
@@ -372,42 +384,18 @@ class Map extends Component {
         }
 
         const chartData = [{
-          data: [{
-            color: '#DDDDDD',
-            y: normal,
-            label: 'Normal',
-          }, {
-            color: '#FFDC00',
-            y: stressed,
-            label: 'Stressed',
-          }, {
-            color: '#FF851B',
-            y: crisis,
-            label: 'Crisis',
-          }, {
-            color: '#FF4136',
-            y: emergency,
-            label: 'Emergency',
-          }, {
-            color: '#000',
-            y: catastrophic,
-            label: 'Catastrophic',
-          }],
-          size: '100%',
-          innerSize: '52%',
+          data: chartArr,
+          size: layer.chart.size,
+          innerSize: layer.chart.innerSize,
         }];
 
-        const content = `<div><b>${district.district_name}</b></div>` +
-          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #FF851B;"></span> Emergency: <b>${emergency.toFixed(1)}%</b></div>` +
-          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #FF4136;"></span> Crisis: <b>${crisis.toFixed(1)}%</b></div>` +
-          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #FFDC00;"></span> Stressed: <b>${stressed.toFixed(1)}%</b></div>` +
-          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #DDDDDD;"></span> Normal: <b>${normal.toFixed(1)}%</b></div>`;
+        const content = `<div><b>${district.district_name}</b></div>` + chartProp;
 
         const el = document.createElement('div');
         el.id = `chart-${district.district_osm_id}-${layer.id}-${_self.props.mapId}`;
         el.className = `marker-chart marker-chart-${layer.id}-${_self.props.mapId}`;
-        el.style.width = '60px';
-        el.style.height = '60px';
+        el.style.width = layer.chart.width;
+        el.style.height = layer.chart.height;
         $(el).attr('data-map', _self.props.mapId);
         $(el).attr('data-lng', district.longitude);
         $(el).attr('data-lat', district.latitude);
@@ -415,7 +403,7 @@ class Map extends Component {
 
         // add marker to map
         new mapboxgl.Marker(el, {
-          offset: [-50 / 2, -50 / 2],
+          offset: layer.chart.offset,
         })
           .setLngLat([district.longitude, district.latitude])
           .addTo(_self.map);
@@ -589,7 +577,7 @@ class Map extends Component {
       });
 
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId
-         }" class="legend-row">` + `<b>${layer.label}</b>` +
+        }" class="legend-row">` + `<b>${layer.label}</b>` +
         `<div class="legend-fill ${layer.categories ? 'legend-label' : ''}">` +
         `<ul>${legend_background}</ul></div>${layer.credit}</div>`);
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
@@ -631,9 +619,9 @@ class Map extends Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-      },
+          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+        },
       );
     }
   }

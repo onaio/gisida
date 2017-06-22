@@ -75,14 +75,24 @@ class App extends Component {
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
     const styles = this.props.styles;
-    const appName = this.props.appConfig.appName
-    const appNameCaps = this.props.appConfig.appNameCaps
 
     return (
       <div>
         <Menu toggleSingleScreen={singleScreen} toggleSplitScreen={splitScreen} appConfig={this.props.appConfig}/>
-        <Map mapId="map-1" layerData={layerData} layers={layers} styles={styles} locations={this.props.locations} />
-        <Map mapId="map-2" layerData={layerData} layers={layers} styles={styles} locations={this.props.locations} />
+        <Map
+          mapId="map-1"
+          layerData={layerData}
+          layers={layers} styles={styles}
+          locations={this.props.locations}
+          mapConfig={this.props.appConfig}
+        />
+        <Map
+          mapId="map-2"
+          layerData={layerData}
+          layers={layers} styles={styles}
+          locations={this.props.locations}
+          mapConfig={this.props.appConfig}
+        />
         <Sectors sectorMenuId="sector-menu-1" mapTargetId="map-1" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
         <Sectors sectorMenuId="sector-menu-2" mapTargetId="map-2" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
       </div>

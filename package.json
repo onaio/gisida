@@ -63,8 +63,6 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile-prod": "webpack -p --progress",
-    "compile-dev": "webpack -d --progress --watch",
     "eslint": "eslint src --ext=jsx --ext=js"
   }
 }
