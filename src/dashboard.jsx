@@ -9,30 +9,28 @@ window.jQuery = jQuery;
 import App from './components/App/App';
 import Login from './components/Login/Login';
 import { isLoggedIn } from './components/Login/Login';
-import config from './config';
+import defaultConfig from './config';
 
 require('bootstrap-loader');
 
-const layerData = config.LAYERS;
-const sectorJson = config.SECTORS;
-const styles = config.STYLES;
-
 class Dashboard {
   constructor(options) {
+    const container = document.getElementById(options.APP.container);
+    const config = Object.assign({}, defaultConfig, options);
+
     const sectorData = [];
-    for (const key in sectorJson) {
-      if (sectorJson.hasOwnProperty(key)) {
-        sectorData.push({ sector: key, layers: sectorJson[key].layers });
+    for (const key in config.SECTORS) {
+      if (config.SECTORS.hasOwnProperty(key)) {
+        sectorData.push({ sector: key, layers: config.SECTORS[key].layers });
       }
     }
 
     if (isLoggedIn()) {
       render(
-        <App sectorData={sectorData} layerData={layerData} styles={styles} />,
-        document.getElementById('app'),
-      );
+        <App sectorData={sectorData} layerData={config.LAYERS} styles={config.STYLES} />,
+        container);
     } else {
-      render(<Login />, document.getElementById('app'));
+      render(<Login />, container);
     }
   }
 }
