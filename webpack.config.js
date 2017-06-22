@@ -16,8 +16,8 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve('dist/'),
-        filename: 'gisida.js',
+        // path: path.resolve('dist/'),
+        filename: '../irfsomalia/assets/js/gisida.js',
         libraryTarget: 'var',
         library: 'gisida'
     },

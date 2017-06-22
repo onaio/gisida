@@ -14,7 +14,7 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
     <div className="brand">
       <img src={appConfig.appIcon} alt="UKAID" className="brand-icon" />
       <div className="brand-title">
-        <span className="white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appName}</div>
+        <span className="white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appNameDesc}</div>
     </div>
     <ul>
       <li><a href="#" onClick={toggleSingleScreen}><span className="glyphicon glyphicon-home" /></a></li>

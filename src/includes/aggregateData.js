@@ -1,8 +1,4 @@
-import config from '../config';
-
-const locations = config.locations;
-
-export default function (layerData, filterOptions) {
+export default function (layerData, locations, filterOptions) {
   let data = layerData.mergedData;
   let aggregated_data = [];
   // merge OSM Ids

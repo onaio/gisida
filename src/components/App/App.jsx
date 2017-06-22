@@ -81,8 +81,8 @@ class App extends Component {
     return (
       <div>
         <Menu toggleSingleScreen={singleScreen} toggleSplitScreen={splitScreen} appConfig={this.props.appConfig}/>
-        <Map mapId="map-1" layerData={layerData} layers={layers} styles={styles} />
-        <Map mapId="map-2" layerData={layerData} layers={layers} styles={styles} />
+        <Map mapId="map-1" layerData={layerData} layers={layers} styles={styles} locations={this.props.locations} />
+        <Map mapId="map-2" layerData={layerData} layers={layers} styles={styles} locations={this.props.locations} />
         <Sectors sectorMenuId="sector-menu-1" mapTargetId="map-1" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
         <Sectors sectorMenuId="sector-menu-2" mapTargetId="map-2" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
       </div>

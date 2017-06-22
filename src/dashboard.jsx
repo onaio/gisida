@@ -32,6 +32,7 @@ class Dashboard {
           layerData={config.LAYERS}
           styles={config.STYLES}
           appConfig={config.APP}
+          locations={config.LOCATIONS}
         />,
         container);
     } else {

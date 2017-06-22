@@ -121,12 +121,12 @@ class Map extends Component {
         q.awaitAll((error, data) => {
           const mergedData = [].concat.apply([], data);
           layerData.mergedData = mergedData;
-          layerData.source.data = aggregateData(layerData);
+          layerData.source.data = aggregateData(layerData, this.props.locations);
           layerData.loaded = true;
           renderData(layerData);
         });
       } else if (filterOptions) {
-        layerData.source.data = aggregateData(layerData, filterOptions);
+        layerData.source.data = aggregateData(layerData, this.props.locations, filterOptions);
         _self.addLayer(layerData);
       } else {
         // add the already processed layer
