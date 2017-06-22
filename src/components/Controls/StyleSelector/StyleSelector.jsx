@@ -7,11 +7,11 @@ function StyleSelector(props) {
         <a title="styles" className="leaflet-control-layers-toggle" />
         <form className="leaflet-control-layers-list">
           <div className="leaflet-control-layers-base">
-            {props.styles.map((b, i) =>
-              (<label key={`label_${i}`}>
+            {props.styles.map(b =>
+              (<label key={`label_${b.label}`} htmlFor="styles">
                 <input
                   readOnly
-                  key={`input_${i}`}
+                  key={`input_${b.label}`}
                   type="radio"
                   name="leaflet-base-layers"
                   className="leaflet-control-layers-selector"

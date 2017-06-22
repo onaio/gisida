@@ -1,19 +1,24 @@
+import Cookie from 'js-cookie';
+
 export function formatNum(num, decimal) {
   let x = (`${num}`).length;
   if (Number.isInteger(num) && x > 3) {
-    const p = Math.pow;
-    decimal = p(10, decimal);
+    const pow = 10 ** decimal;
     x -= x % 3;
-    return Math.round(num * decimal / p(10, x)) / decimal + ' kMGTPE'[x / 3];
+    return Math.round(num * pow / (10 ** x)) / pow + ' kMGTPE'[x / 3];
   }
   return num;
 }
 
 export function getLastIndex(arr, item) {
-  let indices = [],
-    i;
-  for (i = 0; i < arr.length; i++) {
+  const indices = [];
+
+  for (let i = 0; i < arr.length; i += 1) {
     if (arr[i] === item) { indices.push(i); }
   }
   return indices[indices.length - 1];
 }
+
+export const isLoggedIn = function () {
+  return Cookie.get('dsauth') === 'true';
+};

@@ -1,5 +1,6 @@
-require('./FilterSelector.scss');
 import { Component } from 'react';
+
+require('./FilterSelector.scss');
 
 class FilterSelector extends Component {
 
@@ -28,19 +29,19 @@ class FilterSelector extends Component {
     if (this.state && this.state.options) {
       return (
         <nav id="filter-group" className="filter-group">
-          {Object.keys(this.state.options).map((val, i) =>
-            (<span key={`label_${i}`}>
+          {Object.keys(this.state.options).map(val =>
+            (<span key={`label_${val}`}>
               <input
                 type="checkbox"
                 id={val}
-                key={`input_${i}`}
+                key={`input_${val}`}
                 value={val}
                 onChange={(e) => {
                   this.updateOptions(e.target.value);
                 }}
                 checked={this.state.options[val]}
               />
-              <label htmlFor={val} key={`label_${i}`}>
+              <label htmlFor={val} key={`label_${val}`}>
                 {val}
               </label>
             </span>))
