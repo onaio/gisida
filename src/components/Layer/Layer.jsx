@@ -1,15 +1,14 @@
 import React from 'react';
-
 require('./Layer.scss');
 
-const Layer = ({ mapTargetId, layer, layerData, onLayerChange = f => f }) =>
+const Layer = ({ mapTargetId, layer, layerData, visible = false, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
     <input
       type="checkbox"
       data-layer={layer}
       onChange={e => onLayerChange(layer, e.target.checked, mapTargetId)}
     />
-    <label htmlFor={layer}>{layerData[layer].label}</label>
+    <label>{layerData[layer].label}</label>
   </li>);
 
 Layer.propTypes = {

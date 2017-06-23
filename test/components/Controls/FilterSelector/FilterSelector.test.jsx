@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import FilterSelector from '../../../src/components/Controls/FilterSelector/FilterSelector';
+import FilterSelector from '../../../../src/components/Controls/FilterSelector/FilterSelector';
 
 describe('FilterSelector', () => {
     it('FilterSelector renders filter options', () => {
