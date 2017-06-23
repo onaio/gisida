@@ -364,12 +364,20 @@ class Map extends Component {
         let dimension;
 
         for (let i = 0; i < layer.categories.property.length; i += 1) {
-          chartArr.push({ color: layer.categories.color[i], y: parseInt(district[layer.categories.property[i]] / total * 100), label: layer.categories.label[i] });
+          chartArr.push({
+            color: layer.categories.color[i],
+            y: parseInt(district[layer.categories.property[i]] / total * 100),
+            label: layer.categories.label[i]
+          });
           propTotal += parseInt(district[layer.categories.property[i]] / total * 100);
-          chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: ${layer.categories.color[i]};"></span>${layer.categories.label[i]}: <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
+          chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; 
+          width: 5px; background: ${layer.categories.color[i]};"></span>
+          ${layer.categories.label[i]}: 
+          <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
         }
 
-        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px; background: #DDDDDD;"></span>
+        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px;
+        width: 5px; background: #DDDDDD;"></span>
         Normal: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
         chartArr.splice(0, 0, {
           color: '#DDDDDD',
