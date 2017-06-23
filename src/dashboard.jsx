@@ -27,7 +27,13 @@ class Dashboard {
 
     if (isLoggedIn()) {
       render(
-        <App sectorData={sectorData} layerData={config.LAYERS} styles={config.STYLES} />,
+        <App
+          sectorData={sectorData}
+          layerData={config.LAYERS}
+          styles={config.STYLES}
+          appConfig={config.APP}
+          locations={config.LOCATIONS}
+        />,
         container);
     } else {
       render(<Login />, container);
