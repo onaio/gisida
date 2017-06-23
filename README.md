@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/onaio/gisida/tree/master.svg?style=svg)](https://circleci.com/gh/onaio/gisida/tree/master)
+[![CircleCI](https://circleci.com/gh/onaio/gisida.svg?style=svg&circle-token=f208fd6ec8d6c2990a75c21602b0da14ed63b59b)](https://circleci.com/gh/onaio/gisida)
 
 # gisida
-A dashboard builder library for map visualizations
+Gisida is a Javascript library for building map dashboards using [React](https://github.com/facebook/react) and [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js)
