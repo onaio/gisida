@@ -1,6 +1,5 @@
 const protocol = 'https';
 const host = 'api.ona.io';
-const token = '';
 
 export default function (_self, datasetID, fieldName, callback) {
   const queryParams =
@@ -13,6 +12,6 @@ export default function (_self, datasetID, fieldName, callback) {
      '"survey_intro/Region_miss",' +
      '"'}${fieldName}"]` };
 
-  wrappers.milia.set_host(protocol, host);
-  wrappers.milia.get_form_data(datasetID, queryParams, callback);
+  wrappers.milia.set_host(protocol, host); // eslint-disable-line no-undef
+  wrappers.milia.get_form_data(datasetID, queryParams, callback); // eslint-disable-line no-undef
 }

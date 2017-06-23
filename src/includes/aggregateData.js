@@ -1,22 +1,23 @@
 export default function (layerData, locations, filterOptions) {
   let data = layerData.mergedData;
-  let aggregated_data = [];
+  let aggregatedData = [];
   // merge OSM Ids
   if (layerData['merge-locations']) {
     data.map((datum) => {
+      const row = datum;
       if (!datum.district_id) {
         // add district_id if not defined
-        datum.district_id = locations[datum.District];
+        row.district_id = locations[datum.District];
         if (!(datum.district_id)) {
           // Use alternative district field
-          datum.district_id = locations[datum['survey_intro/District_miss']];
+          row.district_id = locations[datum['survey_intro/District_miss']];
         }
         if (!(datum.district_id)) {
           // Use alternative region miss field
-          datum.district_id = locations[datum['survey_intro/Region_miss']];
+          row.district_id = locations[datum['survey_intro/Region_miss']];
         }
       }
-      return datum;
+      return row;
     });
   }
   data = data.filter(datum => datum.district_id !== undefined);
@@ -29,19 +30,22 @@ export default function (layerData, locations, filterOptions) {
   if (layerData.aggregate.filter && filterOptions) {
     const filters = [];
     for (const key in filterOptions) {
-      if (filterOptions[key] === false) {
-        filters.push(key);
+      if (Object.prototype.hasOwnProperty.call(filterOptions, key)) {
+        if (filterOptions[key] === false) {
+          filters.push(key);
+        }
       }
     }
     data = data.filter(
       datum => !filters.includes(datum[layerData.aggregate.filter]));
   }
   // aggregate raw data
-  aggregated_data =
+  aggregatedData =
+  // eslint-disable-next-line no-undef
     wrappers.stats.aggregate_data(
       data,
       layerData.property,
       layerData.aggregate);
 
-  return aggregated_data;
+  return aggregatedData;
 }

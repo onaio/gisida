@@ -1,11 +1,7 @@
-require('./Login.scss');
-
 import { Component } from 'react';
 import Cookie from 'js-cookie';
 
-export const isLoggedIn = function () {
-  return Cookie.get('dsauth') === 'true';
-};
+require('./Login.scss');
 
 
 class Login extends Component {

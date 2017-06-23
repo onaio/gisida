@@ -11,7 +11,6 @@ const radius = [
   '21',
 ];
 
-const defaultColor = 'transparent';
 const getColorBrewerColor = function (c, numColors) {
   if (colorbrewer[c]) {
     return colorbrewer[c][numColors];
@@ -31,7 +30,11 @@ function getStops(layer) {
   let breaks = [];
 
   // Sort data based on data value
-  const list = layer.data.map((x, i) => ({ data: x, osmIDs: layer.osmIDs[i], periods: layer.periods[i] }), this);
+  const list = layer.data.map((x, i) => ({
+    data: x,
+    osmIDs: layer.osmIDs[i],
+    periods: layer.periods[i],
+  }), this);
   list.sort((a, b) => ((a.data < b.data)
     ? -1
     : ((a.data === b.data)
@@ -42,7 +45,11 @@ function getStops(layer) {
   const period = list.map(items => items.periods);
 
   // Sort for limit data based on osmIDs
-  const dataList = layer.osmIDs.map((x, i) => ({ osmIDs: x, data: layer.data[i], periods: layer.periods[i] }), this);
+  const dataList = layer.osmIDs.map((x, i) => ({
+    osmIDs: x,
+    data: layer.data[i],
+    periods: layer.periods[i],
+  }), this);
   dataList.sort((a, b) => ((a.osmIDs < b.osmIDs)
     ? -1
     : ((a.osmIDs === b.osmIDs)
@@ -54,7 +61,7 @@ function getStops(layer) {
 
   // Split the data into nClusters
   const cluster = layer.clusters ? ss.ckmeans(sortedData, layer.clusters) : null;
-  breaks = layer.limit ? layer.limit : cluster.map(cluster => cluster[cluster.length - 1]);
+  breaks = layer.limit ? layer.limit : cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;
   const osmIDs = layer.limit ? rangeID : osmID;
@@ -93,6 +100,7 @@ function getStops(layer) {
     }
     return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors];
   }
+  return [];
 }
 
 export default function (layer, timefield) {

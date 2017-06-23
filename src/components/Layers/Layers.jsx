@@ -1,10 +1,17 @@
-require('./Layers.scss');
 import Layer from '../Layer/Layer';
+
+require('./Layers.scss');
 
 const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
   (<ul className="layers">
-    {layers.map((layer, i) =>
-      <Layer onLayerChange={onLayerChange} key={i} mapTargetId={mapTargetId} layer={layer} layerData={layerData} />)
+    {layers.map(layer =>
+      (<Layer
+        onLayerChange={onLayerChange}
+        key={layer}
+        mapTargetId={mapTargetId}
+        layer={layer}
+        layerData={layerData}
+      />))
   }
   </ul>);
 

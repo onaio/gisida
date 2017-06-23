@@ -1,15 +1,15 @@
 import React from 'react';
-window.React = React;
-
 import { render } from 'react-dom';
 import jQuery from 'jquery';
-window.$ = jQuery;
-window.jQuery = jQuery;
-
 import App from './components/App/App';
 import Login from './components/Login/Login';
-import { isLoggedIn } from './components/Login/Login';
 import defaultConfig from './config';
+import { isLoggedIn } from './includes/utils';
+
+window.$ = jQuery;
+window.jQuery = jQuery;
+window.React = React;
+
 
 require('bootstrap-loader');
 

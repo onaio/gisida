@@ -1,17 +1,19 @@
-require('./Map.scss');
+
 import { Component } from 'react';
 import Highcharts from 'highcharts';
+import * as d3 from 'd3';
+import ss from 'simple-statistics';
 import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
-import { formatNum } from '../../includes/utils';
+import { formatNum, getLastIndex } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
 import StyleSelector from '../Controls/StyleSelector/StyleSelector';
-import { getLastIndex } from '../../includes/utils';
 import Export from '../Export/Export';
-import * as d3 from 'd3';
-import ss from 'simple-statistics';
+
+require('./Map.scss');
+
 const activeLayers = [];
 
 
@@ -19,8 +21,7 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.changeStyle = this.changeStyle.bind(this);
-    this.filterData = this.filterData.bind(this);
-    const map = {};
+    this.filterData = this.filterData.bind(this); 
     this.state = {
       layers: props.layers.layers,
       layersObj: [],
