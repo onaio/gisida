@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login Login renders login screen 1`] = `
+<div
+  className="login"
+>
+  <div>
+    <form
+      className="login-form"
+      onSubmit={[Function]}
+    >
+      <div
+        className="form-group"
+      >
+        <div
+          className="brand-login"
+        />
+        <label
+          htmlFor="password"
+        >
+          Enter your Password
+        </label>
+        <input
+          autoFocus={true}
+          className="form-control"
+          type="password"
+        />
+      </div>
+      <button
+        className="btn btn-default center-block"
+        type="submit"
+      >
+        Log In
+      </button>
+    </form>
+  </div>
+</div>
+`;
