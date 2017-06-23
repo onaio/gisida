@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1498207978778" clover="3.2.0">
+  <project timestamp="1498207978778" name="All files">
+    <metrics statements="4" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="8" coveredmethods="7" elements="43" coveredelements="28" complexity="0" loc="4" ncloc="4" packages="1" files="2" classes="2">
+      <file name="Login.jsx" path="/Users/arerimoi/ona/gisida/src/components/Login/Login.jsx">
+        <metrics statements="4" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="8" coveredmethods="7"/>
+        <line num="1" count="2" type="cond" truecount="5" falsecount="3"/>
+        <line num="4" count="2" type="cond" truecount="13" falsecount="10"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+      </file>
+      <file name="Login.scss" path="/Users/arerimoi/ona/gisida/src/components/Login/Login.scss">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </metrics>
+  </project>
+</coverage>

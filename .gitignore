@@ -10,3 +10,4 @@ out/
 checkouts/
 dist/
 .lein-env
+__snapshots__/
