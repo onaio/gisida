@@ -12,3 +12,4 @@
        - run: 
            name: Run ESLint
            command: npm run lint
+       - run: npm run test
