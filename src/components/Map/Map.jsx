@@ -1,5 +1,4 @@
-
-import { Component } from 'react';
+import React from 'react';
 import Highcharts from 'highcharts';
 import * as d3 from 'd3';
 import ss from 'simple-statistics';
@@ -13,15 +12,79 @@ import StyleSelector from '../Controls/StyleSelector/StyleSelector';
 import Export from '../Export/Export';
 
 require('./Map.scss');
+/* global mapboxgl */
 
 const activeLayers = [];
 
+class Map extends React.Component {
+  static drawDoughnutChart(container, data, dimension) {
+    Highcharts.chart(container, {
+      chart: {
+        type: 'pie',
+        spacing: 0,
+        backgroundColor: 'transparent',
+        height: dimension,
+        width: dimension,
+      },
+      title: {
+        text: '',
+      },
+      credits: {
+        enabled: false,
+      },
+      tooltip: {
+        enabled: false,
+        backgroundColor: 'rgba(255,255,255,0)',
+        borderWidth: 0,
+        shadow: false,
+        useHTML: true,
+        formatter() {
+          if (this.point.options.label !== undefined) {
+            return `<div class="chart-Tooltip"><b>${this.point.options.label}: 
+            ${this.point.options.y.toFixed(0)}%</b></div>`;
+          }
+          return '';
+        },
+      },
+      plotOptions: {
+        series: {
+          animation: true,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+        pie: {
+          allowPointSelect: false,
+          // borderWidth: 0,
+          borderColor: '#fff',
+          dataLabels: {
+            enabled: false,
+            distance: 80,
+            crop: false,
+            overflow: 'none',
+            formatter() {
+              if (this.point.scoreLabel !== undefined) {
+                return `<b>${this.point.label}</b>`;
+              }
+              return '';
+            },
+            style: {
+              fontWeight: 'bold',
+            },
+          },
+          center: ['50%', '50%'],
+        },
+      },
+      series: data,
+    });
+  }
 
-class Map extends Component {
   constructor(props) {
     super(props);
     this.changeStyle = this.changeStyle.bind(this);
-    this.filterData = this.filterData.bind(this); 
+    this.filterData = this.filterData.bind(this);
     this.state = {
       layers: props.layers.layers,
       layersObj: [],
@@ -31,7 +94,6 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const _self = this;
     mapboxgl.accessToken = this.props.mapConfig.mapAccessToken;
     this.map = new mapboxgl.Map({
       container: this.props.mapId,
@@ -70,23 +132,39 @@ class Map extends Component {
     this.addTimeseriesLayers();
   }
 
+  getSliderLayers() {
+    const sliderIds = [];
+    Object.keys(this.props.layerData).forEach((key) => {
+      sliderIds.push(key);
+    });
+
+    const sliderLayers = [];
+    for (let i = 0; i < sliderIds.length; i += 1) {
+      if ('aggregate' in this.props.layerData[sliderIds[i]] &&
+        'timeseries' in this.props.layerData[sliderIds[i]].aggregate) {
+        sliderLayers.push(sliderIds[i]);
+      }
+    }
+    return sliderLayers;
+  }
+
   prepareLayer(layer, filterOptions = false) {
-    const _self = this;
-    const layer_id = layer.title || layer.id;
-    const layerData = this.props.layerData[layer_id];
-    layerData.id = layer_id;
+    const self = this;
+    const layerId = layer.title || layer.id;
+    const layerData = this.props.layerData[layerId];
+    layerData.id = layerId;
 
     if (layerData.popup && layerData.type !== 'chart') {
       activeLayers.push(layerData.id);
     }
 
-    function renderData(layerData) {
+    function renderData() {
       if (!(layerData.labels)) {
-        _self.addLayer(layerData);
+        self.addLayer(layerData);
       } else {
         d3.csv(layerData.labels.data, (labels) => {
           layerData.labels.data = labels;
-          _self.addLayer(layerData);
+          self.addLayer(layerData);
         });
       }
     }
@@ -116,11 +194,12 @@ class Map extends Component {
         const filePaths = layerData.source.data;
         filePaths.forEach((filePath) => {
           if (Number.isInteger(filePath)) {
-            q = q.defer(fetchData, _self, filePath, layerData.property);
+            q = q.defer(fetchData, self, filePath, layerData.property);
           } else q = q.defer(d3.csv, filePath);
         });
         q.awaitAll((error, data) => {
-          const mergedData = [].concat.apply([], data);
+          const mergedData = [].concat(...data);
+          // const mergedData = [].concat.apply([], data);
           layerData.mergedData = mergedData;
           layerData.source.data = aggregateData(layerData, this.props.locations);
           layerData.loaded = true;
@@ -128,26 +207,26 @@ class Map extends Component {
         });
       } else if (filterOptions) {
         layerData.source.data = aggregateData(layerData, this.props.locations, filterOptions);
-        _self.addLayer(layerData);
+        self.addLayer(layerData);
       } else {
         // add the already processed layer
-        _self.addLayer(layerData);
+        self.addLayer(layerData);
       }
     } else if (layerData.layers) {
       // if layer has sublayers, add all sublayers
-      _self.addLegend(layerData);
-      layerData.layers.forEach((layer) => {
-        const subLayer = this.props.layerData[layer];
+      self.addLegend(layerData);
+      layerData.layers.forEach((sublayer) => {
+        const subLayer = this.props.layerData[sublayer];
         subLayer.id = layer;
-        _self.addLayer(subLayer);
+        self.addLayer(subLayer);
       });
     }
   }
 
   addLayer(layer) {
-    const _self = this;
-    const layerData = this.props.layerData;
+    const self = this;
     const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
+    let stops;
 
     if (layer === undefined) {
       return null;
@@ -161,7 +240,7 @@ class Map extends Component {
     });
 
     if (layer.property) {
-      var stops = generateStops(layer, timefield);
+      stops = generateStops(layer, timefield);
     }
 
     if (stops) {
@@ -339,11 +418,11 @@ class Map extends Component {
       }
 
       if (layer.categories && layer.categories.shape) {
-        const stops = [];
+        const iconStops = [];
         layer.categories.type.forEach((type, index) => {
-          stops.push([type, layer.categories.shape[index]]);
+          iconStops.push([type, layer.categories.shape[index]]);
         });
-        symbolLayer.layout['icon-image'].stops = stops;
+        symbolLayer.layout['icon-image'].stops = iconStops;
       }
 
       this.map.addLayer(symbolLayer);
@@ -359,7 +438,7 @@ class Map extends Component {
       // create a DOM element for the marker
       layer.source.data.forEach((district) => {
         const total = district[layer.categories.total];
-        let chartArr = [];
+        const chartArr = [];
         let chartProp = '';
         let propTotal = 0;
         let dimension;
@@ -367,10 +446,10 @@ class Map extends Component {
         for (let i = 0; i < layer.categories.property.length; i += 1) {
           chartArr.push({
             color: layer.categories.color[i],
-            y: parseInt(district[layer.categories.property[i]] / total * 100),
-            label: layer.categories.label[i]
+            y: parseInt(district[layer.categories.property[i]] / total * 100, 10),
+            label: layer.categories.label[i],
           });
-          propTotal += parseInt(district[layer.categories.property[i]] / total * 100);
+          propTotal += parseInt(district[layer.categories.property[i]] / total * 100, 10);
           chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; 
           width: 5px; background: ${layer.categories.color[i]};"></span>
           ${layer.categories.label[i]}: 
@@ -398,14 +477,14 @@ class Map extends Component {
           innerSize: layer.chart.innerSize,
         }];
 
-        const content = `<div><b>${district.district_name}</b></div>` + chartProp;
+        const content = `<div><b>${district.district_name}</b></div>${chartProp}`;
 
         const el = document.createElement('div');
-        el.id = `chart-${district.district_osm_id}-${layer.id}-${_self.props.mapId}`;
-        el.className = `marker-chart marker-chart-${layer.id}-${_self.props.mapId}`;
+        el.id = `chart-${district.district_osm_id}-${layer.id}-${self.props.mapId}`;
+        el.className = `marker-chart marker-chart-${layer.id}-${self.props.mapId}`;
         el.style.width = layer.chart.width;
         el.style.height = layer.chart.height;
-        $(el).attr('data-map', _self.props.mapId);
+        $(el).attr('data-map', self.props.mapId);
         $(el).attr('data-lng', district.longitude);
         $(el).attr('data-lat', district.latitude);
         $(el).attr('data-popup', content);
@@ -415,57 +494,56 @@ class Map extends Component {
           offset: layer.chart.offset,
         })
           .setLngLat([district.longitude, district.latitude])
-          .addTo(_self.map);
+          .addTo(self.map);
 
-        const container = $(`#chart-${district.district_osm_id}-${layer.id}-${_self.props.mapId}`)[0];
-        _self.drawDoughnutChart(container, chartData, dimension);
+        const container = $(`#chart-${district.district_osm_id}-${layer.id}-${self.props.mapId}`)[0];
+        Map.drawDoughnutChart(container, chartData, dimension);
       });
     }
 
     // sort the layers
-    _self.sortLayers();
+    self.sortLayers();
+
+    return null;
   }
 
   sortLayers() {
-    const _self = this;
+    const self = this;
     const layerData = this.props.layerData;
-    for (var key in layerData) {
-      if (layerData.hasOwnProperty(key)) {
-        if (layerData[key].type === 'line') {
-          if (_self.map.getLayer(key)) {
-            _self.map.moveLayer(key);
-          }
+
+    Object.keys(layerData).forEach((key) => {
+      if (layerData[key].type === 'line') {
+        if (self.map.getLayer(key)) {
+          self.map.moveLayer(key);
         }
       }
-    }
-    for (var key in layerData) {
-      if (layerData.hasOwnProperty(key)) {
-        if (layerData[key].type === 'circle') {
-          if (_self.map.getLayer(key)) {
-            _self.map.moveLayer(key);
-          }
+    });
+
+    Object.keys(layerData).forEach((key) => {
+      if (layerData[key].type === 'circle') {
+        if (self.map.getLayer(key)) {
+          self.map.moveLayer(key);
         }
       }
-    }
-    for (var key in layerData) {
-      if (layerData.hasOwnProperty(key)) {
-        if (layerData[key].type === 'symbol') {
-          if (_self.map.getLayer(key)) {
-            _self.map.moveLayer(key);
-          }
+    });
+
+    Object.keys(layerData).forEach((key) => {
+      if (layerData[key].type === 'symbol') {
+        if (self.map.getLayer(key)) {
+          self.map.moveLayer(key);
         }
       }
-    }
+    });
   }
 
   removeLayer(layer) {
-    const layer_id = layer.title || layer.id;
-    const layerData = this.props.layerData[layer_id];
+    const layerId = layer.title || layer.id;
+    const layerData = this.props.layerData[layerId];
 
     if (layerData.layers) {
-      layerData.layers.forEach((layer) => {
-        this.map.removeLayer(layer);
-        this.map.removeSource(layer);
+      layerData.layers.forEach((sublayer) => {
+        this.map.removeLayer(sublayer);
+        this.map.removeSource(sublayer);
       });
     }
     if (layerData.popup && layerData.type !== 'chart') {
@@ -473,16 +551,16 @@ class Map extends Component {
       activeLayers.splice(index, 1);
     }
     if (layerData.labels) {
-      $(`.marker-label-${layer_id}-${this.props.mapId}`).remove();
+      $(`.marker-label-${layerId}-${this.props.mapId}`).remove();
     }
     if (layerData.type === 'chart') {
-      $(`.marker-chart-${layer_id}-${this.props.mapId}`).remove();
+      $(`.marker-chart-${layerId}-${this.props.mapId}`).remove();
     } else {
-      if (this.map.getLayer(layer_id)) {
-        this.map.removeLayer(layer_id);
+      if (this.map.getLayer(layerId)) {
+        this.map.removeLayer(layerId);
       }
-      if (this.map.getSource(layer_id)) {
-        this.map.removeSource(layer_id);
+      if (this.map.getSource(layerId)) {
+        this.map.removeSource(layerId);
       }
     }
     this.setState({ layerObj: null });
@@ -498,7 +576,7 @@ class Map extends Component {
         layer.labels.offset = [-18, 10];
       }
       if (layer.labels.mode === 'join') {
-        data.forEach((row, index) => {
+        data.forEach((row) => {
           if (row[layer.labels.property]) {
             const el = document.createElement('div');
             el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
@@ -522,7 +600,7 @@ class Map extends Component {
           }
         });
       } else {
-        layer.labels.data.forEach((label, index) => {
+        layer.labels.data.forEach((label) => {
           if (label[layer.labels.property]) {
             const el = document.createElement('div');
             el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
@@ -550,7 +628,7 @@ class Map extends Component {
 
   addLegend(layer, stops, data, breaks, colors) {
     const mapId = this.props.mapId;
-    let legend_background = '';
+    let background = '';
     if (layer.credit && layer.type === 'circle') {
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"` +
         'class="legend-shapes">' +
@@ -568,7 +646,7 @@ class Map extends Component {
           layer.categories.shape[index] === 'triangle-15' ?
           'border-bottom-color:' : 'background:';
 
-        legend_background += `<li class="layer-symbols"> <span class="${
+        background += `<li class="layer-symbols"> <span class="${
           layer.categories.shape[index]}" style="${style}${color};"></span>${
           layer.categories.label[index]}</li>`;
       });
@@ -577,18 +655,18 @@ class Map extends Component {
         'class="legend-row">' +
         `<b>${layer.label}</b>` +
         '<div class="legend-shapes">' +
-        `<ul style="left: 0;">${legend_background}</ul> </div>${layer.credit}</div>`);
+        `<ul style="left: 0;">${background}</ul> </div>${layer.credit}</div>`);
     } else if (layer.credit && layer.categories.breaks === 'no') {
       layer.categories.color.forEach((color, index) => {
-        legend_background += `<li style="background:${color}; width:${
+        background += `<li style="background:${color}; width:${
           100 / layer.categories.color.length
           }%;">${layer.categories.label[index]}</li>`;
       });
 
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId
-        }" class="legend-row">` + `<b>${layer.label}</b>` +
+        }" class="legend-row"><b>${layer.label}</b>` +
         `<div class="legend-fill ${layer.categories ? 'legend-label' : ''}">` +
-        `<ul>${legend_background}</ul></div>${layer.credit}</div>`);
+        `<ul>${background}</ul></div>${layer.credit}</div>`);
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
       const dataValues = data.map(values => values[layer.property]);
       const colorLegend = [...new Set(stops.map(stop => stop[1]))];
@@ -601,10 +679,9 @@ class Map extends Component {
 
       colorLegend.forEach((color, index) => {
         const firstVal = breaks[index - 1] !== undefined ? breaks[index - 1] : 0;
-        const lastVal = color === colorLegend[colorLegend.length - 1] || breaks[index] === undefined ?
-          Math.max(...dataValues) :
-          breaks[index];
-        legend_background += `<li class="background-block-${layer.id}-${mapId}"` +
+        const lastVal = color === colorLegend[colorLegend.length - 1] ||
+          breaks[index] === undefined ? Math.max(...dataValues) : breaks[index];
+        background += `<li class="background-block-${layer.id}-${mapId}"` +
           `data-tooltip="${formatNum(firstVal, 1)}-${formatNum(lastVal, 1)}${legendSuffix}"` +
           `style="background:${color}; width:${100 / colorLegend.length
           }%;"></li > `;
@@ -615,29 +692,28 @@ class Map extends Component {
         `<b>${layer.label}</b>` +
         '<ul class="legend-limit" style="padding: 0% 0% 3% 0%;">' +
         `<li id="first-limit-${layer.id}" class="${mapId
-        }"style="position: absolute; list-style: none; display: inline; left: 3%;">${0}${legendSuffix}</li>` +
-        `<li id="last-limit-${layer.id}" class="${mapId
+        }"style="position: absolute; list-style: none; display: inline; left: 3%;">${0}${legendSuffix}</li>
+        <li id="last-limit-${layer.id}" class="${mapId
         }"style="position: absolute; list-style: none; display: inline; right: 3%;">${
-        formatNum(Math.max(...dataValues), 1)}${legendSuffix}</li>` + '</ul>' +
-        '<div class="legend-fill' + '">' +
-        `<ul id="legend-background">${legend_background}</ul>` +
-        `</div>${layer.credit}</div>`);
+        formatNum(Math.max(...dataValues), 1)}${legendSuffix}</li></ul>
+        <div class="legend-fill"><ul id="legend-background">${background}</ul>
+        </div>${layer.credit}</div>`);
 
       $(`.background-block-${layer.id}-${mapId}`).hover(
         () => {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-        },
+        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+      },
       );
     }
   }
 
   removeLegend(layer) {
-    const layer_id = layer.title || layer.id;
-    $(`#legend-${layer_id}-${this.props.mapId}`).remove();
+    const layerId = layer.title || layer.id;
+    $(`#legend-${layerId}-${this.props.mapId}`).remove();
   }
 
   filterData(filterOptions) {
@@ -645,25 +721,9 @@ class Map extends Component {
     this.prepareLayer(this.state.layerObj, filterOptions);
   }
 
-  getSliderLayers() {
-    const sliderIds = [];
-    for (const key in this.props.layerData) {
-      sliderIds.push(key);
-    }
-    const sliderLayers = [];
-    for (let i = 0; i < sliderIds.length; i += 1) {
-      if ('aggregate' in this.props.layerData[sliderIds[i]] &&
-        'timeseries' in this.props.layerData[sliderIds[i]].aggregate) {
-        sliderLayers.push(sliderIds[i]);
-      }
-    }
-    return sliderLayers;
-  }
-
   addTimeseriesLayers() {
     const sliderLayers = this.getSliderLayers();
     const viewedIds = this.state.layers.map(layers => layers.title);
-    const idIndices = [];
     const map = this.map;
     let sliderItem = null;
     // update these to use classes instead of ids for multimap
@@ -672,10 +732,10 @@ class Map extends Component {
     for (let i = 0; i < sliderLayers.length; i += 1) {
       const id = sliderLayers[i];
       if (viewedIds.includes(id)) {
-        const index = getLastIndex(viewedIds, id);
+        let index = getLastIndex(viewedIds, id);
         const layerObj = this.props.layerData[id];
 
-        if (this.state.layers[index].visible == true &&
+        if (this.state.layers[index].visible === true &&
           layerObj.source.data instanceof Object && this.state
           && this.state.stops && layerObj.id === this.state.stops.id) {
           const paintStops = this.state.stops.stops;
@@ -691,9 +751,10 @@ class Map extends Component {
             label.textContent = period[period.length - 1];
 
             slider.addEventListener('input', (e) => {
-              const index = parseInt(e.target.value, 10);
+              index = parseInt(e.target.value, 10);
               label.textContent = period[index];
-              if (map.getLayer(layerObj.id) && Stops[index] !== undefined && Stops[index][0][0] !== undefined) {
+              if (map.getLayer(layerObj.id) && Stops[index] !== undefined
+                && Stops[index][0][0] !== undefined) {
                 const defaultValue = layerObj.type === 'circle' ? 0 : 'rgba(0,0,0,0)';
                 const paintProperty = layerObj.type === 'circle' ? 'circle-radius' : 'fill-color';
                 const newStops = {
@@ -703,7 +764,8 @@ class Map extends Component {
                   default: defaultValue,
                 };
                 map.setPaintProperty(layerObj.id, paintProperty, newStops);
-                const Data = layerObj.source.data.filter(data => data[layerObj.aggregate.timeseries.field] === period[index]);
+                const Data = layerObj.source.data.filter(data =>
+                  data[layerObj.aggregate.timeseries.field] === period[index]);
                 this.removeLabels(layerObj);
                 this.addLabels(layerObj, Data);
                 this.removeLegend(layerObj);
@@ -720,93 +782,29 @@ class Map extends Component {
 
   addDefaultLayers() {
     const layerData = this.props.layerData;
-    for (const key in layerData) {
-      if (layerData.hasOwnProperty(key)) {
-        if (layerData[key].visible === true) {
-          $(`.layer.${this.props.mapId} > [data-layer="${key}"]`).trigger('click');
-        }
-      }
-    }
-  }
 
-  drawDoughnutChart(container, data, dimension) {
-    Highcharts.chart(container, {
-      chart: {
-        type: 'pie',
-        spacing: 0,
-        backgroundColor: 'transparent',
-        height: dimension,
-        width: dimension,
-      },
-      title: {
-        text: '',
-      },
-      credits: {
-        enabled: false,
-      },
-      tooltip: {
-        enabled: false,
-        backgroundColor: 'rgba(255,255,255,0)',
-        borderWidth: 0,
-        shadow: false,
-        useHTML: true,
-        formatter() {
-          if (this.point.options.label !== undefined) {
-            return `<div class="chart-Tooltip"><b>${this.point.options.label}: ${this.point.options.y.toFixed(0)}%</b></div>`;
-          }
-          return '';
-        },
-      },
-      plotOptions: {
-        series: {
-          animation: true,
-          states: {
-            hover: {
-              enabled: false,
-            },
-          },
-        },
-        pie: {
-          allowPointSelect: false,
-          // borderWidth: 0,
-          borderColor: '#fff',
-          dataLabels: {
-            enabled: false,
-            distance: 80,
-            crop: false,
-            overflow: 'none',
-            formatter() {
-              if (this.point.scoreLabel !== undefined) {
-                return `<b>${this.point.label}</b>`;
-              }
-              return '';
-            },
-            style: {
-              fontWeight: 'bold',
-            },
-          },
-          center: ['50%', '50%'],
-        },
-      },
-      series: data,
+    Object.keys(layerData).forEach((key) => {
+      if (layerData[key].visible === true) {
+        $(`.layer.${this.props.mapId} > [data-layer="${key}"]`).trigger('click');
+      }
     });
   }
 
   addMousemoveEvent() {
-    const _self = this;
+    const self = this;
     const layerData = this.props.layerData;
     const popup = new mapboxgl.Popup({
       closeOnClick: true,
       closeButton: false,
     });
 
-    _self.map.on('mousemove', (e) => {
-      const features = _self.map.queryRenderedFeatures(e.point, {
+    self.map.on('mousemove', (e) => {
+      const features = self.map.queryRenderedFeatures(e.point, {
         layers: activeLayers,
       });
 
       // Change the cursor style as a UI indicator.
-      _self.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+      self.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
       if (!features.length) {
         popup.remove();
@@ -821,16 +819,17 @@ class Map extends Component {
       if (layer.type !== 'chart' && layer.popup.body) {
         const periodData = [];
         if (layer.aggregate && layer.aggregate.timeseries) {
-          const currPeriod = document.getElementById(`${_self.props.mapId}-label`).textContent;
+          const currPeriod = document.getElementById(`${self.props.mapId}-label`).textContent;
           layer.source.data.forEach((Obj) => {
             if (Obj[layer.aggregate.timeseries.field] === currPeriod) {
               periodData.push(Obj);
             }
           });
         }
-        const data = (layer.aggregate && layer.aggregate.timeseries) ? periodData : layer.source.data;
-        data.forEach((row, index) => {
-          if (row[layer.source.join[1]] == feature.properties[layer.source.join[0]]) {
+        const data = (layer.aggregate && layer.aggregate.timeseries) ?
+          periodData : layer.source.data;
+        data.forEach((row) => {
+          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             if (row[layer.popup.header]) {
               content = `<div><b>${row[layer.popup.header]}</b></div>` +
                 `<div><center>${row[layer.popup.body]}</center></div>`;
@@ -839,9 +838,9 @@ class Map extends Component {
             }
           }
         });
-        popup.setLngLat(_self.map.unproject(e.point))
+        popup.setLngLat(self.map.unproject(e.point))
           .setHTML(content)
-          .addTo(_self.map);
+          .addTo(self.map);
       }
     });
 
@@ -851,10 +850,10 @@ class Map extends Component {
       const lng = $(e.currentTarget).data('lng');
       const lat = $(e.currentTarget).data('lat');
       const content = $(e.currentTarget).data('popup');
-      if (map === _self.props.mapId) {
+      if (map === self.props.mapId) {
         popup.setLngLat([parseFloat(lng), parseFloat(lat)])
           .setHTML(content)
-          .addTo(_self.map);
+          .addTo(self.map);
       }
     });
   }
@@ -892,9 +891,16 @@ class Map extends Component {
         <div id={this.props.mapId}>
           {this.addTimeseriesLayers()}
           <div className={`legend ${this.props.mapId}`} />
-          <StyleSelector changeStyle={this.changeStyle} style={this.state.style} styles={this.state.styles} />
+          <StyleSelector
+            changeStyle={this.changeStyle}
+            style={this.state.style}
+            styles={this.state.styles}
+          />
         </div>
-        <FilterSelector filterData={this.filterData} layerObj={this.state.layerObj} />
+        <FilterSelector
+          filterData={this.filterData}
+          layerObj={this.state.layerObj}
+        />
         <Export />
       </div>
     );
@@ -902,3 +908,21 @@ class Map extends Component {
 }
 
 export default Map;
+
+Map.propTypes = {
+  layers: React.propTypes.objectOf(React.propTypes.array).isRequired,
+  mapConfig: React.propTypes.objectOf(React.propTypes.object).isRequired,
+  styles: React.propTypes.string.isRequired,
+  mapId: React.propTypes.string.isRequired,
+  layerData: React.proptypes.objectof(React.propTypes.object).isRequired,
+  locations: React.proptypes.objectof(React.propTypes.object).isRequired,
+};
+
+Map.defaultProps = {
+  layers: [],
+  mapConfig: {},
+  styles: '',
+  mapId: '',
+  layerData: {},
+  locations: {},
+};
