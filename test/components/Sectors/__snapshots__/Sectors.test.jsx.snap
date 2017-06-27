@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sectors Sectors renders sectors.json clusters 1`] = `
+<div
+  className="sectors-menu-wrapper"
+  id="sector-menu-1-wrapper"
+>
+  <a
+    className="open-btn"
+    href="#"
+    onClick={[Function]}
+  >
+    <span
+      className="glyphicon glyphicon-list"
+    />
+  </a>
+  <div
+    className="sectors-menu"
+    id="sector-menu-1"
+  >
+    <a
+      className="close-btn"
+      href="#"
+      onClick={[Function]}
+    >
+      <span
+        className="glyphicon glyphicon-remove"
+      />
+    </a>
+    <ul
+      className="sectors"
+    >
+      <li
+        className="sector"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+        >
+          Sample Sector
+           
+          <span
+            className="caret"
+          />
+        </a>
+        <ul
+          className="layers"
+        >
+          <li
+            className="layer map-1"
+          >
+            <input
+              data-layer="test_layer"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label>
+              Test Layer
+            </label>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

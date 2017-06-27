@@ -1,17 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1498207978778" clover="3.2.0">
-  <project timestamp="1498207978778" name="All files">
-    <metrics statements="4" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="8" coveredmethods="7" elements="43" coveredelements="28" complexity="0" loc="4" ncloc="4" packages="1" files="2" classes="2">
-      <file name="Login.jsx" path="/Users/arerimoi/ona/gisida/src/components/Login/Login.jsx">
-        <metrics statements="4" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="8" coveredmethods="7"/>
-        <line num="1" count="2" type="cond" truecount="5" falsecount="3"/>
-        <line num="4" count="2" type="cond" truecount="13" falsecount="10"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-      </file>
-      <file name="Login.scss" path="/Users/arerimoi/ona/gisida/src/components/Login/Login.scss">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
+<coverage generated="1498566476422" clover="3.2.0">
+  <project timestamp="1498566476422" name="All files">
+    <metrics statements="29" coveredstatements="27" conditionals="117" coveredconditionals="74" methods="36" coveredmethods="35" elements="182" coveredelements="136" complexity="0" loc="29" ncloc="29" packages="9" files="18" classes="18">
+      <package name="Controls.FilterSelector">
+        <metrics statements="2" coveredstatements="2" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+        <file name="FilterSelector.jsx" path="/Users/royrutto/Dev/gisida/src/components/Controls/FilterSelector/FilterSelector.jsx">
+          <metrics statements="2" coveredstatements="2" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+          <line num="1" count="3" type="cond" truecount="18" falsecount="13"/>
+          <line num="3" count="1" type="stmt"/>
+        </file>
+        <file name="FilterSelector.scss" path="/Users/royrutto/Dev/gisida/src/components/Controls/FilterSelector/FilterSelector.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Controls.StyleSelector">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <file name="StyleSelector.jsx" path="/Users/royrutto/Dev/gisida/src/components/Controls/StyleSelector/StyleSelector.jsx">
+          <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+          <line num="1" count="1" type="cond" truecount="3" falsecount="1"/>
+          <line num="2" count="1" type="stmt"/>
+          <line num="5" count="1" type="stmt"/>
+        </file>
+        <file name="StyleSelector.scss" path="/Users/royrutto/Dev/gisida/src/components/Controls/StyleSelector/StyleSelector.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Controls.TimeSeriesSlider">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <file name="TimeSeriesSlider.jsx" path="/Users/royrutto/Dev/gisida/src/components/Controls/TimeSeriesSlider/TimeSeriesSlider.jsx">
+          <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+          <line num="1" count="1" type="stmt"/>
+          <line num="4" count="1" type="cond" truecount="3" falsecount="1"/>
+          <line num="5" count="1" type="stmt"/>
+        </file>
+        <file name="TimeSeriesSlider.scss" path="/Users/royrutto/Dev/gisida/src/components/Controls/TimeSeriesSlider/TimeSeriesSlider.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Export">
+        <metrics statements="2" coveredstatements="2" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+        <file name="Export.jsx" path="/Users/royrutto/Dev/gisida/src/components/Export/Export.jsx">
+          <metrics statements="2" coveredstatements="2" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+          <line num="1" count="5" type="cond" truecount="18" falsecount="13"/>
+          <line num="3" count="1" type="stmt"/>
+        </file>
+        <file name="Export.scss" path="/Users/royrutto/Dev/gisida/src/components/Export/Export.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Layer">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="2"/>
+        <file name="Layer.jsx" path="/Users/royrutto/Dev/gisida/src/components/Layer/Layer.jsx">
+          <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="2"/>
+          <line num="1" count="3" type="cond" truecount="3" falsecount="1"/>
+          <line num="2" count="3" type="stmt"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="Layer.scss" path="/Users/royrutto/Dev/gisida/src/components/Layer/Layer.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Layers">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <file name="Layers.jsx" path="/Users/royrutto/Dev/gisida/src/components/Layers/Layers.jsx">
+          <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+          <line num="1" count="2" type="stmt"/>
+          <line num="2" count="4" type="cond" truecount="4" falsecount="0"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="6" count="2" type="stmt"/>
+        </file>
+        <file name="Layers.scss" path="/Users/royrutto/Dev/gisida/src/components/Layers/Layers.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Login">
+        <metrics statements="3" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+        <file name="Login.jsx" path="/Users/royrutto/Dev/gisida/src/components/Login/Login.jsx">
+          <metrics statements="3" coveredstatements="3" conditionals="31" coveredconditionals="18" methods="7" coveredmethods="7"/>
+          <line num="1" count="2" type="cond" truecount="5" falsecount="3"/>
+          <line num="2" count="2" type="cond" truecount="13" falsecount="10"/>
+          <line num="4" count="1" type="stmt"/>
+        </file>
+        <file name="Login.scss" path="/Users/royrutto/Dev/gisida/src/components/Login/Login.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Menu">
+        <metrics statements="6" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="2"/>
+        <file name="Menu.jsx" path="/Users/royrutto/Dev/gisida/src/components/Menu/Menu.jsx">
+          <metrics statements="6" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="2"/>
+          <line num="1" count="1" type="stmt"/>
+          <line num="4" count="2" type="cond" truecount="3" falsecount="1"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="7" count="0" type="stmt"/>
+          <line num="9" count="0" type="stmt"/>
+          <line num="12" count="1" type="stmt"/>
+        </file>
+        <file name="Menu.scss" path="/Users/royrutto/Dev/gisida/src/components/Menu/Menu.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="Sectors">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <file name="Sectors.jsx" path="/Users/royrutto/Dev/gisida/src/components/Sectors/Sectors.jsx">
+          <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+          <line num="1" count="1" type="stmt"/>
+          <line num="3" count="2" type="cond" truecount="4" falsecount="0"/>
+          <line num="5" count="1" type="stmt"/>
+        </file>
+        <file name="Sectors.scss" path="/Users/royrutto/Dev/gisida/src/components/Sectors/Sectors.scss">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
     </metrics>
   </project>
 </coverage>

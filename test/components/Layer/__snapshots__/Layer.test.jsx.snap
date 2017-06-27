@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layer Layer renders each layer indicator 1`] = `
+<li
+  className="layer map-1"
+>
+  <input
+    data-layer="test_layer"
+    onChange={[Function]}
+    type="checkbox"
+  />
+  <label>
+    Test Layer
+  </label>
+</li>
+`;

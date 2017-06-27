@@ -1,0 +1,14 @@
+[
+    {
+        "label": "style-1",
+        "style": "test://test-style-1"
+    },
+    {
+        "label": "style-2",
+        "style": "test://test-style-2"
+    },
+    {
+        "label": "style-3",
+        "style": "test://test-style-3"
+    }
+]

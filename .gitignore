@@ -10,4 +10,4 @@ out/
 checkouts/
 dist/
 .lein-env
-__snapshots__/
+coverage/
