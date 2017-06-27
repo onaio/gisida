@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu Menu renders application details 1`] = `
+<div
+  className="menu"
+>
+  <div
+    className="brand"
+  >
+    <img
+      alt="UKAID"
+      className="brand-icon"
+      src={undefined}
+    />
+    <div
+      className="brand-title"
+    >
+      <span
+        className="white"
+      />
+         
+    </div>
+  </div>
+  <ul>
+    <li>
+      <a
+        href="#"
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-home"
+        />
+      </a>
+    </li>
+    <li>
+      <a
+        href="#"
+        onClick={[Function]}
+      >
+        <span
+          className="glyphicon glyphicon-th-large"
+        />
+      </a>
+    </li>
+  </ul>
+  <a
+    className="sign-out"
+    onClick={[Function]}
+  >
+    <span
+      className="glyphicon glyphicon-log-out"
+    />
+  </a>
+</div>
+`;
