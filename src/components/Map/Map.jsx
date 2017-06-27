@@ -17,6 +17,70 @@ require('./Map.scss');
 const activeLayers = [];
 
 class Map extends React.Component {
+  static drawDoughnutChart(container, data, dimension) {
+    Highcharts.chart(container, {
+      chart: {
+        type: 'pie',
+        spacing: 0,
+        backgroundColor: 'transparent',
+        height: dimension,
+        width: dimension,
+      },
+      title: {
+        text: '',
+      },
+      credits: {
+        enabled: false,
+      },
+      tooltip: {
+        enabled: false,
+        backgroundColor: 'rgba(255,255,255,0)',
+        borderWidth: 0,
+        shadow: false,
+        useHTML: true,
+        formatter() {
+          if (this.point.options.label !== undefined) {
+            return `<div class="chart-Tooltip"><b>${this.point.options.label}: 
+            ${this.point.options.y.toFixed(0)}%</b></div>`;
+          }
+          return '';
+        },
+      },
+      plotOptions: {
+        series: {
+          animation: true,
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+        pie: {
+          allowPointSelect: false,
+          // borderWidth: 0,
+          borderColor: '#fff',
+          dataLabels: {
+            enabled: false,
+            distance: 80,
+            crop: false,
+            overflow: 'none',
+            formatter() {
+              if (this.point.scoreLabel !== undefined) {
+                return `<b>${this.point.label}</b>`;
+              }
+              return '';
+            },
+            style: {
+              fontWeight: 'bold',
+            },
+          },
+          center: ['50%', '50%'],
+        },
+      },
+      series: data,
+    });
+  }
+
   constructor(props) {
     super(props);
     this.changeStyle = this.changeStyle.bind(this);
@@ -433,7 +497,7 @@ class Map extends React.Component {
           .addTo(self.map);
 
         const container = $(`#chart-${district.district_osm_id}-${layer.id}-${self.props.mapId}`)[0];
-        self.drawDoughnutChart(container, chartData, dimension);
+        Map.drawDoughnutChart(container, chartData, dimension);
       });
     }
 
@@ -723,70 +787,6 @@ class Map extends React.Component {
       if (layerData[key].visible === true) {
         $(`.layer.${this.props.mapId} > [data-layer="${key}"]`).trigger('click');
       }
-    });
-  }
-
-  drawDoughnutChart(container, data, dimension) {
-    Highcharts.chart(container, {
-      chart: {
-        type: 'pie',
-        spacing: 0,
-        backgroundColor: 'transparent',
-        height: dimension,
-        width: dimension,
-      },
-      title: {
-        text: '',
-      },
-      credits: {
-        enabled: false,
-      },
-      tooltip: {
-        enabled: false,
-        backgroundColor: 'rgba(255,255,255,0)',
-        borderWidth: 0,
-        shadow: false,
-        useHTML: true,
-        formatter() {
-          if (this.point.options.label !== undefined) {
-            return `<div class="chart-Tooltip"><b>${this.point.options.label}: 
-            ${this.point.options.y.toFixed(0)}%</b></div>`;
-          }
-          return '';
-        },
-      },
-      plotOptions: {
-        series: {
-          animation: true,
-          states: {
-            hover: {
-              enabled: false,
-            },
-          },
-        },
-        pie: {
-          allowPointSelect: false,
-          // borderWidth: 0,
-          borderColor: '#fff',
-          dataLabels: {
-            enabled: false,
-            distance: 80,
-            crop: false,
-            overflow: 'none',
-            formatter() {
-              if (this.point.scoreLabel !== undefined) {
-                return `<b>${this.point.label}</b>`;
-              }
-              return '';
-            },
-            style: {
-              fontWeight: 'bold',
-            },
-          },
-          center: ['50%', '50%'],
-        },
-      },
-      series: data,
     });
   }
 
