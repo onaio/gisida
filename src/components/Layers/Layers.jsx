@@ -1,3 +1,4 @@
+import React from 'react';
 import Layer from '../Layer/Layer';
 
 require('./Layers.scss');
@@ -14,5 +15,12 @@ const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
       />))
   }
   </ul>);
+
+Layers.propTypes = {
+  mapTargetId: React.PropTypes.string.isRequired,
+  layers: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  onLayerChange: React.PropTypes.func.isRequired,
+};
 
 export default Layers;

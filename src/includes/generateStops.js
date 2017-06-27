@@ -11,13 +11,13 @@ const radius = [
   '21',
 ];
 
-const getColorBrewerColor = function (c, numColors) {
+const getColorBrewerColor = function getColorBrewerColor(c, numColors) {
   if (colorbrewer[c]) {
     return colorbrewer[c][numColors];
   }
   return c;
 };
-const getColor = function (c, i) {
+const getColor = function getColor(c, i) {
   if (c instanceof Array) {
     return c[i];
   }

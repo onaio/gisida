@@ -19,6 +19,6 @@ export function getLastIndex(arr, item) {
   return indices[indices.length - 1];
 }
 
-export const isLoggedIn = function () {
+export const isLoggedIn = function isLoggedIn() {
   return Cookie.get('dsauth') === 'true';
 };

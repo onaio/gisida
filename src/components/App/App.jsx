@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React from 'react';
 import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
@@ -7,7 +7,7 @@ require('./App.scss');
 
 window.maps = [];
 
-class App extends Component {
+class App extends React.Component {
   static showSector(e) {
     e.preventDefault();
     $(e.target).parent('li').find('.layers').toggle();
@@ -74,18 +74,24 @@ class App extends Component {
 
     return (
       <div>
-        <Menu toggleSingleScreen={singleScreen} toggleSplitScreen={splitScreen} appConfig={this.props.appConfig}/>
+        <Menu
+          toggleSingleScreen={singleScreen}
+          toggleSplitScreen={splitScreen}
+          appConfig={this.props.appConfig}
+        />
         <Map
           mapId="map-1"
           layerData={layerData}
-          layers={layers} styles={styles}
+          layers={layers}
+          styles={styles}
           locations={this.props.locations}
           mapConfig={this.props.appConfig}
         />
         <Map
           mapId="map-2"
           layerData={layerData}
-          layers={layers} styles={styles}
+          layers={layers}
+          styles={styles}
           locations={this.props.locations}
           mapConfig={this.props.appConfig}
         />
@@ -96,5 +102,13 @@ class App extends Component {
   }
 
 }
+
+App.propTypes = {
+  appConfig: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  locations: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  sectorData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  styles: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+};
 
 export default App;

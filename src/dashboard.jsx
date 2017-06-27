@@ -19,11 +19,9 @@ class Dashboard {
     const config = Object.assign({}, defaultConfig, options);
 
     const sectorData = [];
-    for (const key in config.SECTORS) {
-      if (config.SECTORS.hasOwnProperty(key)) {
-        sectorData.push({ sector: key, layers: config.SECTORS[key].layers });
-      }
-    }
+    Object.keys(config.SECTORS).forEach((key) => {
+      sectorData.push({ sector: key, layers: config.SECTORS[key].layers });
+    });
 
     if (isLoggedIn()) {
       render(

@@ -20,8 +20,7 @@
         "jsx-a11y/no-autofocus":0,
         "no-mixed-operators": 0,
         "no-nested-ternary": 0,
-        "react/react-in-jsx-scope": 0,
-        "react/prop-types": 0
+        "react/react-in-jsx-scope": 0
     },
     "parser": "babel-eslint",
     "globals": {

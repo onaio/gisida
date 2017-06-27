@@ -1,8 +1,8 @@
-import { Component } from 'react';
+import React from 'react';
 
 require('./FilterSelector.scss');
 
-class FilterSelector extends Component {
+class FilterSelector extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.layerObj && nextProps.layerObj.filterOptions) {
@@ -52,5 +52,10 @@ class FilterSelector extends Component {
     return (<nav />);
   }
 }
+
+FilterSelector.propTypes = {
+  filterData: React.PropTypes.func.isRequired,
+  layerObj: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+};
 
 export default FilterSelector;

@@ -27,17 +27,14 @@ export default function (layerData, locations, filterOptions) {
     filterValues = filterValues.filter(datum => datum !== undefined);
     layerData.filterOptions = [...new Set(filterValues)];
   }
+  const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
-    const filters = [];
-    for (const key in filterOptions) {
-      if (Object.prototype.hasOwnProperty.call(filterOptions, key)) {
-        if (filterOptions[key] === false) {
-          filters.push(key);
-        }
+    Object.keys(filterOptions).forEach((opt) => {
+      if (filterOptions[opt] === false) {
+        filters.push(opt);
       }
-    }
-    data = data.filter(
-      datum => !filters.includes(datum[layerData.aggregate.filter]));
+    });
+    data = data.filter(datum => !filters.includes(datum[layerData.aggregate.filter]));
   }
   // aggregate raw data
   aggregatedData =
