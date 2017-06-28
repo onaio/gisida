@@ -901,7 +901,7 @@ class Map extends React.Component {
           filterData={this.filterData}
           layerObj={this.state.layerObj}
         />
-        <Export />
+        <Export map={this.props.mapId} />
       </div>
     );
   }
@@ -910,12 +910,12 @@ class Map extends React.Component {
 export default Map;
 
 Map.propTypes = {
-  layers: React.propTypes.objectOf(React.propTypes.array).isRequired,
-  mapConfig: React.propTypes.objectOf(React.propTypes.object).isRequired,
-  styles: React.propTypes.string.isRequired,
-  mapId: React.propTypes.string.isRequired,
-  layerData: React.proptypes.objectof(React.propTypes.object).isRequired,
-  locations: React.proptypes.objectof(React.propTypes.object).isRequired,
+  layers: React.PropTypes.objectOf(React.PropTypes.array).isRequired,
+  mapConfig: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
+  styles: React.PropTypes.string.isRequired,
+  mapId: React.PropTypes.string.isRequired,
+  layerData: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
+  locations: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
 };
 
 Map.defaultProps = {
