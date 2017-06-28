@@ -1,0 +1,41 @@
+.export-btn {
+  width: 34px;
+  background: #fff;
+  z-index: 500;
+  right: 8px;
+  top: 150px;
+  display: block;
+  position: absolute;
+  font-size: 18px;
+  text-align: center;
+  line-height: 1.8;
+  color: #222;
+  border: 2px solid #cdcdcd;
+  border-radius: 7px;
+}
+
+.export-btn-map-2 {
+  
+}
+
+.modal-content {
+  padding: 40px;
+  
+  .close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    span {
+      font-size: 30px;
+    }
+  }
+  
+  .field-image img {
+    width: 100%;
+    height: auto;
+    min-height: 350px;
+    background: #eee url(/assets/img/loader.svg) no-repeat center center;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+}

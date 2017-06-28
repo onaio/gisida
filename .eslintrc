@@ -20,6 +20,7 @@
         "jsx-a11y/no-autofocus": 0,
         "no-mixed-operators": 0,
         "no-nested-ternary": 0,
+        "react/no-array-index-key": 0,
         "react/react-in-jsx-scope": 0,
         "no-param-reassign": [
             2,
