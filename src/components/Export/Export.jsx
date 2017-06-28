@@ -82,4 +82,3 @@ Export.propTypes = {
 Export.defaultProps = {
   map: '',
 };
-
