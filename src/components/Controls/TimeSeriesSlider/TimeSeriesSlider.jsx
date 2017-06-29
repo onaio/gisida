@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 require('./TimeSeriesSlider.scss');
 
@@ -16,8 +17,8 @@ function TimeSeriesSlider(props) {
 }
 
 TimeSeriesSlider.propTypes = {
-  mapId: React.PropTypes.string.isRequired,
-  periods: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
+  mapId: PropTypes.string.isRequired,
+  periods: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default TimeSeriesSlider;

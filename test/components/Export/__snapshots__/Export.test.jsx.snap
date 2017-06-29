@@ -3,7 +3,7 @@
 exports[`Export Export renders export icon and screen 1`] = `
 <div>
   <a
-    className="export-btn export-btn-"
+    className="export-btn export-btn-map-1"
     href="#"
     onClick={[Function]}
   >

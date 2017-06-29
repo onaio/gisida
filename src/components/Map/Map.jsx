@@ -2,6 +2,7 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import * as d3 from 'd3';
 import ss from 'simple-statistics';
+import PropTypes from 'prop-types';
 import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
 import { formatNum, getLastIndex } from '../../includes/utils';
@@ -910,19 +911,10 @@ class Map extends React.Component {
 export default Map;
 
 Map.propTypes = {
-  layers: React.PropTypes.objectOf(React.PropTypes.array).isRequired,
-  mapConfig: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
-  styles: React.PropTypes.string.isRequired,
-  mapId: React.PropTypes.string.isRequired,
-  layerData: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
-  locations: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
-};
-
-Map.defaultProps = {
-  layers: [],
-  mapConfig: {},
-  styles: '',
-  mapId: '',
-  layerData: {},
-  locations: {},
+  layers: PropTypes.objectOf(PropTypes.array).isRequired,
+  mapConfig: PropTypes.objectOf(PropTypes.object).isRequired,
+  styles: PropTypes.string.isRequired,
+  mapId: PropTypes.string.isRequired,
+  layerData: PropTypes.objectOf(PropTypes.object).isRequired,
+  locations: PropTypes.objectOf(PropTypes.object).isRequired,
 };

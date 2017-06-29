@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Cookie from 'js-cookie';
 
 require('./Menu.scss');
@@ -24,9 +25,9 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
   </div>);
 
 Menu.propTypes = {
-  toggleSingleScreen: React.PropTypes.func.isRequired,
-  toggleSplitScreen: React.PropTypes.func.isRequired,
-  appConfig: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  toggleSingleScreen: PropTypes.func.isRequired,
+  toggleSplitScreen: PropTypes.func.isRequired,
+  appConfig: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Menu;
