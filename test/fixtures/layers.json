@@ -1,0 +1,10 @@
+{
+    "test_layer": {
+        "label": "Test Layer",
+        "source": {
+            "type": "geojson",
+            "data": "data/test_geojson.geojson"
+        },
+        "type": "symbol"
+    }
+}

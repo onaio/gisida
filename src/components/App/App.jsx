@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
+
 
 require('./App.scss');
 
@@ -104,11 +106,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  appConfig: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  locations: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  sectorData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  styles: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  appConfig: PropTypes.objectOf(PropTypes.any).isRequired,
+  layerData: PropTypes.objectOf(PropTypes.any).isRequired,
+  locations: PropTypes.objectOf(PropTypes.any).isRequired,
+  sectorData: PropTypes.objectOf(PropTypes.any).isRequired,
+  styles: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default App;

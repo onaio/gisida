@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Layers from '../Layers/Layers';
 
 require('./Sectors.scss');
@@ -32,13 +33,13 @@ const Sectors = ({ sectorMenuId,
 
 
 Sectors.propTypes = {
-  sectorMenuId: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  mapTargetId: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  sectorData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  onToggleSectors: React.PropTypes.func.isRequired,
-  onSectorClick: React.PropTypes.func.isRequired,
-  onLayerChange: React.PropTypes.func.isRequired,
+  sectorMenuId: PropTypes.string.isRequired,
+  mapTargetId: PropTypes.string.isRequired,
+  sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
+  layerData: PropTypes.objectOf(PropTypes.any).isRequired,
+  onToggleSectors: PropTypes.func.isRequired,
+  onSectorClick: PropTypes.func.isRequired,
+  onLayerChange: PropTypes.func.isRequired,
 };
 
 export default Sectors;

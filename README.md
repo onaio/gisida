@@ -2,3 +2,4 @@
 
 # gisida
 Gisida is a Javascript library for building map dashboards using [React](https://github.com/facebook/react) and [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js)
+

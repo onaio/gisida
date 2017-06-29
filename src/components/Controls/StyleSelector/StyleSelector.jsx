@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 require('./StyleSelector.scss');
 
@@ -33,8 +34,8 @@ function StyleSelector(props) {
 }
 
 StyleSelector.propTypes = {
-  styles: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  style: React.PropTypes.string.isRequired,
+  styles: PropTypes.arrayOf(PropTypes.any).isRequired,
+  style: PropTypes.string.isRequired,
 };
 
 export default StyleSelector;
