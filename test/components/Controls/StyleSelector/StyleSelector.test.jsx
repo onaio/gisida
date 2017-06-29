@@ -8,7 +8,7 @@ describe('StyleSelector', () => {
         const changeStyle = jest.fn();
         const style = 'test://test-style';
         const component = renderer.create(
-            <StyleSelector changeStyle={changeStyle} style={style} styles={styles} />);
+            <StyleSelector style={style} styles={styles} />);
         const json = component.toJSON();
         expect(json).toMatchSnapshot();
     });

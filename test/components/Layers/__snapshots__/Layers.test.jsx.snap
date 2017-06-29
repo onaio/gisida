@@ -12,7 +12,9 @@ exports[`Layers Layers renders indicators 1`] = `
       onChange={[Function]}
       type="checkbox"
     />
-    <label>
+    <label
+      htmlFor="test_layer"
+    >
       Test Layer
     </label>
   </li>

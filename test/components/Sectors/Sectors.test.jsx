@@ -12,7 +12,7 @@ describe('Sectors', () => {
         const component = renderer.create(
             <Sectors
                 sectorMenuId="sector-menu-1"
-                mapTargetId="map-1"
+                mapTargetId='map-1'
                 onToggleSectors={toggleSectors}
                 onSectorClick={sectorClick}
                 onLayerChange={changeLayer}

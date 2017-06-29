@@ -16,8 +16,8 @@ function TimeSeriesSlider(props) {
 }
 
 TimeSeriesSlider.propTypes = {
-  mapId: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  periods: React.PropTypes.string.isRequired,
+  mapId: React.PropTypes.string.isRequired,
+  periods: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
 };
 
 export default TimeSeriesSlider;

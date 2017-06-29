@@ -32,9 +32,9 @@ const Sectors = ({ sectorMenuId,
 
 
 Sectors.propTypes = {
-  sectorMenuId: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  mapTargetId: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  sectorData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  sectorMenuId: React.PropTypes.string.isRequired,
+  mapTargetId: React.PropTypes.string.isRequired,
+  sectorData: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
   layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
   onToggleSectors: React.PropTypes.func.isRequired,
   onSectorClick: React.PropTypes.func.isRequired,

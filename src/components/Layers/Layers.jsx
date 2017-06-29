@@ -18,7 +18,7 @@ const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
 
 Layers.propTypes = {
   mapTargetId: React.PropTypes.string.isRequired,
-  layers: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  layers: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
   layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
   onLayerChange: React.PropTypes.func.isRequired,
 };

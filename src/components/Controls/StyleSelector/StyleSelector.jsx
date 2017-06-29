@@ -33,7 +33,7 @@ function StyleSelector(props) {
 }
 
 StyleSelector.propTypes = {
-  styles: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
+  styles: React.PropTypes.arrayOf(React.PropTypes.any).isRequired,
   style: React.PropTypes.string.isRequired,
 };
 
