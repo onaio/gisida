@@ -8,6 +8,5 @@ target/
 main.js
 out/
 checkouts/
-dist/
 .lein-env
 coverage/

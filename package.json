@@ -73,7 +73,7 @@
     "react"
   ],
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/gisida.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src --ext=jsx --ext=js"
