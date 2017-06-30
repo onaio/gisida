@@ -10,15 +10,18 @@ exports[`Menu Menu renders application details 1`] = `
     <img
       alt="UKAID"
       className="brand-icon"
-      src={undefined}
+      src="test.jpg"
     />
     <div
       className="brand-title"
     >
       <span
         className="white"
-      />
+      >
+        test app
+      </span>
          
+      This is a test app
     </div>
   </div>
   <ul>
@@ -46,6 +49,8 @@ exports[`Menu Menu renders application details 1`] = `
   <a
     className="sign-out"
     onClick={[Function]}
+    role="button"
+    tabIndex={0}
   >
     <span
       className="glyphicon glyphicon-log-out"

@@ -1,10 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
 
 function getEntrySources(sources) {
-  if (process.env.NODE_ENV !== 'production') {
-
-  }
   return sources;
 }
 
@@ -75,4 +71,3 @@ module.exports = {
   },
 
 };
-

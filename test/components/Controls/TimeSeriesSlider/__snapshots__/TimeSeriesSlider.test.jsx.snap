@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimeSeriesSlider TimeSeriesSlider renders time series slider 1`] = `
+<div
+  className="series"
+>
+  <label
+    className="label"
+    htmlFor="slider"
+    id="1-label"
+  />
+  <input
+    className="slider"
+    id="1-slider"
+    list="datalist"
+    type="range"
+  />
+  <datalist
+    id="datalist"
+  >
+    <option>
+      0
+    </option>
+    <option>
+      1
+    </option>
+    <option>
+      2
+    </option>
+  </datalist>
+</div>
+`;

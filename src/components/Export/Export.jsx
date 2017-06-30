@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import $ from 'jquery';
 
 require('./Export.scss');
 
@@ -76,10 +78,5 @@ class Export extends React.Component {
 export default Export;
 
 Export.propTypes = {
-  map: React.PropTypes.string.isRequired,
+  map: PropTypes.string.isRequired,
 };
-
-Export.defaultProps = {
-  map: '',
-};
-

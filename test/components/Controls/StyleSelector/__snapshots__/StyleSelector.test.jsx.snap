@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StyleSelector StyleSelector renders map style icon and options 1`] = `
+<div
+  className="leaflet-left leaflet-top leaflet-right layer-selector"
+>
+  <div
+    aria-haspopup="true"
+    className="leaflet-control leaflet-control-layers"
+  >
+    <a
+      className="leaflet-control-layers-toggle"
+      title="styles"
+    />
+    <form
+      className="leaflet-control-layers-list"
+    >
+      <div
+        className="leaflet-control-layers-base"
+      >
+        <label
+          htmlFor="styles"
+        >
+          <input
+            checked={false}
+            className="leaflet-control-layers-selector"
+            name="leaflet-base-layers"
+            onClick={[Function]}
+            readOnly={true}
+            type="radio"
+            value="test://test-style-1"
+          />
+          <span>
+            style-1
+          </span>
+        </label>
+        <label
+          htmlFor="styles"
+        >
+          <input
+            checked={false}
+            className="leaflet-control-layers-selector"
+            name="leaflet-base-layers"
+            onClick={[Function]}
+            readOnly={true}
+            type="radio"
+            value="test://test-style-2"
+          />
+          <span>
+            style-2
+          </span>
+        </label>
+        <label
+          htmlFor="styles"
+        >
+          <input
+            checked={false}
+            className="leaflet-control-layers-selector"
+            name="leaflet-base-layers"
+            onClick={[Function]}
+            readOnly={true}
+            type="radio"
+            value="test://test-style-3"
+          />
+          <span>
+            style-3
+          </span>
+        </label>
+      </div>
+      <div
+        className="leaflet-control-layers-overlays"
+      />
+    </form>
+  </div>
+</div>
+`;

@@ -1,10 +1,10 @@
-import { Component } from 'react';
+import React from 'react';
 import Cookie from 'js-cookie';
 
 require('./Login.scss');
 
 
-class Login extends Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loginError: false };

@@ -7,8 +7,9 @@
      steps:
        - checkout
        - run: 
-           name: Install Dependencies
+           name: Install dependencies
            command: yarn install
        - run: 
-           name: Run ESLint
+           name: Run eslint
            command: npm run lint
+       - run: npm test

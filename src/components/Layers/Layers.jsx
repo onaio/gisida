@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
 require('./Layers.scss');
@@ -17,10 +18,10 @@ const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
   </ul>);
 
 Layers.propTypes = {
-  mapTargetId: React.PropTypes.string.isRequired,
-  layers: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  layerData: React.PropTypes.objectOf(React.PropTypes.any).isRequired,
-  onLayerChange: React.PropTypes.func.isRequired,
+  mapTargetId: PropTypes.string.isRequired,
+  layers: PropTypes.arrayOf(PropTypes.any).isRequired,
+  layerData: PropTypes.objectOf(PropTypes.any).isRequired,
+  onLayerChange: PropTypes.func.isRequired,
 };
 
 export default Layers;
