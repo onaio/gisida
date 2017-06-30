@@ -2,6 +2,7 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import * as d3 from 'd3';
 import ss from 'simple-statistics';
+import Mustache from 'mustache';
 import PropTypes from 'prop-types';
 import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
@@ -570,53 +571,54 @@ class Map extends React.Component {
   }
 
   addLabels(layer, data) {
-    if (layer.labels && layer.labels.data) {
-      if (!layer.labels.height) {
-        layer.labels.height = 30;
-        layer.labels.width = 30;
-        layer.labels.offset = [-18, 10];
-      }
-      if (layer.labels.mode === 'join') {
-        data.forEach((row) => {
-          if (row[layer.labels.property]) {
-            const el = document.createElement('div');
-            el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
-            el.style.width = layer.labels.width;
-            el.style.height = layer.labels.height;
-            let labelSuffix = layer.labels.suffix || '';
-            if (row.total || row[layer.labels['property-2']]) {
-              const cummulativeSuffix = row.total ? row.total : row[layer.labels['property-2']];
-              labelSuffix += `<span style='font-size: 12px; font-weight: normal'><br><center>of ${cummulativeSuffix}</center></span>`;
-            }
-            $(el).html(row[layer.labels.property] + labelSuffix);
-            layer.labels.data.forEach((label) => {
-              if (label.osm_id === row[layer.source.join[1]]) {
-                new mapboxgl.Marker(el, {
-                  offset: layer.labels.offset,
-                })
-                  .setLngLat([label.longitude, label.latitude])
-                  .addTo(this.map);
-              }
+    if (layer.labels && layer.labels.data && layer.labels.join) {
+      const labels = [];
+
+      data.forEach((row) => {
+        const el = document.createElement('div');
+        el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
+        el.style.width = layer.labels.width;
+        el.style.height = layer.labels.height;
+        el.style['font-size'] = '12px';
+        el.style['font-weight'] = 'normal';
+        $(el).html(Mustache.render(layer.labels.label, row));
+        layer.labels.data.forEach((label) => {
+          if (label[layer.labels.join[0]] === row[layer.labels.join[1]]) {
+            labels.push({
+              el,
+              offset: layer.labels.offset,
+              coordinates: [label[layer.labels.coordinates[0]], label[layer.labels.coordinates[1]]],
             });
           }
         });
-      } else {
-        layer.labels.data.forEach((label) => {
-          if (label[layer.labels.property]) {
-            const el = document.createElement('div');
-            el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
-            el.style.width = layer.labels.width;
-            el.style.height = layer.labels.height;
-            $(el).attr('data-coords', [label.longitude, label.latitude]);
-            $(el).html(label[layer.labels.property]);
-            new mapboxgl.Marker(el, {
-              offset: layer.labels.offset,
-            })
-              .setLngLat([label.longitude, label.latitude])
-              .addTo(this.map);
-          }
+      });
+
+      if (this.map.getZoom() > layer.labels.minZoom) {
+        labels.forEach((row) => {
+          new mapboxgl.Marker(row.el, {
+            offset: row.offset,
+          })
+            .setLngLat(row.coordinates)
+            .addTo(this.map);
         });
       }
+
+      this.map.on('zoom', () => {
+        if (this.map.getZoom() > layer.labels.minZoom
+          && this.map.getLayer(layer.id) !== undefined) {
+          this.removeLabels(layer);
+
+          labels.forEach((row) => {
+            new mapboxgl.Marker(row.el, {
+              offset: row.offset,
+            })
+              .setLngLat(row.coordinates)
+              .addTo(this.map);
+          });
+        } else {
+          this.removeLabels(layer);
+        }
+      });
     }
   }
 
