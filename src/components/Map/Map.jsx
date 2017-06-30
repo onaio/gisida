@@ -570,33 +570,51 @@ class Map extends React.Component {
   }
 
   addLabels(layer, data) {
+    const labels = [];
+
+    data.forEach((row) => {
+      const el = document.createElement('div');
+      el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
+      el.style.width = layer.labels.width;
+      el.style.height = layer.labels.height;
+      el.style['font-size'] = '12px';
+      el.style['font-weight'] = 'normal';
+      $(el).html(Mustache.render(layer.labels.label, row));
+      layer.labels.data.forEach((label) => {
+        if (label[layer.labels.join[0]] === row[layer.labels.join[1]]) {
+          labels.push({
+            el,
+            offset: layer.labels.offset,
+            coordinates: [label.longitude, label.latitude],
+          });
+        }
+      });
+    });
+
+    if (this.map.getZoom() > layer.labels.minZoom) {
+      labels.forEach((row) => {
+        new mapboxgl.Marker(row.el, {
+          offset: row.offset,
+        })
+          .setLngLat(row.coordinates)
+          .addTo(this.map);
+      });
+    }
+
     if (layer.labels && layer.labels.data && layer.labels.join) {
       this.map.on('zoom', () => {
         if (this.map.getZoom() > layer.labels.minZoom) {
-          data.forEach((row) => {
-            const el = document.createElement('div');
-            el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
-            el.style.width = layer.labels.width;
-            el.style.height = layer.labels.height;
-            el.style['font-size'] = '12px';
-            el.style['font-weight'] = 'normal';
-            $(el).html(Mustache.render(layer.labels.label, row));
+          this.removeLabels(layer);
 
-            layer.labels.data.forEach((label) => {
-              if (label[layer.labels.join[0]] === row[layer.labels.join[1]]) {
-                new mapboxgl.Marker(el, {
-                  offset: layer.labels.offset,
-                })
-                  .setLngLat([label.longitude, label.latitude])
-                  .addTo(this.map);
-              }
-            });
+          labels.forEach((row) => {
+            new mapboxgl.Marker(row.el, {
+              offset: row.offset,
+            })
+              .setLngLat(row.coordinates)
+              .addTo(this.map);
           });
         } else {
-          const classItems = document.getElementsByClassName(`marker-label-${layer.id}-${this.props.mapId}`);
-          while (classItems[0]) {
-            classItems[0].parentNode.removeChild(classItems[0]);
-          }
+          this.removeLabels(layer);
         }
       });
     }
