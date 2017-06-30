@@ -603,7 +603,7 @@ class Map extends React.Component {
       }
 
       this.map.on('zoom', () => {
-        if (this.map.getZoom() > layer.labels.minZoom) {
+        if (this.map.getZoom() > layer.labels.minZoom && this.map.getLayer(layer.id) !== undefined) {
           this.removeLabels(layer);
 
           labels.forEach((row) => {
