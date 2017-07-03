@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
+import Framework from '../Framework/Framework';
 
 
 require('./App.scss');
@@ -89,30 +90,35 @@ class App extends React.Component {
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
     const styles = this.props.styles;
+    const appConfig = this.props.appConfig;
 
     return (
       <div>
         <Menu
           toggleSingleScreen={singleScreen}
           toggleSplitScreen={splitScreen}
-          appConfig={this.props.appConfig}
+          appConfig={appConfig}
         />
-        <Map
-          mapId="map-1"
-          layerData={layerData}
-          layers={layers}
-          styles={styles}
-          locations={this.props.locations}
-          mapConfig={this.props.appConfig}
-        />
-        <Map
-          mapId="map-2"
-          layerData={layerData}
-          layers={layers}
-          styles={styles}
-          locations={this.props.locations}
-          mapConfig={this.props.appConfig}
-        />
+        {appConfig.defaultView === 'framework' ?
+          <Framework /> :
+          <Map
+            mapId="map-1"
+            layerData={layerData}
+            layers={layers}
+            styles={styles}
+            locations={this.props.locations}
+            mapConfig={appConfig}
+          />
+         }
+        {appConfig.splitView ?
+          <Map
+            mapId="map-2"
+            layerData={layerData}
+            layers={layers}
+            styles={styles}
+            locations={this.props.locations}
+            mapConfig={appConfig}
+          /> : null}
         <Sectors sectorMenuId="sector-menu-1" mapTargetId="map-1" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
         <Sectors sectorMenuId="sector-menu-2" mapTargetId="map-2" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
       </div>
