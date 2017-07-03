@@ -34,7 +34,7 @@ class Dashboard {
         />,
         container);
     } else {
-      render(<Login />, container);
+      render(<Login appConfig={config.APP} />, container);
     }
   }
 }

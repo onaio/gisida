@@ -458,14 +458,17 @@ class Map extends React.Component {
           <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
         }
 
-        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px;
-        width: 5px; background: #DDDDDD;"></span>
-        Normal: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
-        chartArr.splice(0, 0, {
-          color: '#DDDDDD',
-          y: (100 - propTotal),
-          label: 'Normal',
-        });
+        if (layer.categories.difference) {
+          chartProp +=
+            `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px;
+            background: ${layer.categories.difference[1]};"></span>
+            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+          chartArr.splice(0, 0, {
+            color: layer.categories.difference[1],
+            y: (100 - propTotal),
+            label: layer.categories.difference[0],
+          });
+        }
 
         for (let i = 0; i < clusters.length; i += 1) {
           if (clusters[i].includes(total)) {

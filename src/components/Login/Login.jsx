@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookie from 'js-cookie';
+import PropTypes from 'prop-types';
 
 require('./Login.scss');
 
@@ -11,7 +12,7 @@ class Login extends React.Component {
   }
 
   handleLogin(password) {
-    if (password === 'irf' || password === 'irfsomalia') {
+    if (this.props.appConfig.password.includes(password)) {
       Cookie.set('dsauth', true);
       location.reload();
     } else {
@@ -38,3 +39,7 @@ class Login extends React.Component {
 }
 
 export default Login;
+
+Login.propTypes = {
+  appConfig: PropTypes.string.isRequired,
+};
