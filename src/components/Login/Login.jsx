@@ -12,7 +12,7 @@ class Login extends React.Component {
   }
 
   handleLogin(password) {
-    if (password === this.props.appConfig.password) {
+    if (this.props.appConfig.password.includes(password)) {
       Cookie.set('dsauth', true);
       location.reload();
     } else {

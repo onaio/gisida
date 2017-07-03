@@ -459,9 +459,10 @@ class Map extends React.Component {
         }
 
         if (layer.categories.difference) {
-          chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px;
-        width: 5px; background: ${layer.categories.difference[1]};"></span>
-        ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+          chartProp +=
+            `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px;
+            background: ${layer.categories.difference[1]};"></span>
+            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
           chartArr.splice(0, 0, {
             color: layer.categories.difference[1],
             y: (100 - propTotal),
