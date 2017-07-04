@@ -109,18 +109,39 @@ class App extends React.Component {
             locations={this.props.locations}
             mapConfig={appConfig}
           />
-         }
+        }
+        <Sectors
+          view={appConfig.defaultView}
+          sectorMenuId="sector-menu-1"
+          mapTargetId="map-1"
+          onToggleSectors={toggleSectors}
+          onSectorClick={sectorClick}
+          onLayerChange={changeLayer}
+          sectorData={sectorData}
+          layerData={layerData}
+        />
+
         {appConfig.splitView ?
-          <Map
-            mapId="map-2"
-            layerData={layerData}
-            layers={layers}
-            styles={styles}
-            locations={this.props.locations}
-            mapConfig={appConfig}
-          /> : null}
-        <Sectors sectorMenuId="sector-menu-1" mapTargetId="map-1" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
-        <Sectors sectorMenuId="sector-menu-2" mapTargetId="map-2" onToggleSectors={toggleSectors} onSectorClick={sectorClick} onLayerChange={changeLayer} sectorData={sectorData} layerData={layerData} />
+          <div>
+            <Map
+              mapId="map-2"
+              layerData={layerData}
+              layers={layers}
+              styles={styles}
+              locations={this.props.locations}
+              mapConfig={appConfig}
+            />
+            <Sectors
+              sectorMenuId="sector-menu-2"
+              mapTargetId="map-2"
+              onToggleSectors={toggleSectors}
+              onSectorClick={sectorClick}
+              onLayerChange={changeLayer}
+              sectorData={sectorData}
+              layerData={layerData}
+            />
+          </div>
+          : null}
       </div>
     );
   }
