@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class Framework extends React.Component {
 
   render() {
-    return (<div>Panels will go here</div>);
+    return (<div />);
   }
 
 
