@@ -16,8 +16,12 @@ const Filters = ({ filters, headers }) =>
   </ul>);
 
 Filters.propTypes = {
-  filters: PropTypes.objectOf(PropTypes.any).isRequired,
-  headers: PropTypes.objectOf(PropTypes.any).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.any).isRequired,
+  headers: PropTypes.arrayOf(PropTypes.any),
+};
+
+Filters.defaultProps = {
+  headers: [],
 };
 
 export default Filters;

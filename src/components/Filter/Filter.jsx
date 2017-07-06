@@ -19,7 +19,11 @@ const Filter = ({ filter, headers }) =>
 
 Filter.propTypes = {
   filter: PropTypes.string.isRequired,
-  headers: PropTypes.objectOf(PropTypes.any).isRequired,
+  headers: PropTypes.arrayOf(PropTypes.any),
+};
+
+Filter.defaultProps = {
+  headers: [],
 };
 
 export default Filter;

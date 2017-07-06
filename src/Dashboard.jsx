@@ -20,12 +20,21 @@ class Dashboard {
 
     const sectorData = [];
     Object.keys(config.SECTORS).forEach((key) => {
-      sectorData.push({
-        sector: key,
-        layers: config.SECTORS[key].layers,
-        filters: config.SECTORS[key].filters,
-        headers: config.SECTORS[key].headers,
-      });
+      if (config.SECTORS[key].filters) {
+        sectorData.push({
+          sector: key,
+          layers: config.SECTORS[key].layers,
+          filters: config.SECTORS[key].filters,
+          headers: config.SECTORS[key].headers,
+        });
+      } else {
+        sectorData.push({
+          sector: key,
+          layers: config.SECTORS[key].layers,
+          sectors: config.SECTORS[key].sectors,
+          headers: config.SECTORS[key].headers,
+        });
+      }
     });
 
     if (isLoggedIn()) {

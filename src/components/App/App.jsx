@@ -14,6 +14,7 @@ class App extends React.Component {
   static showSector(e) {
     e.preventDefault();
     $(e.target).parent('li').find('.layers').toggle();
+    $(e.target).parent('li').find('.filters').toggle();
   }
 
   static splitScreen(e) {
@@ -36,7 +37,9 @@ class App extends React.Component {
   static toggleSectors(e) {
     e.preventDefault();
     $(e.target).parents('.sectors-menu-wrapper').find('.sectors-menu').toggle();
+    $(e.target).parents('.sectors-menu-wrapper').find('.framework-sectors-menu').toggle();
     $(e.target).parents('.sectors-menu-wrapper').find('.open-btn').toggle();
+    $(e.target).parents('.sectors-menu-wrapper').find('.framework-open-btn').toggle();
   }
 
   constructor(props) {
@@ -99,8 +102,10 @@ class App extends React.Component {
           toggleSplitScreen={splitScreen}
           appConfig={appConfig}
         />
-        {appConfig.defaultView === 'framework' ?
-          <Framework /> :
+        {appConfig.defaultView === 'framework' && !this.props.toggleView ?
+          <Framework
+            sectorData={sectorData}
+          /> :
           <Map
             mapId="map-1"
             layerData={layerData}

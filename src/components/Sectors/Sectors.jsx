@@ -12,15 +12,17 @@ const Sectors = ({ sectorMenuId,
   onToggleSectors = f => f,
   onSectorClick = f => f,
   onLayerChange = f => f,
-  view = f => f }) =>
+  view }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
-    <a href="#" onClick={e => onToggleSectors(e)} className="open-btn"><span className="glyphicon glyphicon-list" /></a>
-    <div id={sectorMenuId} className="sectors-menu">
+    <a href="#" onClick={e => onToggleSectors(e)} className={view === 'framework' ? 'framework-open-btn' : 'open-btn'}><span className="glyphicon glyphicon-list" /></a>
+    <div
+      className={view === 'framework' ? 'framework-sectors-menu' : 'sectors-menu'}
+    >
       <a className="close-btn" onClick={e => onToggleSectors(e)} href="#"><span className="glyphicon glyphicon-remove" /></a>
       <ul className="sectors">
         {sectorData.map((sector, i) =>
           // eslint-disable-next-line react/no-array-index-key
-          (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector} <span className="caret" /></a>
+          sector.filters ? (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector} <span className="caret" /></a>
             {view === 'framework' ?
               <Filters
                 filters={sector.filters}
@@ -33,7 +35,7 @@ const Sectors = ({ sectorMenuId,
                 layerData={layerData}
               />
             }
-          </li>))
+          </li>) : '')
         }
       </ul>
     </div>
