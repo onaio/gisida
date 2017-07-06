@@ -56,7 +56,11 @@ class FilterSelector extends React.Component {
 
 FilterSelector.propTypes = {
   filterData: PropTypes.func.isRequired,
-  layerObj: PropTypes.objectOf(PropTypes.any).isRequired,
+  layerObj: PropTypes.objectOf(PropTypes.any),
+};
+
+FilterSelector.defaultProps = {
+  layerObj: {},
 };
 
 export default FilterSelector;

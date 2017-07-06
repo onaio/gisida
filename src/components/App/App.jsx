@@ -109,8 +109,8 @@ App.propTypes = {
   appConfig: PropTypes.objectOf(PropTypes.any).isRequired,
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   locations: PropTypes.objectOf(PropTypes.any).isRequired,
-  sectorData: PropTypes.objectOf(PropTypes.any).isRequired,
-  styles: PropTypes.objectOf(PropTypes.any).isRequired,
+  sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
+  styles: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default App;

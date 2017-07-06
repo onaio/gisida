@@ -917,9 +917,9 @@ export default Map;
 
 Map.propTypes = {
   layers: PropTypes.objectOf(PropTypes.array).isRequired,
-  mapConfig: PropTypes.objectOf(PropTypes.object).isRequired,
-  styles: PropTypes.string.isRequired,
+  mapConfig: PropTypes.objectOf(PropTypes.any).isRequired,
+  styles: PropTypes.arrayOf(PropTypes.any).isRequired,
   mapId: PropTypes.string.isRequired,
-  layerData: PropTypes.objectOf(PropTypes.object).isRequired,
-  locations: PropTypes.objectOf(PropTypes.object).isRequired,
+  layerData: PropTypes.objectOf(PropTypes.any).isRequired,
+  locations: PropTypes.objectOf(PropTypes.any).isRequired,
 };
