@@ -219,7 +219,7 @@ class Map extends React.Component {
       self.addLegend(layerData);
       layerData.layers.forEach((sublayer) => {
         const subLayer = this.props.layerData[sublayer];
-        subLayer.id = layer;
+        subLayer.id = sublayer;
         self.addLayer(subLayer);
       });
     }
