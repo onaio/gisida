@@ -299,10 +299,12 @@ class Map extends React.Component {
           circleLayer.source.url = layer.source['map-id'];
           circleLayer['source-layer'] = layer.source.layer;
         } else if (layer.source.type === 'geojson') {
-          circleLayer.paint['circle-radius'] = {
-            property: layer.source.join[0],
-            stops: stops[1][0],
-          };
+          if (stops) {
+            circleLayer.paint['circle-radius'] = {
+              property: layer.source.join[0],
+              stops: stops[1][0],
+            };
+          }
           circleLayer.source.data = layer.source.data;
         }
       }
