@@ -824,7 +824,7 @@ class Map extends React.Component {
       const activeLayerId = feature.layer.id;
       const layer = layerData[activeLayerId];
 
-      if (layer.type !== 'chart' && layer.popup.body) {
+      if (layer.type !== 'chart' && layer.popup) {
         const periodData = [];
         if (layer.aggregate && layer.aggregate.timeseries) {
           const currPeriod = document.getElementById(`${self.props.mapId}-label`).textContent;
@@ -839,8 +839,10 @@ class Map extends React.Component {
         data.forEach((row) => {
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             if (row[layer.popup.header]) {
+              const body = layer.popup.popup ? Mustache.render(layer.popup.popup, row) :
+                row[layer.popup.body];
               content = `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${row[layer.popup.body]}</center></div>`;
+                `<div><center>${body}</center></div>`;
             } else {
               content = row[layer.popup.body];
             }
