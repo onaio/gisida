@@ -637,7 +637,7 @@ class Map extends React.Component {
   addLegend(layer, stops, data, breaks, colors) {
     const mapId = this.props.mapId;
     let background = '';
-    if (layer.credit && layer.type === 'circle') {
+    if (layer.credit && layer.type === 'circle' && layer.categories.breaks === 'yes') {
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"` +
         'class="legend-shapes">' +
         `<b>${layer.label}</b>` +
