@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Layer = ({ mapTargetId, layer, layerData, onLayerChange = f => f }) =>
+require('./Layer.scss');
+
+const Layer = ({ mapTargetId, layer, layerData, headers, defaultView, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
-    <input
-      type="checkbox"
-      data-layer={layer}
-      onChange={e => onLayerChange(layer, e.target.checked, mapTargetId)}
-    />
-    <label htmlFor={layer} >{layerData[layer].label}</label>
+    {headers.includes(layer) ? <b>{layer}</b> :
+    <label htmlFor={layer} >
+        <input
+          type={defaultView === 'framework' ? 'radio' : 'checkbox'}
+          data-layer={layer}
+          onChange={e => onLayerChange(layer, e.target.checked, mapTargetId)}
+        />
+        {layerData[layer] ? layerData[layer].label : layer}</label>
+    }
   </li>);
 
 Layer.propTypes = {
@@ -16,6 +21,12 @@ Layer.propTypes = {
   layer: PropTypes.string.isRequired,
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   onLayerChange: PropTypes.func.isRequired,
+  headers: PropTypes.arrayOf(PropTypes.any),
+  defaultView: PropTypes.string.isRequired,
+};
+
+Layer.defaultProps = {
+  headers: [],
 };
 
 export default Layer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import App from '../App/App';
+import App from '../App/App';
 
 require('./Framework.scss');
 
@@ -22,8 +22,8 @@ class Framework extends React.Component {
                 {sector.headers.includes(layer) ?
                   <b>{layer}</b> :
                   <div>
-                    <canvas className="rectangle" ref={(canvas) => { this.canvas = canvas; }} />
-                    <a>{layer}</a>
+                    <canvas id="rectangle" ref={(canvas) => { this.canvas = canvas; }} />
+                    <a onClick={this.props.onToggleView}>{layer}</a>
                   </div>}
               </li>
             ))
@@ -57,6 +57,7 @@ class Framework extends React.Component {
 
 Framework.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
+  onToggleView: PropTypes.func.isRequired,
 };
 
 export default Framework;

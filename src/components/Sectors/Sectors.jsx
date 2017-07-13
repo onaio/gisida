@@ -12,30 +12,43 @@ const Sectors = ({ sectorMenuId,
   onToggleSectors = f => f,
   onSectorClick = f => f,
   onLayerChange = f => f,
-  view }) =>
+  view,
+  defaultView,
+}) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
-    <a href="#" onClick={e => onToggleSectors(e)} className={view === 'framework' ? 'framework-open-btn' : 'open-btn'}><span className="glyphicon glyphicon-list" /></a>
+    <a
+      href="#"
+      onClick={e => onToggleSectors(e)}
+      className={
+        view === 'framework' || defaultView === 'framework' ? 'framework-open-btn' : 'open-btn'}
+    ><span className="glyphicon glyphicon-list" /></a>
     <div
-      className={view === 'framework' ? 'framework-sectors-menu' : 'sectors-menu'}
+      className={view === 'framework' || defaultView === 'framework' ?
+        'framework-sectors-menu' : 'sectors-menu'}
     >
       <a className="close-btn" onClick={e => onToggleSectors(e)} href="#"><span className="glyphicon glyphicon-remove" /></a>
       <ul className="sectors">
         {sectorData.map((sector, i) =>
           // eslint-disable-next-line react/no-array-index-key
-          sector.filters ? (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector} <span className="caret" /></a>
-            {view === 'framework' ?
+          view === 'framework' && sector.filters ?
+            (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
               <Filters
                 filters={sector.filters}
                 headers={sector.headers}
               />
-              : <Layers
+            </li>) :
+            defaultView === 'framework' && view !== 'framework' ?
+            (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
+              <Layers
                 onLayerChange={onLayerChange}
                 mapTargetId={mapTargetId}
-                layers={sector.layers}
+                layers={sector.filters || sector.sectors ?
+                  sector.filters || sector.sectors : sector.layers}
+                defaultView={defaultView}
+                headers={sector.headers}
                 layerData={layerData}
               />
-            }
-          </li>) : '')
+            </li>) : '')
         }
       </ul>
     </div>
@@ -51,6 +64,7 @@ Sectors.propTypes = {
   onSectorClick: PropTypes.func.isRequired,
   onLayerChange: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,
+  defaultView: PropTypes.string.isRequired,
 };
 
 export default Sectors;

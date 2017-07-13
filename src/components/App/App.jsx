@@ -47,12 +47,14 @@ class App extends React.Component {
     this.state = {
       layers: [],
       sectors: [],
+      view: this.props.appConfig.defaultView,
     };
     this.changeLayer = this.changeLayer.bind(this);
     this.sectorClick = App.showSector.bind(this);
     this.splitScreen = App.splitScreen.bind(this);
     this.singleScreen = App.singleScreen.bind(this);
     this.toggleSectors = App.toggleSectors.bind(this);
+    this.toggleView = this.toggleView.bind(this);
   }
 
   changeLayer(layer, status, map) {
@@ -83,17 +85,23 @@ class App extends React.Component {
     this.setState({ layers });
   }
 
+  toggleView() {
+    this.setState({ view: 'map' });
+  }
+
   render() {
     const { changeLayer } = this;
     const { sectorClick } = this;
     const { toggleSectors } = this;
     const { splitScreen } = this;
     const { singleScreen } = this;
+    const { toggleView } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
     const styles = this.props.styles;
     const appConfig = this.props.appConfig;
+    const currentView = this.state.view;
 
     return (
       <div>
@@ -102,9 +110,10 @@ class App extends React.Component {
           toggleSplitScreen={splitScreen}
           appConfig={appConfig}
         />
-        {appConfig.defaultView === 'framework' && !this.props.toggleView ?
+        {this.state.view === 'framework' ?
           <Framework
             sectorData={sectorData}
+            onToggleView={toggleView}
           /> :
           <Map
             mapId="map-1"
@@ -116,7 +125,8 @@ class App extends React.Component {
           />
         }
         <Sectors
-          view={appConfig.defaultView}
+          view={currentView}
+          defaultView={appConfig.defaultView}
           sectorMenuId="sector-menu-1"
           mapTargetId="map-1"
           onToggleSectors={toggleSectors}

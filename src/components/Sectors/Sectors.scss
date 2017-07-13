@@ -12,12 +12,12 @@
 
 .framework-sectors-menu {
     position: fixed;
-    width: 16%;
+    width: 18%;
     height: 100%;
     color: #555;
     z-index: 1000;
     overflow-y: scroll;
-    background: #F7F6EF;
+    background: #FFFFFF;
     box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
     top: 3em;
     left: 0;
@@ -39,19 +39,18 @@ ul {
 .sectors {
     padding: 0;
     overflow-y: scroll;
-
-    li.sector a {
-        color: #555;
-        display: block;
-        font-weight: 600;
-        padding: 25px 15px;
-        background: rgba(255, 255, 255, 0.4);
+    li.sector {
         border-bottom: 1px solid #eee;
-
-        &:hover,
-        &:focus {
-            text-decoration: none;
+        a {
             color: #555;
+            display: block;
+            font-weight: 600;
+            padding: 25px 15px;
+            &:hover,
+            &:focus {
+                text-decoration: none;
+                color: #555;
+            }
         }
     }
 }
@@ -65,29 +64,31 @@ ul {
 .layers {
     padding: 20px 0 20px 20px;
     display: none;
+    li {
+        position: relative;
+        display: block;
+        width: 100%;
+        label {
+            color: #555;
+            font-weight: normal;
+            font-size: 12px;
+            width: 80%;
+            display: block;
+            margin: 0 0 10px 20px;
+        }
+        input[type='checkbox'], input[type='radio'] {
+           margin-right: 5%; 
+        }
 
-    li.layer {
-      position: relative;
-      display: block;
-      width: 100%;
-    }
-  }
-
-  label {
-    color: #555;
-    font-weight: normal;
-    font-size: 12px;
-    width: 80%;
-    display: block;
-    margin: 0 0 10px 20px;
-}
-
-input[type='checkbox'] {
+        input[type='checkbox'] {
     position: absolute;
     left: 0;
     top: -2px;
 }
 }
+}
+}
+
 
 
 .open-btn {

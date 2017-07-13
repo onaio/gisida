@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
+const Layers = ({ mapTargetId, layers, layerData, headers, defaultView, onLayerChange = f => f }) =>
   (<ul className="layers">
     {layers.map(layer =>
       (<Layer
@@ -11,6 +11,8 @@ const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
         mapTargetId={mapTargetId}
         layer={layer}
         layerData={layerData}
+        headers={headers}
+        defaultView={defaultView}
       />))
   }
   </ul>);
@@ -20,6 +22,12 @@ Layers.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.any).isRequired,
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   onLayerChange: PropTypes.func.isRequired,
+  headers: PropTypes.arrayOf(PropTypes.any),
+  defaultView: PropTypes.string.isRequired,
+};
+
+Layers.defaultProps = {
+  headers: [],
 };
 
 export default Layers;
