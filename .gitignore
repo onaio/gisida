@@ -10,3 +10,4 @@ out/
 checkouts/
 .lein-env
 coverage/
+dist/
