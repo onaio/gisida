@@ -839,12 +839,10 @@ class Map extends React.Component {
         data.forEach((row) => {
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             if (row[layer.popup.header]) {
-              const body = layer.popup.popup ? Mustache.render(layer.popup.popup, row) :
-                row[layer.popup.body];
               content = `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${body}</center></div>`;
+                `<div><center>${Mustache.render(layer.popup.body, row)}</center></div>`;
             } else {
-              content = row[layer.popup.body];
+              content = Mustache.render(layer.popup.body, row);
             }
           }
         });
