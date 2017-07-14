@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 function getEntrySources(sources) {
   return sources;
@@ -70,4 +71,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.css', '.scss'],
   },
 
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin(),
+  ],
 };
