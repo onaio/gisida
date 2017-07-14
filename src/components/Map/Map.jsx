@@ -435,12 +435,15 @@ class Map extends React.Component {
      * CHART ==========================================================
      */
     if (layer.type === 'chart') {
-      const population = layer.source.data.map(d => d[layer.categories.total]);
+      // debugger;
+      const period = [...new Set(layer.source.data.map(p => p[timefield]))];
+      // const currPeriod = period[period.length - 1];
+      const Data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
+      const population = Data.map(d => d[layer.categories.total]);
       const clusters = ss.ckmeans(population, layer.categories.clusters);
-      const dimensions = layer.categories.dimension;
 
       // create a DOM element for the marker
-      layer.source.data.forEach((district) => {
+      Data.forEach((district) => {
         const total = district[layer.categories.total];
         const chartArr = [];
         let chartProp = '';
@@ -474,7 +477,7 @@ class Map extends React.Component {
 
         for (let i = 0; i < clusters.length; i += 1) {
           if (clusters[i].includes(total)) {
-            dimension = dimensions[i];
+            dimension = layer.categories.dimension[i];
           }
         }
 
@@ -484,26 +487,26 @@ class Map extends React.Component {
           innerSize: layer.chart.innerSize,
         }];
 
-        const content = `<div><b>${district.district_name}</b></div>${chartProp}`;
+        const content = `<div><b>${district[layer.source.join[1]]}</b></div>${chartProp}`;
 
         const el = document.createElement('div');
-        el.id = `chart-${district.district_osm_id}-${layer.id}-${self.props.mapId}`;
+        el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${self.props.mapId}`;
         el.className = `marker-chart marker-chart-${layer.id}-${self.props.mapId}`;
         el.style.width = layer.chart.width;
         el.style.height = layer.chart.height;
         $(el).attr('data-map', self.props.mapId);
-        $(el).attr('data-lng', district.longitude);
-        $(el).attr('data-lat', district.latitude);
+        $(el).attr('data-lng', district[layer.chart.coordinates[0]]);
+        $(el).attr('data-lat', district[layer.chart.coordinates[1]]);
         $(el).attr('data-popup', content);
 
         // add marker to map
         new mapboxgl.Marker(el, {
           offset: layer.chart.offset,
         })
-          .setLngLat([district.longitude, district.latitude])
+          .setLngLat([district[layer.chart.coordinates[0]], district[layer.chart.coordinates[1]]])
           .addTo(self.map);
 
-        const container = $(`#chart-${district.district_osm_id}-${layer.id}-${self.props.mapId}`)[0];
+        const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${self.props.mapId}`)[0];
         Map.drawDoughnutChart(container, chartData, dimension);
       });
     }
