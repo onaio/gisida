@@ -469,16 +469,14 @@ class Map extends React.Component {
           label: layer.categories.label[i],
         });
         propTotal += parseInt(district[layer.categories.property[i]] / total * 100, 10);
-        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; 
-          width: 5px; background: ${layer.categories.color[i]};"></span>
+        chartProp += `<div><span class="swatch" style="background: ${layer.categories.color[i]};"></span>
           ${layer.categories.label[i]}: 
           <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
       }
 
       if (layer.categories.difference) {
         chartProp +=
-          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px;
-            background: ${layer.categories.difference[1]};"></span>
+          `<div><span class="swatch" style="background: ${layer.categories.difference[1]};"></span>
             ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
         chartArr.splice(0, 0, {
           color: layer.categories.difference[1],
