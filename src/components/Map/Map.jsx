@@ -435,86 +435,92 @@ class Map extends React.Component {
      * CHART ==========================================================
      */
     if (layer.type === 'chart') {
-      // debugger;
-      const period = [...new Set(layer.source.data.map(p => p[timefield]))];
-      // const currPeriod = period[period.length - 1];
-      const Data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
-      const population = Data.map(d => d[layer.categories.total]);
-      const clusters = ss.ckmeans(population, layer.categories.clusters);
-
-      // create a DOM element for the marker
-      Data.forEach((district) => {
-        const total = district[layer.categories.total];
-        const chartArr = [];
-        let chartProp = '';
-        let propTotal = 0;
-        let dimension;
-
-        for (let i = 0; i < layer.categories.property.length; i += 1) {
-          chartArr.push({
-            color: layer.categories.color[i],
-            y: parseInt(district[layer.categories.property[i]] / total * 100, 10),
-            label: layer.categories.label[i],
-          });
-          propTotal += parseInt(district[layer.categories.property[i]] / total * 100, 10);
-          chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; 
-          width: 5px; background: ${layer.categories.color[i]};"></span>
-          ${layer.categories.label[i]}: 
-          <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
-        }
-
-        if (layer.categories.difference) {
-          chartProp +=
-            `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px;
-            background: ${layer.categories.difference[1]};"></span>
-            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
-          chartArr.splice(0, 0, {
-            color: layer.categories.difference[1],
-            y: (100 - propTotal),
-            label: layer.categories.difference[0],
-          });
-        }
-
-        for (let i = 0; i < clusters.length; i += 1) {
-          if (clusters[i].includes(total)) {
-            dimension = layer.categories.dimension[i];
-          }
-        }
-
-        const chartData = [{
-          data: chartArr,
-          size: layer.chart.size,
-          innerSize: layer.chart.innerSize,
-        }];
-
-        const content = `<div><b>${district[layer.source.join[1]]}</b></div>${chartProp}`;
-
-        const el = document.createElement('div');
-        el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${self.props.mapId}`;
-        el.className = `marker-chart marker-chart-${layer.id}-${self.props.mapId}`;
-        el.style.width = layer.chart.width;
-        el.style.height = layer.chart.height;
-        $(el).attr('data-map', self.props.mapId);
-        $(el).attr('data-lng', district[layer.chart.coordinates[0]]);
-        $(el).attr('data-lat', district[layer.chart.coordinates[1]]);
-        $(el).attr('data-popup', content);
-
-        // add marker to map
-        new mapboxgl.Marker(el, {
-          offset: layer.chart.offset,
-        })
-          .setLngLat([district[layer.chart.coordinates[0]], district[layer.chart.coordinates[1]]])
-          .addTo(self.map);
-
-        const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${self.props.mapId}`)[0];
-        Map.drawDoughnutChart(container, chartData, dimension);
-      });
+      let data = layer.source.data;
+      if (timefield) {
+        const period = [...new Set(layer.source.data.map(p => p[timefield]))];
+        this.setState({ stops: { id: layer.id, period, timefield } });
+        data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
+      }
+      this.addChart(layer, data);
     }
 
     // sort the layers
     self.sortLayers();
 
     return null;
+  }
+
+  addChart(layer, data) {
+    const population = data.map(d => d[layer.categories.total]);
+    const clusters = ss.ckmeans(population, layer.categories.clusters);
+
+    // create a DOM element for the marker
+    data.forEach((district) => {
+      const total = district[layer.categories.total];
+      const chartArr = [];
+      let chartProp = '';
+      let propTotal = 0;
+      let dimension;
+
+      for (let i = 0; i < layer.categories.property.length; i += 1) {
+        chartArr.push({
+          color: layer.categories.color[i],
+          y: parseInt(district[layer.categories.property[i]] / total * 100, 10),
+          label: layer.categories.label[i],
+        });
+        propTotal += parseInt(district[layer.categories.property[i]] / total * 100, 10);
+        chartProp += `<div><span class="swatch" style="display: inline-block; height: 10px; 
+          width: 5px; background: ${layer.categories.color[i]};"></span>
+          ${layer.categories.label[i]}: 
+          <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
+      }
+
+      if (layer.categories.difference) {
+        chartProp +=
+          `<div><span class="swatch" style="display: inline-block; height: 10px; width: 5px;
+            background: ${layer.categories.difference[1]};"></span>
+            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+        chartArr.splice(0, 0, {
+          color: layer.categories.difference[1],
+          y: (100 - propTotal),
+          label: layer.categories.difference[0],
+        });
+      }
+
+      for (let i = 0; i < clusters.length; i += 1) {
+        if (clusters[i].includes(total)) {
+          dimension = layer.categories.dimension[i];
+        }
+      }
+
+      const chartData = [{
+        data: chartArr,
+        size: layer.chart.size,
+        innerSize: layer.chart.innerSize,
+      }];
+
+      const content = `<div><b>${district[layer.source.join[1]]}</b></div>${chartProp}`;
+
+      const el = document.createElement('div');
+      el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${this.props.mapId}`;
+      el.className = `marker-chart marker-chart-${layer.id}-${this.props.mapId}`;
+      el.style.width = layer.chart.width;
+      el.style.height = layer.chart.height;
+      $(el).attr('data-map', this.props.mapId);
+      $(el).attr('data-lng', district[layer.chart.coordinates[0]]);
+      $(el).attr('data-lat', district[layer.chart.coordinates[1]]);
+      $(el).attr('data-popup', content);
+
+      // add marker to map
+      new mapboxgl.Marker(el, {
+        offset: layer.chart.offset,
+      })
+        .setLngLat([district[layer.chart.coordinates[0]], district[layer.chart.coordinates[1]]])
+        .addTo(this.map);
+
+      const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${this.props.mapId}`)[0];
+      Map.drawDoughnutChart(container, chartData, dimension);
+    });
   }
 
   sortLayers() {
@@ -749,12 +755,22 @@ class Map extends React.Component {
         if (this.state.layers[index].visible === true &&
           layerObj.source.data instanceof Object && this.state
           && this.state.stops && layerObj.id === this.state.stops.id) {
-          const paintStops = this.state.stops.stops;
-          const stopsIndex = layerObj.type === 'circle' ? 1 : 0;
-          const Stops = paintStops[stopsIndex];
-          const period = paintStops[2];
-          const breaks = paintStops[3];
-          const colors = paintStops[4];
+          let period;
+          let Stops;
+          let breaks;
+          let colors;
+
+          if (layerObj.type === 'chart') {
+            period = this.state.stops.period;
+            Stops = layerObj.source.data;
+          } else {
+            const paintStops = this.state.stops.stops;
+            const stopsIndex = layerObj.type === 'circle' ? 1 : 0;
+            Stops = paintStops[stopsIndex];
+            period = paintStops[2];
+            breaks = paintStops[3];
+            colors = paintStops[4];
+          }
 
           if (slider !== null && label !== null) {
             slider.max = (period.length - 1);
@@ -764,7 +780,12 @@ class Map extends React.Component {
             slider.addEventListener('input', (e) => {
               index = parseInt(e.target.value, 10);
               label.textContent = period[index];
-              if (map.getLayer(layerObj.id) && Stops[index] !== undefined
+              if (layerObj.type === 'chart') {
+                const data = Stops.filter(d =>
+                  d[this.state.stops.timefield] === period[index]);
+                $(`.marker-chart-${layerObj.id}-${this.props.mapId}`).remove();
+                this.addChart(layerObj, data);
+              } else if (map.getLayer(layerObj.id) && Stops[index] !== undefined
                 && Stops[index][0][0] !== undefined) {
                 const defaultValue = layerObj.type === 'circle' ? 0 : 'rgba(0,0,0,0)';
                 const paintProperty = layerObj.type === 'circle' ? 'circle-radius' : 'fill-color';
