@@ -11,7 +11,6 @@ const Filter = ({ filter, headers }) =>
         (<label htmlFor={filter}><input
           type="radio"
           data-layer={filter}
-          style={{ marginRight: `${1}em` }}
         />{filter}
         </label>)
     }

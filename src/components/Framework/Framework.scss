@@ -4,11 +4,20 @@
         top: 3.5em;
         left: 20%;
         width: 30%;
-        height: 2em;
+        padding: 5px;
         box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+        display: table;
+        div {
+            display: table-cell;
+        }
+        .selections {
+            color: #cb181d;
+            display: table-cell;
+            font-size: 12px;
+        }
     }
     .framework-sectors {
-        position: absolute;
+        position: fixed;
         top: 7em;
         width: 100%;
         margin-left: 2%;
@@ -17,20 +26,53 @@
         color: #555;
         font-size: 12px;
         line-height: 1.2;
+        overflow-y: scroll;
         .framework-sector {
             width: 25%;
             margin-left: 2%;
             float: left;
             padding: 15px;
             box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+            .sector-header {
+                font-size: 20px;
+                font-weight: bold;
+                height: 45px;
+                border-bottom: 1px solid #eee;
+            }
             ul {
                 list-style: none;
+                margin-left: 4%;
                 li {
                     margin-left: -15%;
+                    padding-top: 2%;
+                    .sub-sector {
+                        font-weight: bold;
+                        padding-top: 3%;
+                    }
                     div {
-                        #rectangle {
+                        display: table;
+                        .status {
+                            display: table-cell;
+                            border: 1px solid black;
+                            width: 25px;
+                            height: 25px;
+                            .status-1 {
+                                width: 50%;
+                                height: 100%;
+                            }
+                            .status-2 {
+                                width: 50%;
+                                height: 100%;
+                            }
+                        }
+                        .rectangle {
                             width: 10%;
                             height: 10%;
+                        }
+                        .status-link {
+                            display: table-cell;
+                            vertical-align: middle;
+                            padding-left: 10px;
                         }
                         a {
                             color: #555;
@@ -40,9 +82,5 @@
                 }
             }
         }
-    }
-    .sector-header {
-        font-size: 14px;
-        font-weight: bold;
     }
 }
