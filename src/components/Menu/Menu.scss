@@ -1,17 +1,17 @@
 .menu {
   width: 80px;
-  background: #E74624;
+  background: #e74624;
   height: 100%;
   position: fixed;
   top: 0;
-  left: 0px;
+  left: 0;
   z-index: 1000;
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
-  
+
   ul {
     padding: 0;
     list-style-type: none;
-    
+
     li a {
       display: block;
       width: 80px;
@@ -36,11 +36,11 @@
   text-align: center;
   cursor: pointer;
 }
+
 .sign-out:hover,
 .sign-out:focus {
   color: #999;
 }
-
 
 .brand-title {
   color: #fff;
@@ -52,6 +52,7 @@
   writing-mode: vertical-rl;
   -webkit-writing-mode: vertical-rl;
 }
+
 .brand-icon {
   display: block;
   width: 80px;
@@ -63,6 +64,7 @@
   background-size: 70%;
   text-indent: -9999px;
 }
+
 .white {
   text-transform: uppercase;
 }

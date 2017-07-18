@@ -12,4 +12,7 @@
        - run: 
            name: Run eslint
            command: npm run lint
+       - run:
+           name: Stylelint
+           command: npm run stylelint
        - run: npm test

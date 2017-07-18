@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-require('./Layers.scss');
-
 const Layers = ({ mapTargetId, layers, layerData, onLayerChange = f => f }) =>
   (<ul className="layers">
     {layers.map(layer =>

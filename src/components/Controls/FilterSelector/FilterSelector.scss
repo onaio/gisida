@@ -1,36 +1,36 @@
 .filter-group {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
-  font-weight: normal!important; 
+  font-weight: normal !important;
   position: absolute;
-  top: 10px;
   right: 10px;
   z-index: 1;
   border-radius: 3px;
   width: 120px;
   color: #fff;
-  margin-top: 140px;
+  top: 200px;
 }
+
 .filter-group span input[type=checkbox]:first-child + label {
   border-radius: 3px 3px 0 0;
 }
-  
+
 .filter-group span label:last-child {
   border-radius: 0 0 3px 3px;
   border: none;
 }
-  
+
 .filter-group span input[type=checkbox] {
   display: none;
 }
 
 .filter-group span input[type=checkbox] + label {
-  background-color: rgba(0,0,0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   display: block;
   cursor: pointer;
   padding: 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .filter-group span input[type=checkbox] + label {
@@ -40,9 +40,10 @@
 
 .filter-group span input[type=checkbox] + label:hover,
 .filter-group span input[type=checkbox]:checked + label {
-   background-color:rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
-.filter-group span input[type=checkbox]:checked + label:before {
+
+.filter-group span input[type=checkbox]:checked + label::before {
   content: '✔';
   margin-right: 5px;
 }

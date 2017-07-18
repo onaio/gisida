@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-require('./Layer.scss');
-
 const Layer = ({ mapTargetId, layer, layerData, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
     <input
