@@ -1,11 +1,11 @@
 .login {
   width: 100%;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
   height: 100%;
   position: fixed;
-  
- .brand-login {
+
+  .brand-login {
     display: block;
     width: 200px;
     height: 200px;
@@ -14,15 +14,14 @@
     background: url(/assets/img/logo.png) no-repeat center center;
     background-size: 70%;
     text-indent: -9999px;
-   } 
-   
+  }
+
   .login-form {
     width: 200px;
-    margin: 10% auto 0 auto;
-    
+    margin: 10% auto 0;
+
     .login input {
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
     }
-      
   }
 }
