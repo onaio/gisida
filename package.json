@@ -79,6 +79,8 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src --ext=jsx --ext=js",
-    "stylelint": "stylelint src/**/*.scss ---syntax scss"
+    "stylelint": "stylelint src/**/*.scss --syntax scss",
+    "compile": "webpack --progress",
+    "compile-watch": "webpack --progress --watch"
   }
 }
