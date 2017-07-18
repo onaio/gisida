@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 require('./Framework.scss');
 
 class Framework extends React.Component {
+  componentDidMount() {
+    this.getKey();
+  }
   getFrameworkSectors() {
     const sectors = this.props.sectorData.filter(sector => sector.sectors).map(sector => sector);
     const frameworkSector = [];
@@ -28,7 +31,7 @@ class Framework extends React.Component {
                       <a onClick={this.props.onToggleView}>{layer}</a>
                     </div>
                   </div>
-                  }
+                }
               </li>
             ))
           }
@@ -38,6 +41,16 @@ class Framework extends React.Component {
     return frameworkSector;
   }
 
+  getKey() {
+    const colors = ['white', 'transparent', 'red', 'orange', 'green'];
+    let status = '';
+    colors.forEach((color) => {
+      const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
+      status += `<li style="background: ${color}; border: ${border};"></li>`;
+    });
+    $('.key').prepend(`<ul><li id="key-label">Key</li> ${status} </ul>`);
+  }
+
   render() {
     return (
       <div className="framework-wrapper">
@@ -45,18 +58,11 @@ class Framework extends React.Component {
           <div>Your Selections: </div>
           <div className="selections">IDPs, BAIDOA - SOMALIA, 2017</div>
         </div>
-        <div className="key">
-          <ul>
-            <li id="key1" />
-            <li id="key2" />
-            <li id="key3" />
-            <li id="key4" />
-            <li id="key5" />
-          </ul>
-        </div>
+        <div className="key" />
         <div className="framework-sectors">
           {this.getFrameworkSectors()}
         </div>
+        <div className="powered-by" />
       </div>
     );
   }

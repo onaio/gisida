@@ -18,11 +18,13 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
         <div className="framework-brand-title">
           <span className="framework-white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appNameDesc}</div>
       </div>
-      <div className="framework-reports"><a>How do I use this Framework?</a> | <a>Download Reports</a></div>
+      <div className="framework-reports"><a>How do I use this Framework?</a>
+        <div id="reports-divider"> | </div>
+        <a>Download Reports</a></div>
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
     </div>)
     :
-    (<div className="menu-horizontal">
+    (<div className="menu">
       <div className="brand">
         <img src={appConfig.appIcon} alt={appConfig.appName} className="brand-icon" />
         <div className="brand-title">
