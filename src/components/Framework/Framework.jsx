@@ -9,7 +9,10 @@ class Framework extends React.Component {
     const frameworkSector = [];
     sectors.forEach(sector =>
       frameworkSector.push((<div className="framework-sector">
-        <div className="sector-header">{sector.sector}</div>
+        <div className="sector-header">
+          <div className="header">{sector.sector}</div>
+          <img src={sector.icon} alt={sector.sector} className="icon" />
+        </div>
         <ul>
           {sector.sectors.map(layer =>
             (
@@ -41,6 +44,15 @@ class Framework extends React.Component {
         <div className="filter-selection">
           <div>Your Selections: </div>
           <div className="selections">IDPs, BAIDOA - SOMALIA, 2017</div>
+        </div>
+        <div className="key">
+          <ul>
+            <li id="key1" />
+            <li id="key2" />
+            <li id="key3" />
+            <li id="key4" />
+            <li id="key5" />
+          </ul>
         </div>
         <div className="framework-sectors">
           {this.getFrameworkSectors()}

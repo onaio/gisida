@@ -16,9 +16,47 @@
             font-size: 12px;
         }
     }
+    .key {
+        right: 1px;
+        position: fixed;
+        ul {
+            #key1 {
+                width: 10px;
+                height: 10px;
+                background: white;
+                border: 0.5px black;
+                display: inline;
+            }
+            #key2 {
+                width: 10px;
+                height: 10px;
+                background: transparent;
+                border: 0.5px dotted black;
+                display: inline;
+            }
+            #key3 {
+                width: 10px;
+                height: 10px;
+                background: red;
+                display: inline;
+            }
+            #key4 {
+                width: 10px;
+                height: 10px;
+                background: orange;
+                display: inline;
+            }
+            #key5 {
+                width: 10px;
+                height: 10px;
+                background: green;
+                display: inline;
+            }
+        }
+    }
     .framework-sectors {
         position: fixed;
-        top: 7em;
+        top: 14%;
         width: 100%;
         margin-left: 2%;
         left: 16%;
@@ -32,19 +70,31 @@
             margin-left: 2%;
             float: left;
             padding: 15px;
+            border: 1px #eee solid;
             box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
             .sector-header {
-                font-size: 20px;
-                font-weight: bold;
                 height: 45px;
                 border-bottom: 1px solid #eee;
+                .header {
+                    float: left;
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+                .icon {
+                    float: right;
+                    width: 30px;
+                    text-align: center;
+                    color: #ccc;
+                    background: no-repeat center center;
+                    background-size: 70%;
+                }
             }
             ul {
                 list-style: none;
                 margin-left: 4%;
                 li {
                     margin-left: -15%;
-                    padding-top: 2%;
+                    padding-top: 1.3%;
                     .sub-sector {
                         font-weight: bold;
                         padding-top: 3%;

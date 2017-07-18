@@ -30,6 +30,7 @@ class Dashboard {
       } else {
         sectorData.push({
           sector: key,
+          icon: config.SECTORS[key].icon,
           layers: config.SECTORS[key].layers,
           sectors: config.SECTORS[key].sectors,
           headers: config.SECTORS[key].headers,
