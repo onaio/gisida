@@ -22,7 +22,7 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
     </div>)
     :
-    (<div className="menu">
+    (<div className="menu-horizontal">
       <div className="brand">
         <img src={appConfig.appIcon} alt={appConfig.appName} className="brand-icon" />
         <div className="brand-title">

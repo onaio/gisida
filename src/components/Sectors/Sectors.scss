@@ -7,127 +7,129 @@
   overflow-y: scroll;
   background: #f7f6ef;
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
-//   left: 80px;
-
+  //   left: 80px;
+}
 
 .framework-sectors-menu {
-    position: fixed;
-    width: 18%;
-    height: 100%;
-    color: #555;
-    z-index: 1000;
-    overflow-y: scroll;
-    background: #FFFFFF;
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
-    top: 3em;
-    left: 0;
+  position: fixed;
+  width: 18%;
+  height: 100%;
+  color: #555;
+  z-index: 1000;
+  overflow-y: scroll;
+  background: #fff;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+  top: 3em;
+  left: 0;
 }
 
 .close-btn {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    z-index: 1000;
-    color: #555;
-    display: block;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  z-index: 1000;
+  color: #555;
+  display: block;
 }
 
 ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .sectors {
-    padding: 0;
-    overflow-y: scroll;
-    li.sector {
-        border-bottom: 1px solid #eee;
-        a {
-            color: #555;
-            display: block;
-            font-weight: 600;
-            padding: 10px 15px;
-            &:hover,
-            &:focus {
-                text-decoration: none;
-                color: #555;
-            }
-        }
+  padding: 0;
+  overflow-y: scroll;
+
+  li.sector {
+    border-bottom: 1px solid #eee;
+
+    a {
+      color: #555;
+      display: block;
+      font-weight: 600;
+      padding: 10px 15px;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        color: #555;
+      }
     }
+  }
 }
 
 .filters-menu {
-    height: 100%;
-    top: 10em;
-    left: 0;
+  height: 100%;
+  top: 10em;
+  left: 0;
 }
 
 .layers {
-    padding: 20px 0 20px 20px;
-    display: none;
-    li {
-        position: relative;
-        display: block;
-        width: 100%;
-        label {
-            color: #555;
-            font-weight: normal;
-            font-size: 12px;
-            width: 80%;
-            display: block;
-            margin: 0 0 10px 20px;
-        }
-        input[type='checkbox'], input[type='radio'] {
-           margin-right: 5%; 
-        }
+  padding: 20px 0 20px 20px;
+  display: none;
 
-        input[type='checkbox'] {
-    position: absolute;
-    left: 0;
-    top: -2px;
-}
-}
-}
-}
+  li {
+    position: relative;
+    display: block;
+    width: 100%;
 
+    label {
+      color: #555;
+      font-weight: normal;
+      font-size: 12px;
+      width: 80%;
+      display: block;
+      margin: 0 0 10px 20px;
+    }
 
+    input[type='checkbox'],
+    input[type='radio'] {
+      margin-right: 5%;
+    }
+
+    input[type='checkbox'] {
+      position: absolute;
+      left: 0;
+      top: -2px;
+    }
+  }
+}
 
 .open-btn {
-    position: fixed;
-    display: block;
-    color: #333;
-    background: #fff;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    width: 32px;
-    line-height: 2;
-    font-size: 15px;
-    text-align: center;
-    top: 10px;
-    display: none;
+  position: fixed;
+  color: #333;
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 32px;
+  line-height: 2;
+  font-size: 15px;
+  text-align: center;
+  top: 10px;
+  display: none;
 }
 
 .framework-open-btn {
-    position: absolute;
-    display: block;
-    color: #333;
-    background: #fff;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    width: 32px;
-    line-height: 2;
-    font-size: 15px;
-    text-align: center;
-    top: 3em;
-    left: 1em;
-    display: none;
+  position: absolute;
+  color: #333;
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 32px;
+  line-height: 2;
+  font-size: 15px;
+  text-align: center;
+  top: 3em;
+  left: 1em;
+  display: none;
 }
 
 #sector-menu-1-wrapper .open-btn {
-    left: 90px;
+  left: 90px;
 }
 
 #sector-menu-2-wrapper .open-btn {
-    left: 53%;
+  left: 53%;
 }
 
 #sector-menu-1 {
@@ -137,8 +139,8 @@ ul {
 }
 
 #sector-menu-2 {
-    height: 100%;
-    top: 0;
-    left: 52%;
-    display: none;
+  height: 100%;
+  top: 0;
+  left: 52%;
+  display: none;
 }
