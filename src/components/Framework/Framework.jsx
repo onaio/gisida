@@ -42,15 +42,24 @@ class Framework extends React.Component {
   }
 
   getKey() {
-    const colors = ['white', 'transparent', 'red', 'orange', 'green'];
+    const colors = {
+      white: 'Data unavilable',
+      transparent: 'Incomplete data exists',
+      red: 'Far from met',
+      orange: 'Not fully met, obstacles exist',
+      green: 'Well on way to being achieved',
+    };
     let status = '';
-    colors.forEach((color) => {
+    Object.keys(colors).forEach((color) => {
       const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
-      status += `<li style="background: ${color}; border: ${border};"></li>`;
+      status += `<li>
+      <div class="status-key" style="background: ${color}; border: ${border};"></div>
+      <div class="status-description">${colors[color]}</div>
+      </li>`;
     });
-    $('.key').prepend(`<ul><li id="key-label">Key</li> ${status} </ul>`);
+    $('.key').prepend(`<ul><li><div id="key-label">Key</div></li>${status}</ul>`);
   }
-
+// <div className="status-description">${colors[color]}</div>
   render() {
     return (
       <div className="framework-wrapper">
