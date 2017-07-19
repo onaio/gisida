@@ -64,7 +64,7 @@ class Framework extends React.Component {
     return (
       <div className="framework-wrapper">
         <div className="filter-selection">
-          <div>Your Selections: </div>
+          <div className="pre-text">YOUR SELECTIONS: </div>
           <div className="selections">IDPs, BAIDOA - SOMALIA, 2017</div>
         </div>
         <div className="key" />
