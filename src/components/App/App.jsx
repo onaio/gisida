@@ -85,8 +85,8 @@ class App extends React.Component {
     this.setState({ layers });
   }
 
-  toggleView() {
-    this.setState({ view: 'map' });
+  toggleView(view) {
+    this.setState({ view });
   }
 
   render() {
@@ -131,6 +131,7 @@ class App extends React.Component {
           mapTargetId="map-1"
           onToggleSectors={toggleSectors}
           onSectorClick={sectorClick}
+          onToggleView={toggleView}
           onLayerChange={changeLayer}
           sectorData={sectorData}
           layerData={layerData}
@@ -150,6 +151,7 @@ class App extends React.Component {
               sectorMenuId="sector-menu-2"
               mapTargetId="map-2"
               onToggleSectors={toggleSectors}
+              onToggleView={toggleView}
               onSectorClick={sectorClick}
               onLayerChange={changeLayer}
               sectorData={sectorData}

@@ -10,6 +10,7 @@ const Sectors = ({ sectorMenuId,
   sectorData,
   layerData,
   onToggleSectors = f => f,
+  onToggleView = f => f,
   onSectorClick = f => f,
   onLayerChange = f => f,
   view,
@@ -30,25 +31,26 @@ const Sectors = ({ sectorMenuId,
       <ul className="sectors">
         {sectorData.map((sector, i) =>
           // eslint-disable-next-line react/no-array-index-key
-          view === 'framework' && sector.filters ?
+          (sector.filters || sector.views) ?
             (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
               <Filters
                 filters={sector.filters}
                 headers={sector.headers}
+                views={sector.views}
+                onToggleView={onToggleView}
               />
             </li>) :
             defaultView === 'framework' && view !== 'framework' ?
-            (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
-              <Layers
-                onLayerChange={onLayerChange}
-                mapTargetId={mapTargetId}
-                layers={sector.filters || sector.sectors ?
-                  sector.filters || sector.sectors : sector.layers}
-                defaultView={defaultView}
-                headers={sector.headers}
-                layerData={layerData}
-              />
-            </li>) : '')
+              (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
+                <Layers
+                  onLayerChange={onLayerChange}
+                  mapTargetId={mapTargetId}
+                  layers={sector.layers}
+                  defaultView={defaultView}
+                  headers={sector.headers}
+                  layerData={layerData}
+                />
+              </li>) : '')
         }
       </ul>
     </div>
@@ -61,6 +63,7 @@ Sectors.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   onToggleSectors: PropTypes.func.isRequired,
+  onToggleView: PropTypes.func.isRequired,
   onSectorClick: PropTypes.func.isRequired,
   onLayerChange: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,

@@ -11,32 +11,33 @@ class Framework extends React.Component {
     const sectors = this.props.sectorData.filter(sector => sector.sectors).map(sector => sector);
     const frameworkSector = [];
     sectors.forEach(sector =>
-      frameworkSector.push((<div className="framework-sector">
-        <div className="sector-header">
-          <div className="header">{sector.sector}</div>
-          <img src={sector.icon} alt={sector.sector} className="icon" />
-        </div>
-        <ul>
-          {sector.sectors.map(layer =>
-            (
-              <li className="layerItem" key={layer}>
-                {sector.headers.includes(layer) ?
-                  <div className="sub-sector">{layer}</div> :
-                  <div>
-                    <div className="status">
-                      <div className="status-1" />
-                      <div className="status-2" />
+      frameworkSector.push(
+        (<div className="framework-sector" key={sector.sector}>
+          <div className="sector-header">
+            <div className="header">{sector.sector}</div>
+            <img src={sector.icon} alt={sector.sector} className="icon" />
+          </div>
+          <ul>
+            {sector.sectors.map(layer =>
+              (
+                <li className="layerItem" key={Math.random()}>
+                  {sector.headers.includes(layer) ?
+                    <div className="sub-sector">{layer}</div> :
+                    <div>
+                      <div className="status">
+                        <div className="status-1" />
+                        <div className="status-2" />
+                      </div>
+                      <div className="status-link">
+                        <a onClick={this.props.onToggleView}>{layer}</a>
+                      </div>
                     </div>
-                    <div className="status-link">
-                      <a onClick={this.props.onToggleView}>{layer}</a>
-                    </div>
-                  </div>
-                }
-              </li>
-            ))
-          }
-        </ul>
-      </div>),
+                  }
+                </li>
+              ))
+            }
+          </ul>
+        </div>),
       ));
     return frameworkSector;
   }

@@ -19,7 +19,7 @@ const Layers = ({ mapTargetId, layers, layerData, headers, defaultView, onLayerC
 
 Layers.propTypes = {
   mapTargetId: PropTypes.string.isRequired,
-  layers: PropTypes.arrayOf(PropTypes.any).isRequired,
+  layers: PropTypes.arrayOf(PropTypes.any),
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   onLayerChange: PropTypes.func.isRequired,
   headers: PropTypes.arrayOf(PropTypes.any),
@@ -28,6 +28,7 @@ Layers.propTypes = {
 
 Layers.defaultProps = {
   headers: [],
+  layers: [],
 };
 
 export default Layers;
