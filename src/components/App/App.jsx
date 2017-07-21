@@ -96,12 +96,14 @@ class App extends React.Component {
     const { splitScreen } = this;
     const { singleScreen } = this;
     const { toggleView } = this;
+    const { showIndicatorDetails } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
     const styles = this.props.styles;
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
+    const details = this.props.details;
 
     return (
       <div>
@@ -113,6 +115,7 @@ class App extends React.Component {
         {this.state.view === 'framework' ?
           <Framework
             sectorData={sectorData}
+            details={details}
             onToggleView={toggleView}
           /> :
           <Map
@@ -171,6 +174,7 @@ App.propTypes = {
   locations: PropTypes.objectOf(PropTypes.any).isRequired,
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   styles: PropTypes.arrayOf(PropTypes.any).isRequired,
+  details: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default App;

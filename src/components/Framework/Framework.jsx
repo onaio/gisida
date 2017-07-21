@@ -1,12 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Mustache from 'mustache';
 
 require('./Framework.scss');
 
 class Framework extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showIndicatorDetails: false,
+    };
+  }
   componentDidMount() {
     this.getKey();
   }
+
+  onClick() {
+    this.setState({ showIndicatorDetails: true });
+  }
+
+  onTogglePopup() {
+    this.setState({ showIndicatorDetails: false });
+  }
+
   getFrameworkSectors() {
     const sectors = this.props.sectorData.filter(sector => sector.sectors).map(sector => sector);
     const frameworkSector = [];
@@ -29,8 +45,40 @@ class Framework extends React.Component {
                         <div className="status-2" />
                       </div>
                       <div className="status-link">
-                        <a onClick={this.props.onToggleView}>{layer}</a>
+                        <a data-toggle="modal" data-target={this.props.details[layer] ? `#${this.props.details[layer].id}` : ''}>{layer}</a>
                       </div>
+                      {this.props.details[layer] ?
+                        <div className="modal fade" id={this.props.details[layer].id} role="dialog">
+                          <div
+                            className="modal-dialog"
+                          >
+                            <div className="modal-content">
+                              <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">{layer}</h4>
+                                <a href="#">View on map</a>
+                              </div>
+                              <div className="modal-body">
+                                <h4 className="modal-header">Indicator</h4>
+                                <p>{this.props.details[layer].indicator}</p>
+                                <h4 className="modal-header">Analysis</h4>
+                                <div
+                                  className="indicator-status-1"
+                                  background-color={this.props.details[layer].analysis.status[0]}
+                                />
+                                <div
+                                  className="indicator-status-2"
+                                  background-color={this.props.details[layer].analysis.status[1]}
+                                />
+                                <p>{this.props.details[layer].analysis.details}</p>
+
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        : ''
+                      }
                     </div>
                   }
                 </li>
@@ -39,6 +87,7 @@ class Framework extends React.Component {
           </ul>
         </div>),
       ));
+
     return frameworkSector;
   }
 
@@ -51,17 +100,23 @@ class Framework extends React.Component {
       green: 'Well on way to being achieved',
     };
     let status = '';
+    let popup = '';
     Object.keys(colors).forEach((color) => {
       const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
-      status += `<li>
-      <div class="status-key" style="background: ${color}; border: ${border};"></div>
-      <div class="status-description">${colors[color]}</div>
-      </li>`;
+      status += `< li >
+                          <div class="status-key" style="background: ${color}; border: ${border};"></div>
+        </li>`;
+      popup += `
+      <div>
+                          <div class="popup-status-key" style="background: ${color}; border: ${border};"></div>
+                          <div class="popup-status-description">${colors[color]}</div></div>`;
     });
     $('.key').prepend(`<ul><li><div id="key-label">Key</div></li>${status}</ul>`);
+    $('.key-popup').prepend(`<div id="popup-key-label">Key</div>${popup}`);
   }
-// <div className="status-description">${colors[color]}</div>
+
   render() {
+    console.log(this.props.details['Violent crimes']);
     return (
       <div className="framework-wrapper">
         <div className="filter-selection">
@@ -69,6 +124,7 @@ class Framework extends React.Component {
           <div className="selections">IDPs, BAIDOA - SOMALIA, 2017</div>
         </div>
         <div className="key" />
+        <div className="key-popup" />
         <div className="framework-sectors">
           {this.getFrameworkSectors()}
         </div>
@@ -80,7 +136,9 @@ class Framework extends React.Component {
 
 Framework.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
-  onToggleView: PropTypes.func.isRequired,
+  details: PropTypes.objectOf(PropTypes.any).isRequired,
+  showIndicatorDetails: PropTypes.func.isRequired,
+  // onToggleView: PropTypes.func.isRequired,
 };
 
 export default Framework;
