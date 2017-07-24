@@ -40,12 +40,14 @@ class Framework extends React.Component {
                   {sector.headers.includes(layer) ?
                     <div className="sub-sector">{layer}</div> :
                     <div>
-                      <div className="status">
-                        <div className="status-1" />
-                        <div className="status-2" />
-                      </div>
-                      <div className="status-link">
-                        <a data-toggle="modal" data-target={this.props.details[layer] ? `#${this.props.details[layer].id}` : ''}>{layer}</a>
+                      <div className="sector-indicator">
+                        <div className="status">
+                          <div className="status-1" />
+                          <div className="status-2" />
+                        </div>
+                        <div className="status-link">
+                          <a data-toggle="modal" data-target={this.props.details[layer] ? `#${this.props.details[layer].id}` : ''}>{layer}</a>
+                        </div>
                       </div>
                       {this.props.details[layer] ?
                         <div className="modal fade" id={this.props.details[layer].id} role="dialog">
@@ -56,7 +58,10 @@ class Framework extends React.Component {
                               <div className="modal-header">
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                                 <h4 className="modal-title">{layer}</h4>
-                                <a className="toggle-view-link" href="#">View on map</a>
+                                <a
+                                  className="toggle-view-link"
+                                  onClick={this.props.onToggleView}
+                                >View on map</a>
                               </div>
                               <div className="modal-body">
                                 <h6 className="modal-header">Indicator</h6>
@@ -135,6 +140,7 @@ class Framework extends React.Component {
 Framework.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   details: PropTypes.objectOf(PropTypes.any).isRequired,
+  onToggleView: PropTypes.func.isRequired,
 };
 
 export default Framework;
