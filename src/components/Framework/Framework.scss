@@ -158,3 +158,17 @@
     content: url("/assets/img/Ona-powered-2color-horiz.png");
   }
 }
+
+    .toggle-view-link {
+        margin: 5px;
+        display: inline-table;
+    }
+
+    .modal-body {
+        h6 {
+            font-family: inherit;
+            font-weight: 600;
+            line-height: 1.1;
+            color: inherit;
+        }
+    }

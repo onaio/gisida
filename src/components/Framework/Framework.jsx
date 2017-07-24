@@ -56,12 +56,12 @@ class Framework extends React.Component {
                               <div className="modal-header">
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                                 <h4 className="modal-title">{layer}</h4>
-                                <a href="#">View on map</a>
+                                <a className="toggle-view-link" href="#">View on map</a>
                               </div>
                               <div className="modal-body">
-                                <h4 className="modal-header">Indicator</h4>
+                                <h6 className="modal-header">Indicator</h6>
                                 <p>{this.props.details[layer].indicator}</p>
-                                <h4 className="modal-header">Analysis</h4>
+                                <h6 className="modal-header">Analysis</h6>
                                 <div
                                   className="indicator-status-1"
                                   background-color={this.props.details[layer].analysis.status[0]}
@@ -71,7 +71,6 @@ class Framework extends React.Component {
                                   background-color={this.props.details[layer].analysis.status[1]}
                                 />
                                 <p>{this.props.details[layer].analysis.details}</p>
-
                               </div>
                             </div>
 
@@ -103,20 +102,19 @@ class Framework extends React.Component {
     let popup = '';
     Object.keys(colors).forEach((color) => {
       const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
-      status += `< li >
-                          <div class="status-key" style="background: ${color}; border: ${border};"></div>
-        </li>`;
+      status += `<li>
+      <div class="status-key" style="background: ${color}; border: ${border};"></div>
+      </li>`;
       popup += `
       <div>
-                          <div class="popup-status-key" style="background: ${color}; border: ${border};"></div>
-                          <div class="popup-status-description">${colors[color]}</div></div>`;
+      <div class="popup-status-key" style="background: ${color}; border: ${border};"></div>
+      <div class="popup-status-description">${colors[color]}</div></div>`;
     });
     $('.key').prepend(`<ul><li><div id="key-label">Key</div></li>${status}</ul>`);
     $('.key-popup').prepend(`<div id="popup-key-label">Key</div>${popup}`);
   }
 
   render() {
-    console.log(this.props.details['Violent crimes']);
     return (
       <div className="framework-wrapper">
         <div className="filter-selection">
@@ -137,8 +135,6 @@ class Framework extends React.Component {
 Framework.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   details: PropTypes.objectOf(PropTypes.any).isRequired,
-  showIndicatorDetails: PropTypes.func.isRequired,
-  // onToggleView: PropTypes.func.isRequired,
 };
 
 export default Framework;

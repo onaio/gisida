@@ -96,7 +96,6 @@ class App extends React.Component {
     const { splitScreen } = this;
     const { singleScreen } = this;
     const { toggleView } = this;
-    const { showIndicatorDetails } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
