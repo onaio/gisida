@@ -1,3 +1,5 @@
+/* global wrappers */
+
 export default function (layerData, locations, filterOptions) {
   let data = layerData.mergedData;
   let aggregatedData = [];
@@ -23,9 +25,11 @@ export default function (layerData, locations, filterOptions) {
   data = data.filter(datum => datum.district_id !== undefined);
   // get filter options from filter field
   if (layerData.aggregate.filter) {
-    let filterValues = data.map(datum => datum[layerData.aggregate.filter]);
-    filterValues = filterValues.filter(datum => datum !== undefined);
-    layerData.filterOptions = [...new Set(filterValues)];
+    const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
+    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
+    let allFilters = [].concat(...[filterValues, subfilterValues]);
+    allFilters = allFilters.filter(datum => datum !== undefined);
+    layerData.filterOptions = [...new Set(allFilters)];
   }
   const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
@@ -35,10 +39,10 @@ export default function (layerData, locations, filterOptions) {
       }
     });
     data = data.filter(datum => !filters.includes(datum[layerData.aggregate.filter]));
+    data = data.filter(datum => !filters.includes(datum[layerData.aggregate['sub-filter']]));
   }
   // aggregate raw data
   aggregatedData =
-  // eslint-disable-next-line no-undef
     wrappers.stats.aggregate_data(
       data,
       layerData.property,

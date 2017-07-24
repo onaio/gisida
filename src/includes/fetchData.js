@@ -6,7 +6,8 @@ export default function (_self, datasetID, fieldName, callback) {
   const queryParams =
     { fields:
     `${'["today",' +
-     '"Partner",' +
+    '"Partner",' +
+    '"Sub_Partner",' +
      '"District",' +
      '"survey_intro/consent",' +
      '"survey_intro/District_miss",' +
