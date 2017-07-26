@@ -1,3 +1,5 @@
+/* global wrappers */
+
 export default function (layerData, locations, filterOptions) {
   let data = layerData.mergedData;
   let aggregatedData = [];
@@ -23,22 +25,39 @@ export default function (layerData, locations, filterOptions) {
   data = data.filter(datum => datum.district_id !== undefined);
   // get filter options from filter field
   if (layerData.aggregate.filter) {
-    let filterValues = data.map(datum => datum[layerData.aggregate.filter]);
-    filterValues = filterValues.filter(datum => datum !== undefined);
-    layerData.filterOptions = [...new Set(filterValues)];
+    const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
+    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
+    const allFilters = [].concat(...[filterValues, subfilterValues]);
+    // check filter values are in accepted values lists, remove those that are not
+    const acceptedFilters = allFilters.filter(datum =>
+      (datum !== undefined &&
+        [].concat(...[
+          layerData.aggregate['accepted-filter-values'],
+          layerData.aggregate['accepted-sub-filter-values']]).includes(datum)));
+    layerData.filterOptions = [...new Set(acceptedFilters)];
   }
   const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
+    // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
         filters.push(opt);
       }
     });
-    data = data.filter(datum => !filters.includes(datum[layerData.aggregate.filter]));
+    // apply filters
+    data = data.filter((datum) => {
+      if (!layerData.aggregate['accepted-sub-filter-values'].includes(datum[layerData.aggregate['sub-filter']])) {
+        // remove rows that should be filtered out, ignore rows with values from second filter field
+        return !filters.includes(datum[layerData.aggregate.filter]);
+      } else if (layerData.aggregate['accepted-sub-filter-values'].includes(datum[layerData.aggregate['sub-filter']])) {
+        // remove rows that should be filtered out, ignore rows with values from first filter field
+        return !filters.includes(datum[layerData.aggregate['sub-filter']]);
+      } return true;
+    });
   }
+
   // aggregate raw data
   aggregatedData =
-  // eslint-disable-next-line no-undef
     wrappers.stats.aggregate_data(
       data,
       layerData.property,

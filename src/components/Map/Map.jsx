@@ -201,7 +201,6 @@ class Map extends React.Component {
         });
         q.awaitAll((error, data) => {
           const mergedData = [].concat(...data);
-          // const mergedData = [].concat.apply([], data);
           layerData.mergedData = mergedData;
           layerData.source.data = aggregateData(layerData, this.props.locations);
           layerData.loaded = true;
