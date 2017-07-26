@@ -26,31 +26,36 @@ export default function (layerData, locations, filterOptions) {
   // get filter options from filter field
   if (layerData.aggregate.filter) {
     const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
-    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
+    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter-field']]);
     let allFilters = [].concat(...[filterValues, subfilterValues]);
-    allFilters = allFilters.filter(datum => (datum !== undefined &&
-      layerData.aggregate['sub-filter-values'].includes(datum)));
+    allFilters = allFilters.filter(datum =>
+      (datum !== undefined &&
+        [].concat(...[layerData.aggregate['filter-values'], layerData.aggregate['sub-filter-values']]).includes(datum)));
     layerData.filterOptions = [...new Set(allFilters)];
   }
   const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
+    // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
         filters.push(opt);
       }
     });
+    // remove rows that are include filter values, ignoring secong/additional filter field
     data = data.filter((datum) => {
-      if (datum[layerData.aggregate['sub-filter']] !== layerData.aggregate['sub-filter-values'][2]) {
+      if (!layerData.aggregate['sub-filter-values'].includes(datum[layerData.aggregate['sub-filter-field']])) {
         return !filters.includes(datum[layerData.aggregate.filter]);
       } return true;
     });
-
+   // remove rows that are include sub-filter values, ignoring first filter field
     data = data.filter((datum) => {
-      if (datum[layerData.aggregate['sub-filter']] === layerData.aggregate['sub-filter-values'][2]) {
-        return !filters.includes(datum[layerData.aggregate['sub-filter']]);
+      if (layerData.aggregate['sub-filter-values'].includes(datum[layerData.aggregate['sub-filter-field']])) {
+        return !filters.includes(datum[layerData.aggregate['sub-filter-field']]);
       } return true;
     });
   }
+
+  console.log(data);
   // aggregate raw data
   aggregatedData =
     wrappers.stats.aggregate_data(

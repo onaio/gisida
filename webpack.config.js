@@ -13,7 +13,7 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve('dist/'),
+    path: path.resolve('../irfsomalia/assets/js/'),
     filename: 'gisida.js',
     libraryTarget: 'var',
     library: 'gisida',
