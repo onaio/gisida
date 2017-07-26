@@ -28,6 +28,7 @@ export default function (layerData, locations, filterOptions) {
     const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
     const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
     let allFilters = [].concat(...[filterValues, subfilterValues]);
+    // check filter values are in accepted values lists, remove those that are not
     allFilters = allFilters.filter(datum =>
       (datum !== undefined &&
         [].concat(...[
