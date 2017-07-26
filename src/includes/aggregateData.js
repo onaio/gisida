@@ -27,14 +27,14 @@ export default function (layerData, locations, filterOptions) {
   if (layerData.aggregate.filter) {
     const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
     const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
-    let allFilters = [].concat(...[filterValues, subfilterValues]);
+    const allFilters = [].concat(...[filterValues, subfilterValues]);
     // check filter values are in accepted values lists, remove those that are not
-    allFilters = allFilters.filter(datum =>
+    const acceptedFilters = allFilters.filter(datum =>
       (datum !== undefined &&
         [].concat(...[
           layerData.aggregate['accepted-filter-values'],
           layerData.aggregate['accepted-sub-filter-values']]).includes(datum)));
-    layerData.filterOptions = [...new Set(allFilters)];
+    layerData.filterOptions = [...new Set(acceptedFilters)];
   }
   const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
