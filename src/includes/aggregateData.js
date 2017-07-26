@@ -43,15 +43,13 @@ export default function (layerData, locations, filterOptions) {
         filters.push(opt);
       }
     });
-    // remove rows that are include filter values, ignoring secong/additional filter field
+    // apply filters
     data = data.filter((datum) => {
       if (!layerData.aggregate['accepted-sub-filter-values'].includes(datum[layerData.aggregate['sub-filter']])) {
+        // remove rows that should be filtered out, ignore rows with values from second filter field
         return !filters.includes(datum[layerData.aggregate.filter]);
-      } return true;
-    });
-    // remove rows that are include sub-filter values, ignoring first filter field
-    data = data.filter((datum) => {
-      if (layerData.aggregate['accepted-sub-filter-values'].includes(datum[layerData.aggregate['sub-filter']])) {
+      } else if (layerData.aggregate['accepted-sub-filter-values'].includes(datum[layerData.aggregate['sub-filter']])) {
+        // remove rows that should be filtered out, ignore rows with values from first filter field
         return !filters.includes(datum[layerData.aggregate['sub-filter']]);
       } return true;
     });
