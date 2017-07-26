@@ -28,7 +28,8 @@ export default function (layerData, locations, filterOptions) {
     const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
     const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
     let allFilters = [].concat(...[filterValues, subfilterValues]);
-    allFilters = allFilters.filter(datum => (datum !== undefined && ['BRCiS', 'SCOPE', 'UNICEF'].includes(datum)));
+    allFilters = allFilters.filter(datum => (datum !== undefined &&
+      layerData.aggregate['sub-filter-values'].includes(datum)));
     layerData.filterOptions = [...new Set(allFilters)];
   }
   const filters = [];
@@ -39,13 +40,13 @@ export default function (layerData, locations, filterOptions) {
       }
     });
     data = data.filter((datum) => {
-      if (datum[layerData.aggregate['sub-filter']] !== 'UNICEF') {
+      if (datum[layerData.aggregate['sub-filter']] !== layerData.aggregate['sub-filter-values'][2]) {
         return !filters.includes(datum[layerData.aggregate.filter]);
       } return true;
     });
 
     data = data.filter((datum) => {
-      if (datum[layerData.aggregate['sub-filter']] === 'UNICEF') {
+      if (datum[layerData.aggregate['sub-filter']] === layerData.aggregate['sub-filter-values'][2]) {
         return !filters.includes(datum[layerData.aggregate['sub-filter']]);
       } return true;
     });
