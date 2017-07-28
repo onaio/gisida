@@ -461,6 +461,14 @@ class Map extends React.Component {
       let propTotal = 0;
       let dimension;
 
+      if (layer.categories.title) {
+        chartProp += `<div><b>${district[layer.categories.title]}</b></div>`;
+      }
+
+      if (layer.categories['total-label']) {
+        chartProp += `<div>${layer.categories['total-label']}: <b>${total}</b></div>`;
+      }
+
       for (let i = 0; i < layer.categories.property.length; i += 1) {
         chartArr.push({
           color: layer.categories.color[i],
