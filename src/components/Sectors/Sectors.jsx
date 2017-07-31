@@ -51,6 +51,7 @@ const Sectors = ({ sectorMenuId,
             view !== 'framework' ?
               (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
                 <Layers
+                  sector={sector.sector}
                   onLayerChange={onLayerChange}
                   mapTargetId={mapTargetId}
                   layers={sector.layers}

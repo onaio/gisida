@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-const Layers = ({ mapTargetId, layers, layerData, headers, defaultView, onLayerChange = f => f }) =>
+const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f }) =>
   (<ul className="layers">
     {layers.map(layer =>
       (<Layer
@@ -13,6 +13,7 @@ const Layers = ({ mapTargetId, layers, layerData, headers, defaultView, onLayerC
         layerData={layerData}
         headers={headers}
         defaultView={defaultView}
+        sector={sector}
       />))
     }
   </ul>);
