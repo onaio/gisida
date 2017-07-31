@@ -780,9 +780,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-      },
+          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+        },
       );
     }
   }

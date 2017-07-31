@@ -48,6 +48,7 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
+      filters: [],
     };
     this.changeLayer = this.changeLayer.bind(this);
     this.sectorClick = App.showSector.bind(this);
@@ -55,6 +56,7 @@ class App extends React.Component {
     this.singleScreen = App.singleScreen.bind(this);
     this.toggleSectors = App.toggleSectors.bind(this);
     this.toggleView = this.toggleView.bind(this);
+    this.getFilters = this.getFilters.bind(this);
   }
 
   changeLayer(layer, status, map) {
@@ -89,6 +91,21 @@ class App extends React.Component {
     this.setState({ view });
   }
 
+  getFilters(group, filter, status) {
+    let filters = [...this.state.filters, { [group]: filter }];
+    if (this.state.filters.length > 0) {
+      for (let i = 0; i < this.state.filters.length; i += 1) {
+        let sector = Object.keys(this.state.filters[i])[0];
+        if (sector === group) {
+          let filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
+          filters = [...filteredArr, { [group]: filter }];
+        }
+      }
+    }
+
+    this.setState({ filters });
+  }
+
   render() {
     const { changeLayer } = this;
     const { sectorClick } = this;
@@ -96,6 +113,7 @@ class App extends React.Component {
     const { splitScreen } = this;
     const { singleScreen } = this;
     const { toggleView } = this;
+    const { getFilters } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
@@ -103,6 +121,7 @@ class App extends React.Component {
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
     const details = this.props.details;
+    const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
 
     return (
       <div>
@@ -135,8 +154,10 @@ class App extends React.Component {
           onSectorClick={sectorClick}
           onToggleView={toggleView}
           onLayerChange={changeLayer}
+          onFilterSelect={getFilters}
           sectorData={sectorData}
           layerData={layerData}
+          filters={filters}
         />
 
         {appConfig.splitView ?
@@ -156,8 +177,10 @@ class App extends React.Component {
               onToggleView={toggleView}
               onSectorClick={sectorClick}
               onLayerChange={changeLayer}
+              onFilterSelect={getFilters}
               sectorData={sectorData}
               layerData={layerData}
+              filters={filters}
             />
           </div>
           : null}

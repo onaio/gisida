@@ -14,7 +14,7 @@ const Layers = ({ mapTargetId, layers, layerData, headers, defaultView, onLayerC
         headers={headers}
         defaultView={defaultView}
       />))
-  }
+    }
   </ul>);
 
 Layers.propTypes = {

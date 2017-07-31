@@ -24,7 +24,7 @@ class Framework extends React.Component {
   }
 
   getFrameworkSectors() {
-    const sectors = this.props.sectorData.filter(sector => sector.sectors).map(sector => sector);
+    const sectors = this.props.sectorData.filter(sector => sector.layers).map(sector => sector);
     const frameworkSector = [];
     sectors.forEach(sector =>
       frameworkSector.push(
@@ -34,17 +34,19 @@ class Framework extends React.Component {
             <img src={sector.icon} alt={sector.sector} className="icon" />
           </div>
           <ul>
-            {sector.sectors.map(layer =>
+            {sector.layers.map(layer =>
               (
                 <li className="layerItem" key={Math.random()}>
                   {sector.headers.includes(layer) ?
                     <div className="sub-sector">{layer}</div> :
                     <div>
                       <div className="sector-indicator">
-                        <div className="status">
-                          <div className="status-1" />
-                          <div className="status-2" />
-                        </div>
+                        {this.props.details[layer] ?
+                          <div className="status">
+                            <div className="status-1" style={{ background: `${this.props.details[layer].analysis.colors[0]}` }} />
+                            <div className="status-2" style={{ background: `${this.props.details[layer].analysis.colors[1]}` }} />
+                          </div>
+                          : ''}
                         <div className="status-link">
                           <a data-toggle="modal" data-target={this.props.details[layer] ? `#${this.props.details[layer].id}` : ''}>{layer}</a>
                         </div>
@@ -122,10 +124,6 @@ class Framework extends React.Component {
   render() {
     return (
       <div className="framework-wrapper">
-        <div className="filter-selection">
-          <div className="pre-text">YOUR SELECTIONS: </div>
-          <div className="selections">IDPs, BAIDOA - SOMALIA, 2017</div>
-        </div>
         <div className="key" />
         <div className="key-popup" />
         <div className="framework-sectors">

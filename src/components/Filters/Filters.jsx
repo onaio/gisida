@@ -4,7 +4,7 @@ import Filter from '../Filter/Filter';
 
 require('./Filters.scss');
 
-const Filters = ({ filters, headers, views, onToggleView }) =>
+const Filters = ({ filters, headers, sector, views, onToggleView, onFilterSelect = f => f, getStatus }) =>
   (<ul className="filters">
     {views ?
       views.map(view =>
@@ -19,6 +19,9 @@ const Filters = ({ filters, headers, views, onToggleView }) =>
           key={filter}
           filter={filter}
           headers={headers}
+          sector={sector}
+          onFilterSelect={onFilterSelect}
+          getStatus={getStatus}
         />))
     }
   </ul>);

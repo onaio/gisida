@@ -3,18 +3,24 @@ import PropTypes from 'prop-types';
 
 require('./Layer.scss');
 
-const Layer = ({ mapTargetId, layer, layerData, headers, defaultView, onLayerChange = f => f }) =>
-  (<li className={`layer ${mapTargetId}`}>
-    {headers.includes(layer) ? <b>{layer}</b> :
-    <label htmlFor={layer} >
-        <input
-          type={defaultView === 'framework' ? 'radio' : 'checkbox'}
-          data-layer={layer}
-          onChange={e => onLayerChange(layer, e.target.checked, mapTargetId)}
-        />
-        {layerData[layer] ? layerData[layer].label : layer}</label>
-    }
-  </li>);
+class Layer extends React.Component {
+  render() {
+    return (
+      <li className={`layer ${this.props.mapTargetId}`}>
+        {this.props.headers.includes(this.props.layer) ? <b>{this.props.layer}</b> :
+          < label htmlFor={this.props.layer} >
+            <input
+              type={this.props.defaultView === 'framework' ? 'radio' : 'checkbox'}
+              data-layer={this.props.layer}
+              name={group}
+              onChange={e => this.props.onLayerChange(this.props.layer, e.target.checked, this.props.layer)}
+            />
+            {this.props.layerData[this.props.layer] ? this.props.layerData[this.props.layer].label : this.props.layer}</label>
+        }
+      </li >
+    )
+  }
+}
 
 Layer.propTypes = {
   mapTargetId: PropTypes.string.isRequired,

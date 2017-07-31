@@ -13,10 +13,16 @@ const Sectors = ({ sectorMenuId,
   onToggleView = f => f,
   onSectorClick = f => f,
   onLayerChange = f => f,
+  onFilterSelect = f => f,
   view,
   defaultView,
+  filters
 }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
+    <div className="filter-selection">
+      <div className="pre-text">YOUR SELECTIONS: </div>
+      <div className="selections">{filters.join(', ')}</div>
+    </div>
     <a
       href="#"
       onClick={e => onToggleSectors(e)}
@@ -34,13 +40,15 @@ const Sectors = ({ sectorMenuId,
           (sector.filters || sector.views) ?
             (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
               <Filters
+                sector={sector.sector}
                 filters={sector.filters}
                 headers={sector.headers}
                 views={sector.views}
                 onToggleView={onToggleView}
+                onFilterSelect={onFilterSelect}
               />
             </li>) :
-            defaultView === 'framework' && view !== 'framework' ?
+            view !== 'framework' ?
               (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
                 <Layers
                   onLayerChange={onLayerChange}
@@ -49,6 +57,7 @@ const Sectors = ({ sectorMenuId,
                   defaultView={defaultView}
                   headers={sector.headers}
                   layerData={layerData}
+                  onFilterSelect={onFilterSelect}
                 />
               </li>) : '')
         }

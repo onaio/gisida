@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 require('./Filter.scss');
 
-const Filter = ({ filter, view, headers, onToggleView }) =>
+const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = f => f }) =>
   (<li className={'filter'}>
     {
       (headers !== undefined && headers.includes(filter)) ?
@@ -18,8 +18,14 @@ const Filter = ({ filter, view, headers, onToggleView }) =>
             /> {view}
           </label>) :
           (<label htmlFor={filter}>
-            <input type="radio" />{filter}
-          </label>)
+            <input type="radio"
+              id={sector}
+              value={filter}
+              name={sector}
+              onClick={e => onFilterSelect(sector, filter, e.target.checked)}
+            />
+            {filter}</label>
+          )
     }
   </li>);
 
