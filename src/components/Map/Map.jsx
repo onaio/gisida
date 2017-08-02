@@ -273,7 +273,13 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.categories.color,
+          'circle-color': layer.color ?
+          {
+            property: layer.source.join[0],
+            stops: stops[0][0],
+            type: 'categorical',
+          } :
+            layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': 1,
