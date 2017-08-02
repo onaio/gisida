@@ -294,12 +294,14 @@ class Map extends React.Component {
 
       if (layer.source.data) {
         if (layer.source.type === 'vector') {
-          const layerStops = timefield ? stops[1][stops[1].length - 1] : stops[1][0];
+          const layerStops = stops ?
+            timefield ? stops[1][stops[1].length - 1] : stops[1][0] :
+            [[0, 0]];
           circleLayer.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: layerStops,
             type: 'categorical',
-            default: 0,
+            default: stops ? 0 : 3,
           };
           circleLayer.source.url = layer.source['map-id'];
           circleLayer['source-layer'] = layer.source.layer;
