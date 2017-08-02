@@ -1,7 +1,7 @@
 import colorbrewer from 'colorbrewer';
 import ss from 'simple-statistics';
 
-const radius = [
+const defaultRadiusRange = [
   '3',
   '6',
   '9',
@@ -9,6 +9,9 @@ const radius = [
   '15',
   '18',
   '21',
+  '24',
+  '27',
+  '30',
 ];
 
 const getColorBrewerColor = function getColorBrewerColor(c, numColors) {
@@ -27,6 +30,7 @@ const getColor = function getColor(c, i) {
 function getStops(layer) {
   const colorsStops = [];
   const radiusStops = [];
+  const radius = layer.radiusRange || defaultRadiusRange;
   let breaks = [];
 
   // Sort data based on data value
@@ -113,6 +117,7 @@ export default function (layer, timefield) {
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join[1]);
   const limit = layer.categories.limit;
+  const radiusRange = layer['radius-range'];
 
   for (let i = 0; i < rows.length; i += 1) {
     if (isGeoJSON) {
@@ -127,5 +132,5 @@ export default function (layer, timefield) {
     }
   }
 
-  return getStops({ data, colors, osmIDs, periods, limit, clusters });
+  return getStops({ data, colors, osmIDs, periods, limit, clusters, radiusRange });
 }
