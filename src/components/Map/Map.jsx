@@ -273,7 +273,13 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.categories.color,
+          'circle-color': layer.color ?
+          {
+            property: layer.source.join[0],
+            stops: stops[0][0],
+            type: 'categorical',
+          } :
+            layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': 1,
@@ -288,12 +294,14 @@ class Map extends React.Component {
 
       if (layer.source.data) {
         if (layer.source.type === 'vector') {
-          const layerStops = timefield ? stops[1][stops[1].length - 1] : stops[1][0];
+          const layerStops = stops ?
+            timefield ? stops[1][stops[1].length - 1] : stops[1][0] :
+            [[0, 0]];
           circleLayer.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: layerStops,
             type: 'categorical',
-            default: 0,
+            default: stops ? 0 : 3,
           };
           circleLayer.source.url = layer.source['map-id'];
           circleLayer['source-layer'] = layer.source.layer;
@@ -662,7 +670,7 @@ class Map extends React.Component {
         `</div>${
         layer.credit
         }</div>`);
-    } else if (layer.credit && layer.categories.shape) {
+    } else if (layer.credit && layer.categories.shape && layer.type !== 'circle') {
       layer.categories.color.forEach((color, index) => {
         const style = layer.categories.shape[index] === 'triangle-stroked-11' ||
           layer.categories.shape[index] === 'triangle-15' ?
