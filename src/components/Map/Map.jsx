@@ -275,7 +275,7 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.color ?
+          'circle-color': layer.categories.color instanceof Array ?
           {
             property: layer.source.join[0],
             stops: stops[0][0],
