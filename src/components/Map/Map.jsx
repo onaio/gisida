@@ -192,7 +192,6 @@ class Map extends React.Component {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
         readData(layerData, layerData.source.data);
-
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
@@ -289,7 +288,7 @@ class Map extends React.Component {
             stops: stops[0][0],
             type: 'categorical',
           } :
-            layer.categories.color,
+          layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': 1,
@@ -760,9 +759,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-        },
+        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+      },
       );
     }
   }

@@ -41,5 +41,5 @@ class Login extends React.Component {
 export default Login;
 
 Login.propTypes = {
-  appConfig: PropTypes.string.isRequired,
+  appConfig: PropTypes.objectOf(PropTypes.any).isRequired,
 };
