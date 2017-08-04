@@ -161,13 +161,29 @@ class Map extends React.Component {
       activeLayers.push(layerData.id);
     }
 
-    function renderData() {
-      if (!(layerData.labels)) {
-        self.addLayer(layerData);
+    function renderData(layerProp) {
+      if (!(layerProp.labels)) {
+        self.addLayer(layerProp);
       } else {
-        d3.csv(layerData.labels.data, (labels) => {
-          layerData.labels.data = labels;
-          self.addLayer(layerData);
+        d3.csv(layerProp.labels.data, (labels) => {
+          layerProp.labels.data = labels;
+          self.addLayer(layerProp);
+        });
+      }
+    }
+
+    function readData(layerProp, source) {
+      const fileType = source.split('.').pop();
+      if (fileType === 'csv') {
+        d3.csv(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
+        });
+      }
+      if (fileType === 'geojson') {
+        d3.json(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
         });
       }
     }
@@ -175,20 +191,8 @@ class Map extends React.Component {
     if (layerData.source) {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
-        const fileName = layerData.source.data;
-        const fileType = fileName.split('.').pop();
-        if (fileType === 'csv') {
-          d3.csv(layerData.source.data, (data) => {
-            layerData.source.data = data;
-            renderData(layerData);
-          });
-        }
-        if (fileType === 'geojson') {
-          d3.json(layerData.source.data, (data) => {
-            layerData.source.data = data;
-            renderData(layerData);
-          });
-        }
+        readData(layerData, layerData.source.data);
+
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
@@ -221,7 +225,11 @@ class Map extends React.Component {
       layerData.layers.forEach((sublayer) => {
         const subLayer = this.props.layerData[sublayer];
         subLayer.id = sublayer;
-        self.addLayer(subLayer);
+        if (typeof subLayer.source.data === 'string') {
+          readData(subLayer, subLayer.source.data);
+        } else {
+          self.addLayer(subLayer);
+        }
       });
     }
   }
@@ -752,9 +760,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-      },
+          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+        },
       );
     }
   }
