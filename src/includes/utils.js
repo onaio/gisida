@@ -1,4 +1,5 @@
 import Cookie from 'js-cookie';
+import * as d3 from 'd3';
 
 export function formatNum(num, decimal) {
   let x = (`${num}`).length;
@@ -22,3 +23,19 @@ export function getLastIndex(arr, item) {
 export const isLoggedIn = function isLoggedIn() {
   return Cookie.get('dsauth') === 'true';
 };
+
+export function readData(layerProp, source) {
+  const fileType = source.split('.').pop();
+  if (fileType === 'csv') {
+    d3.csv(layerProp.source.data, (data) => {
+      layerProp.source.data = data;
+    });
+  }
+  if (fileType === 'geojson') {
+    d3.json(layerProp.source.data, (data) => {
+      layerProp.source.data = data;
+    });
+  }
+
+  return layerProp;
+}

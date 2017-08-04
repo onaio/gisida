@@ -7,7 +7,7 @@ import Mustache from 'mustache';
 import PropTypes from 'prop-types';
 import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
-import { formatNum, getLastIndex } from '../../includes/utils';
+import { formatNum, getLastIndex, readData } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
@@ -172,26 +172,12 @@ class Map extends React.Component {
       }
     }
 
-    function readData(layerProp, source) {
-      const fileType = source.split('.').pop();
-      if (fileType === 'csv') {
-        d3.csv(layerProp.source.data, (data) => {
-          layerProp.source.data = data;
-          renderData(layerProp);
-        });
-      }
-      if (fileType === 'geojson') {
-        d3.json(layerProp.source.data, (data) => {
-          layerProp.source.data = data;
-          renderData(layerProp);
-        });
-      }
-    }
     // if layer has source
     if (layerData.source) {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
         readData(layerData, layerData.source.data);
+        renderData(layerData);
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
