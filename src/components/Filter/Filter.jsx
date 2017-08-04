@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 require('./Filter.scss');
 
-const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = f => f }) =>
+const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = f => f, checked, currentView }) =>
   (<li className={'filter'}>
     {
       (headers !== undefined && headers.includes(filter)) ?
@@ -14,6 +14,7 @@ const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = 
               type="radio"
               name="switch-view"
               value={view}
+              checked={view.toLowerCase() === currentView}
               onClick={e => onToggleView(e.target.value.toLowerCase())}
             /> {view}
           </label>) :
@@ -22,6 +23,7 @@ const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = 
               id={sector}
               value={filter}
               name={sector}
+              checked={checked.includes(filter)}
               onClick={e => onFilterSelect(sector, filter, e.target.checked)}
             />
             {filter}</label>

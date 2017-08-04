@@ -48,7 +48,11 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
-      filters: [],
+      filters: [
+        // { STAKEHOLDER: "IDPs" },
+        // { REGION: "Central" },
+        // { YEAR: "2017" },
+      ],
     };
     this.changeLayer = this.changeLayer.bind(this);
     this.sectorClick = App.showSector.bind(this);
@@ -57,34 +61,22 @@ class App extends React.Component {
     this.toggleSectors = App.toggleSectors.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.getFilters = this.getFilters.bind(this);
+    this.viewClick = this.viewClick.bind(this);
   }
 
   changeLayer(layer, status, map) {
-    const layers = [
-      ...this.state.layers,
-      {
-        title: layer,
-        visible: status,
-        map,
-      },
-    ];
-
-    if (this.props.layerData[layer].layers) {
-      const groupedLayer = this.props.layerData[layer].layers;
-      for (let i = 0; i < groupedLayer.length; i += 1) {
-        layers.push({
-          title: groupedLayer[i],
+    let test = $('li').hasClass('layer');
+    if (test) {
+      const layers = [
+        ...this.state.layers,
+        {
+          title: layer,
           visible: status,
           map,
-        });
-      }
-      layers.push({
-        title: layer,
-        visible: status,
-        map,
-      });
+        },
+      ];
+      this.setState({ layers });
     }
-    this.setState({ layers });
   }
 
   toggleView(view) {
@@ -106,6 +98,10 @@ class App extends React.Component {
     this.setState({ filters });
   }
 
+  viewClick(layer, sector) {
+    this.setState({ layer, sector });
+  }
+
   render() {
     const { changeLayer } = this;
     const { sectorClick } = this;
@@ -114,6 +110,7 @@ class App extends React.Component {
     const { singleScreen } = this;
     const { toggleView } = this;
     const { getFilters } = this;
+    const { viewClick } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
     const layerData = this.props.layerData;
@@ -122,6 +119,8 @@ class App extends React.Component {
     const currentView = this.state.view;
     const details = this.props.details;
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
+    const selected = this.state.layer;
+    const showSector = this.state.sector;
 
     return (
       <div>
@@ -135,6 +134,9 @@ class App extends React.Component {
             sectorData={sectorData}
             details={details}
             onToggleView={toggleView}
+            onViewClick={viewClick}
+            onSectorClick={sectorClick}
+            selected={selected}
           /> :
           <Map
             mapId="map-1"
@@ -158,6 +160,8 @@ class App extends React.Component {
           sectorData={sectorData}
           layerData={layerData}
           filters={filters}
+          selected={selected}
+          showSector={showSector}
         />
 
         {appConfig.splitView ?
@@ -181,6 +185,8 @@ class App extends React.Component {
               sectorData={sectorData}
               layerData={layerData}
               filters={filters}
+              selected={selected}
+              showSector={showSector}
             />
           </div>
           : null}

@@ -16,7 +16,9 @@ const Sectors = ({ sectorMenuId,
   onFilterSelect = f => f,
   view,
   defaultView,
-  filters
+  filters,
+  selected,
+  showSector
 }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
     <div className="filter-selection">
@@ -46,10 +48,13 @@ const Sectors = ({ sectorMenuId,
                 views={sector.views}
                 onToggleView={onToggleView}
                 onFilterSelect={onFilterSelect}
+                checked={filters}
+                currentView={view}
               />
             </li>) :
             view !== 'framework' ?
-              (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
+              (<li className="sector" key={i}><a href="#"
+                onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
                 <Layers
                   sector={sector.sector}
                   onLayerChange={onLayerChange}
@@ -59,6 +64,8 @@ const Sectors = ({ sectorMenuId,
                   headers={sector.headers}
                   layerData={layerData}
                   onFilterSelect={onFilterSelect}
+                  selected={selected}
+                  showSector={showSector}
                 />
               </li>) : '')
         }

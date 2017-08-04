@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Mustache from 'mustache';
+import indicatorData from '../../includes/googlesheetData';
 
 require('./Framework.scss');
 
@@ -53,16 +54,14 @@ class Framework extends React.Component {
                       </div>
                       {this.props.details[layer] ?
                         <div className="modal fade" id={this.props.details[layer].id} role="dialog">
-                          <div
-                            className="modal-dialog"
-                          >
+                          <div className="modal-dialog">
                             <div className="modal-content">
                               <div className="modal-header">
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                                 <h4 className="modal-title">{layer}</h4>
                                 <a
                                   className="toggle-view-link"
-                                  onClick={this.props.onToggleView}
+                                  onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
                                 >View on map</a>
                               </div>
                               <div className="modal-body">
@@ -99,7 +98,7 @@ class Framework extends React.Component {
 
   getKey() {
     const colors = {
-      white: 'Data unavilable',
+      white: 'Data unavailable',
       transparent: 'Incomplete data exists',
       red: 'Far from met',
       orange: 'Not fully met, obstacles exist',
@@ -122,6 +121,7 @@ class Framework extends React.Component {
   }
 
   render() {
+    console.log(indicatorData());
     return (
       <div className="framework-wrapper">
         <div className="key" />
