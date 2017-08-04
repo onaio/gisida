@@ -642,8 +642,8 @@ class Map extends React.Component {
         });
       }
 
-      if (!layer.labels.maxZoom) {
-        layers.labels.maxZoom = 22;
+      if (typeof layer.labels.maxZoom === 'undefined') {
+        layer.labels.maxZoom = 22;
       }
       this.map.on('zoom', () => {
         if (this.map.getZoom() > layer.labels.minZoom
