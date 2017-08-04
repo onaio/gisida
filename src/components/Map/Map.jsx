@@ -344,6 +344,12 @@ class Map extends React.Component {
       if (layer.paint) {
         fillLayer.paint = layer.paint;
       }
+      if (layer.minzoom) {
+        fillLayer.minzoom = layer.minzoom;
+      }
+      if (layer.maxzoom) {
+        fillLayer.maxzoom = layer.maxzoom;
+      }
 
       if (!(layer['no-outline'])) {
         fillLayer.paint['fill-outline-color'] = '#fff';
@@ -392,6 +398,12 @@ class Map extends React.Component {
       };
       if (layer.paint) {
         lineLayer.paint = layer.paint;
+      }
+      if (layer.minzoom) {
+        lineLayer.minzoom = layer.minzoom;
+      }
+      if (layer.maxzoom) {
+        lineLayer.maxzoom = layer.maxzoom;
       }
       if (layer.source.type === 'geojson') {
         lineLayer.source.data = layer.source.data;
@@ -630,8 +642,12 @@ class Map extends React.Component {
         });
       }
 
+      if (typeof layer.labels.maxZoom === 'undefined') {
+        layer.labels.maxZoom = 22;
+      }
       this.map.on('zoom', () => {
         if (this.map.getZoom() > layer.labels.minZoom
+          && this.map.getZoom() < layer.labels.maxZoom
           && this.map.getLayer(layer.id) !== undefined) {
           this.removeLabels(layer);
 
