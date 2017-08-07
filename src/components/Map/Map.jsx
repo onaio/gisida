@@ -212,6 +212,7 @@ class Map extends React.Component {
         subLayer.id = sublayer;
         if (typeof subLayer.source.data === 'string') {
           readData(subLayer, subLayer.source.data);
+          renderData(subLayer);
         } else {
           self.addLayer(subLayer);
         }
@@ -765,6 +766,7 @@ class Map extends React.Component {
   addTimeseriesLayers() {
     const sliderLayers = this.getSliderLayers();
     const viewedIds = this.state.layers.map(layers => layers.title);
+
     const map = this.map;
     let sliderItem = null;
     // update these to use classes instead of ids for multimap
