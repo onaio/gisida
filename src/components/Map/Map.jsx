@@ -172,12 +172,27 @@ class Map extends React.Component {
       }
     }
 
+    function readData(layerProp, source) {
+      const fileType = source.split('.').pop();
+      if (fileType === 'csv') {
+        d3.csv(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
+        });
+      }
+      if (fileType === 'geojson') {
+        d3.json(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
+        });
+      }
+    }
+
     // if layer has source
     if (layerData.source) {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
-        let layerProp = readData(layerData, layerData.source.data);
-        renderData(layerProp);
+        readData(layerData, layerData.source.data);
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
@@ -211,8 +226,7 @@ class Map extends React.Component {
         const subLayer = this.props.layerData[sublayer];
         subLayer.id = sublayer;
         if (typeof subLayer.source.data === 'string') {
-          let layerProp = readData(subLayer, subLayer.source.data);
-          renderData(layerProp);
+          readData(subLayer, subLayer.source.data);
         } else {
           self.addLayer(subLayer);
         }
