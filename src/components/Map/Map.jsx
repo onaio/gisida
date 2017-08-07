@@ -358,7 +358,7 @@ class Map extends React.Component {
         fillLayer['source-layer'] = layer.source.layer;
       }
 
-      if (layer.source.data) {
+      if (layer.source.data && !layer.paint) {
         const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
 
         fillLayer.paint['fill-color'] = {
