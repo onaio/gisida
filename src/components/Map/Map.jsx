@@ -176,8 +176,8 @@ class Map extends React.Component {
     if (layerData.source) {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
-        readData(layerData, layerData.source.data);
-        renderData(layerData);
+        let layerProp = readData(layerData, layerData.source.data);
+        renderData(layerProp);
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
@@ -211,8 +211,8 @@ class Map extends React.Component {
         const subLayer = this.props.layerData[sublayer];
         subLayer.id = sublayer;
         if (typeof subLayer.source.data === 'string') {
-          readData(subLayer, subLayer.source.data);
-          renderData(subLayer);
+          let layerProp = readData(subLayer, subLayer.source.data);
+          renderData(layerProp);
         } else {
           self.addLayer(subLayer);
         }

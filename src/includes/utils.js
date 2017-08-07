@@ -25,17 +25,18 @@ export const isLoggedIn = function isLoggedIn() {
 };
 
 export function readData(layerProp, source) {
+  let layer = layerProp;
   const fileType = source.split('.').pop();
   if (fileType === 'csv') {
-    d3.csv(layerProp.source.data, (data) => {
-      layerProp.source.data = data;
+    d3.csv(layer.source.data, (data) => {
+      layer.source.data = data;
     });
   }
   if (fileType === 'geojson') {
-    d3.json(layerProp.source.data, (data) => {
-      layerProp.source.data = data;
+    d3.json(layer.source.data, (data) => {
+      layer.source.data = data;
     });
   }
 
-  return layerProp;
+  return layer;
 }
