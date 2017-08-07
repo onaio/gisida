@@ -420,6 +420,8 @@ class Map extends React.Component {
         source: {
           type: layer.source.type,
         },
+        minzoom: layer.minzoom ? layer.minzoom : this.props.mapConfig.mapZoom,
+        maxzoom: layer.maxzoom ? layer.maxzoom : 22,
         layout: layer.layout,
         paint: layer.paint,
       };
