@@ -31,23 +31,6 @@ class Dashboard {
       });
     });
 
-    let url = "https://spreadsheets.google.com/feeds/list/1fVdPJMpe5tAiGp6yg2bg1J34L4kGdyT-nW_-oGmP1EQ/1/public/basic?alt=json";
-    let dataArr = [];
-    $.getJSON(url, function (data) {
-      let Data = data.feed.entry;
-
-      for (let i = 0; i < Data.length; i += 1) {
-        let dataStr = Data[i].content.$t
-        var params = dataStr.split(', ');
-        var map = {};
-        for (var i = 0; i < params.length; i++) {
-          var parts = params[i].split(':');
-          map[parts[0]] = parts[1].substr(1, parts[1].length);
-        }
-        dataArr.push(map);
-      }
-    });
-    console.log(dataArr);
     if (isLoggedIn()) {
       render(
         <App

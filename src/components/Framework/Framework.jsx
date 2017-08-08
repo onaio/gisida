@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Mustache from 'mustache';
-import indicatorData from '../../includes/googlesheetData';
+import fetchGoogleSheetsData from '../../includes/googlesheetData';
 
 require('./Framework.scss');
 
@@ -10,10 +10,15 @@ class Framework extends React.Component {
     super();
     this.state = {
       showIndicatorDetails: false,
+      indicatorData: [],
     };
+
+    this.updateData = this.updateData.bind(this);
   }
+
   componentDidMount() {
     this.getKey();
+    fetchGoogleSheetsData(this.updateData);
   }
 
   onClick() {
@@ -120,8 +125,14 @@ class Framework extends React.Component {
     $('.key-popup').prepend(`<div id="popup-key-label">Key</div>${popup}`);
   }
 
+  updateData(data) {
+    this.setState({ indicatorData: data });
+  }
+
   render() {
-    console.log(indicatorData());
+    console.log('Google Sheet data will show here ---->');
+    console.log(this.state.indicatorData);
+    console.log('-------------------------------------->');
     return (
       <div className="framework-wrapper">
         <div className="key" />
