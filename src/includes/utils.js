@@ -1,5 +1,5 @@
 import Cookie from 'js-cookie';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
 
 export function formatNum(num, decimal) {
   let x = (`${num}`).length;

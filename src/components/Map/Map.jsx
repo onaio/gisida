@@ -7,7 +7,7 @@ import Mustache from 'mustache';
 import PropTypes from 'prop-types';
 import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
-import { formatNum, getLastIndex, readData } from '../../includes/utils';
+import { formatNum, getLastIndex } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
@@ -313,7 +313,7 @@ class Map extends React.Component {
             type: 'categorical',
             default: stops ? 0 : 3,
           };
-          circleLayer.source.url = layer.source['map-id'];
+          circleLayer.source.url = layer.source.url;
           circleLayer['source-layer'] = layer.source.layer;
         } else if (layer.source.type === 'geojson') {
           if (stops) {
@@ -354,8 +354,8 @@ class Map extends React.Component {
       if (layer.paint) {
         fillLayer.paint = layer.paint;
       }
-      if (layer.minzoom) {
-        fillLayer.minzoom = layer.minzoom;
+      if (layer.source.minzoom) {
+        fillLayer.minzoom = layer.source.minzoom;
       }
       if (layer.maxzoom) {
         fillLayer.maxzoom = layer.maxzoom;
@@ -368,7 +368,7 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         fillLayer.source.data = layer.source.data;
       } else {
-        fillLayer.source.url = layer.source['map-id'];
+        fillLayer.source.url = layer.source.url;
         fillLayer['source-layer'] = layer.source.layer;
       }
 
@@ -409,8 +409,8 @@ class Map extends React.Component {
       if (layer.paint) {
         lineLayer.paint = layer.paint;
       }
-      if (layer.minzoom) {
-        lineLayer.minzoom = layer.minzoom;
+      if (layer.source.minzoom) {
+        lineLayer.minzoom = layer.source.minzoom;
       }
       if (layer.maxzoom) {
         lineLayer.maxzoom = layer.maxzoom;
@@ -418,7 +418,7 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         lineLayer.source.data = layer.source.data;
       } else {
-        lineLayer.source.url = layer.source['map-id'];
+        lineLayer.source.url = layer.source.url;
         lineLayer['source-layer'] = layer.source.layer;
       }
       this.map.addLayer(lineLayer);
@@ -434,8 +434,8 @@ class Map extends React.Component {
         source: {
           type: layer.source.type,
         },
-        minzoom: layer.minzoom ? layer.minzoom : this.props.mapConfig.mapZoom,
-        maxzoom: layer.maxzoom ? layer.maxzoom : 22,
+        minzoom: layer.source.minzoom ? layer.source.minzoom : this.props.mapConfig.mapZoom,
+        maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
         layout: layer.layout,
         paint: layer.paint,
       };
@@ -448,7 +448,7 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         symbolLayer.source.data = layer.source.data;
       } else {
-        symbolLayer.source.url = layer.source['map-id'];
+        symbolLayer.source.url = layer.source.url;
         symbolLayer['source-layer'] = layer.source.layer;
       }
 
@@ -644,7 +644,7 @@ class Map extends React.Component {
         });
       });
 
-      if (this.map.getZoom() > layer.labels.minZoom) {
+      if (this.map.getZoom() > layer.labels.minzoom) {
         labels.forEach((row) => {
           new mapboxgl.Marker(row.el, {
             offset: row.offset,
@@ -654,12 +654,12 @@ class Map extends React.Component {
         });
       }
 
-      if (typeof layer.labels.maxZoom === 'undefined') {
-        layer.labels.maxZoom = 22;
+      if (typeof layer.labels.maxzoom === 'undefined') {
+        layer.labels.maxzoom = 22;
       }
       this.map.on('zoom', () => {
-        if (this.map.getZoom() > layer.labels.minZoom
-          && this.map.getZoom() < layer.labels.maxZoom
+        if (this.map.getZoom() > layer.labels.minzoom
+          && this.map.getZoom() < layer.labels.maxzoom
           && this.map.getLayer(layer.id) !== undefined) {
           this.removeLabels(layer);
 
