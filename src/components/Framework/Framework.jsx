@@ -11,6 +11,7 @@ class Framework extends React.Component {
     this.state = {
       showIndicatorDetails: false,
       indicatorData: [],
+      filterData: [],
     };
 
     this.updateData = this.updateData.bind(this);
@@ -32,6 +33,7 @@ class Framework extends React.Component {
   getFrameworkSectors() {
     const sectors = this.props.sectorData.filter(sector => sector.layers).map(sector => sector);
     const frameworkSector = [];
+    let indicatorObj = this.extendIndicatorDetails();
     sectors.forEach(sector =>
       frameworkSector.push(
         (<div className="framework-sector" key={sector.sector}>
@@ -49,45 +51,46 @@ class Framework extends React.Component {
                       <div className="sector-indicator">
                         {this.props.details[layer] ?
                           <div className="status">
-                            <div className="status-1" style={{ background: `${this.props.details[layer].analysis.colors[0]}` }} />
-                            <div className="status-2" style={{ background: `${this.props.details[layer].analysis.colors[1]}` }} />
+                            <div className="status-1" style={{ background: `${this.props.details[layer].color}` }} />
+                            <div className="status-2" style={{ background: `${this.props.details[layer].color}` }} />
                           </div>
                           : ''}
                         <div className="status-link">
                           <a data-toggle="modal" data-target={this.props.details[layer] ? `#${this.props.details[layer].id}` : ''}>{layer}</a>
                         </div>
                       </div>
-                      {this.props.details[layer] ?
+                      {
+                        this.props.details[layer] ?
                         <div className="modal fade" id={this.props.details[layer].id} role="dialog">
-                          <div className="modal-dialog">
-                            <div className="modal-content">
-                              <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                <h4 className="modal-title">{layer}</h4>
-                                <a
-                                  className="toggle-view-link"
-                                  onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
-                                >View on map</a>
-                              </div>
-                              <div className="modal-body">
-                                <h6 className="modal-header">Indicator</h6>
-                                <p>{this.props.details[layer].indicator}</p>
-                                <h6 className="modal-header">Analysis</h6>
-                                <div
-                                  className="indicator-status-1"
-                                  background-color={this.props.details[layer].analysis.status[0]}
-                                />
-                                <div
-                                  className="indicator-status-2"
-                                  background-color={this.props.details[layer].analysis.status[1]}
-                                />
-                                <p>{this.props.details[layer].analysis.details}</p>
-                              </div>
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal">&times;</button>
+                              <h4 className="modal-title">{layer}</h4>
+                              <a
+                                className="toggle-view-link"
+                                onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
+                              >View on map</a>
                             </div>
-
+                            <div className="modal-body">
+                              <h6 className="modal-header">Indicator</h6>
+                              <p>test</p>
+                              <h6 className="modal-header">Analysis</h6>
+                              <div
+                                className="indicator-status-1"
+                                background-color={this.props.details[layer].color}
+                              />
+                              <div
+                                className="indicator-status-2"
+                                background-color={this.props.details[layer].color}
+                              />
+                              <p>{this.props.details[layer].dataratingfordisplaced}</p>
+                            </div>
                           </div>
+
                         </div>
-                        : ''
+                      </div>
+                      : ''
                       }
                     </div>
                   }
@@ -130,24 +133,40 @@ class Framework extends React.Component {
   }
 
   getFilteredData() {
-    let filters = ["populations", "region", "year"];
     this.indicatorData = this.state.indicatorData;
     if (this.state.indicatorData.length > 0 && this.props.filters.length > 0) {
-      for (let i = 0; i < filters.length; i += 1) {
-        for (let j = 0; j < this.props.filters.length; j += 1) {
-          let filteredData = this.indicatorData.filter((a) =>
-            a[filters[i]] === this.props.filters[j]);
-          if (filteredData.length > 0) {
-            this.indicatorData = filteredData;
-          }
-        }
+      for (let j = 0; j < this.props.filters.length; j += 1) {
+        let filteredData = this.indicatorData.filter((a) =>
+          a.population === this.props.filters[j] ||
+          a.region === this.props.filters[j] ||
+          a.year === this.props.filters[j]
+        )
+        this.indicatorData = filteredData;
       }
     }
 
+    let filterData = this.indicatorData;
+
+    this.setState({ filterData });
     return this.indicatorData;
   }
 
+  extendIndicatorDetails() {
+    let filterData = this.getFilteredData();
+    let indicatorDetails = this.props.details;
+    Object.keys(indicatorDetails).forEach((key) => {
+      for (let i = 0; i < filterData.length; i += 1) {
+        if (key === filterData[i].indicator) {
+          $.extend(indicatorDetails[key], filterData[i]);
+        }
+      }
+    });
+
+    return indicatorDetails;
+  }
+
   render() {
+    console.log(this.state.filterData);
     return (
       <div className="framework-wrapper">
         <div className="key" />
