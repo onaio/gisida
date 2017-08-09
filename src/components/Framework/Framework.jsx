@@ -129,10 +129,25 @@ class Framework extends React.Component {
     this.setState({ indicatorData: data });
   }
 
+  getFilteredData() {
+    let filters = ["populations", "region", "year"];
+    this.indicatorData = this.state.indicatorData;
+    if (this.state.indicatorData.length > 0 && this.props.filters.length > 0) {
+      for (let i = 0; i < filters.length; i += 1) {
+        for (let j = 0; j < this.props.filters.length; j += 1) {
+          let filteredData = this.indicatorData.filter((a) =>
+            a[filters[i]] === this.props.filters[j]);
+          if (filteredData.length > 0) {
+            this.indicatorData = filteredData;
+          }
+        }
+      }
+    }
+
+    return this.indicatorData;
+  }
+
   render() {
-    console.log('Google Sheet data will show here ---->');
-    console.log(this.state.indicatorData);
-    console.log('-------------------------------------->');
     return (
       <div className="framework-wrapper">
         <div className="key" />

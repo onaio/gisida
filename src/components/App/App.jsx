@@ -137,6 +137,7 @@ class App extends React.Component {
             onViewClick={viewClick}
             onSectorClick={sectorClick}
             selected={selected}
+            filters={filters}
           /> :
           <Map
             mapId="map-1"
