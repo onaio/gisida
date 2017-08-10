@@ -61,29 +61,42 @@ class App extends React.Component {
   }
 
   changeLayer(layer, status, map) {
-      const layers = [
-        ...this.state.layers,
-        {
-          title: layer,
-          visible: status,
-          map,
-        },
-      ];
-      this.setState({ layers });
+    const layers = [
+      ...this.state.layers,
+      {
+        title: layer,
+        visible: status,
+        map,
+      },
+    ];
+    this.setState({ layers });
   }
 
   toggleView(view) {
     this.setState({ view });
   }
 
-  getFilters(group, filter, status) {
-    let filters = [...this.state.filters, { [group]: filter }];
+  getFilters(group, filter, status, headers) {
+    let regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
+    let country;
+    let region;
+
+    for (let j = 0; j < regions.length; j += 1) {
+      if (headers.includes(regions[j])) {
+        country = regions[j];
+      } else if (filter === regions[j]) {
+          region = regions[j] + ' - ' + country;
+      }
+    }
+    
+    let obj = region ? { [group]: filter, 'region': region } : { [group]: filter };
+    let filters = [...this.state.filters, obj];
     if (this.state.filters.length > 0) {
       for (let i = 0; i < this.state.filters.length; i += 1) {
         let sector = Object.keys(this.state.filters[i])[0];
         if (sector === group) {
           let filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
-          filters = [...filteredArr, { [group]: filter }];
+          filters = [...filteredArr, obj];
         }
       }
     }
@@ -111,9 +124,12 @@ class App extends React.Component {
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
     const details = this.props.details;
-    const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const selected = this.state.layer;
     const showSector = this.state.sector;
+    const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
+    const UIfilters = this.state.filters.map(filter => filter.region ?
+      filter.region : filter[Object.keys(filter)[0]]);
+      
     return (
       <div>
         <Menu
@@ -152,7 +168,7 @@ class App extends React.Component {
           onFilterSelect={getFilters}
           sectorData={sectorData}
           layerData={layerData}
-          filters={filters}
+          filters={UIfilters}
           selected={selected}
           showSector={showSector}
         />
