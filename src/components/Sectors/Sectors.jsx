@@ -18,12 +18,13 @@ const Sectors = ({ sectorMenuId,
   defaultView,
   filters,
   selected,
-  showSector
+  showSector,
+  UIfilters
 }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
     <div className="filter-selection">
       <div className="pre-text">YOUR SELECTIONS: </div>
-      <div className="selections">{filters.join(', ')}</div>
+      <div className="selections">{UIfilters.join(', ')}</div>
     </div>
     <a
       href="#"

@@ -129,7 +129,7 @@ class App extends React.Component {
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const UIfilters = this.state.filters.map(filter => filter.region ?
       filter.region : filter[Object.keys(filter)[0]]);
-      
+
     return (
       <div>
         <Menu
@@ -168,7 +168,8 @@ class App extends React.Component {
           onFilterSelect={getFilters}
           sectorData={sectorData}
           layerData={layerData}
-          filters={UIfilters}
+          filters={filters}
+          UIfilters={UIfilters}
           selected={selected}
           showSector={showSector}
         />

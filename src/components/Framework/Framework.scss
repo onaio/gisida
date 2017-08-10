@@ -159,3 +159,27 @@
             color: inherit;
         }
     }
+
+    .data-ratings {
+        display: table;
+        margin-bottom: 10px;
+        .indicator-status {
+            display: -webkit-box;
+            border: 1px solid black;
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+            .indicator-status-1 {
+                width: 50%;
+                height: 100%
+            }
+            .indicator-status-2 {
+                width: 50%;
+                height: 100%
+            }
+        }
+        .indicator-rating {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }

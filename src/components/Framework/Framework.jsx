@@ -58,14 +58,18 @@ class Framework extends React.Component {
                       <div className="sector-indicator">
                         {indicatorObj[layer] ?
                           <div className="status">
-                            <div 
-                            className="status-1" 
-                              style={{ background: `${indicatorObj[layer].color ? 
-                              indicatorObj[layer].color[0] : ''}` }} />
-                            <div 
-                            className="status-2" 
-                              style={{ background: `${indicatorObj[layer].color ? 
-                              indicatorObj[layer].color[1] : ''}` }} />
+                            <div
+                              className="status-1"
+                              style={{
+                                background: `${indicatorObj[layer].color ?
+                                  indicatorObj[layer].color[0] : ''}`
+                              }} />
+                            <div
+                              className="status-2"
+                              style={{
+                                background: `${indicatorObj[layer].color ?
+                                  indicatorObj[layer].color[1] : ''}`
+                              }} />
                           </div>
                           : ''}
                         <div className="status-link">
@@ -74,36 +78,47 @@ class Framework extends React.Component {
                       </div>
                       {
                         indicatorObj[layer] ?
-                        <div className="modal fade" id={indicatorObj[layer].id} role="dialog">
-                        <div className="modal-dialog">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <button type="button" className="close" data-dismiss="modal">&times;</button>
-                              <h4 className="modal-title">{layer}</h4>
-                              <a
-                                className="toggle-view-link"
-                                onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
-                              >View on map</a>
-                            </div>
-                            <div className="modal-body">
-                              <h6 className="modal-header">Indicator</h6>
-                              <p>test</p>
-                              <h6 className="modal-header">Analysis</h6>
-                              <div
-                                className="indicator-status-1"
-                                background-color={indicatorObj[layer].color}
-                              />
-                              <div
-                                className="indicator-status-2"
-                                background-color={indicatorObj[layer].color}
-                              />
-                              <p>{indicatorObj[layer].dataratingfordisplaced}</p>
+                          <div className="modal fade" id={indicatorObj[layer].id} role="dialog">
+                            <div className="modal-dialog">
+                              <div className="modal-content">
+                                <div className="modal-header">
+                                  <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                  <h4 className="modal-title">{layer}</h4>
+                                  <a
+                                    className="toggle-view-link"
+                                    onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
+                                  >View on map</a>
+                                </div>
+                                <div className="modal-body">
+                                  <h6 className="modal-header">Indicator</h6>
+                                  <p>{indicatorObj[layer]['benchmarksforrating-incomparisontohostcommunitystatusandaspernationalinternationalstandards']}</p>
+                                  <h6 className="modal-header">Analysis</h6>
+                                  <div className="data-ratings">
+                                    <div className="indicator-status">
+                                      <div
+                                        className="indicator-status-1"
+                                        style={{
+                                          background: `${indicatorObj[layer].color ?
+                                            indicatorObj[layer].color[0] : ''}`
+                                        }}
+                                      />
+                                      <div
+                                        className="indicator-status-2"
+                                        style={{
+                                          background: `${indicatorObj[layer].color ?
+                                            indicatorObj[layer].color[1] : ''}`
+                                        }}
+                                      />
+                                    </div>
+                                  <div className="indicator-rating">{indicatorObj[layer].dataratingfordisplaced}</div>
+                                  </div>
+                                  <p>{indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation}</p>
+                                </div>
+                              </div>
+
                             </div>
                           </div>
-
-                        </div>
-                      </div>
-                      : ''
+                          : ''
                       }
                     </div>
                   }
