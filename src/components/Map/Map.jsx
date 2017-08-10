@@ -1,3 +1,4 @@
+/* global mapboxgl */
 import React from 'react';
 import Highcharts from 'highcharts';
 import * as d3 from 'd3';
@@ -14,7 +15,7 @@ import StyleSelector from '../Controls/StyleSelector/StyleSelector';
 import Export from '../Export/Export';
 
 require('./Map.scss');
-/* global mapboxgl */
+
 
 const activeLayers = [];
 
@@ -202,7 +203,8 @@ class Map extends React.Component {
         q.awaitAll((error, data) => {
           const mergedData = [].concat(...data);
           layerData.mergedData = mergedData;
-          layerData.source.data = aggregateData(layerData, this.props.locations);
+          layerData.source.data = layerData.aggregate.type ?
+            aggregateData(layerData, this.props.locations) : mergedData;
           layerData.loaded = true;
           renderData(layerData);
         });
@@ -273,7 +275,7 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.color ?
+          'circle-color': layer.categories.color instanceof Array ?
           {
             property: layer.source.join[0],
             stops: stops[0][0],
