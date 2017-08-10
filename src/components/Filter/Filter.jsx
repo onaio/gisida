@@ -24,7 +24,7 @@ const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = 
               value={filter}
               name={sector}
               checked={checked.includes(filter)}
-              onClick={e => onFilterSelect(sector.toLowerCase(), filter, e.target.checked)}
+              onClick={e => onFilterSelect(sector, filter, e.target.checked)}
             />
             {filter}</label>
           )

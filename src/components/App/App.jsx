@@ -48,11 +48,6 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
-      filters: [
-        // { STAKEHOLDER: "IDPs" },
-        // { REGION: "Central" },
-        // { YEAR: "2017" },
-      ],
     };
     this.changeLayer = this.changeLayer.bind(this);
     this.sectorClick = App.showSector.bind(this);
@@ -65,8 +60,6 @@ class App extends React.Component {
   }
 
   changeLayer(layer, status, map) {
-    let test = $('li').hasClass('layer');
-    if (test) {
       const layers = [
         ...this.state.layers,
         {
@@ -76,7 +69,6 @@ class App extends React.Component {
         },
       ];
       this.setState({ layers });
-    }
   }
 
   toggleView(view) {
@@ -121,7 +113,6 @@ class App extends React.Component {
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const selected = this.state.layer;
     const showSector = this.state.sector;
-
     return (
       <div>
         <Menu
