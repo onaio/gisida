@@ -40,6 +40,7 @@ class Framework extends React.Component {
     const sectors = this.props.sectorData.filter(sector => sector.layers).map(sector => sector);
     const frameworkSector = [];
     let indicatorObj = this.extendIndicatorDetails();
+
     sectors.forEach(sector =>
       frameworkSector.push(
         (<div className="framework-sector" key={sector.sector}>
@@ -57,8 +58,14 @@ class Framework extends React.Component {
                       <div className="sector-indicator">
                         {indicatorObj[layer] ?
                           <div className="status">
-                            <div className="status-1" style={{ background: `${indicatorObj[layer].color}` }} />
-                            <div className="status-2" style={{ background: `${indicatorObj[layer].color}` }} />
+                            <div 
+                            className="status-1" 
+                              style={{ background: `${indicatorObj[layer].color ? 
+                              indicatorObj[layer].color[0] : ''}` }} />
+                            <div 
+                            className="status-2" 
+                              style={{ background: `${indicatorObj[layer].color ? 
+                              indicatorObj[layer].color[1] : ''}` }} />
                           </div>
                           : ''}
                         <div className="status-link">
@@ -157,6 +164,13 @@ class Framework extends React.Component {
   extendIndicatorDetails() {
     let indicator = [];
     let indicatorObj = {};
+    const status = {
+      'Well on the way to being achieved': 'green',
+      'Not fully met obstacles exist': 'orange',
+      'Far from met': 'red',
+      'Incomplete data exists': 'grey',
+      'Data unavailable': 'white',
+    }
 
     Object.keys(this.props.details).forEach((key) => {
       indicator.push({ [key]: { id: this.props.details[key].id } });
@@ -172,10 +186,14 @@ class Framework extends React.Component {
       for (let i = 0; i < this.state.filterData.length; i += 1) {
         if (key === this.state.filterData[i].indicator) {
           $.extend(indicatorObj[key], this.state.filterData[i]);
+          if (indicatorObj[key].dataratingfordisplaced) {
+            let color1 = status[indicatorObj[key].dataratingfordisplaced.split('/ ').shift()];
+            let color2 = status[indicatorObj[key].dataratingfordisplaced.split('/ ').pop()];
+            indicatorObj[key].color = [color1, color2];
+          }
         }
       }
     });
-
     return indicatorObj;
   }
 
