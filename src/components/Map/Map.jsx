@@ -161,34 +161,38 @@ class Map extends React.Component {
       activeLayers.push(layerData.id);
     }
 
-    function renderData() {
-      if (!(layerData.labels)) {
-        self.addLayer(layerData);
+    function renderData(layerProp) {
+      if (!(layerProp.labels)) {
+        self.addLayer(layerProp);
       } else {
-        d3.csv(layerData.labels.data, (labels) => {
-          layerData.labels.data = labels;
-          self.addLayer(layerData);
+        d3.csv(layerProp.labels.data, (labels) => {
+          layerProp.labels.data = labels;
+          self.addLayer(layerProp);
         });
       }
     }
+
+    function readData(layerProp, source) {
+      const fileType = source.split('.').pop();
+      if (fileType === 'csv') {
+        d3.csv(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
+        });
+      }
+      if (fileType === 'geojson') {
+        d3.json(layerProp.source.data, (data) => {
+          layerProp.source.data = data;
+          renderData(layerProp);
+        });
+      }
+    }
+
     // if layer has source
     if (layerData.source) {
       // if not processed, grab the csv or geojson data
       if (typeof layerData.source.data === 'string') {
-        const fileName = layerData.source.data;
-        const fileType = fileName.split('.').pop();
-        if (fileType === 'csv') {
-          d3.csv(layerData.source.data, (data) => {
-            layerData.source.data = data;
-            renderData(layerData);
-          });
-        }
-        if (fileType === 'geojson') {
-          d3.json(layerData.source.data, (data) => {
-            layerData.source.data = data;
-            renderData(layerData);
-          });
-        }
+        readData(layerData, layerData.source.data);
       } else if (layerData.source.data instanceof Array &&
         !(layerData.source.data[0] instanceof Object) &&
         layerData.source.data.length >= 1 &&
@@ -221,7 +225,11 @@ class Map extends React.Component {
       layerData.layers.forEach((sublayer) => {
         const subLayer = this.props.layerData[sublayer];
         subLayer.id = sublayer;
-        self.addLayer(subLayer);
+        if (typeof subLayer.source.data === 'string') {
+          readData(subLayer, subLayer.source.data);
+        } else {
+          self.addLayer(subLayer);
+        }
       });
     }
   }
@@ -281,7 +289,7 @@ class Map extends React.Component {
             stops: stops[0][0],
             type: 'categorical',
           } :
-            layer.categories.color,
+          layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': 1,
@@ -305,7 +313,7 @@ class Map extends React.Component {
             type: 'categorical',
             default: stops ? 0 : 3,
           };
-          circleLayer.source.url = layer.source['map-id'];
+          circleLayer.source.url = layer.source.url;
           circleLayer['source-layer'] = layer.source.layer;
         } else if (layer.source.type === 'geojson') {
           if (stops) {
@@ -346,8 +354,8 @@ class Map extends React.Component {
       if (layer.paint) {
         fillLayer.paint = layer.paint;
       }
-      if (layer.minzoom) {
-        fillLayer.minzoom = layer.minzoom;
+      if (layer.source.minzoom) {
+        fillLayer.minzoom = layer.source.minzoom;
       }
       if (layer.maxzoom) {
         fillLayer.maxzoom = layer.maxzoom;
@@ -360,11 +368,11 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         fillLayer.source.data = layer.source.data;
       } else {
-        fillLayer.source.url = layer.source['map-id'];
+        fillLayer.source.url = layer.source.url;
         fillLayer['source-layer'] = layer.source.layer;
       }
 
-      if (layer.source.data) {
+      if (layer.source.data && !layer.paint) {
         const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
 
         fillLayer.paint['fill-color'] = {
@@ -401,8 +409,8 @@ class Map extends React.Component {
       if (layer.paint) {
         lineLayer.paint = layer.paint;
       }
-      if (layer.minzoom) {
-        lineLayer.minzoom = layer.minzoom;
+      if (layer.source.minzoom) {
+        lineLayer.minzoom = layer.source.minzoom;
       }
       if (layer.maxzoom) {
         lineLayer.maxzoom = layer.maxzoom;
@@ -410,7 +418,7 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         lineLayer.source.data = layer.source.data;
       } else {
-        lineLayer.source.url = layer.source['map-id'];
+        lineLayer.source.url = layer.source.url;
         lineLayer['source-layer'] = layer.source.layer;
       }
       this.map.addLayer(lineLayer);
@@ -426,6 +434,8 @@ class Map extends React.Component {
         source: {
           type: layer.source.type,
         },
+        minzoom: layer.source.minzoom ? layer.source.minzoom : this.props.mapConfig.mapZoom,
+        maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
         layout: layer.layout,
         paint: layer.paint,
       };
@@ -438,7 +448,7 @@ class Map extends React.Component {
       if (layer.source.type === 'geojson') {
         symbolLayer.source.data = layer.source.data;
       } else {
-        symbolLayer.source.url = layer.source['map-id'];
+        symbolLayer.source.url = layer.source.url;
         symbolLayer['source-layer'] = layer.source.layer;
       }
 
@@ -634,7 +644,7 @@ class Map extends React.Component {
         });
       });
 
-      if (this.map.getZoom() > layer.labels.minZoom) {
+      if (this.map.getZoom() > layer.labels.minzoom) {
         labels.forEach((row) => {
           new mapboxgl.Marker(row.el, {
             offset: row.offset,
@@ -644,12 +654,12 @@ class Map extends React.Component {
         });
       }
 
-      if (typeof layer.labels.maxZoom === 'undefined') {
-        layer.labels.maxZoom = 22;
+      if (typeof layer.labels.maxzoom === 'undefined') {
+        layer.labels.maxzoom = 22;
       }
       this.map.on('zoom', () => {
-        if (this.map.getZoom() > layer.labels.minZoom
-          && this.map.getZoom() < layer.labels.maxZoom
+        if (this.map.getZoom() > layer.labels.minzoom
+          && this.map.getZoom() < layer.labels.maxzoom
           && this.map.getLayer(layer.id) !== undefined) {
           this.removeLabels(layer);
 
@@ -772,6 +782,7 @@ class Map extends React.Component {
   addTimeseriesLayers() {
     const sliderLayers = this.getSliderLayers();
     const viewedIds = this.state.layers.map(layers => layers.title);
+
     const map = this.map;
     let sliderItem = null;
     // update these to use classes instead of ids for multimap

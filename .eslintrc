@@ -28,7 +28,8 @@
                 "props": true,
                 "ignorePropertyModificationsFor": [
                     "layer",
-                    "layerData"
+                    "layerData",
+                    "layerProp"
                 ]
             }
         ]

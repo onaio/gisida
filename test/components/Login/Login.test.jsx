@@ -4,7 +4,7 @@ import Login from '../../../src/components/Login/Login';
 
 describe('Login', () => {
     it('Login renders login screen', () => {
-      const component = renderer.create(<Login />);
+      const component = renderer.create(<Login appConfig={{password: "default"}}/>);
       const json = component.toJSON();
       expect(json).toMatchSnapshot();
     });

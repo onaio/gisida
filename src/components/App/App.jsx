@@ -60,6 +60,22 @@ class App extends React.Component {
         map,
       },
     ];
+
+    if (this.props.layerData[layer].layers) {
+      const groupedLayer = this.props.layerData[layer].layers;
+      for (let i = 0; i < groupedLayer.length; i += 1) {
+        layers.push({
+          title: groupedLayer[i],
+          visible: status,
+          map,
+        });
+      }
+      layers.push({
+        title: layer,
+        visible: status,
+        map,
+      });
+    }
     this.setState({ layers });
   }
 
