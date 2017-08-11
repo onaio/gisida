@@ -23,20 +23,3 @@ export function getLastIndex(arr, item) {
 export const isLoggedIn = function isLoggedIn() {
   return Cookie.get('dsauth') === 'true';
 };
-
-// export function readData(layerProp, source) {
-//   let layer = layerProp;
-//   const fileType = source.split('.').pop();
-//   if (fileType === 'csv') {
-//     d3.csv(layer.source.data, (data) => {
-//       layer.source.data = data;
-//     });
-//   }
-//   if (fileType === 'geojson') {
-//     d3.json(layer.source.data, (data) => {
-//       layer.source.data = data;
-//     });
-//   }
-
-//   return layer;
-// }
