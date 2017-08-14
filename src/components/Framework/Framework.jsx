@@ -10,22 +10,11 @@ class Framework extends React.Component {
     super(props);
     this.state = {
       showIndicatorDetails: false,
-      indicatorData: [],
-      filterData: [],
-      details: this.props.details,
     };
-    this.updateData = this.updateData.bind(this);
   }
 
   componentDidMount() {
     this.getKey();
-    fetchGoogleSheetsData(this.updateData);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.filters.length > 0) {
-      this.getFilteredData(nextProps.filters);
-    }
   }
 
   onClick() {
@@ -39,7 +28,7 @@ class Framework extends React.Component {
   getFrameworkSectors() {
     const sectors = this.props.sectorData.filter(sector => sector.layers).map(sector => sector);
     const frameworkSector = [];
-    let indicatorObj = this.extendIndicatorDetails();
+    let indicatorObj = this.props.layerData;
 
     sectors.forEach(sector =>
       frameworkSector.push(
@@ -158,58 +147,6 @@ class Framework extends React.Component {
 
   updateData(data) {
     this.setState({ indicatorData: data });
-  }
-
-  getFilteredData(filters) {
-    this.indicatorData = this.state.indicatorData;
-    if (this.state.indicatorData.length > 0) {
-      for (let j = 0; j < filters.length; j += 1) {
-        let filteredData = this.indicatorData.filter((a) =>
-          a.population === filters[j] ||
-          a.region === filters[j] ||
-          a.year === filters[j]
-        )
-        this.indicatorData = filteredData;
-      }
-    }
-
-    this.setState({ filterData: this.indicatorData });
-  }
-
-  extendIndicatorDetails() {
-    let indicator = [];
-    let indicatorObj = {};
-    const status = {
-      'Well on the way to being achieved': 'green',
-      'Not fully met obstacles exist': 'orange',
-      'Far from met': 'red',
-      'Incomplete data exists': 'grey',
-      'Data unavailable': 'white',
-    }
-
-    Object.keys(this.props.details).forEach((key) => {
-      indicator.push({ [key]: { id: this.props.details[key].id } });
-    });
-
-    indicator.forEach(function (row) {
-      Object.keys(row).forEach(function (key) {
-        indicatorObj[key] = row[key];
-      });
-    });
-
-    Object.keys(indicatorObj).forEach((key) => {
-      for (let i = 0; i < this.state.filterData.length; i += 1) {
-        if (key === this.state.filterData[i].indicator) {
-          $.extend(indicatorObj[key], this.state.filterData[i]);
-          if (indicatorObj[key].dataratingfordisplaced) {
-            let color1 = status[indicatorObj[key].dataratingfordisplaced.split('/ ').shift()];
-            let color2 = status[indicatorObj[key].dataratingfordisplaced.split('/ ').pop()];
-            indicatorObj[key].color = [color1, color2];
-          }
-        }
-      }
-    });
-    return indicatorObj;
   }
 
   render() {

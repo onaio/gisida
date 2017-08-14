@@ -4,6 +4,7 @@ import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
+import fetchGoogleSheetsData from '../../includes/googlesheetData';
 
 
 require('./App.scss');
@@ -49,6 +50,7 @@ class App extends React.Component {
       sectors: [],
       view: this.props.appConfig.defaultView,
       filters: [],
+      layerData: this.props.layerData,
     };
     this.changeLayer = this.changeLayer.bind(this);
     this.sectorClick = App.showSector.bind(this);
@@ -58,6 +60,12 @@ class App extends React.Component {
     this.toggleView = this.toggleView.bind(this);
     this.getFilters = this.getFilters.bind(this);
     this.viewClick = this.viewClick.bind(this);
+    this.updateData = this.updateData.bind(this);
+    this.getFilteredData = this.getFilteredData.bind(this);
+  }
+
+  componentDidMount() {
+    fetchGoogleSheetsData(this.updateData);
   }
 
   changeLayer(layer, status, map) {
@@ -101,12 +109,79 @@ class App extends React.Component {
       }
     }
 
+    const filterArr = filters.map(filter => filter[Object.keys(filter)[0]]);
+    this.getFilteredData(filterArr);
     this.setState({ filters });
   }
 
   viewClick(layer, sector) {
     let selected = {sector, layer};
     this.setState({ selected });
+  }
+
+  updateData(data) {
+    this.setState({ indicatorData: data });
+  }
+
+  getFilteredData(filters) {
+    this.indicatorData = this.state.indicatorData;
+    if (this.state.indicatorData.length > 0) {
+      for (let j = 0; j < filters.length; j += 1) {
+        let filteredData = this.indicatorData.filter((a) =>
+          a.population === filters[j] ||
+          a.region === filters[j] ||
+          a.year === filters[j]
+        )
+        this.indicatorData = filteredData;
+      }
+    }
+
+    this.extendIndicatorDetails(this.indicatorData); 
+  }
+
+  extendIndicatorDetails(filteredData) {
+    let indicator = [];
+    let layerData = {};
+    const status = {
+      'Well on the way to being achieved': 'green',
+      'Not fully met obstacles exist': 'orange',
+      'Far from met': 'red',
+      'Incomplete data exists': 'grey',
+      'Data unavailable': 'white',
+    }
+
+    Object.keys(this.props.layerData).forEach((key) => {
+      indicator.push({ [key]: { 
+        id: this.props.layerData[key].id, 
+        label: this.props.layerData[key].label,
+        source: this.props.layerData[key].source,
+        type: "fill" } 
+      });
+    });
+
+    indicator.forEach(function (row) {
+      Object.keys(row).forEach(function (key) {
+        layerData[key] = row[key];
+      });
+    });
+
+    Object.keys(layerData).forEach((key) => {
+      for (let i = 0; i < filteredData.length; i += 1) {
+        if (key === filteredData[i].indicator) {
+          $.extend(layerData[key], filteredData[i]);
+          if (layerData[key].dataratingfordisplaced) {
+            let color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
+            let color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
+            layerData[key].color = [color1, color2];
+          }
+          if (layerData[key].region) {
+            layerData[key].source.stops = [[layerData[key].region, "#ff0000"]]
+          }
+        }
+      }
+    });
+    
+    this.setState({ layerData });
   }
 
   render() {
@@ -120,7 +195,7 @@ class App extends React.Component {
     const { viewClick } = this;
     const layers = this.state;
     const sectorData = this.props.sectorData;
-    const layerData = this.props.layerData;
+    const layerData = this.state.layerData;
     const styles = this.props.styles;
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
@@ -129,7 +204,7 @@ class App extends React.Component {
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const UIfilters = this.state.filters.map(filter => filter.region ?
       filter.region : filter[Object.keys(filter)[0]]);
-    
+
     return (
       <div>
         <Menu
@@ -140,11 +215,10 @@ class App extends React.Component {
         {this.state.view === 'framework' ?
           <Framework
             sectorData={sectorData}
-            details={details}
             onToggleView={toggleView}
             onViewClick={viewClick}
             onSectorClick={sectorClick}
-            filters={filters}
+            layerData={layerData}
           /> :
           <Map
             mapId="map-1"
