@@ -12,9 +12,9 @@ const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, on
           data-layer={layer}
           name={sector}
           value={layer}
-          onChange={(e) => { onLayerChange(layer, e.target.checked, mapTargetId); this.props.onViewClick(layer); }}
+          onChange={(e) => onLayerChange(layer, e.target.checked, mapTargetId, sector)}
         />
-        {layerData[layer] ? layerData[layer].label : layer}</label>
+        {(layerData[layer] && layerData[layer] !== undefined)? layerData[layer].label : layer}</label>
     }
   </li>);
 
