@@ -9,6 +9,7 @@ import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
 import { formatNum, getLastIndex } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
+import generateFilters from '../../includes/generateFilters';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
 import StyleSelector from '../Controls/StyleSelector/StyleSelector';
@@ -176,7 +177,9 @@ class Map extends React.Component {
       const fileType = source.split('.').pop();
       if (fileType === 'csv') {
         d3.csv(layerProp.source.data, (data) => {
-          layerProp.source.data = data;
+          layerData.csvdata = data;
+          layerData.source.data = layerData.aggregate.filter ?
+            generateFilters(layerData, filterOptions) : data;
           renderData(layerProp);
         });
       }
@@ -213,7 +216,10 @@ class Map extends React.Component {
           renderData(layerData);
         });
       } else if (filterOptions) {
-        layerData.source.data = aggregateData(layerData, this.props.locations, filterOptions);
+        layerData.source.data =
+          layerData.mergedData ?
+            aggregateData(layerData, this.props.locations, filterOptions) :
+            generateFilters(layerData, filterOptions);
         self.addLayer(layerData);
       } else {
         // add the already processed layer
