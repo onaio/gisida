@@ -49,7 +49,11 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
-      filters: [],
+      filters: [
+        { STAKEHOLDER: "IDPs" },
+        { REGION: "All regions" },
+        { YEAR: "2017" },
+      ],
       layerData: this.props.layerData,
     };
     this.changeLayer = this.changeLayer.bind(this);
@@ -93,10 +97,10 @@ class App extends React.Component {
       if (headers.includes(regions[j])) {
         country = regions[j];
       } else if (filter === regions[j]) {
-          region = regions[j] + ' - ' + country;
+        region = regions[j] + ' - ' + country;
       }
     }
-    
+
     let obj = region ? { [group]: filter, 'region': region } : { [group]: filter };
     let filters = [...this.state.filters, obj];
     if (this.state.filters.length > 0) {
@@ -115,7 +119,7 @@ class App extends React.Component {
   }
 
   viewClick(layer, sector) {
-    let selected = {sector, layer};
+    let selected = { sector, layer };
     this.setState({ selected });
   }
 
@@ -136,7 +140,7 @@ class App extends React.Component {
       }
     }
 
-    this.extendIndicatorDetails(this.indicatorData); 
+    this.extendIndicatorDetails(this.indicatorData);
   }
 
   extendIndicatorDetails(filteredData) {
@@ -151,11 +155,13 @@ class App extends React.Component {
     }
 
     Object.keys(this.props.layerData).forEach((key) => {
-      indicator.push({ [key]: { 
-        id: this.props.layerData[key].id, 
+      indicator.push({
+      [key]: {
+        id: this.props.layerData[key].id,
         label: this.props.layerData[key].label,
         source: this.props.layerData[key].source,
-        type: "fill" } 
+        type: "fill"
+      }
       });
     });
 
@@ -180,7 +186,7 @@ class App extends React.Component {
         }
       }
     });
-    
+
     this.setState({ layerData });
   }
 
