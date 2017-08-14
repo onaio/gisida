@@ -2,18 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 require('./Layer.scss');
-
-const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, onLayerChange = f => f, selected }) =>
+const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
     {headers.includes(layer) ? <b>{layer}</b> :
-      <label htmlFor={layer} >
+      <label classname="label" htmlFor={layer} >
         <input
           type={defaultView === 'framework' ? 'radio' : 'checkbox'}
           id={layer.replace(' ', '-')}
           data-layer={layer}
-          name={sector.replace(' ', '-')}
-          value={layer.replace(' ', '-')}
-          checked={layer === selected}
+          name={sector}
+          value={layer}
           onChange={(e) => { onLayerChange(layer, e.target.checked, mapTargetId); this.props.onViewClick(layer); }}
         />
         {layerData[layer] ? layerData[layer].label : layer}</label>

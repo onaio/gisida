@@ -105,7 +105,8 @@ class App extends React.Component {
   }
 
   viewClick(layer, sector) {
-    this.setState({ layer, sector });
+    let selected = {sector, layer};
+    this.setState({ selected });
   }
 
   render() {
@@ -124,12 +125,11 @@ class App extends React.Component {
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
     const details = this.props.details;
-    const selected = this.state.layer;
-    const showSector = this.state.sector;
+    const selected = this.state.selected;
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const UIfilters = this.state.filters.map(filter => filter.region ?
       filter.region : filter[Object.keys(filter)[0]]);
-
+    
     return (
       <div>
         <Menu
@@ -144,7 +144,6 @@ class App extends React.Component {
             onToggleView={toggleView}
             onViewClick={viewClick}
             onSectorClick={sectorClick}
-            selected={selected}
             filters={filters}
           /> :
           <Map
@@ -154,6 +153,7 @@ class App extends React.Component {
             styles={styles}
             locations={this.props.locations}
             mapConfig={appConfig}
+            selected={selected}
           />
         }
         <Sectors
@@ -171,7 +171,6 @@ class App extends React.Component {
           filters={filters}
           UIfilters={UIfilters}
           selected={selected}
-          showSector={showSector}
         />
 
         {appConfig.splitView ?

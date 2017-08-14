@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f, selected, showSector }) =>
+const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f, showSector }) =>
   (<ul className="layers" style={{
     display: `${sector === showSector ? 'block' : 'none'}`
   }}>
@@ -16,7 +16,6 @@ const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, 
         headers={headers}
         defaultView={defaultView}
         sector={sector}
-        selected={selected}
       />))
     }
   </ul>);

@@ -899,6 +899,10 @@ class Map extends React.Component {
         $(`.layer.${this.props.mapId} > [data-layer="${key}"]`).trigger('click');
       }
     });
+
+    if (this.props.selected) {
+    $(`input[type='radio'][name="${this.props.selected.sector}"][value="${this.props.selected.layer}"]`).trigger('click');
+    }
   }
 
   addMousemoveEvent() {
