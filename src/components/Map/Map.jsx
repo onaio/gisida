@@ -399,6 +399,13 @@ class Map extends React.Component {
           type: 'categorical',
           default: 'rgba(0,0,0,0)',
         };
+      } else if (layer.source.stops) {
+        fillLayer.paint['fill-color'] = {
+          property: layer.source.join[0],
+          stops: layer.source.stops,
+          type: 'categorical',
+          default: 'rgba(0,0,0,0)',
+        };
       }
       // add filter
       if (layer.filter) {
