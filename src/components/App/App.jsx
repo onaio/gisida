@@ -215,8 +215,8 @@ class App extends React.Component {
             let color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
             layerData[key].color = [color1, color2];
           }
-          if (layerData[key].region) {
-            layerData[key].source.stops = [[layerData[key].region, "#ff0000"]]
+          if (layerData[key].region && layerData[key].color) {
+            layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]]
           }
         }
       }

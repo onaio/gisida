@@ -53,6 +53,7 @@
 }
 
 .framework-sectors-menu {
+    padding-top: 5px;
     position: fixed;
     width: 18%;
     height: 95%;
@@ -140,7 +141,7 @@ ul {
 }
 
 .framework-open-btn {
-    position: absolute;
+    position: fixed;
     display: block;
     color: #333;
     background: #fff;
@@ -161,6 +162,10 @@ ul {
 
 #sector-menu-2-wrapper .open-btn {
     left: 53%;
+}
+
+.sectors-menu-wrapper {
+    position: fixed;
 }
 
 #sector-menu-2 {
