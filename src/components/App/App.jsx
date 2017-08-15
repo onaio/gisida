@@ -5,6 +5,7 @@ import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
+import { getLastIndex } from '../../includes/utils';
 
 
 require('./App.scss');
@@ -72,15 +73,49 @@ class App extends React.Component {
     fetchGoogleSheetsData(this.updateData);
   }
 
-  changeLayer(layer, status, map) {
-    const layers = [
-      ...this.state.layers,
-      {
-        title: layer,
-        visible: status,
-        map,
-      },
-    ];
+  getIndex(layer, sector) {
+    const sectorsObj = this.props.sectorData.filter(datum => datum.layers !== undefined);
+    let s = sectorsObj.filter(s => s.layers.includes(layer))[0].sector;
+    const viewedSectors = this.state.layers.map(layers => layers.s);
+    let index = viewedSectors.includes(s) ? getLastIndex(viewedSectors, s) : null;
+
+    return index;
+  }
+
+  changeLayer(layer, status, map, sector, type) {
+    let layers;
+    let index = this.getIndex(layer, sector); 
+    if (type === 'radio' && index !== null) {
+      layers = [
+        ...this.state.layers,
+        {
+          title: this.state.layers[index].title,
+          visible: false,
+          map: this.state.layers[index].map,
+          sector: this.state.layers[index].sector,
+          type: type,
+        },
+        {
+          title: layer,
+          visible: status,
+          map,
+          sector,
+          type,
+        },
+      ];
+    } else {
+      layers = [
+        ...this.state.layers,
+        {
+          title: layer,
+          visible: status,
+          map,
+          sector,
+          type,
+        },
+      ];
+    }
+
     this.setState({ layers });
   }
 
@@ -156,12 +191,12 @@ class App extends React.Component {
 
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
-      [key]: {
-        id: this.props.layerData[key].id,
-        label: this.props.layerData[key].label,
-        source: this.props.layerData[key].source,
-        type: "fill"
-      }
+        [key]: {
+          id: this.props.layerData[key].id,
+          label: this.props.layerData[key].label,
+          source: this.props.layerData[key].source,
+          type: "fill"
+        }
       });
     });
 

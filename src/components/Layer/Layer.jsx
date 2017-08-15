@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 require('./Layer.scss');
+let type;
 const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
     {headers.includes(layer) ? <b>{layer}</b> :
@@ -12,7 +13,7 @@ const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, on
           data-layer={layer}
           name={sector}
           value={layer}
-          onChange={(e) => onLayerChange(layer, e.target.checked, mapTargetId, sector)}
+          onClick={(e) => onLayerChange(layer, e.target.checked, mapTargetId, sector, type = defaultView === 'framework' ? 'radio' : 'checkbox')}
         />
         {(layerData[layer] && layerData[layer] !== undefined)? layerData[layer].label : layer}</label>
     }

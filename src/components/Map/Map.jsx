@@ -116,7 +116,7 @@ class Map extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.map.resize();
     if (nextProps.layers.layers.length > 0) {
-      const l = nextProps.layers.layers.length - 1;
+      let l = nextProps.layers.layers.length - 1;
       const layers = nextProps.layers.layers;
       this.setState({
         layers,
@@ -125,6 +125,8 @@ class Map extends React.Component {
         && nextProps.layers.layers[l].map === this.props.mapId) {
         this.prepareLayer(nextProps.layers.layers[l]);
       }
+      l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ? 
+      (l - 1) : l;
       if (nextProps.layers.layers[l].visible === false
         && nextProps.layers.layers[l].map === this.props.mapId) {
         this.removeLayer(nextProps.layers.layers[l]);

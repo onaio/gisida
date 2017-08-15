@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f, showSector }) =>
+const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f, selected }) =>
   (<ul className="layers" style={{
-    display: `${sector === showSector ? 'block' : 'none'}`
+    display: `${selected !== undefined && sector === selected.sector ? 'block' : 'none'}`
   }}>
     {layers.map(layer =>
       (<Layer
