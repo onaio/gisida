@@ -51,9 +51,9 @@ class App extends React.Component {
       sectors: [],
       view: this.props.appConfig.defaultView,
       filters: [
-        { STAKEHOLDER: "IDPs" },
-        { REGION: "All regions" },
-        { YEAR: "2017" },
+        { POPULATION: "IDPs" },
+        { REGION: "All regions", region: "All regions - Uganda" },
+        { YEAR: "2017" }
       ],
       layerData: this.props.layerData,
     };
