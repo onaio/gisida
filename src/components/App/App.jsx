@@ -70,7 +70,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetchGoogleSheetsData(this.updateData);
+    fetchGoogleSheetsData(this.props.appConfig.dataURL, this.updateData);
   }
 
   getIndex(layer, sector) {

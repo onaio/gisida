@@ -14,8 +14,7 @@ function convertData(data) {
   }
   return convertedData;
 }
-export default function (callback) {
-  const url = 'https://spreadsheets.google.com/feeds/list/1fVdPJMpe5tAiGp6yg2bg1J34L4kGdyT-nW_-oGmP1EQ/1/public/basic?alt=json';
+export default function (url, callback) {
   let q = d3.queue();
   q = q.defer(d3.request, url);
   q.awaitAll((error, response) => {
