@@ -9,7 +9,7 @@ import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
 import { formatNum, getLastIndex } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
-import generateFilters from '../../includes/generateFilters';
+import { processFilters, generateFilterOptions } from '../../includes/filterUtils';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
 import StyleSelector from '../Controls/StyleSelector/StyleSelector';
@@ -177,9 +177,10 @@ class Map extends React.Component {
       const fileType = source.split('.').pop();
       if (fileType === 'csv') {
         d3.csv(layerProp.source.data, (data) => {
-          layerData.csvdata = data;
-          layerData.source.data = layerData.aggregate.filter ?
-            generateFilters(layerData, filterOptions) : data;
+          layerData.source.data = data;
+          if (layerData.aggregate && layerData.aggregate.filter) {
+            generateFilterOptions(layerData);
+          }
           renderData(layerProp);
         });
       }
@@ -210,6 +211,9 @@ class Map extends React.Component {
         q.awaitAll((error, data) => {
           const mergedData = [].concat(...data);
           layerData.mergedData = mergedData;
+          if (layerData.aggregate && layerData.aggregate.filter) {
+            generateFilterOptions(layerData);
+          }
           layerData.source.data = layerData.aggregate.type ?
             aggregateData(layerData, this.props.locations) : mergedData;
           layerData.loaded = true;
@@ -217,9 +221,9 @@ class Map extends React.Component {
         });
       } else if (filterOptions) {
         layerData.source.data =
-          layerData.mergedData ?
+          layerData.aggregate.type ?
             aggregateData(layerData, this.props.locations, filterOptions) :
-            generateFilters(layerData, filterOptions);
+            processFilters(layerData, filterOptions);
         self.addLayer(layerData);
       } else {
         // add the already processed layer
