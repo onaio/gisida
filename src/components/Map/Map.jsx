@@ -302,7 +302,14 @@ class Map extends React.Component {
           layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
-          'circle-stroke-width': 1,
+          'circle-stroke-width': layer.categories.color instanceof Array ?
+          {
+            property: layer.source.join[0],
+            stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
+            type: 'categorical',
+            default: 0,
+          } :
+            1,
           'circle-stroke-opacity': 1,
         },
       };
@@ -813,6 +820,7 @@ class Map extends React.Component {
           let breaks;
           let colors;
           let Stops;
+          let strokeWidthStops;
 
           if (layerObj.type === 'chart') {
             period = this.state.stops.period;
@@ -824,6 +832,7 @@ class Map extends React.Component {
             period = paintStops[2];
             breaks = paintStops[3];
             colors = paintStops[4];
+            strokeWidthStops = paintStops[5];
             Stops = layerObj.type === 'circle' ? radiusStops : colorStops;
           }
 
@@ -856,7 +865,13 @@ class Map extends React.Component {
                     stops: colorStops[index],
                     type: 'categorical',
                   };
+                  const newStrokeStops = {
+                    property: layerObj.source.join[0],
+                    stops: strokeWidthStops[index],
+                    type: 'categorical',
+                  };
                   map.setPaintProperty(layerObj.id, 'circle-color', newColorStops);
+                  map.setPaintProperty(layerObj.id, 'circle-stroke-width', newStrokeStops);
                 }
                 map.setPaintProperty(layerObj.id, paintProperty, newStops);
                 const Data = layerObj.source.data.filter(data =>

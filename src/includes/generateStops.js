@@ -85,9 +85,11 @@ function getStops(layer) {
     const uniqPeriods = [...new Set(layer.periods)];
     const periodStops = [];
     const periodRadius = [];
+    const periodStroke = [];
     for (let j = 0; j < uniqPeriods.length; j += 1) {
       periodStops[j] = [];
       periodRadius[j] = [];
+      periodStroke[j] = [];
     }
     const periodProp = layer.limit ? rangePeriod : period;
     for (let m = 0; m < periodProp.length; m += 1) {
@@ -95,10 +97,11 @@ function getStops(layer) {
         if (periodProp[m] === uniqPeriods[n]) {
           periodStops[n].push(colorsStops[m]);
           periodRadius[n].push(radiusStops[m]);
+          periodStroke[n].push([radiusStops[m][0], 1]);
         }
       }
     }
-    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors];
+    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke];
   }
   return [];
 }
