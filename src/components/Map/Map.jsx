@@ -296,7 +296,7 @@ class Map extends React.Component {
           'circle-color': layer.categories.color instanceof Array ?
           {
             property: layer.source.join[0],
-            stops: stops[0][0],
+            stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
           } :
           layer.categories.color,
@@ -808,20 +808,23 @@ class Map extends React.Component {
           layerObj.source.data instanceof Object && this.state
           && this.state.stops && layerObj.id === this.state.stops.id) {
           let period;
-          let Stops;
+          let colorStops;
+          let radiusStops;
           let breaks;
           let colors;
+          let Stops;
 
           if (layerObj.type === 'chart') {
             period = this.state.stops.period;
-            Stops = layerObj.source.data;
+            colorStops = layerObj.source.data;
           } else {
             const paintStops = this.state.stops.stops;
-            const stopsIndex = layerObj.type === 'circle' ? 1 : 0;
-            Stops = paintStops[stopsIndex];
+            colorStops = paintStops[0];
+            radiusStops = paintStops[1];
             period = paintStops[2];
             breaks = paintStops[3];
             colors = paintStops[4];
+            Stops = layerObj.type === 'circle' ? radiusStops : colorStops;
           }
 
           if (slider !== null && label !== null) {
@@ -847,6 +850,14 @@ class Map extends React.Component {
                   type: 'categorical',
                   default: defaultValue,
                 };
+                if (layerObj.type === 'circle' && layerObj.categories.color instanceof Array) {
+                  const newColorStops = {
+                    property: layerObj.source.join[0],
+                    stops: colorStops[index],
+                    type: 'categorical',
+                  };
+                  map.setPaintProperty(layerObj.id, 'circle-color', newColorStops);
+                }
                 map.setPaintProperty(layerObj.id, paintProperty, newStops);
                 const Data = layerObj.source.data.filter(data =>
                   data[layerObj.aggregate.timeseries.field] === period[index]);
