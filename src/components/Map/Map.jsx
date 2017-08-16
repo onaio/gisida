@@ -293,7 +293,7 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.categories.color instanceof Array ?
+          'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
           {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
@@ -302,7 +302,7 @@ class Map extends React.Component {
           layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
-          'circle-stroke-width': layer.categories.color instanceof Array ?
+          'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
           {
             property: layer.source.join[0],
             stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
