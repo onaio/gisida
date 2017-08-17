@@ -197,7 +197,10 @@ class App extends React.Component {
           label: this.props.layerData[key].label,
           source: this.props.layerData[key].source,
           type: this.props.layerData[key].type,
-          labels: this.props.layerData[key].labels
+          labels: this.props.layerData[key].labels,
+          categories: this.props.layerData[key].categories,
+          description: this.props.layerData[key].description,
+          credit: " "
         }
       });
     });
@@ -220,12 +223,13 @@ class App extends React.Component {
           if (layerData[key].region && layerData[key].color) {
             if (layerData[key].region === "All regions") {
               d3.csv(layerData[key].labels.data, (data) => {
-                letlayerData[key].source.stops = [];
+                let stops = [];
                 layerData[key].source.data = data.filter((row) =>
                   row.country === layerData[key].country);
                 layerData[key].source.data.forEach((row) => {
-                  layerData[key].source.stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
+                  stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
                 });
+                layerData[key].source.stops = stops;
               });
             } else {
               layerData[key].source.data = [{ "region": layerData[key].region }];
@@ -235,7 +239,7 @@ class App extends React.Component {
         }
       }
     });
-
+    
     this.setState({ layerData });
   }
 

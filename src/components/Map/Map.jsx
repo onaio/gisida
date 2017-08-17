@@ -290,8 +290,8 @@ class Map extends React.Component {
       this.addLabels(layer, Data);
     } else if (layer.credit && layer.categories.breaks === 'no') {
       this.addLegend(layer);
+      this.addLabels(layer, layer.source.data);
     }
-    this.addLabels(layer, layer.source.data);
 
     /*
      * CIRCLE ==========================================================
@@ -744,6 +744,7 @@ class Map extends React.Component {
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"` +
         'class="legend-row">' +
         `<b>${layer.label}</b>` +
+        `<div class="legend-description">${layer[layer.description]}</div>` +
         '<div class="legend-shapes">' +
         `<ul style="left: 0;">${background}</ul> </div>${layer.credit}</div>`);
     } else if (layer.credit && layer.categories.breaks === 'no') {
