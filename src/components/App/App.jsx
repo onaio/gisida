@@ -6,6 +6,7 @@ import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
 import { getLastIndex } from '../../includes/utils';
+import * as d3 from 'd3';
 
 
 require('./App.scss');
@@ -84,7 +85,7 @@ class App extends React.Component {
 
   changeLayer(layer, status, map, sector, type) {
     let layers;
-    let index = this.getIndex(layer, sector); 
+    let index = this.getIndex(layer, sector);
     if (type === 'radio' && index !== null) {
       layers = [
         ...this.state.layers,
@@ -195,7 +196,8 @@ class App extends React.Component {
           id: this.props.layerData[key].id,
           label: this.props.layerData[key].label,
           source: this.props.layerData[key].source,
-          type: "fill"
+          type: this.props.layerData[key].type,
+          labels: this.props.layerData[key].labels
         }
       });
     });
@@ -216,7 +218,19 @@ class App extends React.Component {
             layerData[key].color = [color1, color2];
           }
           if (layerData[key].region && layerData[key].color) {
-            layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]]
+            if (layerData[key].region === "All regions") {
+              d3.csv(layerData[key].labels.data, (data) => {
+                letlayerData[key].source.stops = [];
+                layerData[key].source.data = data.filter((row) =>
+                  row.country === layerData[key].country);
+                layerData[key].source.data.forEach((row) => {
+                  layerData[key].source.stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
+                });
+              });
+            } else {
+              layerData[key].source.data = [{ "region": layerData[key].region }];
+              layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
+            }
           }
         }
       }

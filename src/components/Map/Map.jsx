@@ -125,8 +125,8 @@ class Map extends React.Component {
         && nextProps.layers.layers[l].map === this.props.mapId) {
         this.prepareLayer(nextProps.layers.layers[l]);
       }
-      l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ? 
-      (l - 1) : l;
+      l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ?
+        (l - 1) : l;
       if (nextProps.layers.layers[l].visible === false
         && nextProps.layers.layers[l].map === this.props.mapId) {
         this.removeLayer(nextProps.layers.layers[l]);
@@ -230,7 +230,15 @@ class Map extends React.Component {
         self.addLayer(layerData);
       } else {
         // add the already processed layer
-        self.addLayer(layerData);
+        if (typeof layerData.labels.data === 'string') {
+          const fileName = layerData.labels.data;
+          const fileType = fileName.split('.').pop();
+          if (fileType === 'csv') {
+            renderData(layerData);
+          }
+        } else {
+          self.addLayer(layerData);
+        }
       }
     } else if (layerData.layers) {
       // if layer has sublayers, add all sublayers
@@ -283,6 +291,7 @@ class Map extends React.Component {
     } else if (layer.credit && layer.categories.breaks === 'no') {
       this.addLegend(layer);
     }
+    this.addLabels(layer, layer.source.data);
 
     /*
      * CIRCLE ==========================================================
@@ -303,6 +312,7 @@ class Map extends React.Component {
             type: 'categorical',
           } :
           layer.categories.color,
+
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
@@ -392,19 +402,14 @@ class Map extends React.Component {
         fillLayer['source-layer'] = layer.source.layer;
       }
 
+
       if (layer.source.data && !layer.paint) {
-        const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
+        const layerStops = timefield ? stops[0][stops[1].length - 1] : stops ? stops[0][0] : '';
+        const Stops = layer.source.stops ? layer.source.stops : layerStops;
 
         fillLayer.paint['fill-color'] = {
           property: layer.source.join[0],
-          stops: layerStops,
-          type: 'categorical',
-          default: 'rgba(0,0,0,0)',
-        };
-      } else if (layer.source.stops) {
-        fillLayer.paint['fill-color'] = {
-          property: layer.source.join[0],
-          stops: layer.source.stops,
+          stops: Stops,
           type: 'categorical',
           default: 'rgba(0,0,0,0)',
         };
@@ -910,7 +915,7 @@ class Map extends React.Component {
     });
 
     if (this.props.selected) {
-    $(`input[type='radio'][name="${this.props.selected.sector}"][value="${this.props.selected.layer}"]`).trigger('click');
+      $(`input[type='radio'][name="${this.props.selected.sector}"][value="${this.props.selected.layer}"]`).trigger('click');
     }
   }
 
