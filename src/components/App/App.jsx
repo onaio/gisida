@@ -200,7 +200,8 @@ class App extends React.Component {
           labels: this.props.layerData[key].labels,
           categories: this.props.layerData[key].categories,
           description: this.props.layerData[key].description,
-          credit: " "
+          credit: " ",
+          popup: this.props.layerData[key].popup
         }
       });
     });
@@ -239,7 +240,7 @@ class App extends React.Component {
         }
       }
     });
-    
+
     this.setState({ layerData });
   }
 

@@ -958,11 +958,17 @@ class Map extends React.Component {
         }
         const data = (layer.aggregate && layer.aggregate.timeseries) ?
           periodData : layer.source.data;
+        if (layer.description) {
+          data.forEach((row) => {
+            row.rating = layer.dataratingfordisplaced;
+            row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
+          })
+        }
         data.forEach((row) => {
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             if (row[layer.popup.header]) {
-              content = `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, row)}</center></div>`;
+              content = `<div class="popup-header"><b>${row[layer.popup.header]}</b></div>` +
+                `<div class="popup-body">${Mustache.render(layer.popup.body, row)}</div>`;
             } else {
               content = Mustache.render(layer.popup.body, row);
             }
