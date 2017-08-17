@@ -5,7 +5,8 @@ function getEntrySources(sources) {
   return sources;
 }
 
-module.exports = {
+const config = {
+
   entry: {
     main: getEntrySources([
       './src/index.js',
@@ -13,8 +14,8 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve('dist/'),
-    filename: 'gisida.js',
+    path: path.resolve('./dist/'),
+    filename: './js/gisida.js',
     libraryTarget: 'var',
     library: 'gisida',
   },
@@ -42,19 +43,19 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=application/font-woff&name=./assets/fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=application/font-woff&name=./fonts/[hash].[ext]',
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./assets/fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[hash].[ext]',
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader?name=./assets/fonts/[hash].[ext]',
+        use: 'file-loader?name=./fonts/[hash].[ext]',
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=image/svg+xml&name=./assets/fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=image/svg+xml&name=./fonts/[hash].[ext]',
       },
       {
         test: /\.scss$/,
@@ -75,6 +76,17 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"',
     }),
-    new webpack.optimize.UglifyJsPlugin(),
   ],
+};
+
+module.exports = function (env) {
+  if (env) {
+    if (env.path) {
+      config.output.path = path.resolve(env.path);
+    }
+    if (env.uglify === 'true') {
+      config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    }
+  }
+  return config;
 };
