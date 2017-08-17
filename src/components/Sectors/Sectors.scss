@@ -59,14 +59,14 @@
     height: 95%;
     color: #555;
     z-index: 1000;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: #ffffff;
     box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
     top: 6%;
     left: 0;
     .sectors {
         padding: 0;
-        overflow-y: scroll;
+        overflow-y: auto;
         li.sector {
             border-bottom: 1px solid #eee;
             a {

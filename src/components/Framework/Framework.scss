@@ -4,7 +4,7 @@
         .key {
             top: 10%;
             right: 15px;
-            position: fixed;
+            position: absolute;
             ul {
                 li {
                     float: left;
@@ -56,16 +56,14 @@
             }
         }
         .framework-sectors {
-            position: fixed;
+            position: relative;
             top: 8.5em;
             width: 100%;
             margin-left: 2%;
             left: 16%;
-            z-index: 1000;
             color: #555;
             font-size: 12px;
             line-height: 1.2;
-            overflow-y: scroll;
             .framework-sector {
                 width: 25%;
                 margin-left: 2%;

@@ -12,6 +12,7 @@ const Filter = ({ filter, view, headers, sector, onToggleView, onFilterSelect = 
           (<label htmlFor={view}>
             <input
               type="radio"
+              id={view}
               name="switch-view"
               value={view}
               checked={view.toLowerCase() === currentView}
