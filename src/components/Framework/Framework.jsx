@@ -62,17 +62,17 @@ class Framework extends React.Component {
                           </div>
                           : ''}
                         <div className="status-link">
-                          <a data-toggle="modal" data-target={indicatorObj[layer] ? `#${indicatorObj[layer].id}` : ''}>{layer}</a>
+                          <a data-toggle="modal" data-target={indicatorObj[layer] ? `#${layer}` : ''}>{indicatorObj[layer].label}</a>
                         </div>
                       </div>
                       {
                         indicatorObj[layer] ?
-                          <div className="modal fade" id={indicatorObj[layer].label} role="dialog">
+                          <div className="modal fade" id={indicatorObj[layer].id} role="dialog">
                             <div className="modal-dialog">
                               <div className="modal-content">
                                 <div className="modal-header">
                                   <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                  <h4 className="modal-title">{layer}</h4>
+                                  <h4 className="modal-title">{indicatorObj[layer].label}</h4>
                                   <a
                                     className="toggle-view-link"
                                     onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}

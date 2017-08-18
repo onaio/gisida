@@ -376,7 +376,7 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'fill-color': '#f00',
+          'fill-color': 'transparent',
           'fill-opacity': 0.7,
         },
       };
@@ -655,7 +655,7 @@ class Map extends React.Component {
   }
 
   addLabels(layer, data) {
-    if (layer.labels && layer.labels.data && layer.labels.join) {
+    if (layer.labels && layer.labels.data && layer.labels.join && data) {
       const labels = [];
 
       data.forEach((row) => {
@@ -741,11 +741,12 @@ class Map extends React.Component {
           layer.categories.shape[index]}" style="${style}${color};"></span>${
           layer.categories.label[index]}</li>`;
       });
+      let description = layer[layer.description] ? layer[layer.description] : '';
 
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"` +
         'class="legend-row">' +
         `<b>${layer.label}</b>` +
-        `<div class="legend-description">${layer[layer.description]}</div>` +
+        `<div class="legend-description">${description}</div>` +
         '<div class="legend-shapes">' +
         `<ul style="left: 0;">${background}</ul> </div>${layer.credit}</div>`);
     } else if (layer.credit && layer.categories.breaks === 'no') {

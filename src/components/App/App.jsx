@@ -190,7 +190,7 @@ class App extends React.Component {
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
         [key]: {
-          id: this.props.layerData[key].id,
+          id: key,
           label: this.props.layerData[key].label,
           source: this.props.layerData[key].source,
           type: this.props.layerData[key].type,
@@ -211,7 +211,7 @@ class App extends React.Component {
 
     Object.keys(layerData).forEach((key) => {
       for (let i = 0; i < filteredData.length; i += 1) {
-        if (key === filteredData[i].indicator) {
+        if (layerData[key].label === filteredData[i].indicator) {
           $.extend(layerData[key], filteredData[i]);
           if (layerData[key].dataratingfordisplaced) {
             let color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
@@ -237,7 +237,7 @@ class App extends React.Component {
         }
       }
     });
-
+    
     this.setState({ layerData });
   }
 
