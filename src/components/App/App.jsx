@@ -197,7 +197,7 @@ class App extends React.Component {
           labels: this.props.layerData[key].labels,
           categories: this.props.layerData[key].categories,
           description: this.props.layerData[key].description,
-          credit: " ",
+          credit: this.props.layerData[key].credit,
           popup: this.props.layerData[key].popup
         }
       });

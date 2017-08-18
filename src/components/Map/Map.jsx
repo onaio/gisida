@@ -944,7 +944,7 @@ class Map extends React.Component {
       }
 
       const feature = features[0];
-      let content = 'Unknown';
+      let content = '';
       const activeLayerId = feature.layer.id;
       const layer = layerData[activeLayerId];
 
@@ -964,8 +964,11 @@ class Map extends React.Component {
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
             row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
+            row.firstColor = layer.color[0];
+            row.secondColor = layer.color[1];
           })
         }
+
         data.forEach((row) => {
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             if (row[layer.popup.header]) {
@@ -976,9 +979,11 @@ class Map extends React.Component {
             }
           }
         });
+        if (content) {
         popup.setLngLat(self.map.unproject(e.point))
           .setHTML(content)
           .addTo(self.map);
+        }
       }
     });
 
