@@ -75,11 +75,8 @@ class App extends React.Component {
   }
 
   getIndex(layer, sector) {
-    const sectorsObj = this.props.sectorData.filter(datum => datum.layers !== undefined);
-    let s = sectorsObj.filter(s => s.layers.includes(layer))[0].sector;
-    const viewedSectors = this.state.layers.map(layers => layers.s);
-    let index = viewedSectors.includes(s) ? getLastIndex(viewedSectors, s) : null;
-
+    const viewedSectors = this.state.layers.map(layers => layers.sector);
+    let index = viewedSectors.includes(sector) ? getLastIndex(viewedSectors, sector) : null;
     return index;
   }
 
@@ -116,7 +113,7 @@ class App extends React.Component {
         },
       ];
     }
-
+    
     this.setState({ layers });
   }
 

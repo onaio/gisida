@@ -126,7 +126,8 @@ class Map extends React.Component {
         this.prepareLayer(nextProps.layers.layers[l]);
       }
       l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ?
-        (l - 1) : l;
+        nextProps.layers.layers.length - 2 : l;
+
       if (nextProps.layers.layers[l].visible === false
         && nextProps.layers.layers[l].map === this.props.mapId) {
         this.removeLayer(nextProps.layers.layers[l]);

@@ -15,7 +15,7 @@ const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, on
           value={layer}
           onClick={(e) => onLayerChange(layer, e.target.checked, mapTargetId, sector, type = defaultView === 'framework' ? 'radio' : 'checkbox')}
         />
-        {(layerData[layer] && layerData[layer] !== undefined)? layerData[layer].label : layer}</label>
+        {layerData[layer].label}</label>
     }
   </li>);
 

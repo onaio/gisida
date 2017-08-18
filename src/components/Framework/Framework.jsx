@@ -67,7 +67,7 @@ class Framework extends React.Component {
                       </div>
                       {
                         indicatorObj[layer] ?
-                          <div className="modal fade" id={indicatorObj[layer].id} role="dialog">
+                          <div className="modal fade" id={indicatorObj[layer].label} role="dialog">
                             <div className="modal-dialog">
                               <div className="modal-content">
                                 <div className="modal-header">

@@ -118,6 +118,14 @@
         border-bottom: 12px solid white;
         display: inline-block;
     }
+    .square {
+        width: 15px;
+        height: 15px;
+        margin: 0 10px 0 0;
+        background: white;
+        display: inline-block;
+        border: 1px solid black;
+    }
 }
 
 .layer-symbols {
@@ -175,7 +183,7 @@
 }
 
 .legend-description {
-  padding-top: 5px;
+    padding-top: 5px;
 }
 
 .popup-body {
