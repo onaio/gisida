@@ -1,27 +1,29 @@
 .login {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  height: 100%;
-  position: fixed;
-
-  .brand-login {
-    display: block;
-    width: 200px;
-    height: 200px;
-    text-align: center;
-    color: #ccc;
-    background: url(/assets/img/logo.png) no-repeat center center;
-    background-size: 70%;
-    text-indent: -9999px;
-  }
-
-  .login-form {
-    width: 200px;
-    margin: 10% auto 0;
-
-    .login input {
-      background: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    background: white;
+    color: black;
+    height: 100%;
+    position: fixed;
+    .brand-login {
+        display: block;
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        color: #ccc;
+        background-size: 70%;
+        text-indent: -9999px;
     }
-  }
+    .password-label {
+        display: inline-block;
+        font-weight: bold;
+        margin: 10px 0 5px 25px;
+        color: #333;
+    }
+    .login-form {
+        width: 200px;
+        margin: 10% auto 0;
+        .login input {
+            background: rgba(0, 0, 0, 0.8);
+        }
+    }
 }

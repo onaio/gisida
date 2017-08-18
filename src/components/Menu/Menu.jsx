@@ -18,9 +18,9 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
         <div className="framework-brand-title">
           <span className="framework-white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appNameDesc}</div>
       </div>
-      <div className="framework-reports"><a>How do I use this Framework?</a>
+      <div className="framework-reports"><a>How do I use the site?</a>
         <div id="reports-divider"> | </div>
-        <a>Download Reports</a></div>
+        <a href="http://regionaldss.org/publications/redss-solutions-statements">Download</a></div>
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
     </div>)
     :
