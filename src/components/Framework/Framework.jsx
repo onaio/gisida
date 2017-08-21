@@ -75,6 +75,7 @@ class Framework extends React.Component {
                                   <h4 className="modal-title">{indicatorObj[layer].label}</h4>
                                   <a
                                     className="toggle-view-link"
+                                    data-dismiss="modal"
                                     onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
                                   >View on map</a>
                                 </div>
