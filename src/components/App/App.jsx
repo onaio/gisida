@@ -51,11 +51,7 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
-      filters: [
-        { POPULATION: "IDPs" },
-        { REGION: "All regions", region: "All regions - Uganda" },
-        { YEAR: "2017" }
-      ],
+      filters: [],
       layerData: this.props.layerData,
     };
     this.changeLayer = this.changeLayer.bind(this);
@@ -147,7 +143,9 @@ class App extends React.Component {
     }
 
     const filterArr = filters.map(filter => filter[Object.keys(filter)[0]]);
-    this.getFilteredData(filterArr);
+    if (filterArr.length === 3) {
+      this.getFilteredData(filterArr);
+    }
     this.setState({ filters });
   }
 
