@@ -1,9 +1,10 @@
     .framework-wrapper {
-        position: fixed;
+        position: relative;
         height: 92%;
+        top: 8em;
         .key {
-            top: 10%;
-            right: 15px;
+            top: -3.5em;
+            right: 3%;
             position: absolute;
             ul {
                 li {
@@ -27,12 +28,12 @@
         }
         .key-popup {
             z-index: 1001;
-            position: fixed;
-            top: 14%;
-            right: 15px;
+            position: absolute;
+            top: -1em;
+            right: 3%;
             width: 20%;
             background: #FFF;
-            height: 25%;
+            height: auto;
             border: 1px #eee solid;
             box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
             #popup-key-label {
@@ -44,6 +45,7 @@
                 display: table;
                 padding-left: 10px;
                 padding-bottom: 2px;
+                margin-bottom: 4px;
                 .popup-status-key {
                     display: table-cell;
                     width: 15px;
@@ -58,22 +60,23 @@
         .framework-sectors {
             position: relative;
             top: 17%;
-            width: 100%;
+            width: 80%;
             margin-left: 2%;
             left: 16%;
             color: #555;
             font-size: 12px;
             line-height: 1.2;
             height: 85%;
-            overflow-y: scroll;
+            overflow-y: auto;
             .framework-sector {
-                width: 25%;
+                width: 31%;
                 margin-left: 2%;
                 float: left;
                 padding: 15px;
                 border: 1px #eee solid;
                 box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
-                overflow-x: scroll;
+                overflow-x: auto;
+                margin-bottom: 2em;
                 .sector-header {
                     height: 45px;
                     border-bottom: 1px solid #eee;
@@ -202,5 +205,11 @@
         .indicator-rating {
             display: table-cell;
             vertical-align: middle;
+        }
+    }
+
+    @media screen and (max-width: 748px) {
+        .framework-sector {
+            width: 100% !important;
         }
     }
