@@ -58,7 +58,7 @@
             }
         }
         .framework-sectors {
-            position: relative;
+            position: fixed;
             top: 17%;
             width: 80%;
             margin-left: 2%;
@@ -66,7 +66,7 @@
             color: #555;
             font-size: 12px;
             line-height: 1.2;
-            height: 85%;
+            height: 75%;
             overflow-y: auto;
             .framework-sector {
                 width: 31%;
