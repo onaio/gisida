@@ -217,7 +217,7 @@ class App extends React.Component {
             layerData[key].color = [color1, color2];
           }
           if (layerData[key].region && layerData[key].color) {
-            if (layerData[key].region === "All regions") {
+            if (layerData[key].region === "All regions" || layerData[key].region === "Regions") {
               d3.csv(layerData[key].labels.data, (data) => {
                 let stops = [];
                 layerData[key].source.data = data.filter((row) =>
