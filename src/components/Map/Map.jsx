@@ -265,6 +265,10 @@ class Map extends React.Component {
       return null;
     }
 
+    if (this.map.getLayer(layer.id)) {
+      this.removeLayer(layer);
+    }
+
     const layerObj = layer;
     const layersObj = [...this.state.layersObj, layer];
     this.setState({
@@ -960,7 +964,7 @@ class Map extends React.Component {
         }
         const data = (layer.aggregate && layer.aggregate.timeseries) ?
           periodData : layer.source.data;
-        if (layer.description) {
+        if (layer.description && data) {
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
             row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
@@ -969,18 +973,21 @@ class Map extends React.Component {
           })
         }
 
-        data.forEach((row) => {
-          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
-            if (row[layer.popup.header]) {
-              content = `<div class="popup-header"><b>${row[layer.popup.header]}</b></div>` +
-                `<div class="popup-body">${Mustache.render(layer.popup.body, row)}</div>`;
-            } else {
-              content = Mustache.render(layer.popup.body, row);
+        if (data) {
+          data.forEach((row) => {
+            if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
+              if (row[layer.popup.header]) {
+                content = `<div class="popup-header"><b>${row[layer.popup.header]}</b></div>` +
+                  `<div class="popup-body">${Mustache.render(layer.popup.body, row)}</div>`;
+              } else {
+                content = Mustache.render(layer.popup.body, row);
+              }
             }
-          }
-        });
+          });
+        }
+
         if (content) {
-        popup.setLngLat(self.map.unproject(e.point))
+          popup.setLngLat(self.map.unproject(e.point))
           .setHTML(content)
           .addTo(self.map);
         }
