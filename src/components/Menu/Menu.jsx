@@ -20,7 +20,7 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
       </div>
       <div className="framework-reports"><a>How do I use the site?</a>
         <div id="reports-divider"> | </div>
-        <a href="http://regionaldss.org/publications/redss-solutions-statements">Download</a></div>
+        <a href="http://regionaldss.org/publications/redss-solutions-statements" target="_blank">Download</a></div>
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
     </div>)
     :
