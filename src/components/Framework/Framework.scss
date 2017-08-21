@@ -208,8 +208,12 @@
         }
     }
 
-    @media screen and (max-width: 748px) {
+    @media screen and (max-width: 1048px) {
         .framework-sector {
-            width: 100% !important;
+            width: 95% !important;
+        }
+
+        .framework-sector ul {
+            margin-left: 8% !important;
         }
     }
