@@ -100,7 +100,7 @@ class Framework extends React.Component {
                                         }}
                                       />
                                     </div>
-                                  <div className="indicator-rating">{indicatorObj[layer].dataratingfordisplaced}</div>
+                                    <div className="indicator-rating">{indicatorObj[layer].dataratingfordisplaced}</div>
                                   </div>
                                   <p>{indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation}</p>
                                 </div>
@@ -158,7 +158,10 @@ class Framework extends React.Component {
         <div className="framework-sectors">
           {this.getFrameworkSectors()}
         </div>
-        <div className="powered-by" />
+        <div className="footer">
+          <div className="partners" />
+          <div className="powered-by" />
+        </div>
       </div>
     );
   }

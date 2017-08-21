@@ -1,6 +1,6 @@
     .framework-wrapper {
-        position: relative;
-        height: 100vh;
+        position: fixed;
+        height: 92%;
         .key {
             top: 10%;
             right: 15px;
@@ -57,13 +57,15 @@
         }
         .framework-sectors {
             position: relative;
-            top: 8.5em;
+            top: 17%;
             width: 100%;
             margin-left: 2%;
             left: 16%;
             color: #555;
             font-size: 12px;
             line-height: 1.2;
+            height: 85%;
+            overflow-y: scroll;
             .framework-sector {
                 width: 25%;
                 margin-left: 2%;
@@ -71,6 +73,7 @@
                 padding: 15px;
                 border: 1px #eee solid;
                 box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+                overflow-x: scroll;
                 .sector-header {
                     height: 45px;
                     border-bottom: 1px solid #eee;
@@ -135,12 +138,32 @@
                 }
             }
         }
-        .powered-by {
-            width: 100px;
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            content: url("/assets/img/Ona-powered-2color-horiz.png");
+        .footer {
+            height: 5%;
+            top: 95%;
+            position: fixed;
+            left: 31.5%;
+            .partners-text {
+                color: #cb181d;
+                font-weight: 200;
+                font-size: 16px;
+            }
+            .partners {
+                content: url("/assets/img/partners.png");
+                position: fixed;
+                bottom: 5px;
+                height: 26px;
+                width: 35%;
+                left: 37%;
+                box-shadow: 0 1px 7px rgba(203, 24, 29, 0.8);
+            }
+            .powered-by {
+                width: 100px;
+                position: fixed;
+                right: 15px;
+                bottom: 5px;
+                content: url("/assets/img/Ona-powered-2color-horiz.png");
+            }
         }
     }
 
