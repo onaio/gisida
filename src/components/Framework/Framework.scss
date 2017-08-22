@@ -58,7 +58,7 @@
             }
         }
         .framework-sectors {
-            position: fixed;
+            position: relative;
             top: 17%;
             width: 80%;
             margin-left: 2%;
@@ -142,10 +142,12 @@
             }
         }
         .footer {
-            height: 5%;
-            top: 95%;
+            height: 2.5em;
+            bottom: 0;
             position: fixed;
-            left: 31.5%;
+            width: 100%;
+            left: 17.5%;
+            background: #fff;
             .partners-text {
                 color: #cb181d;
                 font-weight: 200;
