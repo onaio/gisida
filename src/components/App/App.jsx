@@ -1,4 +1,5 @@
 import React from 'react';
+import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
@@ -7,7 +8,6 @@ import Framework from '../Framework/Framework';
 import Selections from '../Selections/Selections';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
 import { getLastIndex } from '../../includes/utils';
-import * as d3 from 'd3';
 
 
 require('./App.scss');
@@ -73,13 +73,13 @@ class App extends React.Component {
 
   getIndex(layer, sector) {
     const viewedSectors = this.state.layers.map(layers => layers.sector);
-    let index = viewedSectors.includes(sector) ? getLastIndex(viewedSectors, sector) : null;
+    const index = viewedSectors.includes(sector) ? getLastIndex(viewedSectors, sector) : null;
     return index;
   }
 
   changeLayer(layer, status, map, sector, type) {
     let layers;
-    let index = this.getIndex(layer, sector);
+    const index = this.getIndex(layer, sector);
     if (type === 'radio' && index !== null) {
       layers = [
         ...this.state.layers,
@@ -88,7 +88,7 @@ class App extends React.Component {
           visible: false,
           map: this.state.layers[index].map,
           sector: this.state.layers[index].sector,
-          type: type,
+          type,
         },
         {
           title: layer,
@@ -119,7 +119,7 @@ class App extends React.Component {
   }
 
   getFilters(group, filter, status, headers) {
-    let regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
+    const regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
     let country;
     let region;
 
@@ -127,23 +127,23 @@ class App extends React.Component {
       if (headers.includes(regions[j])) {
         country = regions[j];
       } else if (filter === regions[j]) {
-        region = regions[j] + ' - ' + country;
+        region = `${regions[j]} - ${country}`;
       }
     }
 
-    let obj = region ? { [group]: filter, 'region': region } : { [group]: filter };
+    const obj = region ? { [group]: filter, region } : { [group]: filter };
     let filters = [...this.state.filters, obj];
     if (this.state.filters.length > 0) {
       for (let i = 0; i < this.state.filters.length; i += 1) {
-        let sector = Object.keys(this.state.filters[i])[0];
+        const sector = Object.keys(this.state.filters[i])[0];
         if (sector === group) {
-          let filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
+          const filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
           filters = [...filteredArr, obj];
         }
       }
     }
 
-    const filterArr = filters.map(filter => filter[Object.keys(filter)[0]]);
+    const filterArr = filters.map(item => item[Object.keys(item)[0]]);
     if (filterArr.length === 3) {
       this.getFilteredData(filterArr);
     }
@@ -151,7 +151,7 @@ class App extends React.Component {
   }
 
   viewClick(layer, sector) {
-    let selected = { sector, layer };
+    const selected = { sector, layer };
     this.setState({ selected });
   }
 
@@ -163,11 +163,11 @@ class App extends React.Component {
     this.indicatorData = this.state.indicatorData;
     if (this.state.indicatorData.length > 0) {
       for (let j = 0; j < filters.length; j += 1) {
-        let filteredData = this.indicatorData.filter((a) =>
+        const filteredData = this.indicatorData.filter(a =>
           a.population === filters[j] ||
           a.region === filters[j] ||
-          a.year === filters[j]
-        )
+          a.year === filters[j],
+        );
         this.indicatorData = filteredData;
       }
     }
@@ -176,15 +176,15 @@ class App extends React.Component {
   }
 
   extendIndicatorDetails(filteredData) {
-    let indicator = [];
-    let layerData = {};
+    const indicator = [];
+    const layerData = {};
     const status = {
       'Well on the way to being achieved': 'green',
       'Not fully met obstacles exist': 'orange',
       'Far from met': 'red',
       'Incomplete data exists': 'grey',
       'Data unavailable': 'white',
-    }
+    };
 
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
@@ -197,8 +197,8 @@ class App extends React.Component {
           categories: this.props.layerData[key].categories,
           description: this.props.layerData[key].description,
           credit: this.props.layerData[key].credit,
-          popup: this.props.layerData[key].popup
-        }
+          popup: this.props.layerData[key].popup,
+        },
       });
     });
 
