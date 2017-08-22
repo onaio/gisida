@@ -4,6 +4,7 @@ import Menu from '../Menu/Menu';
 import Map from '../Map/Map';
 import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
+import Selections from '../Selections/Selections';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
 import { getLastIndex } from '../../includes/utils';
 import * as d3 from 'd3';
@@ -109,7 +110,7 @@ class App extends React.Component {
         },
       ];
     }
-    
+
     this.setState({ layers });
   }
 
@@ -235,7 +236,7 @@ class App extends React.Component {
         }
       }
     });
-    
+
     this.setState({ layerData });
   }
 
@@ -285,6 +286,10 @@ class App extends React.Component {
             selected={selected}
           />
         }
+        {appConfig.defaultView === "framework" ?
+          <Selections
+            UIfilters={UIfilters}
+          /> : ''}
         <Sectors
           view={currentView}
           defaultView={appConfig.defaultView}

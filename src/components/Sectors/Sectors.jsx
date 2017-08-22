@@ -18,14 +18,9 @@ const Sectors = ({ sectorMenuId,
   defaultView,
   filters,
   selected,
-  showSector,
-  UIfilters
+  showSector
 }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
-    <div className="filter-selection">
-      <div className="pre-text">YOUR SELECTIONS: </div>
-      <div className="selections">{UIfilters.join(', ')}</div>
-    </div>
     <a
       href="#"
       onClick={e => onToggleSectors(e)}
