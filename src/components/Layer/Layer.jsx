@@ -2,20 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 require('./Layer.scss');
-let type;
-const Layer = ({ mapTargetId, layer, sector, layerData, headers, defaultView, onLayerChange = f => f }) =>
+
+function getType(defaultView) {
+  const type = defaultView === 'framework' ? 'radio' : 'checkbox';
+
+  return type;
+}
+const Layer = ({
+  mapTargetId,
+  layer,
+  sector,
+  layerData,
+  headers, defaultView, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
     {headers.includes(layer) ? <b>{layer}</b> :
-      <label classname="label" htmlFor={layer} >
-        <input
-          type={defaultView === 'framework' ? 'radio' : 'checkbox'}
-          id={layer.replace(' ', '-')}
-          data-layer={layer}
-          name={sector}
-          value={layer}
-          onClick={(e) => onLayerChange(layer, e.target.checked, mapTargetId, sector, type = defaultView === 'framework' ? 'radio' : 'checkbox')}
-        />
-        {layerData[layer].label}</label>
+    <label className="label" htmlFor={layer} >
+      <input
+        type={defaultView === 'framework' ? 'radio' : 'checkbox'}
+        id={layer.replace(' ', '-')}
+        data-layer={layer}
+        name={sector}
+        value={layer}
+        onClick={e => onLayerChange(layer, e.target.checked, mapTargetId, sector,
+        getType(defaultView))}
+      />
+      {layerData[layer].label}</label>
     }
   </li>);
 
@@ -26,10 +37,12 @@ Layer.propTypes = {
   onLayerChange: PropTypes.func.isRequired,
   headers: PropTypes.arrayOf(PropTypes.any),
   defaultView: PropTypes.string.isRequired,
+  sector: PropTypes.string,
 };
 
 Layer.defaultProps = {
   headers: [],
+  sector: '',
 };
 
 export default Layer;

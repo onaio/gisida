@@ -4,7 +4,15 @@ import Filter from '../Filter/Filter';
 
 require('./Filters.scss');
 
-const Filters = ({ filters, headers, sector, views, onToggleView, onFilterSelect = f => f, getStatus, checked, currentView }) =>
+const Filters = ({
+  filters,
+  headers,
+  sector,
+  views,
+  onToggleView,
+  onFilterSelect = f => f,
+  checked,
+  currentView }) =>
   (<ul className="filters" style={{ display: `${currentView === 'framework' ? 'block' : 'none'}` }}>
     {views ?
       views.map(view =>
@@ -22,7 +30,6 @@ const Filters = ({ filters, headers, sector, views, onToggleView, onFilterSelect
           headers={headers}
           sector={sector}
           onFilterSelect={onFilterSelect}
-          getStatus={getStatus}
           checked={checked}
         />))
     }
@@ -33,12 +40,20 @@ Filters.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.any),
   views: PropTypes.arrayOf(PropTypes.any),
   onToggleView: PropTypes.func.isRequired,
+  sector: PropTypes.string,
+  checked: PropTypes.string,
+  currentView: PropTypes.string,
+  onFilterSelect: PropTypes.func,
 };
 
 Filters.defaultProps = {
   headers: [],
   filters: null,
   views: null,
+  sector: null,
+  checked: null,
+  currentView: null,
+  onFilterSelect: null,
 };
 
 export default Filters;

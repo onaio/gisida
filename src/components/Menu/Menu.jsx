@@ -11,7 +11,7 @@ const logOut = (e) => {
 };
 
 const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConfig = f => f }) =>
-  appConfig.defaultView === 'framework' ?
+  (appConfig.defaultView === 'framework' ?
     (<div className="framework-menu">
       <div className="framework-brand">
         <img src={appConfig.appIcon} alt={appConfig.appName} className="framework-brand-icon" />
@@ -20,7 +20,7 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
       </div>
       <div className="framework-reports"><a>How do I use the site?</a>
         <div id="reports-divider"> | </div>
-        <a href="http://regionaldss.org/publications/redss-solutions-statements" target="_blank">Download</a></div>
+        <a target="_blank" rel="noopener noreferrer" href="http://regionaldss.org/publications/redss-solutions-statements">Download</a></div>
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
     </div>)
     :
@@ -35,7 +35,7 @@ const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConf
         <li><a href="#" onClick={toggleSplitScreen}><span className="glyphicon glyphicon-th-large" /></a></li>
       </ul>
       <a className="sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
-    </div>);
+    </div>));
 
 Menu.propTypes = {
   toggleSingleScreen: PropTypes.func.isRequired,

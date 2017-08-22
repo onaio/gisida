@@ -4,12 +4,16 @@ import PropTypes from 'prop-types';
 require('./Selections.scss');
 
 const Selections = ({
-    UIfilters
+    UIfilters,
 }) => (
-        <div className="filter-selection">
-            <div className="pre-text">YOUR SELECTIONS: </div>
-            <div className="selections">{UIfilters.join(', ')}</div>
-        </div>
-)
+  <div className="filter-selection">
+    <div className="pre-text">YOUR SELECTIONS: </div>
+    <div className="selections">{UIfilters.join(', ')}</div>
+  </div>
+);
 
 export default Selections;
+
+Selections.propTypes = {
+  UIfilters: PropTypes.arrayOf(PropTypes.any).isRequired,
+};

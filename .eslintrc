@@ -29,7 +29,9 @@
                 "ignorePropertyModificationsFor": [
                     "layer",
                     "layerData",
-                    "layerProp"
+                    "layerProp",
+                    "row",
+                    "obj"
                 ]
             }
         ]

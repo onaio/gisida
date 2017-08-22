@@ -128,9 +128,9 @@ class Map extends React.Component {
       l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ?
         l - 1 : l;
       if (nextProps.layers.layers[l].visible === false
-        && nextProps.layers.layers[l].map === this.props.mapId 
+        && nextProps.layers.layers[l].map === this.props.mapId
         && nextProps.layers.layers[l].title !== nextProps.layers.layers[l + 1].title) {
-          this.removeLayer(nextProps.layers.layers[l]);
+        this.removeLayer(nextProps.layers.layers[l]);
       }
     }
   }
@@ -229,17 +229,15 @@ class Map extends React.Component {
             aggregateData(layerData, this.props.locations, filterOptions) :
             processFilters(layerData, filterOptions);
         self.addLayer(layerData);
-      } else {
-        // add the already processed layer
-        if (typeof layerData.labels.data === 'string') {
-          const fileName = layerData.labels.data;
-          const fileType = fileName.split('.').pop();
-          if (fileType === 'csv') {
-            renderData(layerData);
-          }
-        } else {
-          self.addLayer(layerData);
+      } else if (typeof layerData.labels.data === 'string') {
+        const fileName = layerData.labels.data;
+        const fileType = fileName.split('.').pop();
+        if (fileType === 'csv') {
+          renderData(layerData);
         }
+      } else {
+            // add the already processed layer
+        self.addLayer(layerData);
       }
     } else if (layerData.layers) {
       // if layer has sublayers, add all sublayers
@@ -317,7 +315,6 @@ class Map extends React.Component {
             type: 'categorical',
           } :
           layer.categories.color,
-
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
@@ -745,7 +742,7 @@ class Map extends React.Component {
           layer.categories.shape[index]}" style="${style}${color};"></span>${
           layer.categories.label[index]}</li>`;
       });
-      let description = layer[layer.description] ? layer[layer.description] : '';
+      const description = layer[layer.description] ? layer[layer.description] : '';
 
       $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"` +
         'class="legend-row">' +
@@ -801,9 +798,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-        },
+        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+      },
       );
     }
   }
@@ -967,10 +964,11 @@ class Map extends React.Component {
         if (layer.description && data) {
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
+            /* eslint max-len: ["error", 130]*/
             row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
             row.firstColor = layer.color[0];
             row.secondColor = layer.color[1];
-          })
+          });
         }
 
         if (data) {
@@ -1066,4 +1064,9 @@ Map.propTypes = {
   mapId: PropTypes.string.isRequired,
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   locations: PropTypes.objectOf(PropTypes.any).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.any),
+};
+
+Map.defaultProps = {
+  selected: [],
 };

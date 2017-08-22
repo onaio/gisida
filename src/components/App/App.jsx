@@ -77,6 +77,54 @@ class App extends React.Component {
     return index;
   }
 
+  getFilters(group, filter, status, headers) {
+    const regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
+    let country;
+    let region;
+
+    for (let j = 0; j < regions.length; j += 1) {
+      if (headers.includes(regions[j])) {
+        country = regions[j];
+      } else if (filter === regions[j]) {
+        region = `${regions[j]} - ${country}`;
+      }
+    }
+
+    const obj = region ? { [group]: filter, region } : { [group]: filter };
+    let filters = [...this.state.filters, obj];
+    if (this.state.filters.length > 0) {
+      for (let i = 0; i < this.state.filters.length; i += 1) {
+        const sector = Object.keys(this.state.filters[i])[0];
+        if (sector === group) {
+          const filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
+          filters = [...filteredArr, obj];
+        }
+      }
+    }
+
+    const filterArr = filters.map(item => item[Object.keys(item)[0]]);
+    if (filterArr.length === 3) {
+      this.getFilteredData(filterArr);
+    }
+    this.setState({ filters });
+  }
+
+  getFilteredData(filters) {
+    this.indicatorData = this.state.indicatorData;
+    if (this.state.indicatorData.length > 0) {
+      for (let j = 0; j < filters.length; j += 1) {
+        const filteredData = this.indicatorData.filter(a =>
+          a.population === filters[j] ||
+          a.region === filters[j] ||
+          a.year === filters[j],
+        );
+        this.indicatorData = filteredData;
+      }
+    }
+
+    this.extendIndicatorDetails(this.indicatorData);
+  }
+
   changeLayer(layer, status, map, sector, type) {
     let layers;
     const index = this.getIndex(layer, sector);
@@ -118,38 +166,6 @@ class App extends React.Component {
     this.setState({ view });
   }
 
-  getFilters(group, filter, status, headers) {
-    const regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
-    let country;
-    let region;
-
-    for (let j = 0; j < regions.length; j += 1) {
-      if (headers.includes(regions[j])) {
-        country = regions[j];
-      } else if (filter === regions[j]) {
-        region = `${regions[j]} - ${country}`;
-      }
-    }
-
-    const obj = region ? { [group]: filter, region } : { [group]: filter };
-    let filters = [...this.state.filters, obj];
-    if (this.state.filters.length > 0) {
-      for (let i = 0; i < this.state.filters.length; i += 1) {
-        const sector = Object.keys(this.state.filters[i])[0];
-        if (sector === group) {
-          const filteredArr = this.state.filters.filter(f => Object.keys(f)[0] !== group);
-          filters = [...filteredArr, obj];
-        }
-      }
-    }
-
-    const filterArr = filters.map(item => item[Object.keys(item)[0]]);
-    if (filterArr.length === 3) {
-      this.getFilteredData(filterArr);
-    }
-    this.setState({ filters });
-  }
-
   viewClick(layer, sector) {
     const selected = { sector, layer };
     this.setState({ selected });
@@ -157,22 +173,6 @@ class App extends React.Component {
 
   updateData(data) {
     this.setState({ indicatorData: data });
-  }
-
-  getFilteredData(filters) {
-    this.indicatorData = this.state.indicatorData;
-    if (this.state.indicatorData.length > 0) {
-      for (let j = 0; j < filters.length; j += 1) {
-        const filteredData = this.indicatorData.filter(a =>
-          a.population === filters[j] ||
-          a.region === filters[j] ||
-          a.year === filters[j],
-        );
-        this.indicatorData = filteredData;
-      }
-    }
-
-    this.extendIndicatorDetails(this.indicatorData);
   }
 
   extendIndicatorDetails(filteredData) {
@@ -202,8 +202,8 @@ class App extends React.Component {
       });
     });
 
-    indicator.forEach(function (row) {
-      Object.keys(row).forEach(function (key) {
+    indicator.forEach((row) => {
+      Object.keys(row).forEach((key) => {
         layerData[key] = row[key];
       });
     });
@@ -213,15 +213,15 @@ class App extends React.Component {
         if (layerData[key].label === filteredData[i].indicator) {
           $.extend(layerData[key], filteredData[i]);
           if (layerData[key].dataratingfordisplaced) {
-            let color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
-            let color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
+            const color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
+            const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
             layerData[key].color = [color1, color2];
           }
           if (layerData[key].region && layerData[key].color) {
-            if (layerData[key].region === "All regions" || layerData[key].region === "Regions") {
+            if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
               d3.csv(layerData[key].labels.data, (data) => {
-                let stops = [];
-                layerData[key].source.data = data.filter((row) =>
+                const stops = [];
+                layerData[key].source.data = data.filter(row =>
                   row.country === layerData[key].country);
                 layerData[key].source.data.forEach((row) => {
                   stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
@@ -229,7 +229,7 @@ class App extends React.Component {
                 layerData[key].source.stops = stops;
               });
             } else {
-              layerData[key].source.data = [{ "region": layerData[key].region }];
+              layerData[key].source.data = [{ region: layerData[key].region }];
               layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
             }
           }
@@ -255,12 +255,10 @@ class App extends React.Component {
     const styles = this.props.styles;
     const appConfig = this.props.appConfig;
     const currentView = this.state.view;
-    const details = this.props.details;
     const selected = this.state.selected;
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
-    const UIfilters = this.state.filters.map(filter => filter.region ?
-      filter.region : filter[Object.keys(filter)[0]]);
-
+    const UIfilters = this.state.filters.map(filter =>
+      filter.region || filter[Object.keys(filter)[0]]);
     return (
       <div>
         <Menu
@@ -286,7 +284,7 @@ class App extends React.Component {
             selected={selected}
           />
         }
-        {appConfig.defaultView === "framework" ?
+        {appConfig.defaultView === 'framework' ?
           <Selections
             UIfilters={UIfilters}
           /> : ''}
@@ -329,7 +327,6 @@ class App extends React.Component {
               layerData={layerData}
               filters={filters}
               selected={selected}
-              showSector={showSector}
             />
           </div>
           : null}
@@ -345,7 +342,6 @@ App.propTypes = {
   locations: PropTypes.objectOf(PropTypes.any).isRequired,
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   styles: PropTypes.arrayOf(PropTypes.any).isRequired,
-  details: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default App;

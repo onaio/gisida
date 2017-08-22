@@ -18,7 +18,6 @@ const Sectors = ({ sectorMenuId,
   defaultView,
   filters,
   selected,
-  showSector
 }) =>
   (<div id={`${sectorMenuId}-wrapper`} className="sectors-menu-wrapper">
     <a
@@ -35,7 +34,7 @@ const Sectors = ({ sectorMenuId,
       <ul className="sectors">
         {sectorData.map((sector, i) =>
           // eslint-disable-next-line react/no-array-index-key
-          (sector.filters || sector.views) ?
+          ((sector.filters || sector.views) ?
             (<li className="sector" key={i}><a href="#" onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
               <Filters
                 sector={sector.sector}
@@ -49,8 +48,10 @@ const Sectors = ({ sectorMenuId,
               />
             </li>) :
             view !== 'framework' ?
-              (<li className="sector" key={i}><a href="#"
-                onClick={e => onSectorClick(e)}>{sector.sector}<span className="caret" /></a>
+              (<li className="sector" key={i}><a
+                href="#"
+                onClick={e => onSectorClick(e)}
+              >{sector.sector}<span className="caret" /></a>
                 <Layers
                   sector={sector.sector}
                   onLayerChange={onLayerChange}
@@ -62,7 +63,7 @@ const Sectors = ({ sectorMenuId,
                   onFilterSelect={onFilterSelect}
                   selected={selected}
                 />
-              </li>) : '')
+              </li>) : ''))
         }
       </ul>
     </div>
@@ -80,6 +81,15 @@ Sectors.propTypes = {
   onLayerChange: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,
   defaultView: PropTypes.string.isRequired,
+  onFilterSelect: PropTypes.func,
+  filters: PropTypes.arrayOf(PropTypes.any),
+  selected: PropTypes.arrayOf(PropTypes.any),
+};
+
+Sectors.defaultProps = {
+  onFilterSelect: null,
+  filters: null,
+  selected: null,
 };
 
 export default Sectors;

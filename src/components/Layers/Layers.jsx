@@ -2,10 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Layer from '../Layer/Layer';
 
-const Layers = ({ mapTargetId, layers, sector, layerData, headers, defaultView, onLayerChange = f => f, selected }) =>
-  (<ul className="layers" style={{
-    display: `${selected !== undefined && sector === selected.sector ? 'block' : 'none'}`
-  }}>
+const Layers = ({
+  mapTargetId,
+  layers,
+  sector,
+  layerData,
+  headers,
+  defaultView,
+  selected,
+  onLayerChange = f => f }) =>
+  (<ul
+    className="layers"
+    style={{
+      display: `${selected !== undefined && sector === selected.sector ? 'block' : 'none'}`,
+    }}
+  >
     {layers.map(layer =>
       (<Layer
         onLayerChange={onLayerChange}
@@ -27,11 +38,14 @@ Layers.propTypes = {
   onLayerChange: PropTypes.func.isRequired,
   headers: PropTypes.arrayOf(PropTypes.any),
   defaultView: PropTypes.string.isRequired,
+  sector: PropTypes.string.isRequired,
+  selected: PropTypes.string,
 };
 
 Layers.defaultProps = {
   headers: [],
   layers: [],
+  selected: '',
 };
 
 export default Layers;

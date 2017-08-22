@@ -1,11 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Mustache from 'mustache';
-import fetchGoogleSheetsData from '../../includes/googlesheetData';
 
 require('./Framework.scss');
 
 class Framework extends React.Component {
+  static getKey() {
+    const colors = {
+      white: 'Data unavailable',
+      transparent: 'Incomplete data exists',
+      red: 'Far from met',
+      orange: 'Not fully met, obstacles exist',
+      green: 'Well on way to being achieved',
+    };
+    let status = '';
+    let popup = '';
+    Object.keys(colors).forEach((color) => {
+      const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
+      status += `<li>
+      <div class="status-key" style="background: ${color}; border: ${border};"></div>
+      </li>`;
+      popup += `
+      <div>
+      <div class="popup-status-key" style="background: ${color}; border: ${border};"></div>
+      <div class="popup-status-description">${colors[color]}</div></div>`;
+    });
+    $('.key').prepend(`<ul><li><div id="key-label">Key</div></li>${status}</ul>`);
+    $('.key-popup').prepend(`<div id="popup-key-label">Key</div>${popup}`);
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -28,8 +49,8 @@ class Framework extends React.Component {
   getFrameworkSectors() {
     const sectors = this.props.sectorData.filter(sector => sector.layers).map(sector => sector);
     const frameworkSector = [];
-    let indicatorObj = this.props.layerData;
-
+    const indicatorObj = this.props.layerData;
+    /* eslint max-len: ["error", 153]*/
     sectors.forEach(sector =>
       frameworkSector.push(
         (<div className="framework-sector" key={sector.sector}>
@@ -51,14 +72,16 @@ class Framework extends React.Component {
                               className="status-1"
                               style={{
                                 background: `${indicatorObj[layer].color ?
-                                  indicatorObj[layer].color[0] : ''}`
-                              }} />
+                                  indicatorObj[layer].color[0] : ''}`,
+                              }}
+                            />
                             <div
                               className="status-2"
                               style={{
                                 background: `${indicatorObj[layer].color ?
-                                  indicatorObj[layer].color[1] : ''}`
-                              }} />
+                                  indicatorObj[layer].color[1] : ''}`,
+                              }}
+                            />
                           </div>
                           : ''}
                         <div className="status-link">
@@ -76,12 +99,15 @@ class Framework extends React.Component {
                                   <a
                                     className="toggle-view-link"
                                     data-dismiss="modal"
-                                    onClick={(e) => { this.props.onToggleView("map"); this.props.onViewClick(layer, sector.sector); }}
+                                    role="button"
+                                    tabIndex="-1"
+                                    onClick={() => { this.props.onToggleView('map'); this.props.onViewClick(layer, sector.sector); }}
                                   >View on map</a>
                                 </div>
                                 <div className="modal-body">
                                   <h6 className="modal-header">Indicator</h6>
-                                  <p>{indicatorObj[layer]['benchmarksforrating-incomparisontohostcommunitystatusandaspernationalinternationalstandards']}</p>
+                                  <p>{indicatorObj[layer]['benchmarksforrating-incomparisontohostcommunitystatusandaspernationalinternationalstandards']}
+                                  </p>
                                   <h6 className="modal-header">Analysis</h6>
                                   <div className="data-ratings">
                                     <div className="indicator-status">
@@ -89,20 +115,22 @@ class Framework extends React.Component {
                                         className="indicator-status-1"
                                         style={{
                                           background: `${indicatorObj[layer].color ?
-                                            indicatorObj[layer].color[0] : ''}`
+                                            indicatorObj[layer].color[0] : ''}`,
                                         }}
                                       />
                                       <div
                                         className="indicator-status-2"
                                         style={{
                                           background: `${indicatorObj[layer].color ?
-                                            indicatorObj[layer].color[1] : ''}`
+                                            indicatorObj[layer].color[1] : ''}`,
                                         }}
                                       />
                                     </div>
                                     <div className="indicator-rating">{indicatorObj[layer].dataratingfordisplaced}</div>
                                   </div>
-                                  <p>{indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation}</p>
+                                  <p>
+                                    {indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation}
+                                  </p>
                                 </div>
                               </div>
 
@@ -120,30 +148,6 @@ class Framework extends React.Component {
       ));
 
     return frameworkSector;
-  }
-
-  getKey() {
-    const colors = {
-      white: 'Data unavailable',
-      transparent: 'Incomplete data exists',
-      red: 'Far from met',
-      orange: 'Not fully met, obstacles exist',
-      green: 'Well on way to being achieved',
-    };
-    let status = '';
-    let popup = '';
-    Object.keys(colors).forEach((color) => {
-      const border = color === 'white' ? '1px solid #eee' : color === 'transparent' ? '1px dotted #555' : '';
-      status += `<li>
-      <div class="status-key" style="background: ${color}; border: ${border};"></div>
-      </li>`;
-      popup += `
-      <div>
-      <div class="popup-status-key" style="background: ${color}; border: ${border};"></div>
-      <div class="popup-status-description">${colors[color]}</div></div>`;
-    });
-    $('.key').prepend(`<ul><li><div id="key-label">Key</div></li>${status}</ul>`);
-    $('.key-popup').prepend(`<div id="popup-key-label">Key</div>${popup}`);
   }
 
   updateData(data) {
@@ -168,8 +172,9 @@ class Framework extends React.Component {
 
 Framework.propTypes = {
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
-  details: PropTypes.objectOf(PropTypes.any).isRequired,
+  layerData: PropTypes.arrayOf(PropTypes.any).isRequired,
   onToggleView: PropTypes.func.isRequired,
+  onViewClick: PropTypes.func.isRequired,
 };
 
 export default Framework;
