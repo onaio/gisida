@@ -159,7 +159,6 @@ class Framework extends React.Component {
           {this.getFrameworkSectors()}
         </div>
         <div className="footer">
-          <div className="partners" />
           <div className="powered-by" />
         </div>
       </div>
