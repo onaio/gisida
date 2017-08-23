@@ -53,7 +53,6 @@ const Sectors = ({ sectorMenuId,
                 onClick={e => onSectorClick(e)}
               >{sector.sector}<span className="caret" /></a>
                 <Layers
-                  sector={sector.sector}
                   onLayerChange={onLayerChange}
                   mapTargetId={mapTargetId}
                   layers={sector.layers}

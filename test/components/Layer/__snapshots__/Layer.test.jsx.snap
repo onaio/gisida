@@ -11,7 +11,7 @@ exports[`Layer Layer renders each layer indicator 1`] = `
     <input
       data-layer="test_layer"
       id="test_layer"
-      name=""
+      name="layer"
       onClick={[Function]}
       type="checkbox"
       value="test_layer"

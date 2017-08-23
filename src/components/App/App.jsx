@@ -7,7 +7,6 @@ import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
 import Selections from '../Selections/Selections';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
-import { getLastIndex } from '../../includes/utils';
 
 
 require('./App.scss');
@@ -71,12 +70,6 @@ class App extends React.Component {
     fetchGoogleSheetsData(this.props.appConfig.dataURL, this.updateData);
   }
 
-  getIndex(layer, sector) {
-    const viewedSectors = this.state.layers.map(layers => layers.sector);
-    const index = viewedSectors.includes(sector) ? getLastIndex(viewedSectors, sector) : null;
-    return index;
-  }
-
   getFilters(group, filter, status, headers) {
     const regions = this.props.sectorData.filter(a => a.sector === 'REGION').map(f => f.filters)[0];
     let country;
@@ -125,24 +118,22 @@ class App extends React.Component {
     this.extendIndicatorDetails(this.indicatorData);
   }
 
-  changeLayer(layer, status, map, sector, type) {
+  changeLayer(layer, status, map, type) {
     let layers;
-    const index = this.getIndex(layer, sector);
-    if (type === 'radio' && index !== null) {
+    const index = this.state.layers.length - 1;
+    if (type === 'radio' && index !== -1) {
       layers = [
         ...this.state.layers,
         {
           title: this.state.layers[index].title,
           visible: false,
           map: this.state.layers[index].map,
-          sector: this.state.layers[index].sector,
           type,
         },
         {
           title: layer,
           visible: status,
           map,
-          sector,
           type,
         },
       ];
@@ -153,7 +144,6 @@ class App extends React.Component {
           title: layer,
           visible: status,
           map,
-          sector,
           type,
         },
       ];

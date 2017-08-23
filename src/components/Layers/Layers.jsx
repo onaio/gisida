@@ -5,11 +5,11 @@ import Layer from '../Layer/Layer';
 const Layers = ({
   mapTargetId,
   layers,
-  sector,
   layerData,
   headers,
   defaultView,
   selected,
+  sector,
   onLayerChange = f => f }) =>
   (<ul
     className="layers"
@@ -26,7 +26,6 @@ const Layers = ({
         layerData={layerData}
         headers={headers}
         defaultView={defaultView}
-        sector={sector}
       />))
     }
   </ul>);

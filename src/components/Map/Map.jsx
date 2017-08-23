@@ -919,7 +919,7 @@ class Map extends React.Component {
     });
 
     if (this.props.selected) {
-      $(`input[type='radio'][name="${this.props.selected.sector}"][value="${this.props.selected.layer}"]`).trigger('click');
+      $(`input[type='radio'][name="layer"][value="${this.props.selected.layer}"]`).trigger('click');
     }
   }
 

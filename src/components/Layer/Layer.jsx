@@ -11,7 +11,6 @@ function getType(defaultView) {
 const Layer = ({
   mapTargetId,
   layer,
-  sector,
   layerData,
   headers, defaultView, onLayerChange = f => f }) =>
   (<li className={`layer ${mapTargetId}`}>
@@ -21,9 +20,9 @@ const Layer = ({
         type={defaultView === 'framework' ? 'radio' : 'checkbox'}
         id={layer.replace(' ', '-')}
         data-layer={layer}
-        name={sector}
+        name={'layer'}
         value={layer}
-        onClick={e => onLayerChange(layer, e.target.checked, mapTargetId, sector,
+        onClick={e => onLayerChange(layer, e.target.checked, mapTargetId,
         getType(defaultView))}
       />
       {layerData[layer].label}</label>
@@ -37,12 +36,10 @@ Layer.propTypes = {
   onLayerChange: PropTypes.func.isRequired,
   headers: PropTypes.arrayOf(PropTypes.any),
   defaultView: PropTypes.string,
-  sector: PropTypes.string,
 };
 
 Layer.defaultProps = {
   headers: [],
-  sector: '',
   defaultView: '',
 };
 
