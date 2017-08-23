@@ -14,6 +14,8 @@ describe('Layers', () => {
         mapTargetId={'map-1'}
         layers={layers}
         layerData={layerData}
+        sector='sector'
+        defaultView = 'test'
       />);
     const json = component.toJSON();
     expect(json).toMatchSnapshot();

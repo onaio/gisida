@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Filter Filter renders each filter 1`] = `
+<li
+  className="filter"
+>
+  <label
+    htmlFor="test_view"
+  >
+    <input
+      checked={false}
+      id="test_view"
+      name="switch-view"
+      onClick={[Function]}
+      type="radio"
+      value="test_view"
+    />
+     
+    test_view
+  </label>
+</li>
+`;

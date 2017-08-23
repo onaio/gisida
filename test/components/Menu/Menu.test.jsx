@@ -12,6 +12,7 @@ describe('Menu', () => {
                     appIcon: 'test.jpg',
                     appName: 'test app',
                     appNameDesc: 'This is a test app',
+                    defaultView: 'test'
                 }}
             />);
         const json = component.toJSON();

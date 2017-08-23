@@ -3,18 +3,27 @@
 exports[`Layers Layers renders indicators 1`] = `
 <ul
   className="layers"
+  style={
+    Object {
+      "display": "none",
+    }
+  }
 >
   <li
     className="layer map-1"
   >
-    <input
-      data-layer="test_layer"
-      onChange={[Function]}
-      type="checkbox"
-    />
     <label
+      className="label"
       htmlFor="test_layer"
     >
+      <input
+        data-layer="test_layer"
+        id="test_layer"
+        name="sector"
+        onClick={[Function]}
+        type="checkbox"
+        value="test_layer"
+      />
       Test Layer
     </label>
   </li>

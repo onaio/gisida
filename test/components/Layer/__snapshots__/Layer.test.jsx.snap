@@ -4,14 +4,18 @@ exports[`Layer Layer renders each layer indicator 1`] = `
 <li
   className="layer map-1"
 >
-  <input
-    data-layer="test_layer"
-    onChange={[Function]}
-    type="checkbox"
-  />
   <label
+    className="label"
     htmlFor="test_layer"
   >
+    <input
+      data-layer="test_layer"
+      id="test_layer"
+      name=""
+      onClick={[Function]}
+      type="checkbox"
+      value="test_layer"
+    />
     Test Layer
   </label>
 </li>

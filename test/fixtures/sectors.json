@@ -1,7 +1,17 @@
 {
     "Sample Sector": {
         "layers": [
-            "test_layer"
+          "test_layer"
+        ],
+        "views": [
+          "test_views"
+        ],
+        "filters": [
+          "test_filters"
+        ],
+        "icon": "test_icon.jpg",
+        "headers": [
+          "test_headers"
         ]
     }
 }

@@ -41,7 +41,7 @@ Filters.propTypes = {
   views: PropTypes.arrayOf(PropTypes.any),
   onToggleView: PropTypes.func.isRequired,
   sector: PropTypes.string,
-  checked: PropTypes.string,
+  checked: PropTypes.arrayOf(PropTypes.any),
   currentView: PropTypes.string,
   onFilterSelect: PropTypes.func,
 };

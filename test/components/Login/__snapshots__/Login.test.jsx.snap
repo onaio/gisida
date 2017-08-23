@@ -14,8 +14,14 @@ exports[`Login Login renders login screen 1`] = `
       >
         <div
           className="brand-login"
+          style={
+            Object {
+              "background": "url(\\"/assets/img/login_logo.png\\") no-repeat center center",
+            }
+          }
         />
         <label
+          className="password-label"
           htmlFor="password"
         >
           Enter your Password

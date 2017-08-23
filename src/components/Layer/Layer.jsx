@@ -36,13 +36,14 @@ Layer.propTypes = {
   layerData: PropTypes.objectOf(PropTypes.any).isRequired,
   onLayerChange: PropTypes.func.isRequired,
   headers: PropTypes.arrayOf(PropTypes.any),
-  defaultView: PropTypes.string.isRequired,
+  defaultView: PropTypes.string,
   sector: PropTypes.string,
 };
 
 Layer.defaultProps = {
   headers: [],
   sector: '',
+  defaultView: '',
 };
 
 export default Layer;

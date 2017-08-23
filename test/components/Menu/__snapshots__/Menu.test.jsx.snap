@@ -8,7 +8,7 @@ exports[`Menu Menu renders application details 1`] = `
     className="brand"
   >
     <img
-      alt="UKAID"
+      alt="test app"
       className="brand-icon"
       src="test.jpg"
     />

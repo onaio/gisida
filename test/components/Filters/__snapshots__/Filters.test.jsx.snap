@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Filters Filters renders each filters 1`] = `
+<ul
+  className="filters"
+  style={
+    Object {
+      "display": "none",
+    }
+  }
+>
+  <li
+    className="filter"
+  >
+    <label
+      htmlFor="test_filters"
+    >
+      <input
+        checked={false}
+        id="test_sector"
+        name="test_sector"
+        onClick={[Function]}
+        type="radio"
+        value="test_filters"
+      />
+      test_filters
+    </label>
+  </li>
+</ul>
+`;
