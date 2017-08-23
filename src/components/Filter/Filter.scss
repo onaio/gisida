@@ -1,13 +1,14 @@
 .filter {
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: normal;
-        margin-right: 5px;
-        font-size: 13px;
-        input[type="radio"] {
-            margin-right: 5px;
-        }
+  label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: normal;
+    margin-right: 5px;
+    font-size: 13px;
+
+    input[type="radio"] {
+      margin-right: 5px;
     }
+  }
 }
