@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Selections Selections renders filter selections 1`] = `
+<div
+  className="filter-selection"
+>
+  <div
+    className="pre-text"
+  >
+    YOUR SELECTIONS: 
+  </div>
+  <div
+    className="selections"
+  >
+    test_filters
+  </div>
+</div>
+`;

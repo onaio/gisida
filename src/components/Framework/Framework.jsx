@@ -32,6 +32,7 @@ class Framework extends React.Component {
     this.state = {
       showIndicatorDetails: false,
     };
+    this.getKey = Framework.getKey.bind(this);
   }
 
   componentDidMount() {
