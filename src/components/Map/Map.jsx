@@ -236,7 +236,7 @@ class Map extends React.Component {
           renderData(layerData);
         }
       } else {
-            // add the already processed layer
+        // add the already processed layer
         self.addLayer(layerData);
       }
     } else if (layerData.layers) {
@@ -739,8 +739,8 @@ class Map extends React.Component {
           'border-bottom-color:' : 'background:';
 
         background += `<li class="layer-symbols"> <span class="${
-          layer.categories.shape[index]}" style="${style}${color};"></span>${
-          layer.categories.label[index]}</li>`;
+        layer.categories.shape[index]}" style="${style}${color};"></span>${
+        layer.categories.label[index]}</li>`;
       });
       const description = layer[layer.description] ? layer[layer.description] : '';
 
@@ -986,8 +986,8 @@ class Map extends React.Component {
 
         if (content) {
           popup.setLngLat(self.map.unproject(e.point))
-          .setHTML(content)
-          .addTo(self.map);
+            .setHTML(content)
+            .addTo(self.map);
         }
       }
     });

@@ -14,7 +14,7 @@ const Layers = ({
   (<ul
     className="layers"
     style={{
-      display: `${selected !== undefined && sector === selected.sector ? 'block' : 'none'}`,
+      display: `${selected !== null && sector === selected.sector ? 'block' : 'none'}`,
     }}
   >
     {layers.map(layer =>

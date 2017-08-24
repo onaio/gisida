@@ -102,12 +102,14 @@ ul {
       width: 80%;
       display: block;
       margin: 0 0 10px 20px;
-      text-indent: -23px;
+      text-indent: -18px;
+      text-align: start;
+      white-space: normal;
     }
 
     input[type='checkbox'],
     input[type='radio'] {
-      margin-right: 5%;
+      margin-right: 5px;
     }
   }
 }

@@ -16,7 +16,7 @@ exports[`Login Login renders login screen 1`] = `
           className="brand-login"
           style={
             Object {
-              "background": "url(\\"/assets/img/login_logo.png\\") no-repeat center center",
+              "background": "url(undefined) no-repeat center center",
             }
           }
         />
