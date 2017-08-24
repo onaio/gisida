@@ -1049,7 +1049,9 @@ class Map extends React.Component {
           filterData={this.filterData}
           layerObj={this.state.layerObj}
         />
-        <Export map={this.props.mapId} />
+        {this.props.mapConfig.defaultView !== 'framework' ?
+          <Export map={this.props.mapId} />
+        : ''}
       </div>
     );
   }
