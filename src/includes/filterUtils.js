@@ -1,5 +1,5 @@
 export function processFilters(layerData, filterOptions) {
-  let data = layerData.source.data;
+  let data = layerData.mergedData || layerData.source.data;
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
@@ -35,7 +35,9 @@ export function generateFilterOptions(layerData) {
   if (layerData.aggregate.filter) {
     const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
     const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
-    const allFilters = [].concat(...[filterValues, subfilterValues]);
+    let allFilters = [].concat(...[filterValues, subfilterValues]);
+
+    allFilters = allFilters.filter(datum => datum !== undefined);
     // check filter values are in accepted values lists, remove those that are not
     let acceptedFilters = [];
     if (acceptedFilterValues || acceptedSubFilterValues) {

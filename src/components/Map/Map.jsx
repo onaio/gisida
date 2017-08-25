@@ -178,6 +178,7 @@ class Map extends React.Component {
       if (fileType === 'csv') {
         d3.csv(layerProp.source.data, (data) => {
           layerData.source.data = data;
+          layerData.mergedData = data;
           if (layerData.aggregate && layerData.aggregate.filter) {
             generateFilterOptions(layerData);
           }
