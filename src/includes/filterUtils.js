@@ -12,7 +12,7 @@ export function processFilters(layerData, filterOptions) {
     });
     // apply filters
     data = data.filter((datum) => {
-      if (acceptedFilterValues && !acceptedFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
+      if (acceptedFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
         // remove rows that should be filtered out, ignore rows with values from second filter field
         return !filters.includes(datum[layerData.aggregate.filter]);
       } else if (acceptedSubFilterValues && acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
@@ -25,7 +25,6 @@ export function processFilters(layerData, filterOptions) {
   }
   return data;
 }
-
 
 export function generateFilterOptions(layerData) {
   const data = layerData.mergedData || layerData.source.data;

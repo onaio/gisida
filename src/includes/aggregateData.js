@@ -23,8 +23,8 @@ export default function (layerData, locations, filterOptions) {
       return row;
     });
   }
-  data = data.filter(datum => datum.district_id !== undefined);
-  layerData.source.data = data;
+  layerData.mergedData = data.filter(datum => datum.district_id !== undefined);
+
   // Process filters with filterOptions
   data = processFilters(layerData, filterOptions);
 
