@@ -75,8 +75,16 @@
   background: #a50f15;
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 1010;
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
+
+  .framework-brand {
+    width: 80%;
+
+    .hamburger-menu {
+     display: none;
+    }
+  }
 }
 
 .framework-brand-title {

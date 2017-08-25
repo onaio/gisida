@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Cookie from 'js-cookie';
+import Layers from '../Layers/Layers';
+import Filters from '../Filters/Filters';
 
 require('./Menu.scss');
 
@@ -10,10 +12,14 @@ const logOut = (e) => {
   location.reload();
 };
 
-const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConfig = f => f }) =>
+const Menu = ({ toggleSingleScreen = f => f, toggleSplitScreen = f => f, appConfig = f => f, onToggleSectors = f => f, view, defaultView }) =>
   (appConfig.defaultView === 'framework' ?
     (<div className="framework-menu">
       <div className="framework-brand">
+      <a href="#"
+        onClick={e => onToggleSectors(e)}
+        className="hamburger-menu">
+        <span className="glyphicon glyphicon-list" /></a>
         <img src={appConfig.appIcon} alt={appConfig.appName} className="framework-brand-icon" />
         <div className="framework-brand-title">
           <span className="framework-white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appNameDesc}</div>

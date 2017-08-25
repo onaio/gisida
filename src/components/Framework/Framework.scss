@@ -38,7 +38,7 @@
     position: absolute;
     top: -1em;
     right: 3%;
-    width: 20%;
+    width: 16em;
     background: #fff;
     height: auto;
     border: 1px #eee solid;
@@ -79,7 +79,7 @@
     font-size: 12px;
     line-height: 1.2;
     height: 75%;
-    overflow-y: auto;
+    overflow-y: hidden;
 
     .framework-sector {
       width: 31%;
@@ -89,7 +89,7 @@
       border: 1px #eee solid;
       box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
       overflow-x: auto;
-      margin-bottom: 2em;
+      margin-bottom: 7em;
 
       .sector-header {
         height: 45px;
@@ -168,6 +168,27 @@
         }
       }
     }
+
+    .partners {
+      position: absolute;
+      bottom: 0;
+      margin: 0 auto;
+      width: 90%;
+      z-index: 400;
+      left: 3em;
+      height: 80px;
+
+      img {
+        position: relative;
+        width: 122px;
+        height: 74px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        bottom: 5px;
+        padding: 5px;
+        float: left;
+      }
+    }
   }
 
   .footer {
@@ -182,16 +203,6 @@
       color: #cb181d;
       font-weight: 200;
       font-size: 16px;
-    }
-
-    .partners {
-      content: url("/assets/img/partners.png");
-      position: fixed;
-      bottom: 5px;
-      height: 26px;
-      width: 35%;
-      left: 37%;
-      box-shadow: 0 1px 7px rgba(203, 24, 29, 0.8);
     }
 
     .powered-by {
@@ -253,5 +264,58 @@
 
   .framework-sector ul {
     margin-left: 8% !important;
+  }
+
+  .framework-sectors-menu {
+    display: none !important;
+  }
+
+  .framework-sectors {
+    left: 0 !important;
+  }
+
+  .filter-selection {
+    left: 3.5% !important;
+  }
+
+  .framework-wrapper {
+    .key {
+      right: 20% !important;
+    }
+
+    .key-popup {
+      right: 19% !important;
+    }
+
+    .footer {
+      left: 0 !important;
+    }
+  }
+
+  .framework-reports {
+    display: block;
+    right: 7% !important;
+    top: 8% !important;
+    width: 15% !important
+  }
+
+  .framework-open-btn {
+    display: none;
+  }
+
+  .framework-menu {
+    .framework-brand {
+     width: 80%;
+     padding-right: 10px;
+
+     .hamburger-menu {
+      color: #fff;
+      display: block;
+      float: right;
+      padding: 7px 0;
+      position: relative;
+      right: 3em;
+     }
+   }
   }
 }
