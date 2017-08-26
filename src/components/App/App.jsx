@@ -64,6 +64,7 @@ class App extends React.Component {
     this.viewClick = this.viewClick.bind(this);
     this.updateData = this.updateData.bind(this);
     this.getFilteredData = this.getFilteredData.bind(this);
+    this.fetchFilters = this.fetchFilters.bind(this);
   }
 
   componentDidMount() {
@@ -229,6 +230,33 @@ class App extends React.Component {
     this.setState({ layerData });
   }
 
+  fetchFilters() {
+    const arr = ['population', 'region', 'year'];
+    if (this.state.indicatorData !== undefined) {
+      for (let i = 0; i < this.state.indicatorData.length; i += 1) {
+        const row = this.state.indicatorData[i];
+        for (let j = 0; j < this.props.sectorData.length; j += 1) {
+          for (let k = 0; k < arr.length; k += 1) {
+            if (this.props.sectorData[j].sector === 'REGION') {
+              Object.keys(this.props.sectorData[j].filters).forEach((country) => {
+                if (row.country === country) {
+                  if (!this.props.sectorData[j].filters[country].includes(row.region)) {
+                    this.props.sectorData[j].filters[country].push(row.region);
+                  }
+                }
+              });
+            } else if (row[arr[k]] && this.props.sectorData[j].sector === (arr[k]).toUpperCase()
+              && !this.props.sectorData[j].filters.includes(row[arr[k]])) {
+              this.props.sectorData[j].filters.push(row[arr[k]]);
+            }
+          }
+        }
+      }
+    }
+
+    return this.props.sectorData;
+  }
+
   render() {
     const { changeLayer } = this;
     const { sectorClick } = this;
@@ -239,10 +267,10 @@ class App extends React.Component {
     const { getFilters } = this;
     const { viewClick } = this;
     const layers = this.state;
-    const sectorData = this.props.sectorData;
     const layerData = this.state.layerData;
     const styles = this.props.styles;
     const appConfig = this.props.appConfig;
+    const sectorData = appConfig.defaultView === 'framework' ? this.fetchFilters() : this.props.sectorData;
     const currentView = this.state.view;
     const selected = this.state.selected;
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
@@ -255,7 +283,7 @@ class App extends React.Component {
           toggleSplitScreen={splitScreen}
           appConfig={appConfig}
         />
-        {this.state.view === 'framework' ?
+        {currentView === 'framework' ?
           <Framework
             sectorData={sectorData}
             onToggleView={toggleView}
@@ -277,22 +305,6 @@ class App extends React.Component {
           <Selections
             UIfilters={UIfilters}
           /> : ''}
-        <Sectors
-          view={currentView}
-          defaultView={appConfig.defaultView}
-          sectorMenuId="sector-menu-1"
-          mapTargetId="map-1"
-          onToggleSectors={toggleSectors}
-          onSectorClick={sectorClick}
-          onToggleView={toggleView}
-          onLayerChange={changeLayer}
-          onFilterSelect={getFilters}
-          sectorData={sectorData}
-          layerData={layerData}
-          filters={filters}
-          UIfilters={UIfilters}
-          selected={selected}
-        />
 
         {appConfig.splitView ?
           <div>
