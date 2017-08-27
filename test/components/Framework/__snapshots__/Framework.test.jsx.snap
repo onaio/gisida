@@ -12,7 +12,48 @@ exports[`Framework Framework renders each Framework view 1`] = `
   />
   <div
     className="framework-sectors"
-  />
+  >
+    <div
+      className="partners"
+    >
+      <img
+        alt="DRC"
+        src="/assets/img/DRC_logo.jpg"
+      />
+      <img
+        alt="InterSOS"
+        src="/assets/img/INTERSOS_OFFICIAL_LOGO.jpg"
+      />
+      <img
+        alt="Mercy Corps"
+        src="/assets/img/Mercy_corps.png"
+      />
+      <img
+        alt="Concern"
+        src="/assets/img/Concern_logo.jpg"
+      />
+      <img
+        alt="IRC"
+        src="/assets/img/IRClogo.jpg"
+      />
+      <img
+        alt="RCK"
+        src="/assets/img/RCK_Logo.jpg"
+      />
+      <img
+        alt="NRC"
+        src="/assets/img/NRC_Logo.jpg"
+      />
+      <img
+        alt="ACTED"
+        src="/assets/img/Logo_ACTED.png"
+      />
+      <img
+        alt="STC"
+        src="/assets/img/STC_Logo.png"
+      />
+    </div>
+  </div>
   <div
     className="footer"
   >

@@ -296,7 +296,7 @@
     display: block;
     right: 7% !important;
     top: 8% !important;
-    width: 15% !important
+    width: 15% !important;
   }
 
   .framework-open-btn {
@@ -305,17 +305,17 @@
 
   .framework-menu {
     .framework-brand {
-     width: 80%;
-     padding-right: 10px;
+      width: 80%;
+      padding-right: 10px;
 
-     .hamburger-menu {
-      color: #fff;
-      display: block;
-      float: right;
-      padding: 7px 0;
-      position: relative;
-      right: 3em;
-     }
-   }
+      .hamburger-menu {
+        color: #fff;
+        display: block;
+        float: right;
+        padding: 7px 0;
+        position: relative;
+        right: 3em;
+      }
+    }
   }
 }

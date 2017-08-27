@@ -163,15 +163,15 @@ class Framework extends React.Component {
         <div className="framework-sectors">
           {this.getFrameworkSectors()}
           <div className="partners">
-            <img src="/assets/img/DRC_logo.jpg"/>
-            <img src="/assets/img/INTERSOS_OFFICIAL_LOGO.jpg"/>
-            <img src="/assets/img/Mercy_corps.png"/>
-            <img src="/assets/img/Concern_logo.jpg"/>
-            <img src="/assets/img/IRClogo.jpg"/>
-            <img src="/assets/img/RCK_Logo.jpg"/>
-            <img src="/assets/img/NRC_Logo.jpg"/>
-            <img src="/assets/img/Logo_ACTED.png"/>
-            <img src="/assets/img/STC_Logo.png"/>
+            <img src="/assets/img/DRC_logo.jpg" alt="DRC" />
+            <img src="/assets/img/INTERSOS_OFFICIAL_LOGO.jpg" alt="InterSOS" />
+            <img src="/assets/img/Mercy_corps.png" alt="Mercy Corps" />
+            <img src="/assets/img/Concern_logo.jpg" alt="Concern" />
+            <img src="/assets/img/IRClogo.jpg" alt="IRC" />
+            <img src="/assets/img/RCK_Logo.jpg" alt="RCK" />
+            <img src="/assets/img/NRC_Logo.jpg" alt="NRC" />
+            <img src="/assets/img/Logo_ACTED.png" alt="ACTED" />
+            <img src="/assets/img/STC_Logo.png" alt="STC" />
           </div>
         </div>
         <div className="footer">
