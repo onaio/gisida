@@ -308,7 +308,8 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
+          'circle-color': (layer.categories.color instanceof Array && !layer.paint) ||
+            (layer.color && layer.color === 'string') ?
           {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
@@ -353,15 +354,18 @@ class Map extends React.Component {
               property: layer.source.join[0],
               stops: stops[1][0],
             };
+            circleLayer.source.data = layer.source.data;
+          } else {
+            circleLayer.source.data = layer.source.data;
+            circleLayer.paint['circle-radius'] = 10;
+            circleLayer.paint['circle-color'] = layer.color[0];
           }
-          circleLayer.source.data = layer.source.data;
         }
       }
       // add filter
       if (layer.filter) {
         circleLayer.filter = layer.filter;
       }
-
       this.map.addLayer(circleLayer);
     }
 
@@ -656,7 +660,7 @@ class Map extends React.Component {
   }
 
   addLabels(layer, data) {
-    if (layer.labels && layer.labels.data && layer.labels.join && data) {
+    if (layer.labels && layer.labels.data && layer.labels.join && data && data instanceof Array) {
       const labels = [];
 
       data.forEach((row) => {
@@ -739,8 +743,8 @@ class Map extends React.Component {
           'border-bottom-color:' : 'background:';
 
         background += `<li class="layer-symbols"> <span class="${
-        layer.categories.shape[index]}" style="${style}${color};"></span>${
-        layer.categories.label[index]}</li>`;
+          layer.categories.shape[index]}" style="${style}${color};"></span>${
+          layer.categories.label[index]}</li>`;
       });
       const description = layer[layer.description] ? layer[layer.description] : '';
 
@@ -1051,7 +1055,7 @@ class Map extends React.Component {
         />
         {this.props.mapConfig.defaultView !== 'framework' ?
           <Export map={this.props.mapId} />
-        : ''}
+          : ''}
       </div>
     );
   }
