@@ -7,6 +7,7 @@ import Sectors from '../Sectors/Sectors';
 import Framework from '../Framework/Framework';
 import Selections from '../Selections/Selections';
 import fetchGoogleSheetsData from '../../includes/googlesheetData';
+import { flattenObj } from '../../includes/utils';
 
 
 require('./App.scss');
@@ -232,16 +233,17 @@ class App extends React.Component {
 
   fetchFilters() {
     const arr = ['population', 'region', 'year'];
+    const countries = { Uganda: [], Somalia: [], Ethiopia: [], Kenya: [], Tanzania: [] };
     if (this.state.indicatorData !== undefined) {
       for (let i = 0; i < this.state.indicatorData.length; i += 1) {
         const row = this.state.indicatorData[i];
         for (let j = 0; j < this.props.sectorData.length; j += 1) {
           for (let k = 0; k < arr.length; k += 1) {
             if (this.props.sectorData[j].sector === 'REGION') {
-              Object.keys(this.props.sectorData[j].filters).forEach((country) => {
+              Object.keys(countries).forEach((country) => {
                 if (row.country === country) {
-                  if (!this.props.sectorData[j].filters[country].includes(row.region)) {
-                    this.props.sectorData[j].filters[country].push(row.region);
+                  if (!countries[country].includes(row.region)) {
+                    countries[country].push(row.region);
                   }
                 }
               });
@@ -253,6 +255,13 @@ class App extends React.Component {
         }
       }
     }
+    const index = this.props.sectorData.map(x => x.sector).indexOf('REGION');
+    Object.keys(countries).forEach((key) => {
+      if (!this.props.sectorData[index].headers.includes(key)) {
+        this.props.sectorData[index].headers.push(key);
+      }
+    });
+    this.props.sectorData[index].filters = flattenObj(countries);
 
     return this.props.sectorData;
   }
@@ -276,6 +285,7 @@ class App extends React.Component {
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const UIfilters = this.state.filters.map(filter =>
       filter.region || filter[Object.keys(filter)[0]]);
+      
     return (
       <div>
         <Menu
@@ -305,7 +315,22 @@ class App extends React.Component {
           <Selections
             UIfilters={UIfilters}
           /> : ''}
-
+        <Sectors
+          view={currentView}
+          defaultView={appConfig.defaultView}
+          sectorMenuId="sector-menu-1"
+          mapTargetId="map-1"
+          onToggleSectors={toggleSectors}
+          onSectorClick={sectorClick}
+          onToggleView={toggleView}
+          onLayerChange={changeLayer}
+          onFilterSelect={getFilters}
+          sectorData={sectorData}
+          layerData={layerData}
+          filters={filters}
+          UIfilters={UIfilters}
+          selected={selected}
+        />
         {appConfig.splitView ?
           <div>
             <Map

@@ -23,3 +23,26 @@ export function getLastIndex(arr, item) {
 export const isLoggedIn = function isLoggedIn() {
   return Cookie.get('dsauth') === 'true';
 };
+
+// export const flattenObj = function flattenObj(obj) {
+//   const result = Object.keys(obj).reduce((r, k) =>
+//     r.concat(k, obj[k])
+//     , []);
+
+//   return result;
+// };
+
+export const flattenObj = function flattenObject(obj) {
+  // Returns array with all keys and values of an object
+  const array = [];
+  $.each(obj, (key, value) => {
+    array.push(key);
+    if ($.isArray(value)) {
+      Array.prototype.push.apply(array, value);
+    } else {
+      array.push(value);
+    }
+  });
+
+  return array;
+};
