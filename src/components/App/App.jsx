@@ -210,9 +210,9 @@ class App extends React.Component {
             const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
             layerData[key].color = [color1, color2];
           }
-          if (layerData[key].region && layerData[key].color) {
-            if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions'
-              && !layerData[key].region === 'Settlements') {
+          if (layerData[key].region && layerData[key].color
+            && !layerData[key].region === 'Settlements') {
+            if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
               d3.csv(layerData[key].labels.data, (data) => {
                 const stops = [];
                 layerData[key].source.data = data.filter(row =>
@@ -229,6 +229,19 @@ class App extends React.Component {
               layerData[key].source.data = [{ region: layerData[key].region }];
               layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
             }
+          } else if (layerData[key].region === 'Settlements') {
+            d3.json(layerData[key].source.data, (data) => {
+              const features = [];
+              data.features.forEach((feature) => {
+                if (feature.properties.Country === layerData[key].country) {
+                  features.push(feature);
+                }
+              });
+              data.features = features;
+              layerData[key].source.data = data;
+            });
+            layerData[key].type = 'circle';
+            layerData[key].source.type = 'geojson';
           }
         }
       }

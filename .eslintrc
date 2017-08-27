@@ -31,7 +31,8 @@
                     "layerData",
                     "layerProp",
                     "row",
-                    "obj"
+                    "obj",
+                    "data"
                 ]
             }
         ]
