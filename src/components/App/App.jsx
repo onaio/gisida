@@ -98,7 +98,8 @@ class App extends React.Component {
     }
 
     const filterArr = filters.map(item => item[Object.keys(item)[0]]);
-    if (filterArr.length === 3) {
+    const filterKeys = [].concat(...filters.map(a => Object.keys(a)));
+    if (filterKeys.includes('POPULATION') && filterKeys.includes('YEAR')) {
       this.getFilteredData(filterArr);
     }
     this.setState({ filters });
@@ -285,7 +286,6 @@ class App extends React.Component {
     const filters = this.state.filters.map(filter => filter[Object.keys(filter)[0]]);
     const UIfilters = this.state.filters.map(filter =>
       filter.region || filter[Object.keys(filter)[0]]);
-      
     return (
       <div>
         <Menu
