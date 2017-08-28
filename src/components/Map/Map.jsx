@@ -123,7 +123,7 @@ class Map extends React.Component {
       });
       if (nextProps.layers.layers[l].visible === true
         && nextProps.layers.layers[l].map === this.props.mapId) {
-        this.prepareLayer(nextProps.layers.layers[l]);
+        this.prepareLayer(nextProps.layers.layers[l], nextProps.layerData);
       }
       l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ?
         l - 1 : l;
@@ -155,10 +155,10 @@ class Map extends React.Component {
     return sliderLayers;
   }
 
-  prepareLayer(layer, filterOptions = false) {
+  prepareLayer(layer, layerObj, filterOptions = false) {
     const self = this;
     const layerId = layer.title || layer.id;
-    const layerData = this.props.layerData[layerId];
+    const layerData = layerObj[layerId];
     layerData.id = layerId;
 
     if (layerData.popup && layerData.type !== 'chart') {
@@ -190,7 +190,10 @@ class Map extends React.Component {
       }
       if (fileType === 'geojson') {
         d3.json(layerProp.source.data, (data) => {
-          layerProp.source.data = data;
+          if (layerData.region) {
+            data.features = data.features.filter(feature => feature.properties.Country === layerData.country);
+            layerData.source.data = data;
+          } else layerData.source.data = data;
           renderData(layerProp);
         });
       }
@@ -263,7 +266,7 @@ class Map extends React.Component {
       return null;
     }
 
-    if (this.map.getLayer(layer.id)) {
+    if (this.map.getLayer(layer.id) || this.map.getSource(layer.id)) {
       this.removeLayer(layer);
     }
 

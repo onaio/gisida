@@ -81,7 +81,7 @@ class App extends React.Component {
       if (headers.includes(regions[j])) {
         country = regions[j];
       } else if (filter === regions[j]) {
-        region = `${regions[j]} - ${country}`;
+        region = filter.split(' - ').length > 1 ? filter : `${regions[j]} - ${country}`;
       }
     }
 
@@ -179,7 +179,6 @@ class App extends React.Component {
       'Incomplete data exists': 'grey',
       'Data unavailable': 'white',
     };
-
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
         [key]: {
@@ -202,6 +201,8 @@ class App extends React.Component {
       });
     });
     Object.keys(layerData).forEach((key) => {
+      layerData[key].source.data = 'data/refugee_camps.geojson';
+      layerData[key].source.type = 'vector';
       for (let i = 0; i < filteredData.length; i += 1) {
         if (layerData[key].label === filteredData[i].indicator) {
           $.extend(layerData[key], filteredData[i]);
@@ -221,20 +222,7 @@ class App extends React.Component {
                 });
                 layerData[key].source.stops = stops;
               });
-            } else if (layerData[key].region === 'Settlements') {
-<<<<<<< HEAD
-=======
-              d3.json(layerData[key].source.data, (data) => {
-                const features = [];
-                data.features.forEach((feature) => {
-                  if (feature.properties.Country === layerData[key].country) {
-                    features.push(feature);
-                  }
-                });
-                data.features = features;
-                layerData[key].source.data = data;
-              });
->>>>>>> Remove duplicates, fetch countries and create an object of arrays
+            } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
               layerData[key].type = 'circle';
               layerData[key].source.type = 'geojson';
             } else {
