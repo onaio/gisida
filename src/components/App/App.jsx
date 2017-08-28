@@ -117,8 +117,9 @@ class App extends React.Component {
         this.indicatorData = filteredData;
       }
     }
-
-    this.extendIndicatorDetails(this.indicatorData);
+    const uniqueData = this.indicatorData.filter((row, index, self) => self.findIndex(t =>
+      t.indicator === row.indicator && t.year === row.year && t.region === row.region) === index);
+    this.extendIndicatorDetails(uniqueData);
   }
 
   changeLayer(layer, status, map, type) {
@@ -200,7 +201,6 @@ class App extends React.Component {
         layerData[key] = row[key];
       });
     });
-
     Object.keys(layerData).forEach((key) => {
       for (let i = 0; i < filteredData.length; i += 1) {
         if (layerData[key].label === filteredData[i].indicator) {
@@ -210,8 +210,7 @@ class App extends React.Component {
             const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
             layerData[key].color = [color1, color2];
           }
-          if (layerData[key].region && layerData[key].color
-            && !layerData[key].region === 'Settlements') {
+          if (layerData[key].region && layerData[key].color) {
             if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
               d3.csv(layerData[key].labels.data, (data) => {
                 const stops = [];
@@ -223,25 +222,25 @@ class App extends React.Component {
                 layerData[key].source.stops = stops;
               });
             } else if (layerData[key].region === 'Settlements') {
+<<<<<<< HEAD
+=======
+              d3.json(layerData[key].source.data, (data) => {
+                const features = [];
+                data.features.forEach((feature) => {
+                  if (feature.properties.Country === layerData[key].country) {
+                    features.push(feature);
+                  }
+                });
+                data.features = features;
+                layerData[key].source.data = data;
+              });
+>>>>>>> Remove duplicates, fetch countries and create an object of arrays
               layerData[key].type = 'circle';
               layerData[key].source.type = 'geojson';
             } else {
               layerData[key].source.data = [{ region: layerData[key].region }];
               layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
             }
-          } else if (layerData[key].region === 'Settlements') {
-            d3.json(layerData[key].source.data, (data) => {
-              const features = [];
-              data.features.forEach((feature) => {
-                if (feature.properties.Country === layerData[key].country) {
-                  features.push(feature);
-                }
-              });
-              data.features = features;
-              layerData[key].source.data = data;
-            });
-            layerData[key].type = 'circle';
-            layerData[key].source.type = 'geojson';
           }
         }
       }
@@ -251,8 +250,13 @@ class App extends React.Component {
 
   fetchFilters() {
     const arr = ['population', 'region', 'year'];
-    const countries = { Uganda: [], Somalia: [], Ethiopia: [], Kenya: [], Tanzania: [] };
     if (this.state.indicatorData !== undefined) {
+      const headers = [...new Set(this.state.indicatorData.map(row =>
+        row.country))].filter(country => country !== undefined);
+      const countries = {};
+      headers.forEach((country) => {
+        countries[country] = [];
+      });
       for (let i = 0; i < this.state.indicatorData.length; i += 1) {
         const row = this.state.indicatorData[i];
         for (let j = 0; j < this.props.sectorData.length; j += 1) {
@@ -272,14 +276,14 @@ class App extends React.Component {
           }
         }
       }
+      const index = this.props.sectorData.map(x => x.sector).indexOf('REGION');
+      Object.keys(countries).forEach((key) => {
+        if (!this.props.sectorData[index].headers.includes(key)) {
+          this.props.sectorData[index].headers.push(key);
+        }
+      });
+      this.props.sectorData[index].filters = flattenObj(countries);
     }
-    const index = this.props.sectorData.map(x => x.sector).indexOf('REGION');
-    Object.keys(countries).forEach((key) => {
-      if (!this.props.sectorData[index].headers.includes(key)) {
-        this.props.sectorData[index].headers.push(key);
-      }
-    });
-    this.props.sectorData[index].filters = flattenObj(countries);
 
     return this.props.sectorData;
   }
