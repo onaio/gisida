@@ -201,17 +201,17 @@ class Framework extends React.Component {
               </li>
               <li>
                 <span className="thumb">
-                  <img src="/assets/img/rck_new_logo_0.png"  alt="RCK" />
+                  <img src="/assets/img/rck_new_logo_0.png" alt="RCK" />
                 </span>
               </li>
               <li>
                 <span className="thumb">
-                  <img src="/assets/img/NRCLogo.png"  alt="NRC" />
+                  <img src="/assets/img/NRCLogo.png" alt="NRC" />
                 </span>
               </li>
               <li>
                 <span className="thumb">
-                  <img src="/assets/img/interSOSLogo_0.png"  alt="InterSOS" />
+                  <img src="/assets/img/interSOSLogo_0.png" alt="InterSOS" />
                 </span>
               </li>
             </ul>

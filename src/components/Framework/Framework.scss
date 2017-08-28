@@ -179,13 +179,13 @@
       ul.partners {
         display: block;
         text-align: center;
-        padding: 0px;
+        padding: 0;
         clear: both;
         list-style: none;
 
         li {
           display: inline;
-          padding: 0px;
+          padding: 0;
           width: 125.667px;
 
           .thumb {
@@ -193,8 +193,8 @@
             height: 60px;
             line-height: 60px;
             vertical-align: middle;
-            padding: 0px 0px 0px 0px;
-            margin: 0px;
+            padding: 0;
+            margin: 0;
             width: 10%;
           }
 
