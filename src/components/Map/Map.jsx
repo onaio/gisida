@@ -1043,7 +1043,10 @@ class Map extends React.Component {
   render() {
     return (
       <div>
-        <div id={this.props.mapId}>
+        <div
+          id={this.props.mapId}
+          style={{ top: `${this.props.mapConfig.defaultView === 'framework' ? '3em' : 0}` }}
+        >
           {this.addTimeseriesLayers()}
           <div className={`legend ${this.props.mapId}`} />
           <StyleSelector
