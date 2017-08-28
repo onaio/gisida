@@ -89,7 +89,7 @@
       border: 1px #eee solid;
       box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
       overflow-x: auto;
-      margin-bottom: 7em;
+      margin-bottom: 15em;
 
       .sector-header {
         height: 45px;
@@ -169,24 +169,42 @@
       }
     }
 
-    .partners {
+    .partners-container {
       position: absolute;
       bottom: 0;
       margin: 0 auto;
-      width: 90%;
+      width: 100%;
       z-index: 400;
-      left: 3em;
-      height: 80px;
 
-      img {
-        position: relative;
-        width: 122px;
-        height: 74px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        bottom: 5px;
-        padding: 5px;
-        float: left;
+      ul.partners {
+        display: block;
+        text-align: center;
+        padding: 0px;
+        clear: both;
+        list-style: none;
+
+        li {
+          display: inline;
+          padding: 0px;
+          width: 125.667px;
+
+          .thumb {
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            vertical-align: middle;
+            padding: 0px 0px 0px 0px;
+            margin: 0px;
+            width: 10%;
+          }
+
+          img {
+            position: relative;
+            bottom: 60px;
+            padding: 5px;
+            float: left;
+          }
+        }
       }
     }
   }

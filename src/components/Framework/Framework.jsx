@@ -162,16 +162,59 @@ class Framework extends React.Component {
         <div className="key-popup" />
         <div className="framework-sectors">
           {this.getFrameworkSectors()}
-          <div className="partners">
-            <img src="/assets/img/DRC_logo.jpg" alt="DRC" />
-            <img src="/assets/img/INTERSOS_OFFICIAL_LOGO.jpg" alt="InterSOS" />
-            <img src="/assets/img/Mercy_corps.png" alt="Mercy Corps" />
-            <img src="/assets/img/Concern_logo.jpg" alt="Concern" />
-            <img src="/assets/img/IRClogo.jpg" alt="IRC" />
-            <img src="/assets/img/RCK_Logo.jpg" alt="RCK" />
-            <img src="/assets/img/NRC_Logo.jpg" alt="NRC" />
-            <img src="/assets/img/Logo_ACTED.png" alt="ACTED" />
-            <img src="/assets/img/STC_Logo.png" alt="STC" />
+          <div className="partners-container">
+            <ul className="partners">
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/DRCLogo.png" alt="DRC" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/worldVision.png" alt="World Vision" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/IRCLogo.png" alt="IRC" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/ACTEDLogo.png" alt="ACTED" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/CARELogo.png" alt="CARE" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/OxfamLogo.png" alt="Oxfam" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/mercyCorpsLogo.png" alt="Mercy Corps" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/rck_new_logo_0.png"  alt="RCK" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/NRCLogo.png"  alt="NRC" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/interSOSLogo_0.png"  alt="InterSOS" />
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="footer">
