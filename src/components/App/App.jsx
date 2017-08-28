@@ -184,7 +184,13 @@ class App extends React.Component {
         [key]: {
           id: key,
           label: this.props.layerData[key].label,
-          source: this.props.layerData[key].source,
+          source: {
+            type: 'vector',
+            layer: 'eastern_africa_regions-78vwd2',
+            data: 'data/refugee_camps.geojson',
+            url: 'mapbox://ona.8egz0919',
+            join: ['region', 'region'],
+          },
           type: this.props.layerData[key].type,
           labels: this.props.layerData[key].labels,
           categories: this.props.layerData[key].categories,
@@ -201,8 +207,6 @@ class App extends React.Component {
       });
     });
     Object.keys(layerData).forEach((key) => {
-      layerData[key].source.data = 'data/refugee_camps.geojson';
-      layerData[key].source.type = 'vector';
       for (let i = 0; i < filteredData.length; i += 1) {
         if (layerData[key].label === filteredData[i].indicator) {
           $.extend(layerData[key], filteredData[i]);
