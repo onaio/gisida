@@ -28,7 +28,7 @@ class Login extends React.Component {
             <div className="form-group">
               <div className={this.props.appConfig.defaultView === 'framework' ? 'framework-brand-login' : 'brand-login'} style={{ background: `url(${this.props.appConfig.loginIcon}) no-repeat center center` }} />
               { this.state.loginError === true ? <div className="alert alert-danger">Incorrect password.</div> : null }
-              <label className="password-label" htmlFor="password">Enter your Password</label>
+              <label className="password-label" htmlFor="password">Enter your password</label>
               <input className="form-control" type="password" ref={(input) => { this.password = input; }} autoFocus />
             </div>
             <button className="btn btn-default center-block" type="submit">Log In</button>
