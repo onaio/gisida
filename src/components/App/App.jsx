@@ -186,9 +186,9 @@ class App extends React.Component {
           label: this.props.layerData[key].label,
           source: {
             type: 'vector',
-            layer: 'eastern_africa_regions-78vwd2',
+            layer: 'eastern_africa_regionsgeojson',
             data: 'data/refugee_camps.geojson',
-            url: 'mapbox://ona.8egz0919',
+            url: 'mapbox://ona.2puzee3z',
             join: ['region', 'region'],
           },
           type: this.props.layerData[key].type,
