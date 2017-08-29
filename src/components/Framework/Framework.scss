@@ -203,6 +203,7 @@
             bottom: 60px;
             padding: 5px;
             float: left;
+            max-width: 100%;
           }
         }
       }
@@ -285,11 +286,20 @@
   }
 
   .framework-sectors-menu {
-    display: none !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 20%;
+    display: none;
   }
 
   .framework-sectors {
     left: 0 !important;
+
+    .partners-container {
+      ul.partners li img {
+        bottom: 10px !important;
+      }
+    }
   }
 
   .filter-selection {
@@ -317,10 +327,6 @@
     width: 15% !important;
   }
 
-  .framework-open-btn {
-    display: none;
-  }
-
   .framework-menu {
     .framework-brand {
       width: 80%;
@@ -328,7 +334,7 @@
 
       .hamburger-menu {
         color: #fff;
-        display: block;
+        display: none !important;
         float: right;
         padding: 7px 0;
         position: relative;
@@ -336,4 +342,38 @@
       }
     }
   }
+
+  .mapboxgl-ctrl-top-right {
+    right: auto !important;
+  }
+
+  .leaflet-right .leaflet-control {
+    float: left !important;
+    margin-left: 0 !important;
+  }
+
+  .sectors-menu-wrapper {
+    z-index: 1500;
+
+    .framework-open-btn {
+      display: block !important;
+      left: 70%;
+      top: 0.2em;
+    }
+  }
+}
+
+@media screen and (min-width: 1048px) {
+  .framework-open-btn {
+    display: block !important;
+  }
+}
+
+.mapboxgl-ctrl-top-right {
+  top: 0;
+  left: 0;
+}
+
+.leaflet-right .leaflet-control {
+  top: 0 !important;
 }
