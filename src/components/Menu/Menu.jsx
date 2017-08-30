@@ -29,7 +29,8 @@ const Menu = ({
         <div className="framework-brand-title">
           <span className="framework-white">{appConfig.appName}</span>&nbsp;&nbsp; {appConfig.appNameDesc}</div>
       </div>
-      <div className="framework-reports"><a>How do I use the site?</a>
+      <div className="framework-reports">
+        <a href="http://redss-helpsite.onalabs.org/" target="_blank" rel="noopener noreferrer">How do I use the site?</a>
         <div id="reports-divider"> | </div>
         <a target="_blank" rel="noopener noreferrer" href="http://regionaldss.org/publications/redss-solutions-statements">Download</a></div>
       <a className="framework-sign-out" onClick={logOut} role="button" tabIndex={0}><span className="glyphicon glyphicon-log-out" /></a>
