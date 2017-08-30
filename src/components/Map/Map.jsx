@@ -94,6 +94,7 @@ class Map extends React.Component {
       layersObj: [],
       style: this.props.mapConfig.mapDefaultStyle,
       styles: props.styles,
+      layerObj: this.props.layerData,
     };
   }
 
@@ -109,7 +110,7 @@ class Map extends React.Component {
     this.map.addControl(new mapboxgl.NavigationControl());
     this.map.on('load', () => {
       this.addDefaultLayers();
-      this.addMousemoveEvent();
+      // this.addMousemoveEvent();
     });
   }
 
@@ -118,8 +119,10 @@ class Map extends React.Component {
     if (nextProps.layers.layers.length > 0) {
       let l = nextProps.layers.layers.length - 1;
       const layers = nextProps.layers.layers;
+      const layerData = nextProps.layerData;
       this.setState({
         layers,
+        layerData,
       });
       if (nextProps.layers.layers[l].visible === true
         && nextProps.layers.layers[l].map === this.props.mapId) {
@@ -137,6 +140,7 @@ class Map extends React.Component {
 
   componentDidUpdate() {
     this.addTimeseriesLayers();
+    this.addMousemoveEvent();
   }
 
   getSliderLayers() {
@@ -932,13 +936,13 @@ class Map extends React.Component {
 
   addMousemoveEvent() {
     const self = this;
-    const layerData = this.props.layerData;
     const popup = new mapboxgl.Popup({
       closeOnClick: true,
       closeButton: false,
     });
 
     self.map.on('mousemove', (e) => {
+      const layerData = this.state.layerData;
       const features = self.map.queryRenderedFeatures(e.point, {
         layers: activeLayers,
       });
@@ -968,7 +972,7 @@ class Map extends React.Component {
         }
         const data = (layer.aggregate && layer.aggregate.timeseries) ?
           periodData : layer.source.data;
-        if (layer.description && data) {
+        if (layer.indicator && data) {
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
             /* eslint max-len: ["error", 130]*/
