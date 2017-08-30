@@ -743,7 +743,7 @@ class Map extends React.Component {
         `</div>${
         layer.credit
         }</div>`);
-    } else if (layer.credit && layer.categories.shape && layer.type !== 'circle') {
+    } else if (layer.credit && layer.categories.shape || layer.indicator) {
       layer.categories.color.forEach((color, index) => {
         const style = layer.categories.shape[index] === 'triangle-stroked-11' ||
           layer.categories.shape[index] === 'triangle-15' ?
