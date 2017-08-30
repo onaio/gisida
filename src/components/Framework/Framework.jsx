@@ -109,6 +109,12 @@ class Framework extends React.Component {
                                   <h6 className="modal-header">Indicator</h6>
                                   <p>{indicatorObj[layer]['benchmarksforrating-incomparisontohostcommunitystatusandaspernationalinternationalstandards']}
                                   </p>
+                                  {indicatorObj[layer].proxyindicator !== undefined ?
+                                    <div>
+                                      <h6 className="modal-header">Proxy Indicator</h6>
+                                      <p>{indicatorObj[layer].proxyindicator}</p>
+                                    </div> : ''
+                                  }
                                   <h6 className="modal-header">Analysis</h6>
                                   <div className="data-ratings">
                                     <div className="indicator-status">
