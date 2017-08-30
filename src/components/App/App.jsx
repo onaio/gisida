@@ -194,6 +194,7 @@ class App extends React.Component {
             url: 'mapbox://ona.2puzee3z',
             join: ['region', 'region'],
           },
+          paint: {},
           type: this.props.layerData[key].type,
           labels: this.props.layerData[key].labels,
           categories: this.props.layerData[key].categories,
@@ -253,6 +254,17 @@ class App extends React.Component {
               } else {
                 layerData[key].source.data = [{ region: layerData[key].region }];
                 layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
+
+                if (layerData[key].color.length > 1) {
+                  if (layerData[key].color.includes('orange') && layerData[key].color.includes('red')) {
+                    layerData[key]['use-fill-pattern'] = true;
+                    layerData[key].source.stops = [[layerData[key].region, 'orange-red']];
+                  }
+                  if (layerData[key].color.includes('green') && layerData[key].color.includes('orange')) {
+                    layerData[key]['use-fill-pattern'] = true;
+                    layerData[key].source.stops = [[layerData[key].region, 'green-orange']];
+                  }
+                }
               }
             }
           }

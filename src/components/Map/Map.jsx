@@ -415,18 +415,33 @@ class Map extends React.Component {
         fillLayer['source-layer'] = layer.source.layer;
       }
 
-
       if (layer.source.data && !layer.paint) {
-        const layerStops = timefield ? stops[0][stops[1].length - 1] : stops ? stops[0][0] : '';
+        const layerStops = timefield ? stops[0][stops[1].length - 1] : stops ? stops[0][0] : [[0, 'rgba(0,0,0,0)']];
         const Stops = layer.source.stops ? layer.source.stops : layerStops;
 
-        fillLayer.paint['fill-color'] = {
-          property: layer.source.join[0],
-          stops: Stops,
-          type: 'categorical',
-          default: 'rgba(0,0,0,0)',
-        };
+        // TODO: refactor to use fill pattern after https://github.com/mapbox/mapbox-gl-js/issues/2732
+        // is impelemented.
+        if (layer['use-fill-pattern']) {
+          fillLayer.type = 'symbol';
+          fillLayer.paint = {};
+          fillLayer.layout = {
+            'icon-image': {
+              property: layer.source.join[0],
+              stops: Stops,
+              type: 'categorical',
+              default: 'rgba(0,0,0,0)',
+            },
+          };
+        } else {
+          fillLayer.paint['fill-color'] = {
+            property: layer.source.join[0],
+            stops: Stops,
+            type: 'categorical',
+            default: 'rgba(0,0,0,0)',
+          };
+        }
       }
+
       // add filter
       if (layer.filter) {
         fillLayer.filter = layer.filter;
