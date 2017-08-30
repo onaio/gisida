@@ -99,7 +99,10 @@ class App extends React.Component {
 
     const filterArr = filters.map(item => item[Object.keys(item)[0]]);
     const filterKeys = [].concat(...filters.map(a => Object.keys(a)));
-    if (filterKeys.includes('POPULATION') && filterKeys.includes('YEAR')) {
+    if (filterKeys.includes('POPULATION') && filterKeys.includes('YEAR')
+      && this.state.view === 'map') {
+      this.getFilteredData(filterArr);
+    } else if (filterArr.length === 3) {
       this.getFilteredData(filterArr);
     }
     this.setState({ filters });
@@ -119,7 +122,7 @@ class App extends React.Component {
     }
     const uniqueData = this.indicatorData.filter((row, index, self) => self.findIndex(t =>
       t.indicator === row.indicator && t.year === row.year && t.region === row.region) === index);
-    this.extendIndicatorDetails(uniqueData);
+    this.extendIndicatorDetails(uniqueData, filters);
   }
 
   changeLayer(layer, status, map, type) {
@@ -169,7 +172,7 @@ class App extends React.Component {
     this.setState({ indicatorData: data });
   }
 
-  extendIndicatorDetails(filteredData) {
+  extendIndicatorDetails(filteredData, filters) {
     const indicator = [];
     const layerData = {};
     const status = {
@@ -206,32 +209,51 @@ class App extends React.Component {
         layerData[key] = row[key];
       });
     });
+
     Object.keys(layerData).forEach((key) => {
-      for (let i = 0; i < filteredData.length; i += 1) {
-        if (layerData[key].label === filteredData[i].indicator) {
-          $.extend(layerData[key], filteredData[i]);
-          if (layerData[key].dataratingfordisplaced) {
-            const color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
-            const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
-            layerData[key].color = [color1, color2];
-          }
-          if (layerData[key].region && layerData[key].color) {
-            if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
-              d3.csv(layerData[key].labels.data, (data) => {
-                const stops = [];
-                layerData[key].source.data = data.filter(row =>
-                  row.country === layerData[key].country);
-                layerData[key].source.data.forEach((row) => {
-                  stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
+      if (filters.length === 2) {
+        const layerArr = filteredData.filter(row =>
+          row.indicator === layerData[key].label).filter(item => item.region.split(' - ').shift() !== 'Settlements');
+        if (layerArr.length > 0) {
+          /* eslint max-len: ["error", 130]*/
+          layerData[key].source.data = layerArr.reduce((data, item) => data.concat(
+            {
+              region: item.region,
+              firstColor: status[item.dataratingfordisplaced.split('/ ').shift()],
+              secondColor: status[item.dataratingfordisplaced.split('/ ').pop()],
+              analysis: item.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation,
+              rating: item.dataratingfordisplaced,
+            }), []);
+          layerData[key].source.stops = layerArr.reduce((stops, item) =>
+            stops.concat([[item.region, status[item.dataratingfordisplaced.split('/ ').shift()]]]), []);
+        }
+      } else {
+        for (let i = 0; i < filteredData.length; i += 1) {
+          if (layerData[key].label === filteredData[i].indicator) {
+            $.extend(layerData[key], filteredData[i]);
+            if (layerData[key].dataratingfordisplaced) {
+              const color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
+              const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
+              layerData[key].color = [color1, color2];
+            }
+            if (layerData[key].region && layerData[key].color) {
+              if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
+                d3.csv(layerData[key].labels.data, (data) => {
+                  const stops = [];
+                  layerData[key].source.data = data.filter(row =>
+                    row.country === layerData[key].country);
+                  layerData[key].source.data.forEach((row) => {
+                    stops.push([row[layerData[key].source.join[0]], layerData[key].color[0]]);
+                  });
+                  layerData[key].source.stops = stops;
                 });
-                layerData[key].source.stops = stops;
-              });
-            } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
-              layerData[key].type = 'circle';
-              layerData[key].source.type = 'geojson';
-            } else {
-              layerData[key].source.data = [{ region: layerData[key].region }];
-              layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
+              } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+                layerData[key].type = 'circle';
+                layerData[key].source.type = 'geojson';
+              } else {
+                layerData[key].source.data = [{ region: layerData[key].region }];
+                layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
+              }
             }
           }
         }
