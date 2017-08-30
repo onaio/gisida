@@ -13,21 +13,22 @@ const Layer = ({
   layer,
   layerData,
   headers, defaultView, onLayerChange = f => f }) =>
+  (headers.includes(layer) ?
   (<li className={`layer ${mapTargetId}`}>
-    {headers.includes(layer) ? <b>{layer}</b> :
-    <label className="label" htmlFor={layer} >
-      <input
-        type={defaultView === 'framework' ? 'radio' : 'checkbox'}
-        id={layer.replace(' ', '-')}
-        data-layer={layer}
-        name={'layer'}
-        value={layer}
-        onClick={e => onLayerChange(layer, e.target.checked, mapTargetId,
-        getType(defaultView))}
-      />
-      {layerData[layer].label}</label>
-    }
-  </li>);
+    <b>{layer}</b>
+  </li>) :
+  (<li className={`layer ${mapTargetId}`}>
+    <input
+      type={defaultView === 'framework' ? 'radio' : 'checkbox'}
+      id={layer.replace(' ', '-')}
+      data-layer={layer}
+      name={'layer'}
+      value={layer}
+      onClick={e => onLayerChange(layer, e.target.checked, mapTargetId,
+          getType(defaultView))}
+    />
+    <label htmlFor={layer} >{layerData[layer].label}</label>
+  </li>));
 
 Layer.propTypes = {
   mapTargetId: PropTypes.string.isRequired,

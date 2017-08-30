@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-require('./Filter.scss');
-
 const Filter = ({ filter,
   view,
   headers,
@@ -11,34 +9,33 @@ const Filter = ({ filter,
   checked,
   currentView,
   onFilterSelect = f => f }) =>
-  (<li className={'filter'}>
-    {
-      (headers !== undefined && headers.includes(filter)) ?
-        (<b>{filter}</b>) :
-        view ?
-          (<label htmlFor={view}>
-            <input
-              type="radio"
-              id={view}
-              name="switch-view"
-              value={view}
-              checked={view.toLowerCase() === currentView}
-              onClick={e => onToggleView(e.target.value.toLowerCase())}
-            /> {view}
-          </label>) :
-          (<label htmlFor={filter}>
-            <input
-              type="radio"
-              id={sector}
-              value={filter}
-              name={sector}
-              checked={checked.includes(filter)}
-              onClick={e => onFilterSelect(sector, filter, e.target.checked, headers)}
-            />
-            {filter}</label>
-          )
-    }
-  </li>);
+  (headers !== undefined && headers.includes(filter) ?
+    (<li className={'filter'}>
+      <b>{filter}</b>
+    </li>) :
+    view ?
+      (<li className={'filter'}>
+        <input
+          type="radio"
+          id={view}
+          name="switch-view"
+          value={view}
+          checked={view.toLowerCase() === currentView}
+          onClick={e => onToggleView(e.target.value.toLowerCase())}
+        />
+        <label htmlFor={view}>{view}</label>
+      </li>) :
+      (<li className={'filter'}>
+        <input
+          type="radio"
+          id={sector}
+          value={filter}
+          name={sector}
+          checked={checked.includes(filter)}
+          onClick={e => onFilterSelect(sector, filter, e.target.checked, headers)}
+        />
+        <label htmlFor={filter}>{filter}</label>
+      </li>));
 
 Filter.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.any),

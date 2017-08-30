@@ -24,7 +24,7 @@ exports[`Login Login renders login screen 1`] = `
           className="password-label"
           htmlFor="password"
         >
-          Enter your Password
+          Enter your password
         </label>
         <input
           autoFocus={true}
