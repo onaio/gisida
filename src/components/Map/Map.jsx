@@ -1000,7 +1000,7 @@ class Map extends React.Component {
           });
         }
 
-        if (data && data.forEach instanceof Array) {
+        if (data && data.forEach instanceof Object) {
           data.forEach((row) => {
             if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
               if (row[layer.popup.header]) {
