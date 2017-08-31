@@ -177,7 +177,17 @@ class Framework extends React.Component {
               </li>
               <li>
                 <span className="thumb">
+                  <img src="/assets/img/save_children_logo.png" alt="Save Children" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
                   <img src="/assets/img/worldVision.png" alt="World Vision" />
+                </span>
+              </li>
+              <li>
+                <span className="thumb">
+                  <img src="/assets/img/concern_logo.jpg" alt="Concern Logo" />
                 </span>
               </li>
               <li>

@@ -195,15 +195,23 @@
             vertical-align: middle;
             padding: 0;
             margin: 0;
-            width: 10%;
+            width: 8%;
           }
 
           img {
             position: relative;
-            bottom: 60px;
-            padding: 5px;
+            bottom: 35px;
+            padding: 0;
             float: left;
             max-width: 100%;
+          }
+        }
+
+        li:nth-child(4) {
+          .thumb {
+            img {
+              bottom: 6px;
+            }
           }
         }
       }
