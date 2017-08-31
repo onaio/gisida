@@ -194,10 +194,10 @@ class Map extends React.Component {
       }
       if (fileType === 'geojson') {
         d3.json(layerProp.source.data, (data) => {
-          if (layerData.region) {
-            data.features = data.features.filter(feature => feature.properties.Country === layerData.country);
-            layerData.source.data = data;
-          } else layerData.source.data = data;
+          if (layerProp.region) {
+            data.features = data.features.filter(feature => feature.properties.Country === layerProp.country);
+            layerProp.source.data = data;
+          } else layerProp.source.data = data;
           renderData(layerProp);
         });
       }
@@ -315,8 +315,9 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': (layer.categories.color instanceof Array && !layer.paint) ||
-            (layer.color && layer.color === 'string') ?
+          'circle-color':
+          ((layer.categories.color instanceof Array && !layer.paint) ||
+            (layer.color && layer.color === 'string')) && stops ?
           {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
@@ -415,7 +416,7 @@ class Map extends React.Component {
         fillLayer['source-layer'] = layer.source.layer;
       }
 
-      if (layer.source.data && !layer.paint) {
+      if (layer.source.data) {
         const layerStops = timefield ? stops[0][stops[1].length - 1] : stops ? stops[0][0] : [[0, 'rgba(0,0,0,0)']];
         const Stops = layer.source.stops ? layer.source.stops : layerStops;
 
@@ -997,7 +998,7 @@ class Map extends React.Component {
           });
         }
 
-        if (data) {
+        if (data && data.forEach instanceof Array) {
           data.forEach((row) => {
             if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
               if (row[layer.popup.header]) {
