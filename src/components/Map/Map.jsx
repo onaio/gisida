@@ -986,15 +986,17 @@ class Map extends React.Component {
             }
           });
         }
-        const data = (layer.aggregate && layer.aggregate.timeseries) ?
+        let data = (layer.aggregate && layer.aggregate.timeseries) ?
           periodData : layer.source.data;
         if (layer.indicator && data) {
+          data = data.features ? data.features : data;
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
             /* eslint max-len: ["error", 130]*/
             row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
             row.firstColor = layer.color[0];
             row.secondColor = layer.color[1];
+            row.region = row.region ? row.region : row.properties.region;
           });
         }
 
