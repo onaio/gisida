@@ -425,14 +425,18 @@ class Map extends React.Component {
         if (layer['use-fill-pattern']) {
           fillLayer.type = 'symbol';
           fillLayer.paint = {};
-          fillLayer.layout = {
-            'icon-image': {
-              property: layer.source.join[0],
-              stops: Stops,
-              type: 'categorical',
-              default: 'rgba(0,0,0,0)',
-            },
-          };
+          if (layer.source.type === 'geojson') {
+            fillLayer.layout = layer.layout;
+          } else {
+            fillLayer.layout = {
+              'icon-image': {
+                property: layer.source.join[0],
+                stops: Stops,
+                type: 'categorical',
+                default: 'rgba(0,0,0,0)',
+              },
+            };
+          }
         } else {
           fillLayer.paint['fill-color'] = {
             property: layer.source.join[0],
@@ -825,9 +829,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-      },
+          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+        },
       );
     }
   }

@@ -237,6 +237,18 @@ class App extends React.Component {
               const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
               layerData[key].color = [color1, color2];
             }
+            if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
+              const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
+              layerData[key]['use-fill-pattern'] = true;
+              if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+                layerData[key].layout = {
+                  'icon-image': color,
+                  'icon-size': 0.25,
+                };
+              } else {
+                layerData[key].source.stops = [[layerData[key].region, color]];
+              }
+            }
             if (layerData[key].region && layerData[key].color) {
               if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
                 d3.csv(layerData[key].labels.data, (data) => {
@@ -249,22 +261,11 @@ class App extends React.Component {
                   layerData[key].source.stops = stops;
                 });
               } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
-                layerData[key].type = 'circle';
+                layerData[key].type = layerData[key].color[0] === layerData[key].color[1] ? 'circle' : layerData[key].type;
                 layerData[key].source.type = 'geojson';
               } else {
                 layerData[key].source.data = [{ region: layerData[key].region }];
                 layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
-
-                if (layerData[key].color.length > 1) {
-                  if (layerData[key].color.includes('orange') && layerData[key].color.includes('red')) {
-                    layerData[key]['use-fill-pattern'] = true;
-                    layerData[key].source.stops = [[layerData[key].region, 'orange-red']];
-                  }
-                  if (layerData[key].color.includes('green') && layerData[key].color.includes('orange')) {
-                    layerData[key]['use-fill-pattern'] = true;
-                    layerData[key].source.stops = [[layerData[key].region, 'green-orange']];
-                  }
-                }
               }
             }
           }
