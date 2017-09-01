@@ -61,7 +61,7 @@ const Sectors = ({ sectorMenuId,
                   layerData={layerData}
                   onFilterSelect={onFilterSelect}
                   selected={selected}
-                  sector={sector}
+                  sector={sector.sector}
                 />
               </li>) : ''))
         }
