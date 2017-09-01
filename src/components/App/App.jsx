@@ -173,6 +173,7 @@ class App extends React.Component {
   }
 
   extendIndicatorDetails(filteredData, filters) {
+    // To be refactored
     const indicator = [];
     const layerData = {};
     const status = {
@@ -196,7 +197,17 @@ class App extends React.Component {
           },
           paint: {},
           type: this.props.layerData[key].type,
-          labels: this.props.layerData[key].labels,
+          labels: {
+            data: 'data/eastern_regions.csv',
+            label: '<b> {{region}} </b>',
+            join: ['region', 'region'],
+            coordinates: ['longitude', 'latitude'],
+            minzoom: 3.5,
+            height: 30,
+            width: 30,
+            offset: [-15, -5],
+          },
+          // labels: this.props.layerData[key].labels,
           categories: this.props.layerData[key].categories,
           description: this.props.layerData[key].description,
           credit: this.props.layerData[key].credit,
