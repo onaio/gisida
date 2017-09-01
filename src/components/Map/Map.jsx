@@ -686,7 +686,8 @@ class Map extends React.Component {
     this.removeLegend(layer);
   }
 
-  addLabels(layer, data) {
+  addLabels(layer, layerData) {
+    const data = layer.source.type === 'geojson' ? layerData.features : layerData;
     if (layer.labels && layer.labels.data && layer.labels.join && data && data instanceof Array) {
       const labels = [];
 
@@ -697,9 +698,15 @@ class Map extends React.Component {
         el.style.height = layer.labels.height;
         el.style['font-size'] = '12px';
         el.style['font-weight'] = 'normal';
-        $(el).html(Mustache.render(layer.labels.label, row));
+        $(el).html(Mustache.render(layer.labels.label, row.properties || row));
         layer.labels.data.forEach((label) => {
-          if (label[layer.labels.join[0]] === row[layer.labels.join[1]]) {
+          if (layer.source.type === 'geojson') {
+            labels.push({
+              el,
+              offset: layer.labels.offset,
+              coordinates: row.geometry.coordinates,
+            });
+          } else if (label[layer.labels.join[0]] === row[layer.labels.join[1]]) {
             labels.push({
               el,
               offset: layer.labels.offset,
@@ -829,9 +836,9 @@ class Map extends React.Component {
           $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
           $(`#last-limit-${layer.id}.${mapId}`).text($('last-limit').text());
         }, () => {
-          $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
-          $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
-        },
+        $(`#first-limit-${layer.id}.${mapId}`).text(0 + legendSuffix);
+        $(`#last-limit-${layer.id}.${mapId}`).text(formatNum(Math.max(...dataValues), 1) + legendSuffix);
+      },
       );
     }
   }

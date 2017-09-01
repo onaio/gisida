@@ -263,6 +263,7 @@ class App extends React.Component {
               } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
                 layerData[key].type = layerData[key].color[0] === layerData[key].color[1] ? 'circle' : layerData[key].type;
                 layerData[key].source.type = 'geojson';
+                layerData[key].labels.offset = [-10, 10];
               } else {
                 layerData[key].source.data = [{ region: layerData[key].region }];
                 layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
