@@ -15,7 +15,7 @@ const config = {
 
   output: {
     path: path.resolve('./dist/'),
-    filename: './js/gisida.js',
+    filename: './assets/js/gisida.js',
     libraryTarget: 'var',
     library: 'gisida',
   },
@@ -43,19 +43,19 @@ const config = {
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=application/font-woff&name=./fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=application/font-woff&name=./assets/fonts/[hash].[ext]',
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./assets/fonts/[hash].[ext]',
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader?name=./fonts/[hash].[ext]',
+        use: 'file-loader?name=./assets/fonts/[hash].[ext]',
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'url-loader?limit=10000&mimetype=image/svg+xml&name=./fonts/[hash].[ext]',
+        use: 'url-loader?limit=10000&mimetype=image/svg+xml&name=./assets/fonts/[hash].[ext]',
       },
       {
         test: /\.scss$/,

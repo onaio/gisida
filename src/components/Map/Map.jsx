@@ -9,6 +9,7 @@ import generateStops from '../../includes/generateStops';
 import fetchData from '../../includes/fetchData';
 import { formatNum, getLastIndex } from '../../includes/utils';
 import aggregateData from '../../includes/aggregateData';
+import { processFilters, generateFilterOptions } from '../../includes/filterUtils';
 import TimeSeriesSlider from '../Controls/TimeSeriesSlider/TimeSeriesSlider';
 import FilterSelector from '../Controls/FilterSelector/FilterSelector';
 import StyleSelector from '../Controls/StyleSelector/StyleSelector';
@@ -176,7 +177,11 @@ class Map extends React.Component {
       const fileType = source.split('.').pop();
       if (fileType === 'csv') {
         d3.csv(layerProp.source.data, (data) => {
-          layerProp.source.data = data;
+          layerData.source.data = data;
+          layerData.mergedData = data;
+          if (layerData.aggregate && layerData.aggregate.filter) {
+            generateFilterOptions(layerData);
+          }
           renderData(layerProp);
         });
       }
@@ -207,13 +212,19 @@ class Map extends React.Component {
         q.awaitAll((error, data) => {
           const mergedData = [].concat(...data);
           layerData.mergedData = mergedData;
+          if (layerData.aggregate && layerData.aggregate.filter) {
+            generateFilterOptions(layerData);
+          }
           layerData.source.data = layerData.aggregate.type ?
             aggregateData(layerData, this.props.locations) : mergedData;
           layerData.loaded = true;
           renderData(layerData);
         });
       } else if (filterOptions) {
-        layerData.source.data = aggregateData(layerData, this.props.locations, filterOptions);
+        layerData.source.data =
+          layerData.aggregate.type ?
+            aggregateData(layerData, this.props.locations, filterOptions) :
+            processFilters(layerData, filterOptions);
         self.addLayer(layerData);
       } else {
         // add the already processed layer
@@ -283,16 +294,23 @@ class Map extends React.Component {
         },
         layout: {},
         paint: {
-          'circle-color': layer.categories.color instanceof Array ?
+          'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
           {
             property: layer.source.join[0],
-            stops: stops[0][0],
+            stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
           } :
           layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
-          'circle-stroke-width': 1,
+          'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
+          {
+            property: layer.source.join[0],
+            stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
+            type: 'categorical',
+            default: 0,
+          } :
+            1,
           'circle-stroke-opacity': 1,
         },
       };
@@ -798,20 +816,25 @@ class Map extends React.Component {
           layerObj.source.data instanceof Object && this.state
           && this.state.stops && layerObj.id === this.state.stops.id) {
           let period;
-          let Stops;
+          let colorStops;
+          let radiusStops;
           let breaks;
           let colors;
+          let Stops;
+          let strokeWidthStops;
 
           if (layerObj.type === 'chart') {
             period = this.state.stops.period;
-            Stops = layerObj.source.data;
+            colorStops = layerObj.source.data;
           } else {
             const paintStops = this.state.stops.stops;
-            const stopsIndex = layerObj.type === 'circle' ? 1 : 0;
-            Stops = paintStops[stopsIndex];
+            colorStops = paintStops[0];
+            radiusStops = paintStops[1];
             period = paintStops[2];
             breaks = paintStops[3];
             colors = paintStops[4];
+            strokeWidthStops = paintStops[5];
+            Stops = layerObj.type === 'circle' ? radiusStops : colorStops;
           }
 
           if (slider !== null && label !== null) {
@@ -837,6 +860,20 @@ class Map extends React.Component {
                   type: 'categorical',
                   default: defaultValue,
                 };
+                if (layerObj.type === 'circle' && layerObj.categories.color instanceof Array) {
+                  const newColorStops = {
+                    property: layerObj.source.join[0],
+                    stops: colorStops[index],
+                    type: 'categorical',
+                  };
+                  const newStrokeStops = {
+                    property: layerObj.source.join[0],
+                    stops: strokeWidthStops[index],
+                    type: 'categorical',
+                  };
+                  map.setPaintProperty(layerObj.id, 'circle-color', newColorStops);
+                  map.setPaintProperty(layerObj.id, 'circle-stroke-width', newStrokeStops);
+                }
                 map.setPaintProperty(layerObj.id, paintProperty, newStops);
                 const Data = layerObj.source.data.filter(data =>
                   data[layerObj.aggregate.timeseries.field] === period[index]);
