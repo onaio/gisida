@@ -131,8 +131,7 @@ class Map extends React.Component {
       l = (nextProps.layers.layers[l].type === 'radio' && nextProps.layers.layers.length > 1) ?
         l - 1 : l;
       if (nextProps.layers.layers[l].visible === false
-        && nextProps.layers.layers[l].map === this.props.mapId
-        && nextProps.layers.layers[l].title !== nextProps.layers.layers[l + 1].title) {
+        && nextProps.layers.layers[l].map === this.props.mapId) {
         this.removeLayer(nextProps.layers.layers[l]);
       }
     }
@@ -236,7 +235,7 @@ class Map extends React.Component {
             aggregateData(layerData, this.props.locations, filterOptions) :
             processFilters(layerData, filterOptions);
         self.addLayer(layerData);
-      } else if (typeof layerData.labels.data === 'string') {
+      } else if (layerData.labels && typeof layerData.labels.data === 'string') {
         const fileName = layerData.labels.data;
         const fileType = fileName.split('.').pop();
         if (fileType === 'csv') {
