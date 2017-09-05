@@ -236,8 +236,12 @@ class App extends React.Component {
               analysis: item.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation,
               rating: item.dataratingfordisplaced,
             }), []);
-          layerData[key].source.stops = layerArr.reduce((stops, item) =>
-            stops.concat([[item.region, status[item.dataratingfordisplaced.split('/ ').shift()]]]), []);
+          layerData[key].source.stops = layerData[key].source.data.reduce((stops, item) =>
+            stops.concat([[item.region, (item.firstColor === item.secondColor) ?
+              item.firstColor : `${item.firstColor}-${item.secondColor}`]]), []);
+          if (layerData[key].source.stops.filter(stop => stop[1].split('-').length === 2).length > 0) {
+            layerData[key]['use-fill-pattern'] = true;
+          }
         }
       } else {
         for (let i = 0; i < filteredData.length; i += 1) {
@@ -247,18 +251,6 @@ class App extends React.Component {
               const color1 = status[layerData[key].dataratingfordisplaced.split('/ ').shift()];
               const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
               layerData[key].color = [color1, color2];
-            }
-            if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
-              const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
-              layerData[key]['use-fill-pattern'] = true;
-              if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
-                layerData[key].layout = {
-                  'icon-image': color,
-                  'icon-size': 0.25,
-                };
-              } else {
-                layerData[key].source.stops = [[layerData[key].region, color]];
-              }
             }
             if (layerData[key].region && layerData[key].color) {
               if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
@@ -278,6 +270,19 @@ class App extends React.Component {
               } else {
                 layerData[key].source.data = [{ region: layerData[key].region }];
                 layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
+
+                if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
+                  const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
+                  layerData[key]['use-fill-pattern'] = true;
+                  if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+                    layerData[key].layout = {
+                      'icon-image': color,
+                      'icon-size': 0.25,
+                    };
+                  } else {
+                    layerData[key].source.stops = [[layerData[key].region, color]];
+                  }
+                }
               }
             }
           }

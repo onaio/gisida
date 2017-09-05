@@ -269,7 +269,8 @@ class Map extends React.Component {
       return null;
     }
 
-    if (this.map.getLayer(layer.id) || this.map.getSource(layer.id)) {
+    if (this.map.getLayer(layer.id) || this.map.getSource(layer.id) ||
+      this.map.getLayer(`${layer.id}-1`) || this.map.getSource(`${layer.id}-1`)) {
       this.removeLayer(layer);
     }
 
@@ -414,20 +415,25 @@ class Map extends React.Component {
         fillLayer.source.url = layer.source.url;
         fillLayer['source-layer'] = layer.source.layer;
       }
-
+      let fillLayer2;
       if (layer.source.data) {
         const layerStops = timefield ? stops[0][stops[1].length - 1] : stops ? stops[0][0] : [[0, 'rgba(0,0,0,0)']];
         const Stops = layer.source.stops ? layer.source.stops : layerStops;
 
+        const patternStops = Stops.filter(stop => stop[1].split('-').length === 2);
+        const fillStops = Stops.filter(stop => stop[1].split('-').length === 1);
+
         // TODO: refactor to use fill pattern after https://github.com/mapbox/mapbox-gl-js/issues/2732
         // is impelemented.
-        if (layer['use-fill-pattern']) {
-          fillLayer.type = 'symbol';
-          fillLayer.paint = {};
+        if (patternStops.length > 0) {
+          fillLayer2 = Object.assign({}, fillLayer);
+          fillLayer2.id = fillStops.length > 0 ? `${fillLayer.id}-1` : fillLayer.id;
+          fillLayer2.type = 'symbol';
+          fillLayer2.paint = {};
           if (layer.source.type === 'geojson') {
-            fillLayer.layout = layer.layout;
+            fillLayer2.layout = layer.layout;
           } else {
-            fillLayer.layout = {
+            fillLayer2.layout = {
               'icon-image': {
                 property: layer.source.join[0],
                 stops: Stops,
@@ -436,22 +442,24 @@ class Map extends React.Component {
               },
             };
           }
-        } else {
-          fillLayer.paint['fill-color'] = {
-            property: layer.source.join[0],
-            stops: Stops,
-            type: 'categorical',
-            default: 'rgba(0,0,0,0)',
-          };
         }
+        fillLayer.paint['fill-color'] = {
+          property: layer.source.join[0],
+          stops: fillStops,
+          type: 'categorical',
+          default: 'rgba(0,0,0,0)',
+        };
       }
-
       // add filter
       if (layer.filter) {
         fillLayer.filter = layer.filter;
       }
-
-      this.map.addLayer(fillLayer);
+      if (fillLayer.paint['fill-color'].stops.length > 0) {
+        this.map.addLayer(fillLayer);
+      }
+      if (fillLayer2) {
+        this.map.addLayer(fillLayer2);
+      }
     }
 
     /*
@@ -678,6 +686,11 @@ class Map extends React.Component {
       }
       if (this.map.getSource(layerId)) {
         this.map.removeSource(layerId);
+      }
+      if (this.map.getLayer(`${layerId}-1`) && this.map.getSource(`${layerId}-1`)) {
+        this.map.removeLayer(`${layerId}-1`);
+        this.map.removeSource(`${layerId}-1`);
+        $(`.marker-label-${layerId}-1-${this.props.mapId}`).remove();
       }
     }
     this.setState({ layerObj: null });
