@@ -252,6 +252,18 @@ class App extends React.Component {
               const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
               layerData[key].color = [color1, color2];
             }
+            if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
+              const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
+              layerData[key]['use-fill-pattern'] = true;
+              if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+                layerData[key].layout = {
+                  'icon-image': color,
+                  'icon-size': 0.25,
+                };
+              } else {
+                layerData[key].source.stops = [[layerData[key].region, color]];
+              }
+            }
             if (layerData[key].region && layerData[key].color) {
               if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {
                 d3.csv(layerData[key].labels.data, (data) => {
@@ -269,19 +281,8 @@ class App extends React.Component {
                 layerData[key].labels.offset = [-10, 10];
               } else {
                 layerData[key].source.data = [{ region: layerData[key].region }];
-                layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
-
-                if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
-                  const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
-                  layerData[key]['use-fill-pattern'] = true;
-                  if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
-                    layerData[key].layout = {
-                      'icon-image': color,
-                      'icon-size': 0.25,
-                    };
-                  } else {
-                    layerData[key].source.stops = [[layerData[key].region, color]];
-                  }
+                if (layerData[key].color.length > 1 && layerData[key].color[0] === layerData[key].color[1]) {
+                  layerData[key].source.stops = [[layerData[key].region, layerData[key].color[0]]];
                 }
               }
             }

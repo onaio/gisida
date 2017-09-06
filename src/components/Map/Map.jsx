@@ -425,7 +425,7 @@ class Map extends React.Component {
 
         // TODO: refactor to use fill pattern after https://github.com/mapbox/mapbox-gl-js/issues/2732
         // is impelemented.
-        if (patternStops.length > 0) {
+        if (patternStops.length > 0 || layer.layout) {
           fillLayer2 = Object.assign({}, fillLayer);
           fillLayer2.id = fillStops.length > 0 ? `${fillLayer.id}-1` : fillLayer.id;
           fillLayer2.type = 'symbol';
