@@ -454,7 +454,9 @@ class Map extends React.Component {
       if (layer.filter) {
         fillLayer.filter = layer.filter;
       }
-      if (fillLayer.paint['fill-color'].stops.length > 0) {
+      if (fillLayer.paint['fill-color'].stops && fillLayer.paint['fill-color'].stops.length > 0) {
+        this.map.addLayer(fillLayer);
+      } else if (!fillLayer.paint['fill-color'].stops && !fillLayer2) {
         this.map.addLayer(fillLayer);
       }
       if (fillLayer2) {
