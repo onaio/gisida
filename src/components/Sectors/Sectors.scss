@@ -20,7 +20,7 @@
         color: #555;
         display: block;
         font-weight: 600;
-        padding: 10px 15px;
+        padding: 25px 15px;
 
         &:hover,
         &:focus {
@@ -40,6 +40,20 @@
       display: block;
       width: 100%;
     }
+  }
+  input[type='checkbox'] {
+    margin-right: 5px;
+    position: absolute;
+    left: 0;
+    top: -2px;
+  }
+  label {
+    color: #555;
+    font-weight: normal;
+    font-size: 12px;
+    width: 80%;
+    display: block;
+    margin: 0 0 10px 20px;
   }
 }
 
