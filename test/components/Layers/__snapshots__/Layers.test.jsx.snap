@@ -12,18 +12,17 @@ exports[`Layers Layers renders indicators 1`] = `
   <li
     className="layer map-1"
   >
+    <input
+      data-layer="test_layer"
+      id="test_layer"
+      name="layer"
+      onClick={[Function]}
+      type="checkbox"
+      value="test_layer"
+    />
     <label
-      className="label"
       htmlFor="test_layer"
     >
-      <input
-        data-layer="test_layer"
-        id="test_layer"
-        name="layer"
-        onClick={[Function]}
-        type="checkbox"
-        value="test_layer"
-      />
       Test Layer
     </label>
   </li>

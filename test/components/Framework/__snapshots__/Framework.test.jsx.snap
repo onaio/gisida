@@ -34,8 +34,28 @@ exports[`Framework Framework renders each Framework view 1`] = `
             className="thumb"
           >
             <img
+              alt="Save Children"
+              src="/assets/img/save_children_logo.png"
+            />
+          </span>
+        </li>
+        <li>
+          <span
+            className="thumb"
+          >
+            <img
               alt="World Vision"
               src="/assets/img/worldVision.png"
+            />
+          </span>
+        </li>
+        <li>
+          <span
+            className="thumb"
+          >
+            <img
+              alt="Concern Logo"
+              src="/assets/img/concern_logo.jpg"
             />
           </span>
         </li>

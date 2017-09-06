@@ -12,17 +12,17 @@ exports[`Filters Filters renders each filters 1`] = `
   <li
     className="filter"
   >
+    <input
+      checked={false}
+      id="test_sector"
+      name="test_sector"
+      onClick={[Function]}
+      type="radio"
+      value="test_filters"
+    />
     <label
       htmlFor="test_filters"
     >
-      <input
-        checked={false}
-        id="test_sector"
-        name="test_sector"
-        onClick={[Function]}
-        type="radio"
-        value="test_filters"
-      />
       test_filters
     </label>
   </li>

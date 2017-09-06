@@ -52,18 +52,17 @@ exports[`Sectors Sectors renders sectors.json clusters 1`] = `
           <li
             className="filter"
           >
+            <input
+              checked={false}
+              id="test_views"
+              name="switch-view"
+              onClick={[Function]}
+              type="radio"
+              value="test_views"
+            />
             <label
               htmlFor="test_views"
             >
-              <input
-                checked={false}
-                id="test_views"
-                name="switch-view"
-                onClick={[Function]}
-                type="radio"
-                value="test_views"
-              />
-               
               test_views
             </label>
           </li>
