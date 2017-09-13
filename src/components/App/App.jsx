@@ -178,7 +178,7 @@ class App extends React.Component {
     const layerData = {};
     const status = {
       'Well on the way to being achieved': 'green',
-      'Not fully met obstacles exist': 'orange',
+      'Not fully met, obstacles exist': 'orange',
       'Far from met': 'red',
       'Incomplete data exists': 'grey',
       'Data unavailable': 'white',
