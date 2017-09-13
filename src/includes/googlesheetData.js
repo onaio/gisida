@@ -4,7 +4,7 @@ function convertData(data) {
   const googleSheetsData = data.feed.entry;
   const convertedData = [];
   for (let i = 0; i < googleSheetsData.length; i += 1) {
-    const rowArr = googleSheetsData[i].content.$t.split(', ');
+    const rowArr = googleSheetsData[i].content.$t.split(/, (?=[^,]+:)/);
     const row = rowArr.reduce((obj, item) => {
       const parts = item.split(': ');
       obj[parts[0]] = parts[1];
