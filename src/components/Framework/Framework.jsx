@@ -68,7 +68,7 @@ class Framework extends React.Component {
                     <div>
                       <div className="sector-indicator">
                         {indicatorObj[layer] ?
-                          <div className="status">
+                          <div className="status" data-toggle="modal" data-target={indicatorObj[layer] ? `#${layer}` : ''}>
                             <div
                               className="status-1"
                               style={{
