@@ -248,6 +248,8 @@
 }
 
 .modal-body {
+  padding: 15px 15px 15px 0 !important;
+
   h6 {
     font-family: inherit;
     font-weight: 600;
@@ -384,4 +386,18 @@
 
 .leaflet-right .leaflet-control {
   top: 0 !important;
+}
+
+.modal-header {
+  display: -webkit-inline-box !important;
+  padding: 15px 15px 15px 0 !important;
+  width: 100%;
+}
+
+.modal-title {
+  width: 85% !important;
+}
+
+.modal-backdrop {
+  background: transparent !important;
 }
