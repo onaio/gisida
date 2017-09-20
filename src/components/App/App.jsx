@@ -180,7 +180,7 @@ class App extends React.Component {
       'Well on the way to being achieved': 'green',
       'Not fully met, obstacles exist': 'orange',
       'Far from met': 'red',
-      'Incomplete data exists': 'grey',
+      'Incomplete data exists': 'transparent',
       'Data unavailable': 'white',
     };
     Object.keys(this.props.layerData).forEach((key) => {

@@ -68,7 +68,16 @@ class Framework extends React.Component {
                     <div>
                       <div className="sector-indicator">
                         {indicatorObj[layer] ?
-                          <div className="status" data-toggle="modal" data-target={indicatorObj[layer] ? `#${layer}` : ''}>
+                          <div
+                            className="status"
+                            data-toggle="modal"
+                            data-target={indicatorObj[layer] ? `#${layer}` : ''}
+                            style={{
+                              border: `${indicatorObj[layer].color !== undefined &&
+                              indicatorObj[layer].color[0] === 'transparent' ?
+                              '1px dotted black' : '1px solid black'}`,
+                            }}
+                          >
                             <div
                               className="status-1"
                               style={{
@@ -117,7 +126,14 @@ class Framework extends React.Component {
                                   }
                                   <h6 className="modal-header">Analysis</h6>
                                   <div className="data-ratings">
-                                    <div className="indicator-status">
+                                    <div
+                                      className="indicator-status"
+                                      style={{
+                                        border: `${indicatorObj[layer].color !== undefined &&
+                                        indicatorObj[layer].color[0] === 'transparent' ?
+                                        '1px dotted black' : '1px solid black'}`,
+                                      }}
+                                    >
                                       <div
                                         className="indicator-status-1"
                                         style={{
