@@ -242,6 +242,9 @@ class App extends React.Component {
           if (layerData[key].source.stops.filter(stop => stop[1].split('-').length === 2).length > 0) {
             layerData[key]['use-fill-pattern'] = true;
           }
+          if (layerData[key].source.stops[0][1] === 'transparent') {
+            layerData[key].type = 'line';
+          }
         }
       } else {
         for (let i = 0; i < filteredData.length; i += 1) {
@@ -263,6 +266,8 @@ class App extends React.Component {
               } else {
                 layerData[key].source.stops = [[layerData[key].region, color]];
               }
+            } else if (layerData[key].color.includes('transparent')) {
+              layerData[key].type = 'line';
             }
             if (layerData[key].region && layerData[key].color) {
               if (layerData[key].region === 'All regions' || layerData[key].region === 'Regions') {

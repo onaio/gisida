@@ -489,6 +489,10 @@ class Map extends React.Component {
       if (layer.maxzoom) {
         lineLayer.maxzoom = layer.maxzoom;
       }
+      if (layer.description === 'indicator-longname') {
+        lineLayer.filter = ['==', layer.source.join[0], layer.source.data[0].region];
+        lineLayer.paint['line-dasharray'] = [3, 3];
+      }
       if (layer.source.type === 'geojson') {
         lineLayer.source.data = layer.source.data;
       } else {
