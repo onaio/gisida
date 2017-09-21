@@ -795,7 +795,9 @@ class Map extends React.Component {
           'border-bottom-color:' : 'background:';
 
         background += `<li class="layer-symbols"> <span class="${
-          layer.categories.shape[index]}" style="${style}${color};"></span>${
+          layer.categories.shape[index]}" style="${style}${color}; 
+          border:${color === 'transparent' ? '1px dotted black' : '1px solid black'};">
+          </span>${
           layer.categories.label[index]}</li>`;
       });
       const description = layer[layer.description] ? layer[layer.description] : '';
@@ -1021,7 +1023,7 @@ class Map extends React.Component {
           data = data.features ? data.features : data;
           data.forEach((row) => {
             row.rating = layer.dataratingfordisplaced;
-            /* eslint max-len: ["error", 130]*/
+            /* eslint max-len: ["error", 500]*/
             row.analysis = layer.analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation;
             row.firstColor = layer.color[0];
             row.secondColor = layer.color[1];
@@ -1033,6 +1035,8 @@ class Map extends React.Component {
           data.forEach((row) => {
             if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
               if (row[layer.popup.header]) {
+                layer.popup.body = row.firstColor === 'transparent' ?
+                  "<br><b> Analysis </b><br><div class='map-status-popup'><div class='map-status-colors' style='border: 1px dotted black'><div class='map-status-firstcolor' style=background:{{ firstColor }}></div><div class='map-status-secondcolor' style=background:{{ secondColor }}></div></div><div class='map-status-rating'> {{ rating }}</div></div> <br> {{ analysis }}" : layer.popup.body;
                 content = `<div class="popup-header"><b>${row[layer.popup.header]}</b></div>` +
                   `<div class="popup-body">${Mustache.render(layer.popup.body, row)}</div>`;
               } else {
