@@ -255,7 +255,8 @@ class App extends React.Component {
               const color2 = status[layerData[key].dataratingfordisplaced.split('/ ').pop()];
               layerData[key].color = [color1, color2];
             }
-            if (layerData[key].color.length > 1 && layerData[key].color[0] !== layerData[key].color[1]) {
+            if (layerData[key].color && layerData[key].color.length > 1
+              && layerData[key].color[0] !== layerData[key].color[1]) {
               const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
               layerData[key]['use-fill-pattern'] = true;
               if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
@@ -266,7 +267,7 @@ class App extends React.Component {
               } else {
                 layerData[key].source.stops = [[layerData[key].region, color]];
               }
-            } else if (layerData[key].color.includes('transparent')) {
+            } else if (layerData[key].color && layerData[key].color.includes('transparent')) {
               layerData[key].type = 'line';
             }
             if (layerData[key].region && layerData[key].color) {
