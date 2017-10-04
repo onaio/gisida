@@ -48,7 +48,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^15.6.2",
-
+    "redux": "^3.7.2",
     "webpack": "^2.6.1"
   },
   "devDependencies": {
@@ -62,7 +62,7 @@
     "jest": "^20.0.4",
     "jest-css-modules": "^1.1.0",
     "stylelint": "^8.0.0",
-    "stylelint-config-standard": "^17.0.0",
+    "stylelint-config-standard": "^17.0.0"
   },
   "keywords": [
     "mapboxgl",
