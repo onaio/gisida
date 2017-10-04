@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import defaultConfig from './../config';
+import defaultConfig from './../../../config';
 const options = window.gisidaOptions; // not sure how else to get this from the Host...
 
 const initialLayersState = {

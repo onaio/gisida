@@ -1,7 +1,8 @@
 const gisida = {};
 
 gisida.version = require('../package.json').version;
-gisida.Gisida = require('./components/Gisida').default;
-gisida.Reducer = require('./reducers/Reducer').default;
+gisida.GisidaCanvas = require('./components/Gisida').default;
+gisida.Reducers = require('./lib/store/reducers/Reducers').default;
+gisida.MapBoxUtils = require('./lib/map/MapBoxUtils').default;
 
 module.exports = gisida
