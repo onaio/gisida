@@ -165,7 +165,9 @@ class Map extends React.Component {
     layerData.id = layerId;
 
     if (layerData.popup && layerData.type !== 'chart') {
-      activeLayers.push(layerData.id);
+      const id = layerData.layout && layerData.layout['icon-image'] ?
+        `${layerData.id}-1` : layerData.id;
+      activeLayers.push(id);
     }
 
     function renderData(layerProp) {
@@ -323,7 +325,7 @@ class Map extends React.Component {
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
           } :
-          layer.categories.color,
+            layer.categories.color,
           'circle-opacity': 0.8,
           'circle-stroke-color': '#fff',
           'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
@@ -678,8 +680,15 @@ class Map extends React.Component {
       });
     }
     if (layerData.popup && layerData.type !== 'chart') {
-      const index = activeLayers.indexOf(layerData.id);
-      activeLayers.splice(index, 1);
+      const id = layerData.layout && layerData.layout['icon-image'] ?
+        `${layerData.id}-1` : layerData.id;
+      let index = activeLayers.indexOf(id);
+      if (this.map.getLayer(id)) {
+        if (index === activeLayers.length - 1 && activeLayers[index - 1].split('-').pop() === '1') {
+          index -= 1;
+        }
+        activeLayers.splice(index, 1);
+      }
     }
     if (layerData.labels) {
       $(`.marker-label-${layerId}-${this.props.mapId}`).remove();
@@ -1005,7 +1014,7 @@ class Map extends React.Component {
       const feature = features[0];
       let content = '';
       const activeLayerId = feature.layer.id;
-      const layer = layerData[activeLayerId];
+      const layer = activeLayerId.split('-').pop() === '1' ? layerData[activeLayerId.slice(0, -2)] : layerData[activeLayerId];
 
       if (layer.type !== 'chart' && layer.popup) {
         const periodData = [];
