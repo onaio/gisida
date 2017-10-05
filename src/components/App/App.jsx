@@ -183,6 +183,7 @@ class App extends React.Component {
       'Incomplete data exists': 'transparent',
       'Data unavailable': 'white',
     };
+    const countries = ['Uganda', 'Ethiopia'];
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
         [key]: {
@@ -281,7 +282,8 @@ class App extends React.Component {
                   });
                   layerData[key].source.stops = stops;
                 });
-              } else if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+              } else if ((layerData[key].region).split(' - ').shift() === 'Settlements' 
+                || countries.includes(layerData[key].region)) {
                 layerData[key].type = layerData[key].color[0] === layerData[key].color[1] ? 'circle' : layerData[key].type;
                 layerData[key].source.type = 'geojson';
                 layerData[key].labels.offset = [-10, 10];

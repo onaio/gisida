@@ -369,6 +369,9 @@ class Map extends React.Component {
             circleLayer.source.data = layer.source.data;
             circleLayer.paint['circle-radius'] = 10;
             circleLayer.paint['circle-color'] = layer.color[0];
+            circleLayer.paint['circle-stroke-color'] = '#b3b3b3';
+            circleLayer.paint['circle-stroke-width'] = 1;
+            circleLayer.paint['circle-stroke-opacity'] = 1;
           }
         }
       }
