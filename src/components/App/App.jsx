@@ -260,7 +260,8 @@ class App extends React.Component {
               && layerData[key].color[0] !== layerData[key].color[1]) {
               const color = `${layerData[key].color[0]}-${layerData[key].color[1]}`;
               layerData[key]['use-fill-pattern'] = true;
-              if ((layerData[key].region).split(' - ').shift() === 'Settlements') {
+              if ((layerData[key].region).split(' - ').shift() === 'Settlements'
+                || countries.includes(layerData[key].region)) {
                 layerData[key].layout = {
                   'icon-image': color,
                   'icon-size': 0.25,
