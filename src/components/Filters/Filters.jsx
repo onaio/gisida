@@ -28,6 +28,7 @@ const Filters = ({
           key={filter}
           filter={filter}
           headers={headers}
+          filters={filters}
           sector={sector}
           onFilterSelect={onFilterSelect}
           checked={checked}

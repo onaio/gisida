@@ -46,3 +46,15 @@ export const flattenObj = function flattenObject(obj) {
 
   return array;
 };
+
+export function getDuplicateIndices(arr, item) {
+  const indices = [];
+
+  arr.filter((row, index) => {
+    if (row === item) {
+      indices.push(index);
+    }
+    return null;
+  });
+  return indices;
+}
