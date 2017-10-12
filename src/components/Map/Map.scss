@@ -198,6 +198,8 @@
 
 .popup-body {
   max-width: 400px;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .map-status-popup {
@@ -225,4 +227,9 @@
     display: table-cell;
     vertical-align: middle;
   }
+}
+
+.mapboxgl-popup-content {
+  max-height: 300px;
+  overflow: auto;
 }
