@@ -183,7 +183,7 @@ class App extends React.Component {
       'Incomplete data exists': 'transparent',
       'Data unavailable': 'white',
     };
-    const countries = ['Uganda', 'Ethiopia'];
+    const countries = ['Tanzania', 'Uganda', 'Ethiopia'];
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
         [key]: {
