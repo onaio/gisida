@@ -74,8 +74,8 @@ class Framework extends React.Component {
                             data-target={indicatorObj[layer] ? `#${layer}` : ''}
                             style={{
                               border: `${indicatorObj[layer].color !== undefined &&
-                              indicatorObj[layer].color[0] === 'transparent' ?
-                              '1px dotted black' : '1px solid black'}`,
+                                indicatorObj[layer].color[0] === 'transparent' ?
+                                '1px dotted black' : '1px solid black'}`,
                             }}
                           >
                             <div
@@ -130,8 +130,8 @@ class Framework extends React.Component {
                                       className="indicator-status"
                                       style={{
                                         border: `${indicatorObj[layer].color !== undefined &&
-                                        indicatorObj[layer].color[0] === 'transparent' ?
-                                        '1px dotted black' : '1px solid black'}`,
+                                          indicatorObj[layer].color[0] === 'transparent' ?
+                                          '1px dotted black' : '1px solid black'}`,
                                       }}
                                     >
                                       <div
@@ -152,7 +152,7 @@ class Framework extends React.Component {
                                     <div className="indicator-rating">{indicatorObj[layer].dataratingfordisplaced}</div>
                                   </div>
                                   <p>
-                                    {indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation}
+                                    {indicatorObj[layer].analysisandreasonforratingperindicatorbasedonavailabledataandincludingdisaggregatedingormation }
                                   </p>
                                 </div>
                               </div>

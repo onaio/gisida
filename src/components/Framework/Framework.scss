@@ -285,6 +285,11 @@
   }
 }
 
+p {
+  text-align: justify;
+  white-space: pre-wrap;
+}
+
 @media screen and (max-width: 1048px) {
   .framework-sector {
     width: 95% !important;

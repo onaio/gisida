@@ -283,7 +283,7 @@ class App extends React.Component {
                   });
                   layerData[key].source.stops = stops;
                 });
-              } else if ((layerData[key].region).split(' - ').shift() === 'Settlements' 
+              } else if ((layerData[key].region).split(' - ').shift() === 'Settlements'
                 || countries.includes(layerData[key].region)) {
                 layerData[key].type = layerData[key].color[0] === layerData[key].color[1] ? 'circle' : layerData[key].type;
                 layerData[key].source.type = 'geojson';
