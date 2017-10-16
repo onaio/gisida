@@ -1,1 +1,0 @@
-// Code that reads mapsec from layer.json config goes here
