@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import defaultConfig from './../../../config';
+import config from './../config';
+
 const options = window.gisidaOptions; // not sure how else to get this from the Host...
 
 const initialLayersState = {
@@ -7,7 +8,7 @@ const initialLayersState = {
   sectors: []
 };
 
-function updateLayers (sate = initialLayersState, action) {
+function updateLayers (state = initialLayersState, action) {
   switch (action.type) {
     case 'CHANGE_LAYER':
       const { layer, status, map } = action;
@@ -40,15 +41,7 @@ function updateLayers (sate = initialLayersState, action) {
   }
 }
 
-const initialAppState = { // todo - initiate these with configs and options?
-  sectorData: {},
-  layerData: {},
-  styles: {},
-  appConfig: {},
-  locations: {}
-}
-
-function appState (state = initialAppState, action) {
+function appState(state = config, action) {
   switch (action.type) {
     default:
       return state;
