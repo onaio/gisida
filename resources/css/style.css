@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+body {
+	background: #F7F7F7;
+	background-image: url('../img/mapspots.png');
+	background-size: contain;
+	background-attachment: fixed;
+	top: 0;
+	left: 0;
+	color:#009688;
+}
+
+/*
+.logo {
+	background-image: url('../img/gisida-logo.png');
+	background-size: contain;
+	width:100px;
+	height:100px;
+	position: relative;
+}
+
+*/
