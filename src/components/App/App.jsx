@@ -183,7 +183,7 @@ class App extends React.Component {
       'Incomplete data exists': 'transparent',
       'Data unavailable': 'white',
     };
-    const countries = ['Tanzania', 'Uganda', 'Ethiopia'];
+    const countries = ['Tanzania', 'Uganda'];
     Object.keys(this.props.layerData).forEach((key) => {
       indicator.push({
         [key]: {
@@ -309,7 +309,9 @@ class App extends React.Component {
         row.country))].filter(country => country !== undefined);
       const countries = {};
       headers.forEach((country) => {
-        countries[country] = [];
+        if (country !== 'Ethiopia') {
+          countries[country] = [];
+        }
       });
       for (let i = 0; i < this.state.indicatorData.length; i += 1) {
         const row = this.state.indicatorData[i];
