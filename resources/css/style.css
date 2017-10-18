@@ -2,15 +2,12 @@
 
 body {
 	background: #F7F7F7;
-	background-image: url('../img/mapspots.png');
-	background-size: contain;
-	background-attachment: fixed;
 	top: 0;
 	left: 0;
 	color:#009688;
 }
 
-/*
+
 .logo {
 	background-image: url('../img/gisida-logo.png');
 	background-size: contain;
@@ -19,4 +16,24 @@ body {
 	position: relative;
 }
 
-*/
+
+#background {
+	background: url(../img/mapspots.png) repeat 5% 5%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: -300;
+}
+
+#midground {
+	background: url(../img/mapspots.png) repeat 20% 20%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: -200;
+}
+
+#foreground {
+	background: url(../img/mapspots.png) repeat 90% 110%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: -100;
+}
