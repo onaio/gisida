@@ -1,0 +1,376 @@
+/* ============================================================
+  RESET - http://meyerweb.com/eric/tools/css/reset/
+============================================================ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ============================================================
+  BOX SIZING & CLEARFIX
+============================================================ */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ============================================================
+  HTML & BODY
+============================================================ */
+body {
+  background-color: #1e1e1e;
+  color: #505050;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+  PRIMARY STRUCTURE
+============================================================ */
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+main {
+  display: block;
+  background-color: #fff;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ============================================================
+  INFO BAR
+============================================================ */
+.info-bar {
+  padding: 5px 0;
+  background-color: #1e1e1e;
+  text-align: center;
+}
+.info-bar .icon {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  background: url("../img/core/icons-light.png");
+  background-image: url("../img/core/icons-light.svg"), none;
+}
+.info-bar .cmn-tut {
+  background-position: 0 0;
+}
+.info-bar .cmn-prev {
+  background-position: -30px 0;
+}
+.info-bar .cmn-next {
+  background-position: -60px 0;
+}
+.info-bar .cmn-download {
+  background-position: -90px 0;
+}
+.info-bar .cmn-archive {
+  background-position: -120px 0;
+}
+.info-bar .icon[data-title]:after {
+  opacity: 1;
+}
+.info-bar .icon[data-title]:hover:after {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20px;
+  content: attr(data-title);
+  padding: 5px 10px;
+  background-color: #fff;
+  color: #000;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+  HEADER & SITE TITLE
+============================================================ */
+/* header */
+header .branding {
+  padding: 20px 0;
+}
+header .logo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+header .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+header .social {
+  text-align: center;
+}
+header .social a {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  color: rgba(0, 0, 0, 0);
+  font-size: 0;
+  text-indent: -9999px;
+  background-size: 30px 30px;
+  background-image: url("../img/core/social-light.png");
+  background-image: url("../img/core/social-light.svg"), none;
+  background-size: 180px 30px;
+}
+header .social a.fb {
+  background-position: 0 0;
+}
+header .social a.twitter {
+  background-position: -30px 0;
+}
+header .social a.googleplus {
+  background-position: -60px 0;
+}
+header .social a.rss {
+  background-position: -90px 0;
+}
+header .social a.email {
+  background-position: -120px 0;
+}
+header .social a.search {
+  background-position: -150px 0;
+}
+header .social a:hover {
+  opacity: 0.4;
+}
+
+@media all and (min-width: 600px) {
+  header .branding {
+    padding-left: 60px;
+  }
+  header .logo {
+    margin-bottom: 0;
+    margin-left: -60px;
+    float: left;
+    width: 60px;
+    height: 60px;
+  }
+  header .logo img {
+    display: block;
+    margin: 0;
+  }
+  header .social {
+    padding: 15px 0;
+    float: right;
+    width: 100%;
+    text-align: right;
+  }
+}
+/* site title */
+.site-title {
+  padding: 5px 0;
+  background-color: black;
+  text-align: center;
+}
+.site-title h1 {
+  color: #fff;
+}
+
+/* ============================================================
+  FOOTER
+============================================================ */
+footer {
+  padding: 20px 0;
+}
+footer .asides {
+  margin-bottom: 20px;
+}
+footer aside {
+  margin-bottom: 10px;
+}
+footer nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+footer nav li {
+  display: inline-block;
+}
+footer nav a {
+  display: block;
+  margin: 0 5px;
+  color: #fff;
+}
+footer .logo {
+  text-align: center;
+}
+footer .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+footer .copyright {
+  text-align: center;
+}
+footer .copyright small {
+  color: #fff;
+  font-size: 12px;
+}
+footer .copyright a {
+  color: #fff;
+}
+
+@media all and (min-width: 600px) {
+  footer aside {
+    margin-bottom: 0;
+    float: left;
+    width: 33.3333%;
+  }
+  footer nav ul {
+    text-align: left;
+  }
+  footer nav li {
+    display: block;
+  }
+  footer nav a {
+    display: inline-block;
+    margin: 0;
+  }
+  footer .logo {
+    text-align: right;
+  }
+}
+/* ============================================================
+  FUSION ADS
+============================================================ */
+#fusionads {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 12px;
+  line-height: 1.2;
+  -webkit-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#fusionads .fusion-wrap {
+  display: block;
+  margin: 0 auto 10px auto;
+  width: 130px;
+}
+
+#fusionads a.fusion-text {
+  display: block;
+  color: #505050;
+}
+
+#fusionads a.fusion-img {
+  display: block;
+  margin-bottom: 10px;
+  width: 130px;
+  height: 100px;
+  background-color: #fff;
+}
+
+#fusionads a.fusion-img img {
+  display: block;
+  margin: 0 0 10px 0;
+}
+
+#fusionads a.fusion-poweredby {
+  color: #1e1e1e;
+}
+#fusionads a.fusion-poweredby:hover {
+  color: black;
+}
+
+#close-fusionad {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 30;
+  width: 20px;
+  height: 20px;
+  background-color: #282828;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ============================================================
+  TEXT LEVEL SEMANTICS
+============================================================ */
+a {
+  text-decoration: none;
+  color: #1e1e1e;
+}
+
+a:hover {
+  color: black;
+}
