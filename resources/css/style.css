@@ -1,39 +1,85 @@
-@charset "UTF-8";
-
 body {
-	background: #F7F7F7;
-	top: 0;
-	left: 0;
-	color:#009688;
+  color:#009688;
 }
 
 
 .logo {
-	background-image: url('../img/gisida-logo.png');
-	background-size: contain;
-	width:100px;
-	height:100px;
-	position: relative;
+  background-image: url('../img/gisida-logo.png');
+  background-size: contain;
+  width:100px;
+  height:100px;
+  position: relative;
 }
 
-
-#background {
-	background: url(../img/mapspots.png) repeat 5% 5%;
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	z-index: -300;
+/* ============================================================
+  SECTIONS
+============================================================ */
+section.module:last-child {
+  margin-bottom: 0;
+}
+section.module h2 {
+  margin-bottom: 40px;
+  font-family: "Roboto Slab", serif;
+  font-size: 30px;
+}
+section.module p {
+  margin-bottom: 40px;
+  font-size: 16px;
+  font-weight: 300;
+}
+section.module p:last-child {
+  margin-bottom: 0;
+}
+section.module.content {
+  padding: 40px 0;
+}
+section.module.parallax {
+  padding: 100px 0;
+  background-position: 0 0;
+}
+section.module.parallax h1 {
+  color: #1e1e1e;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px white;
+}
+section.module.parallax-1 {
+  background-image: url("../img/mapspots.png");
+  background-color: #F7F7F7;
+}
+section.module.parallax-2 {
+  background-image: url("../img/is02.jpg");
+}
+section.module.parallax-3 {
+  background-image: url("../img/mapspots.png");
 }
 
-#midground {
-	background: url(../img/mapspots.png) repeat 20% 20%;
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	z-index: -200;
-}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
 
-#foreground {
-	background: url(../img/mapspots.png) repeat 90% 110%;
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	z-index: -100;
+@media all and (min-width: 600px) {
+  section.module h2 {
+    font-size: 42px;
+  }
+  section.module p {
+    font-size: 20px;
+  }
+  section.module.parallax {
+    padding: 100px 0;
+  }
+  section.module.parallax h1 {
+    font-size: 96px;
+  }
+}
+@media all and (min-width: 960px) {
+  section.module.parallax h1 {
+    font-size: 160px;
+  }
 }
