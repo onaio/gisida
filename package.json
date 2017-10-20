@@ -18,6 +18,7 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "bootstrap-loader": "^2.0.0",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-sass-loader": "^1.0.10",
@@ -38,18 +39,19 @@
     "js-cookie": "^2.1.4",
     "jsx-loader": "^0.13.2",
     "mapbox-gl": "^0.40.1",
+    "mapbox-gl-draw": "^0.16.0",
     "mustache": "^2.3.0",
     "redux": "^3.7.2",
-    "webpack": "^2.6.1"
+    "simple-statistics": "^5.0.1",
+    "webpack": "^3.8.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
-    "eslint": "3.19.0",
-    "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-jsx-a11y": "^5.0.3",
-    "eslint-plugin-react": "^7.1.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
     "stylelint": "^8.0.0",
     "stylelint-config-standard": "^17.0.0"
   },

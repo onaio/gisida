@@ -1,14 +1,79 @@
 import { combineReducers } from 'redux';
-import config from './../config';
 
-const options = window.gisidaOptions; // not sure how else to get this from the Host...
+const defaultState = {
+  "APP": {
+    "mapConfig": {
+      "container": "map",
+      "style": "",
+      "center": [
+        0,
+        0
+      ],
+      "zoom": 5
+    },
+    "accessToken": false,
+    "appIcon": "gisida-sample.png",
+    "appName": "React Gisida"
+  },
+  "NODES": [
+
+  ],
+  "STYLES": [
+    {
+      "label": "Satelitte",
+      "style": "mapbox: //styles/mapbox/satellite-v9"
+    },
+    {
+      "label": "Satelitte Streets",
+      "style": "mapbox: //styles/mapbox/satellite-streets-v9"
+    }
+  ]
+}
 
 const initialLayersState = {
   layers: [],
   sectors: []
 };
 
-function updateLayers (state = initialLayersState, action) {
+function APP(state = {}, action) {
+  switch (action.type) {
+    case 'INIT_APP':
+      return Object.assign({}, state, action.config)
+    default:
+      return state;
+      break;
+  }
+}
+
+
+function STYLES(state = [], action) {
+  switch (action.type) {
+    case 'INIT_STYLES':
+      return [...state, ...action.styles.slice(0)]
+    case 'CHANGE_STYLE':
+      state.map((style) => { 
+
+        // if (style.style===action.style)
+
+      } ) 
+     return state  
+    default:
+      return state;
+      break;
+  }
+}
+
+function NODES(state = [], action) {
+  switch (action.type) { 
+    case 'ADD_NODE': 
+      return [...state, action.node]
+    default:
+      return state;
+      break;
+  }
+}
+
+function PROCESSED_NODES(state = defaultState, action) {
   switch (action.type) {
     case 'CHANGE_LAYER':
       const { layer, status, map } = action;
@@ -41,14 +106,6 @@ function updateLayers (state = initialLayersState, action) {
   }
 }
 
-function appState(state = config, action) {
-  switch (action.type) {
-    default:
-      return state;
-    break;
-  }
-}
+const reducers = combineReducers({ APP, NODES, STYLES  });
 
-const Reducers = combineReducers({appState, updateLayers});
-
-export default Reducers;
+export default reducers;
