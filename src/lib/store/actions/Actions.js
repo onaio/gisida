@@ -1,8 +1,23 @@
-export const changeLayer = (layer, status, map) => {
+
+export const addNode = (node) => {
   return {
-    type: 'CHANGE_LAYER',
-    layer,
-    status,
-    map
-  };
-};
+    type: 'ADD_NODE',
+    node
+  }
+}
+
+export const initApp = (config) => {
+  
+  return {
+    type: 'INIT_APP',
+    config
+  }
+}
+
+
+export const initStyles = (styles) => {
+  return {
+    type: 'INIT_STYLES',
+    styles
+  }
+}
