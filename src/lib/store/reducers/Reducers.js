@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux';
-
 const defaultState = {
   "APP": {
     "mapConfig": {
@@ -113,6 +111,6 @@ function PROCESSED_NODES(state = defaultState, action) {
   }
 }
 
-const reducers = combineReducers({ APP, NODES, STYLES  });
+const defaultReducers = { APP, NODES, STYLES  };
 
-export default reducers;
+export default defaultReducers;

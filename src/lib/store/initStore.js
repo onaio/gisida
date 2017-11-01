@@ -1,14 +1,19 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { initState, initApp, addNode, initStyles} from './actions/Actions';
-import reducers from './reducers/reducers';
+import defaultReducers from './reducers/reducers';
 import { processNodes } from '../process/processNodes'
 import { loadJSON }  from '../files/file';
 
-export default function () { // todo - add custom reducers to combine with default ones
+export default function initStore (customReducers) {
+  let reducers;
+  if (customReducers) {
+    reducers = combineReducers({...defaultReducers, ...customReducers});
+  } else {
+    reducers = combineReducers(defaultReducers);
+  }
 
   // Create initial store
   const store = createStore(reducers);
-
   function addNodeToStore(node) {
     store.dispatch(addNode(JSON.parse(node)));
   }
@@ -27,6 +32,5 @@ export default function () { // todo - add custom reducers to combine with defau
 
   // Load initial state from config.json
   loadJSON(addConfigToStore, 'config');
-  
-  return store
+  return store;
 }
