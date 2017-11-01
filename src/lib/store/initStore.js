@@ -4,7 +4,7 @@ import reducers from './reducers/reducers';
 import { processNodes } from '../process/processNodes'
 import { loadJSON }  from '../files/file';
 
-export default function () {
+export default function () { // todo - add custom reducers to combine with default ones
 
   // Create initial store
   const store = createStore(reducers);
@@ -24,9 +24,9 @@ export default function () {
     store.dispatch(initApp(initialState.APP));
     store.dispatch(initStyles(initialState.STYLES));
   }
+
   // Load initial state from config.json
   loadJSON(addConfigToStore, 'config');
-
   
   return store
 }
