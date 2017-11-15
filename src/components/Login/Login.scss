@@ -48,4 +48,34 @@
       background: rgba(0, 0, 0, 0.8);
     }
   }
+
+  .funded-by {
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    bottom: 17%;
+    right: 10%;
+    position: absolute;
+  }
+
+  .donor-logos {
+    bottom: 5px;
+    right: 5px;
+    position: absolute;
+    padding-right: 10px;
+
+    .donors {
+      display: inline-block;
+      line-height: 60px;
+      vertical-align: middle;
+      padding: 5px;
+    }
+
+    img {
+      position: relative;
+      float: left;
+      width: 90px;
+      height: 100px;
+    }
+  }
 }
