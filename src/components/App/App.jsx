@@ -114,9 +114,10 @@ class App extends React.Component {
     this.setState({ filters });
   }
 
-  getFilteredData(filters) {
-    this.indicatorData = this.state.indicatorData;
-    if (this.state.indicatorData.length > 0) {
+  getFilteredData(filters, data) {
+    const indicatorData = this.state.indicatorData || data;
+    this.indicatorData = indicatorData;
+    if (indicatorData.length > 0) {
       for (let j = 0; j < filters.length; j += 1) {
         const filteredData = this.indicatorData.filter(a =>
           a.population === filters[j] ||
@@ -175,6 +176,9 @@ class App extends React.Component {
   }
 
   updateData(data) {
+    if (data && this.props.defaults) {
+      this.getFilteredData(this.state.filters.map(row => row.POPULATION || row.REGION || row.YEAR), data);
+    }
     this.setState({ indicatorData: data });
   }
 
