@@ -52,7 +52,9 @@ class App extends React.Component {
       layers: [],
       sectors: [],
       view: this.props.appConfig.defaultView,
-      filters: [],
+      filters: [{ POPULATION: 'Overall' },
+      { REGION: 'Lower Juba', region: 'Lower Juba - Somalia' },
+      { YEAR: '2016' }],
       layerData: this.props.layerData,
     };
     this.changeLayer = this.changeLayer.bind(this);
@@ -99,7 +101,11 @@ class App extends React.Component {
 
     const filterArr = filters.map(item => item[Object.keys(item)[0]]);
     const filterKeys = [].concat(...filters.map(a => Object.keys(a)));
-    if (filterKeys.includes('POPULATION') && filterKeys.includes('YEAR')
+    const defaultFilters = Object.keys(this.props.defaults);
+    if (defaultFilters.includes(filterArr[filterArr.length - 1])) {
+      filters = this.props.defaults[filterArr[filterArr.length - 1]];
+      this.getFilteredData(filters.map(row => row.POPULATION || row.REGION || row.YEAR));
+    } else if (filterKeys.includes('POPULATION') && filterKeys.includes('YEAR')
       && this.state.view === 'map') {
       this.getFilteredData(filterArr);
     } else if (filterArr.length === 3) {
@@ -445,6 +451,11 @@ App.propTypes = {
   locations: PropTypes.objectOf(PropTypes.any).isRequired,
   sectorData: PropTypes.arrayOf(PropTypes.any).isRequired,
   styles: PropTypes.arrayOf(PropTypes.any).isRequired,
+  defaults: PropTypes.objectOf(PropTypes.any),
+};
+
+App.defaultProps = {
+  defaults: null,
 };
 
 export default App;

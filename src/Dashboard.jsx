@@ -40,6 +40,7 @@ class Dashboard {
           appConfig={config.APP}
           locations={config.LOCATIONS}
           details={config.INDICATORS}
+          defaults={config.DEFAULTS}
         />,
         container);
     } else {
