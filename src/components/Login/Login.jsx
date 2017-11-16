@@ -38,7 +38,7 @@ class Login extends React.Component {
             <img src="/assets/img/dfid_logo.jpg" alt="DFID" />
           </span>
           <span className="donors">
-            <img src="/assets/img/danida_logo.png" alt="DANIDA" />
+            <img src="/assets/img/danida_logo.jpg" alt="DANIDA" />
           </span>
         </div>
       </div>);
