@@ -1,4 +1,4 @@
-export function loadJSON(callback, filename) {
+export function loadJSON(filename, callback) {
   const path = `${filename}.json`;
   const xobj = new XMLHttpRequest();
   
@@ -12,8 +12,7 @@ export function loadJSON(callback, filename) {
   xobj.send(null);
 }
 
-
-export function loadCSV(callback, filename) {
+export function loadCSV(filename, callback) {
   const path = `${filename}.csv`;
   const xobj = new XMLHttpRequest();
 

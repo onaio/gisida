@@ -1,8 +1,8 @@
 
-export const addNode = (node) => {
+export const addLayer = (layer) => {
   return {
-    type: 'ADD_NODE',
-    node
+    type: 'ADD_LAYER',
+    layer
   }
 }
 
@@ -13,7 +13,6 @@ export const initApp = (config) => {
     config
   }
 }
-
 
 export const initStyles = (styles) => {
   return {

@@ -14,13 +14,14 @@ const defaultRadiusRange = [
   '30',
 ];
 
-const getColorBrewerColor = function getColorBrewerColor(c, numColors) {
+function getColorBrewerColor(c, numColors) {
   if (colorbrewer[c]) {
     return colorbrewer[c][numColors];
   }
   return c;
 };
-const getColor = function getColor(c, i) {
+
+function getColor(c, i) {
   if (c instanceof Array) {
     return c[i];
   }

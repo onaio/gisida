@@ -1,47 +1,42 @@
-import loadJSON from '../files/file';
+import { loadJSON }from './files';
 
+/**
+ * Proceses data and adds it to state.
+**/
+function prepareLayer(rawLayer, filterOptions = false) {
+  const LayerID = rawLayer.title 
 
-/***
- *Proceses data and adds it to state
- *
- *
-***/
-
-
-function prepareNode(rawNode, filterOptions = false) {
-  const nodeID = rawNode.title 
-
-  if (rawNode.popup && rawNode.type !== 'chart') {
+  if (rawLayer.popup && rawLayer.type !== 'chart') {
     activeLayers.push(layerData.id);
   }
 
-  function addToState(rawNode) {
-    if (!(rawNode.labels)) {
-      self.addLayer(rawNode);
+  function addToState(rawLayer) {
+    if (!(rawLayer.labels)) {
+      self.addLayer(rawLayer);
     } else {
-      d3.csv(rawNode.labels.data, (labels) => {
-        rawNode.labels.data = labels;
-        self.addLayer(rawNode);
+      d3.csv(rawLayer.labels.data, (labels) => {
+        rawLayer.labels.data = labels;
+        self.addLayer(rawLayer);
       });
     }
   }
 
-  function readData(rawNode, source) {
+  function readData(rawLayer, source) {
     const fileType = source.split('.').pop();
     if (fileType === 'csv') {
-      d3.csv(rawNode.source.data, (data) => {
+      d3.csv(rawLayer.source.data, (data) => {
         layerData.source.data = data;
         layerData.mergedData = data;
         if (layerData.aggregate && layerData.aggregate.filter) {
           generateFilterOptions(layerData);
         }
-        addToState(rawNode);
+        addToState(rawLayer);
       });
     }
     if (fileType === 'geojson') {
-      d3.json(rawNode.source.data, (data) => {
-        rawNode.source.data = data;
-        addToState(rawNode);
+      d3.json(rawLayer.source.data, (data) => {
+        rawLayer.source.data = data;
+        addToState(rawLayer);
       });
     }
   }
@@ -98,7 +93,7 @@ function prepareNode(rawNode, filterOptions = false) {
   }
 }
 
-export default function processNodes(nodeName) { 
+export default function processLayers(LayerName) { 
   function addToState(spec) {
     JSON.parse(spec);
  } 
