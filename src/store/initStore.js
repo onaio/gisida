@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { initState, initApp, addLayer, initStyles} from './actions/Actions';
+import { initApp, addLayer, initStyles} from './actions/Actions';
 import { processLayers } from '../utils/prepareLayer'
 import { loadJSON } from '../utils/files';
 import defaultReducers from './reducers/reducers';
@@ -15,18 +15,22 @@ export default function initStore (customReducers) {
   // Create initial store
   const store = createStore(reducers);
   
-  function addLayerToStore(layer) {
-    store.dispatch(addLayer(JSON.parse(layer)));
-  }
-  
   // Add config to redux store
   function addConfigToStore(config) {
     const initialState = JSON.parse(config);
     
     // Check if config has list of layers and add them to store
-    if (initialState.LAYERS.length > 0) {
+    if (initialState.LAYERS.length > 0 && initialState.APP.layersPath) {
       initialState.LAYERS.map((layer) => {
-        loadJSON(layer, addLayerToStore);
+        // todo: check if `layer` is full URL e.g http://mydomailn/mylayer.json
+        // and load it directly
+        const path = `${initialState.APP.layersPath}/${layer}`;
+        const addLayerToStore = function (resp) {
+          const layerResp = JSON.parse(resp);
+          layerResp.id = layer;
+          store.dispatch(addLayer(layerResp));
+        }
+        loadJSON(path, addLayerToStore);
       });
     }
 

@@ -1,11 +1,3 @@
-
-export const addLayer = (layer) => {
-  return {
-    type: 'ADD_LAYER',
-    layer
-  }
-}
-
 export const initApp = (config) => {
   
   return {
@@ -21,4 +13,19 @@ export const initStyles = (styles) => {
   }
 }
 
-// todo - add timeseries actions
+export const addLayer = (layer) => {
+  return {
+    type: 'ADD_LAYER',
+    layer
+  }
+}
+
+export const toggleLayer = (layer) => {
+  return {
+    type: 'TOGGLE_LAYER',
+    layer
+  }
+}
+
+
+export default { initApp, initStyles, addLayer, toggleLayer }
