@@ -1,27 +1,19 @@
-export function loadJSON(filename, callback) {
-  const path = `${filename}.json`;
+function fetchURL(path, mimeType, callback) {
   const xobj = new XMLHttpRequest();
-  
-  xobj.overrideMimeType('application/json');
-  xobj.open('GET', path, true); 
-  xobj.onreadystatechange = function () {
-    if (xobj.readyState == 4 && xobj.status == "200") {
-      callback(xobj.responseText);
-    } 
-  };
-  xobj.send(null);
-}
-
-export function loadCSV(filename, callback) {
-  const path = `${filename}.csv`;
-  const xobj = new XMLHttpRequest();
-
-  xobj.overrideMimeType('application/json');
+  xobj.overrideMimeType(mimeType);
   xobj.open('GET', path, true);
   xobj.onreadystatechange = function () {
-    if (xobj.readyState == 4 && xobj.status == "200") {
+    if (xobj.readyState === 4 && xobj.status === 200) {
       callback(xobj.responseText);
     }
   };
   xobj.send(null);
+}
+
+export function loadJSON(path, callback) {
+  fetchURL(path, 'application/json', response => callback(JSON.parse(response)));
+}
+
+export function loadCSV(path, callback) {
+  fetchURL(path, 'text/csv', callback);
 }

@@ -5,13 +5,13 @@ const webpack = require('webpack');
 const config = {
 
   entry: {
-    main: ['./src/index.js']
+    main: ['./src/index.js'],
   },
 
   output: {
     path: path.resolve('./dist/'),
     filename: 'gisida.js',
-    libraryTarget: 'commonjs'
+    libraryTarget: 'commonjs',
   },
 
   devServer: {
@@ -26,7 +26,7 @@ const config = {
         test: /\.jsx?$/,
         use: ['jsx-loader', 'babel-loader'],
         exclude: /node_modules/,
-      }
+      },
     ],
   },
 

@@ -1,92 +1,85 @@
-const defaultState = {
-  "APP": {
-    "mapConfig": {
-      "container": "map",
-      "style": "",
-      "center": [
-        0,
-        0
-      ],
-      "zoom": 5
-    },
-    "accessToken": false,
-    "appIcon": "gisida-sample.png",
-    "appName": "React Gisida"
-  },
-  "LAYERS": [
+import defaultState from '../defaultState';
 
-  ],
-  "STYLES": [
-    {
-      "label": "Satelitte",
-      "style": "mapbox: //styles/mapbox/satellite-v9"
-    },
-    {
-      "label": "Satelitte Streets",
-      "style": "mapbox: //styles/mapbox/satellite-streets-v9"
-    }
-  ]
-}
-
-const defaultMapState = {
-  isLoaded: false,
-  processedLayers: {},
-  activeLayers: {},
-  layersToRemove: [],
-  layersToAdd: [],
-};
-
-const initialLayersState = {
-  layers: [],
-  sectors: []
-};
-
-// todo - set this default state to defaultState.APP
-function APP(state = {}, action) {
+function APP(state = defaultState.APP, action) {
   switch (action.type) {
     case 'INIT_APP':
-      return Object.assign({}, state, action.config) // todo - change to spread opperator
+      return { ...state, ...action.config };
     default:
       return state;
-      break;
   }
 }
 
-// todo - set this default state to defaultState.STYLES
-function STYLES(state = [], action) {
+function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
     case 'INIT_STYLES':
-      return [...state, ...action.styles.slice(0)]
+      return [...state, ...action.styles.slice(0)];
     case 'CHANGE_STYLE':
-      state.map((style) => { 
-
+      state.map((style) => {
         // if (style.style===action.style)
-
-      } ) 
-     return state;
+      });
+      return state;
     default:
       return state;
-      break;
   }
 }
 
-function LAYERS(state = [], action) {
-  switch (action.type) { 
-    case 'ADD_LAYER': 
-      // todo - process node into layer?
-      return [...state, action.layer]
+function LAYERS(state = defaultState.LAYERS, action) {
+  switch (action.type) {
+    case 'ADD_LAYER': {
+      const updatedState = {};
+      updatedState[action.layer.id] = action.layer;
+      return { ...state, ...updatedState };
+    }
+    case 'TOGGLE_LAYER': {
+      const { layerId } = action;
+      const layer = state[layerId];
+      return {
+        ...state,
+        // Update visible property
+        [layerId]: {
+          ...layer,
+          visible: !layer.visible,
+        },
+      };
+    }
+    case 'REQUEST_DATA': {
+      const { layerId } = action;
+      const layer = state[layerId];
+      return {
+        ...state,
+        // Update isLoading property
+        [layerId]: {
+          ...layer,
+          isLoading: true,
+          loaded: false,
+        },
+      };
+    }
+    case 'RECEIVE_DATA': {
+      const { layer } = action;
+      const oldLayer = state[layer.id];
+      return {
+        ...state,
+        // Update isLoading property
+        [layer.id]: {
+          ...oldLayer,
+          source: layer.source,
+          isLoading: false,
+          loaded: true,
+        },
+      };
+    }
     default:
       return state;
-      break;
   }
 }
 // todo - add TIMESERIES reducer
-// todo - scope down the default state to only include layers
 // todo - update this with latest from App.jsx to avoid runaway layers
 // todo - simplify this to 'toggle node'; include in LAYERS reducer
-function PROCESSED_LAYERS(state = defaultState, action) {
+
+function PROCESSED_LAYERS(state = [], action) {
   switch (action.type) {
-    case 'CHANGE_LAYER':
+    case 'CHANGE_LAYER': {
       const { layer, status, map } = action;
       const layers = [...state.layers];
 
@@ -106,18 +99,15 @@ function PROCESSED_LAYERS(state = defaultState, action) {
         visible: status,
         map,
       });
-
       state.layers = layers;
       return state;
-    break;
-
+    }
     default:
       return state;
-    break;
   }
 }
 
-function MAP(state = defaultMapState, action) {
+function MAP(state = defaultState.MAP, action) {
   let activeLayers;
   let activeLayerKeys;
   let processedLayers;
@@ -130,8 +120,6 @@ function MAP(state = defaultMapState, action) {
         ...state,
         isLoaded: true,
       };
-      break;
-
     case 'ADD_LAYERS':
       processedLayers = { ...state.processedLayers };
       activeLayers = { ...state.activeLayers };
@@ -143,15 +131,13 @@ function MAP(state = defaultMapState, action) {
           layersToAdd.push(l.id);
         }
         activeLayers[l.id] = l;
-      })
+      });
       return {
         ...state,
         processedLayers,
         activeLayers,
         layersToAdd,
       };
-      break;
-
     case 'REMOVE_LAYERS':
       activeLayerKeys = Object.keys(state.activeLayers);
       activeLayers = {};
@@ -170,38 +156,21 @@ function MAP(state = defaultMapState, action) {
         activeLayers,
         layersToRemove,
       };
-      break;
-
     case 'LAYERS_REMOVED':
       return {
         ...state,
         layersToRemove: [],
       };
-      break;
-
     case 'LAYERS_ADDED':
       return {
         ...state,
         layersToAdd: [],
       };
-      break;
-
     default:
       return state;
-      break;
   }
 }
 
-// export function LAYERS(state, action) {
-//   switch (action.type) {
-//     case 'CIRCLE_LAYER':
-
-//       break;
-
-//     default:
-//       return state;
-//       break;
-//   }
-// }
-
-export default { APP, LAYERS, STYLES, MAP };
+export default {
+  APP, LAYERS, STYLES, MAP, PROCESSED_LAYERS,
+};

@@ -1,10 +1,11 @@
 import { createStore, combineReducers } from 'redux';
-import { initApp, addLayer, initStyles} from './actions/Actions';
-import { processLayers } from '../utils/prepareLayer'
+import { initApp, addLayer, initStyles, processLayer } from './actions/Actions';
+import defaultReducers from './reducers/Reducers';
 import { loadJSON } from '../utils/files';
-import defaultReducers from './reducers/reducers';
+import prepareLayer from '../map/prepareLayer';
 
-export default function initStore (customReducers) {
+
+export default function initStore(customReducers) {
   let reducers;
   if (customReducers) {
     reducers = combineReducers({ ...defaultReducers, ...customReducers });
@@ -14,31 +15,35 @@ export default function initStore (customReducers) {
 
   // Create initial store
   const store = createStore(reducers);
-  
+
   // Add config to redux store
   function addConfigToStore(config) {
-    const initialState = JSON.parse(config);
-    
     // Check if config has list of layers and add them to store
-    if (initialState.LAYERS.length > 0 && initialState.APP.layersPath) {
-      initialState.LAYERS.map((layer) => {
+    if (config.LAYERS.length > 0 && config.APP.layersPath) {
+      config.LAYERS.map((layer) => {
         // todo: check if `layer` is full URL e.g http://mydomailn/mylayer.json
         // and load it directly
-        const path = `${initialState.APP.layersPath}/${layer}`;
-        const addLayerToStore = function (resp) {
-          const layerResp = JSON.parse(resp);
-          layerResp.id = layer;
-          store.dispatch(addLayer(layerResp));
+        const path = `${config.APP.layersPath}/${layer}.json`;
+
+        function addLayerToStore(responseObj) {
+          const layerObj = responseObj;
+          layerObj.id = layer;
+          layerObj.loaded = false;
+          store.dispatch(addLayer(layerObj));
+          if (layerObj.visible && !layerObj.loaded) {
+            prepareLayer(layerObj, store.dispatch);
+          }
         }
-        loadJSON(path, addLayerToStore);
+
+        return loadJSON(path, addLayerToStore);
       });
     }
 
-    store.dispatch(initApp(initialState.APP));
-    store.dispatch(initStyles(initialState.STYLES));
+    store.dispatch(initApp(config.APP));
+    store.dispatch(initStyles(config.STYLES));
   }
 
   // Read config.json and add to redux store
-  loadJSON('config', addConfigToStore);
+  loadJSON('config.json', addConfigToStore);
   return store;
 }

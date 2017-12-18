@@ -1,31 +1,46 @@
-export const initApp = (config) => {
-  
-  return {
-    type: 'INIT_APP',
-    config
-  }
-}
+export const initApp = config => ({
+  type: 'INIT_APP',
+  config,
+});
 
-export const initStyles = (styles) => {
-  return {
-    type: 'INIT_STYLES',
-    styles
-  }
-}
+export const initStyles = styles => ({
+  type: 'INIT_STYLES',
+  styles,
+});
 
-export const addLayer = (layer) => {
-  return {
-    type: 'ADD_LAYER',
-    layer
-  }
-}
+export const addLayer = layer => ({
+  type: 'ADD_LAYER',
+  layer,
+});
 
-export const toggleLayer = (layer) => {
-  return {
-    type: 'TOGGLE_LAYER',
-    layer
-  }
-}
+export const toggleLayer = layerId => ({
+  type: 'TOGGLE_LAYER',
+  layerId,
+});
 
 
-export default { initApp, initStyles, addLayer, toggleLayer }
+export const requestData = layerId => ({
+  type: 'REQUEST_DATA',
+  layerId,
+});
+
+export const receiveData = layer => ({
+  type: 'RECEIVE_DATA',
+  layer,
+});
+
+export const mapLoaded = isLoaded => ({
+  type: 'IS_LOADED',
+  isLoaded,
+});
+
+
+export default {
+  initApp,
+  initStyles,
+  addLayer,
+  toggleLayer,
+  requestData,
+  receiveData,
+  mapLoaded,
+};
