@@ -1,10 +1,12 @@
+import $ from 'jquery';
 import sortLayers from './sortLayers';
 import buildTimeseriesData from './buildTimeseriesData';
 import generateStops from './generateStops';
+import addChart from './addChart';
+import addLegend from './addLegend';
+import addLabels from './addLabels';
 
 export default function addLayer(map, layer) {
-
-  console.log(layer);
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   let newStops;
@@ -23,14 +25,6 @@ export default function addLayer(map, layer) {
     layerObj.legendBottom = 40;
   }
 
-  // let layersObj = [];
-  // for (let lo = 0; lo < this.state.layersObj.length; lo += 1) {
-  //   if (this.state.layersObj[lo].id !== layer.id) {
-  //     layersObj.push(this.state.layersObj[lo]);
-  //   }
-  // }
-  // layersObj.push(layer);
-
   if (layer.property) {
     stops = generateStops(layer, timefield);
   }
@@ -46,14 +40,13 @@ export default function addLayer(map, layer) {
     const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
     const Data = timefield ? currData : layer.source.data;
 
-    this.addLegend(layer, stopsData, Data, breaks, colors);
-    this.addLabels(layer, Data);
+    addLegend(layer, stopsData, Data, breaks, colors);
+    addLabels(layer, Data);
   } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
-    this.addLegend(layer);
+    addLegend(layer);
+  } else {
+    $('.legend-row.primary').removeClass('primary');
   }
-  // else {
-  //   $('.legend-row.primary').removeClass('primary');
-  // }
 
   /*
    * CIRCLE ==========================================================
@@ -61,6 +54,7 @@ export default function addLayer(map, layer) {
   if (layer.type === 'circle') {
     circleLayer = {
       id: layer.id,
+      visible: layer.visible,
       type: 'circle',
       source: {
         type: layer.source.type,
@@ -137,6 +131,7 @@ export default function addLayer(map, layer) {
   if (layer.type === 'fill') {
     fillLayer = {
       id: layer.id,
+      visible: layer.visible,
       type: 'fill',
       source: {
         type: layer.source.type,
@@ -185,26 +180,6 @@ export default function addLayer(map, layer) {
       fillLayer.filter = layer.filter;
     }
 
-    // disallow multiple fill layers on the map (todo - convert filters to nested for loops)
-    // let id;
-    // const filterLayerObjs = lo => lo.id !== id;
-    // const filterActiveLayers = lo => lo !== id;
-    // for (let l = 0; l < this.state.layersObj.length; l += 1) {
-    //   if (this.state.layersObj[l].type === 'fill') {
-    //     id = this.state.layersObj[l].id;
-    //     if (map.getLayer(id)) {
-    //       map.removeLayer(id);
-    //       if (map.getSource(id)) {
-    //         map.removeSource(id);
-    //       }
-    //       this.removeLabels(this.state.layersObj[l]);
-    //       this.removeLegend(this.state.layersObj[l]);
-    //       layersObj = layersObj.filter(filterLayerObjs);
-    //       self.activeLayers = self.activeLayers.filter(filterActiveLayers);
-    //     }
-    //   }
-    // }
-
     if (!map.getLayer(fillLayer.id)) map.addLayer(fillLayer);
   }
 
@@ -215,6 +190,7 @@ export default function addLayer(map, layer) {
     lineLayer = {
       id: layer.id,
       type: 'line',
+      visible: layer.visible,
       source: {
         type: layer.source.type,
       },
@@ -240,6 +216,7 @@ export default function addLayer(map, layer) {
       lineLayer['source-layer'] = layer.source.layer;
     }
     if (!map.getLayer(lineLayer.id)) map.addLayer(lineLayer);
+    map.setLayoutProperty(lineLayer.id, 'visibility', lineLayer.visible ? 'visible' : 'none');
   }
 
   /*
@@ -248,6 +225,7 @@ export default function addLayer(map, layer) {
   if (layer.type === 'symbol') {
     symbolLayer = {
       id: layer.id,
+      visible: layer.visible,
       type: 'symbol',
       source: {
         type: layer.source.type,
@@ -331,11 +309,41 @@ export default function addLayer(map, layer) {
       newStops = { id: layer.id, period, timefield };
       data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
     }
-    this.addChart(layer, data);
+    addChart(layer, data);
   }
 
+  // Generate layersObj
+  // let layersObj = [];
+  // for (let lo = 0; lo < this.state.layersObj.length; lo += 1) {
+  //   if (this.state.layersObj[lo].id !== layer.id) {
+  //     layersObj.push(this.state.layersObj[lo]);
+  //   }
+  // }
+  // layersObj.push(layer);
+
+
   // sort the layers
-  //sortLayers();
+  // sortLayers();
+
+  // disallow multiple fill layers on the map (todo - convert filters to nested for loops)
+  // let id;
+  // const filterLayerObjs = lo => lo.id !== id;
+  // const filterActiveLayers = lo => lo !== id;
+  // for (let l = 0; l < this.state.layersObj.length; l += 1) {
+  //   if (this.state.layersObj[l].type === 'fill') {
+  //     id = this.state.layersObj[l].id;
+  //     if (map.getLayer(id)) {
+  //       map.removeLayer(id);
+  //       if (map.getSource(id)) {
+  //         map.removeSource(id);
+  //       }
+  //       this.removeLabels(this.state.layersObj[l]);
+  //       this.removeLegend(this.state.layersObj[l]);
+  //       layersObj = layersObj.filter(filterLayerObjs);
+  //       self.activeLayers = self.activeLayers.filter(filterActiveLayers);
+  //     }
+  //   }
+  // }
 
   // const timeseriesMap = buildTimeseriesData(newStops);
   // if (timeseriesMap[layer.id]) {
@@ -365,5 +373,6 @@ export default function addLayer(map, layer) {
   //   stops: newStops,
   //   timeseries: Object.assign({}, this.state.timeseries, timeseriesMap),
   // });
+
   return map;
 }

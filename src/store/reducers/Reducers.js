@@ -73,39 +73,6 @@ function LAYERS(state = defaultState.LAYERS, action) {
       return state;
   }
 }
-// todo - add TIMESERIES reducer
-// todo - update this with latest from App.jsx to avoid runaway layers
-// todo - simplify this to 'toggle node'; include in LAYERS reducer
-
-function PROCESSED_LAYERS(state = [], action) {
-  switch (action.type) {
-    case 'CHANGE_LAYER': {
-      const { layer, status, map } = action;
-      const layers = [...state.layers];
-
-      if (state.layerData[layer].layers) {
-        const groupedLayer = state.layerData[layer].layers;
-        for (let i = 0; i < groupedLayer.length; i += 1) {
-          layers.push({
-            title: groupedLayer[i],
-            visible: status,
-            map,
-          });
-        }
-      }
-
-      layers.push({
-        title: layer,
-        visible: status,
-        map,
-      });
-      state.layers = layers;
-      return state;
-    }
-    default:
-      return state;
-  }
-}
 
 function MAP(state = defaultState.MAP, action) {
   let activeLayers;
@@ -172,5 +139,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, LAYERS, STYLES, MAP, PROCESSED_LAYERS,
+  APP, LAYERS, STYLES, MAP,
 };

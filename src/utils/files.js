@@ -11,7 +11,13 @@ function fetchURL(path, mimeType, callback) {
 }
 
 export function loadJSON(path, callback) {
-  fetchURL(path, 'application/json', response => callback(JSON.parse(response)));
+  fetchURL(path, 'application/json', (response) => {
+    try {
+      callback(JSON.parse(response));
+    } catch (e) {
+      console.error(`Error loading ${path} (${e})`);
+    }
+  });
 }
 
 export function loadCSV(path, callback) {
