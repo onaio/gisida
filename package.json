@@ -67,7 +67,6 @@
     "test": "jest",
     "lint": "eslint src --ext=jsx --ext=js",
     "stylelint": "stylelint src/**/*.scss --syntax scss",
-    "compile": "webpack --progress",
-    "compile-watch": "webpack --progress --watch"
+    "build": "webpack --progress --env.uglify=true"
   }
 }

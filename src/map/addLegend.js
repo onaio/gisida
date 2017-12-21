@@ -117,7 +117,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
 
       // no legend
     } else {
-      // $('.set-primary-layer.primary').removeClass('primary');
+      $('.set-primary-layer.primary').removeClass('primary');
     }
 
     // $('.set-primary-layer.primary').removeClass('primary');
@@ -125,9 +125,9 @@ export default function addLegend(layer, stops, data, breaks, colors) {
     //     .on('click', this.setPrimaryLayer)
     //     .addClass('primary');
 
-    // $('.legend-row.primary').removeClass('primary');
-    // $(`#legend-${layer.id}-${mapId}`)
-    //   .addClass('primary')
-    //   .on('click', this.setPrimaryLayer);
+    $('.legend-row.primary').removeClass('primary');
+    $(`#legend-${layer.id}-${mapId}`)
+      .addClass('primary');
+      // .on('click', this.setPrimaryLayer);
   }
 }
