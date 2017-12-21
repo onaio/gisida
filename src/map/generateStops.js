@@ -1,5 +1,5 @@
 import colorbrewer from 'colorbrewer';
-import ss from 'simple-statistics';
+import { ckmeans } from 'simple-statistics';
 
 const defaultRadiusRange = [
   '3',
@@ -64,7 +64,7 @@ function getStops(layer) {
   const rangePeriod = dataList.map(l => l.periods);
 
   // Split the data into nClusters
-  const cluster = layer.clusters ? ss.ckmeans(sortedData, layer.clusters) : null;
+  const cluster = layer.clusters ? ckmeans(sortedData, layer.clusters) : null;
   breaks = layer.limit ? layer.limit : cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;

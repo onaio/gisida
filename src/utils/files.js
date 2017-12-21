@@ -1,3 +1,5 @@
+import { parse } from 'papaparse';
+
 function fetchURL(path, mimeType, callback) {
   const xobj = new XMLHttpRequest();
   xobj.overrideMimeType(mimeType);
@@ -21,5 +23,11 @@ export function loadJSON(path, callback) {
 }
 
 export function loadCSV(path, callback) {
-  fetchURL(path, 'text/csv', callback);
+  fetchURL(path, 'text/csv', (response) => {
+    try {
+      callback(parse(response, { header: true }).data);
+    } catch (e) {
+      console.error(`Error loading ${path} (${e})`);
+    }
+  });
 }

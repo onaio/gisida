@@ -1,12 +1,25 @@
 import $ from 'jquery';
+import Mustache from 'mustache';
 
-export default function addLabels(layer, data) {
+const mapboxgl = require('mapbox-gl');
+
+// todo: change for split map
+const mapId = '01';
+
+function removeLabels(layer) {
+  const classItems = document.getElementsByClassName(`marker-label-${layer.id}-${mapId}`);
+  while (classItems[0]) {
+    classItems[0].parentNode.removeChild(classItems[0]);
+  }
+}
+
+export default function addLabels(map, layer, data) {
   if (layer.labels && layer.labels.data && layer.labels.join) {
     const labels = [];
 
     data.forEach((row) => {
       const el = document.createElement('div');
-      el.className = `marker-label marker-label-${layer.id}-${this.props.mapId}`;
+      el.className = `marker-label marker-label-${layer.id}-${mapId}`;
       el.style.width = layer.labels.width;
       el.style.height = layer.labels.height;
       el.style['font-size'] = '12px';
@@ -23,34 +36,34 @@ export default function addLabels(layer, data) {
       });
     });
 
-    if (this.map.getZoom() > layer.labels.minzoom) {
+    if (map.getZoom() > layer.labels.minzoom) {
       labels.forEach((row) => {
         new mapboxgl.Marker(row.el, {
           offset: row.offset,
         })
           .setLngLat(row.coordinates)
-          .addTo(this.map);
+          .addTo(map);
       });
     }
 
     if (typeof layer.labels.maxzoom === 'undefined') {
       layer.labels.maxzoom = 22;
     }
-    this.map.on('zoom', () => {
-      if (this.map.getZoom() > layer.labels.minzoom
-        && this.map.getZoom() < layer.labels.maxzoom
-        && this.map.getLayer(layer.id) !== undefined) {
-        this.removeLabels(layer);
+    map.on('zoom', () => {
+      if (map.getZoom() > layer.labels.minzoom
+        && map.getZoom() < layer.labels.maxzoom
+        && map.getLayer(layer.id) !== undefined) {
+        removeLabels(layer);
 
         labels.forEach((row) => {
           new mapboxgl.Marker(row.el, {
             offset: row.offset,
           })
             .setLngLat(row.coordinates)
-            .addTo(this.map);
+            .addTo(map);
         });
       } else {
-        this.removeLabels(layer);
+        removeLabels(layer);
       }
     });
   }

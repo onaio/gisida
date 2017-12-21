@@ -1,9 +1,10 @@
 
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
-import { loadJSON } from '../utils/files';
+import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData } from '../store/actions/Actions';
+
 
 /**
  * Proceses MapSpec and adds it to state.
@@ -20,12 +21,11 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
 
   function renderData(spec) {
     if (!(spec.labels)) {
-      // self.addLayer(layerSpec1);
       dispatch(receiveData(spec));
     } else {
-      d3.csv(spec.labels.data, (labels) => {
+      loadCSV(spec.labels.data, (labels) => {
         spec.labels.data = labels;
-        // self.addLayer(layerSpec1);
+        dispatch(receiveData(spec));
       });
     }
   }
@@ -34,13 +34,13 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
     const layer = { ...spec };
     const fileType = source.split('.').pop();
     if (fileType === 'csv') {
-      d3.csv(spec.source.data, (data) => {
+      loadCSV(spec.source.data, (data) => {
         layer.source.data = data;
         layer.mergedData = data;
         if (spec.aggregate && spec.aggregate.filter) {
           generateFilterOptions(spec);
         }
-        // renderData(layerSpec1);
+        renderData(layer);
       });
     }
     if (fileType === 'geojson') {

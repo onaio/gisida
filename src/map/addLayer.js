@@ -6,7 +6,7 @@ import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
 
-export default function addLayer(map, layer) {
+export default function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   let newStops;
@@ -41,7 +41,7 @@ export default function addLayer(map, layer) {
     const Data = timefield ? currData : layer.source.data;
 
     addLegend(layer, stopsData, Data, breaks, colors);
-    addLabels(layer, Data);
+    addLabels(map, layer, Data);
   } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
     addLegend(layer);
   } else {
@@ -123,6 +123,9 @@ export default function addLayer(map, layer) {
     }
 
     if (!map.getLayer(circleLayer.id)) map.addLayer(circleLayer);
+    if (map.getLayer(circleLayer.id)) {
+      map.setLayoutProperty(circleLayer.id, 'visibility', circleLayer.visible ? 'visible' : 'none');
+    }
   }
 
   /*
@@ -181,6 +184,9 @@ export default function addLayer(map, layer) {
     }
 
     if (!map.getLayer(fillLayer.id)) map.addLayer(fillLayer);
+    if (map.getLayer(fillLayer.id)) {
+      map.setLayoutProperty(fillLayer.id, 'visibility', fillLayer.visible ? 'visible' : 'none');
+    }
   }
 
   /*
@@ -216,7 +222,9 @@ export default function addLayer(map, layer) {
       lineLayer['source-layer'] = layer.source.layer;
     }
     if (!map.getLayer(lineLayer.id)) map.addLayer(lineLayer);
-    map.setLayoutProperty(lineLayer.id, 'visibility', lineLayer.visible ? 'visible' : 'none');
+    if (map.getLayer(lineLayer.id)) {
+      map.setLayoutProperty(lineLayer.id, 'visibility', lineLayer.visible ? 'visible' : 'none');
+    }
   }
 
   /*
@@ -230,7 +238,7 @@ export default function addLayer(map, layer) {
       source: {
         type: layer.source.type,
       },
-      minzoom: layer.source.minzoom ? layer.source.minzoom : this.props.mapConfig.mapZoom,
+      minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
       maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
       layout: layer.layout,
       paint: layer.paint,
@@ -297,6 +305,9 @@ export default function addLayer(map, layer) {
       }
 
       map.addLayer(symbolLayer);
+    }
+    if (map.getLayer(symbolLayer.id)) {
+      map.setLayoutProperty(symbolLayer.id, 'visibility', symbolLayer.visible ? 'visible' : 'none');
     }
   }
   /*

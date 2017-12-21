@@ -64,6 +64,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
         [layer.id]: {
           ...oldLayer,
           source: layer.source,
+          labels: layer.labels,
           isLoading: false,
           loaded: true,
         },
