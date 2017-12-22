@@ -1,4 +1,3 @@
-import * as milia from 'milia-wrapper';
 import { processFilters } from './filters';
 
 export default function aggregateData(layerData, locations, filterOptions) {

@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { initApp, addLayer, initStyles, processLayer } from './actions/Actions';
+import { initApp, addLayer, initStyles } from './actions/Actions';
 import defaultReducers from './reducers/Reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
