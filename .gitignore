@@ -4,10 +4,4 @@ npm-debug.log
 *.vscode
 *.idea/
 *.iml
-target/
-main.js
-out/
-checkouts/
-.lein-env
 coverage/
-dist/
