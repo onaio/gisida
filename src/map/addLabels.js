@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import Mustache from 'mustache';
 
 // todo: change for split map

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import sortLayers from './sortLayers';
 import buildTimeseriesData from './buildTimeseriesData';
 import generateStops from './generateStops';

@@ -1,9 +1,8 @@
-import $ from 'jquery';
-import ss from 'simple-statistics';
+import { ckmeans } from 'simple-statistics';
 
 export default function addChart(layer, data) {
   const population = data.map(d => d[layer.categories.total]);
-  const clusters = ss.ckmeans(population, layer.categories.clusters);
+  const clusters = ckmeans(population, layer.categories.clusters);
 
   // create a DOM element for the marker
   data.forEach((district) => {

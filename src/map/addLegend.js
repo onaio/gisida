@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import formatNum from '../utils/formatNum';
 import hexToRgbA from '../utils/hexToRgbA';
 
