@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import Mustache from 'mustache';
 
-const mapboxgl = require('mapbox-gl');
-
 // todo: change for split map
 const mapId = '01';
 

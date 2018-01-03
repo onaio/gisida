@@ -1,5 +1,3 @@
-import * as milia from 'milia-wrapper';
-
 const protocol = 'https';
 const host = 'api.ona.io';
 
