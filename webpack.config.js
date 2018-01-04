@@ -34,11 +34,7 @@ const config = {
     extensions: ['.js', '.jsx', '.css', '.scss'],
   },
 
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"',
-    }),
-  ],
+  plugins: [],
 };
 
 module.exports = function (env) {
@@ -46,7 +42,8 @@ module.exports = function (env) {
     if (env.path) {
       config.output.path = path.resolve(env.path);
     }
-    if (env.uglify === 'true') {
+    if (env.production === 'true') {
+      config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }));
       config.plugins.push(new webpack.optimize.UglifyJsPlugin());
     }
   }
