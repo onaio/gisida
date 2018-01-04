@@ -1,12 +1,17 @@
-
-# Gisida
-![gisida](http://gisida.onalabs.org/resources/img/gisida-logo.png)
+<h1 align="center">
+<div>
+<img src="http://gisida.onalabs.org/resources/img/gisida-logo.png" width="85">
+</div>
+<div>
+<img src="http://gisida.onalabs.org/resources/img/gisida-logotype.png" width="100">
+</div>
+</h1>
 
 Gisida is a Javascript data pipeline library that generates map visualizations for [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js) using MapSpec.
 
 Gisida uses Redux to manage layers data state.
 
-Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need to quickly build a Map Dashboard using gisida;
+Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need to quickly build a Map Dashboard using Gisida and MapSpec layers.
 
 ## Installation
 
@@ -80,7 +85,7 @@ const store = initStore();
 ```
 
 ### 3. Adding Layers
-- The `layersPath` in `APP.mapConfig` is used to define the folder that contains the layers files. 
+- The `layersPath` propery under `APP.mapConfig` is used to define the folder that contains the layers files. 
 
 - The `LAYERS` propery is a list that contains the filenames of the layers that should be loaded into state. 
 
@@ -136,7 +141,7 @@ TODO: add documentation for Gisida API
 ## Development
 To locally develop and make changes to gisida: 
 
-### Local development:
+### Local development
 - Clone repo:
 ```
 $ git clone git@github.com:onaio/gisida.git
