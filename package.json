@@ -44,6 +44,7 @@
   "main": "dist/gisida.js",
   "scripts": {
     "lint": "eslint src --ext=jsx --ext=js",
-    "build": "webpack --progress --env.uglify=true"
+    "build": "webpack --progress --env.production=true",
+    "develop": "webpack --progress --watch --env.production=false"
   }
 }
