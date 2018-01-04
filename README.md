@@ -35,40 +35,39 @@ $ yarn add gisida
 
 ```json
 {
-  APP: {
-    mapConfig: {
-      container: 'map',
-      style: '',
-      center: [
-        0,
-        0,
+  "APP": {
+    "mapConfig": {
+      "container": "map",
+      "style": "mapbox://styles/mapbox/light-v9",
+      "center": [
+        36.25
+        0.34
       ],
-      zoom: 5,
+      "zoom": 6
     },
-    accessToken: false,
-    appIcon: 'gisida-sample.png',
-    appName: 'React Gisida',
+    "accessToken": "<mapbox-studio-access-token>",
+    "appIcon": "/img/gisida-logo.png",
+    "appName": "GISIDA EXAMPLE",
+    "appColor": "darkslategrey",
+    "layersPath": "/layers"
   },
-  LAYERS: {
-
-  },
-  STYLES: [
+  "STYLES": [
     {
-      label: 'Satelitte',
-      style: 'mapbox: //styles/mapbox/satellite-v9',
+      "label": "Light",
+      "style": "mapbox://styles/mapbox/light-v9"
     },
     {
-      label: 'Satelitte Streets',
-      style: 'mapbox: //styles/mapbox/satellite-streets-v9',
+      "label": "Streets",
+      "style": "mapbox://styles/mapbox/streets-v9"
     },
+    {
+      "label": "Satellite",
+      "style": "mapbox://styles/mapbox/satellite-v9"
+    }
   ],
-  MAP: {
-    isLoaded: false,
-    processedLayers: {},
-    activeLayers: {},
-    layersToRemove: [],
-    layersToAdd: [],
-  },
+  "LAYERS": [
+    "ken-health-sites",
+  ]
 }
 ```
 
@@ -79,6 +78,45 @@ import { initStore } from 'gisida';
 
 const store = initStore();
 ```
+
+### 3. Adding Layers
+- The `layersPath` in `APP.mapConfig` is used to define the folder that contains the layers files. 
+
+- The `LAYERS` propery is a list that contains the filenames of the layers that should be loaded into state. 
+
+**NOTE:** The filename is added withouth the `.json` extension in the config file.
+
+An example layer file in the path `/layers/ken-health-sites.json`
+
+```json
+{
+  "label": "Kenya Health Sites",
+  "source": {
+    "type": "geojson",
+    "data": "data/ken_health_sites.geojson"
+  },
+  "type": "symbol",
+  "minZoom": 0,
+  "paint": {
+    "text-color": "#000",
+    "text-halo-color": "#fff",
+    "text-halo-width": 1.3,
+    "text-halo-blur": 1
+  },
+  "layout": {
+    "text-field": "{name} ({type})",
+    "text-offset": [0,2],
+    "icon-image": "hospital-11",
+    "icon-allow-overlap": true,
+    "text-transform": "uppercase"
+  },
+  "visible": false,
+  "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
+}
+
+```
+
+Ensure that the data file for the layer is located in the specified source path `data/ken_health_sites.geojson`. 
 
 ### 3. Actions 
 
