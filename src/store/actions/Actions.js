@@ -8,9 +8,19 @@ export const initStyles = styles => ({
   styles,
 });
 
+export const initRegions = regions => ({
+  type: 'INIT_REGIONS',
+  regions,
+});
+
 export const addLayer = layer => ({
   type: 'ADD_LAYER',
   layer,
+});
+
+export const changeRegion = region => ({
+  type: 'CHANGE_REGION',
+  region,
 });
 
 export const toggleLayer = layerId => ({
@@ -38,9 +48,11 @@ export const mapLoaded = isLoaded => ({
 export default {
   initApp,
   initStyles,
+  initRegions,
   addLayer,
   toggleLayer,
   requestData,
   receiveData,
   mapLoaded,
+  changeRegion,
 };

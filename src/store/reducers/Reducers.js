@@ -75,6 +75,27 @@ function LAYERS(state = defaultState.LAYERS, action) {
   }
 }
 
+
+function REGIONS(state = defaultState.REGIONS, action) {
+  switch (action.type) {
+    case 'INIT_REGIONS': {
+      return [...state, ...action.regions];
+    }
+    case 'CHANGE_REGION': {
+      const updatedRegions = state.map((r) => {
+        const region = r;
+        if (action.region === region.name) {
+          region.current = true;
+        } else region.current = false;
+        return region;
+      });
+      return updatedRegions;
+    }
+    default:
+      return state;
+  }
+}
+
 function MAP(state = defaultState.MAP, action) {
   let activeLayers;
   let activeLayerKeys;
@@ -140,5 +161,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, LAYERS, STYLES, MAP,
+  APP, LAYERS, STYLES, MAP, REGIONS,
 };

@@ -14,9 +14,8 @@ const defaultState = {
     appIcon: 'gisida-sample.png',
     appName: 'React Gisida',
   },
-  LAYERS: {
-
-  },
+  LAYERS: [
+  ],
   STYLES: [
     {
       label: 'Satelitte',
@@ -26,6 +25,8 @@ const defaultState = {
       label: 'Satelitte Streets',
       style: 'mapbox: //styles/mapbox/satellite-streets-v9',
     },
+  ],
+  REGIONS: [
   ],
   MAP: {
     isLoaded: false,
