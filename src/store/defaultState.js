@@ -19,11 +19,11 @@ const defaultState = {
   STYLES: [
     {
       label: 'Satelitte',
-      style: 'mapbox: //styles/mapbox/satellite-v9',
+      style: 'mapbox://styles/mapbox/satellite-v9',
     },
     {
       label: 'Satelitte Streets',
-      style: 'mapbox: //styles/mapbox/satellite-streets-v9',
+      style: 'mapbox://styles/mapbox/satellite-streets-v9',
     },
   ],
   REGIONS: [

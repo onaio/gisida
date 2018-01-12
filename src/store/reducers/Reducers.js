@@ -11,13 +11,24 @@ function APP(state = defaultState.APP, action) {
 
 function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
-    case 'INIT_STYLES':
-      return [...state, ...action.styles.slice(0)];
-    case 'CHANGE_STYLE':
-      state.map((style) => {
-        // if (style.style===action.style)
+    case 'INIT_STYLES': {
+      const styles = action.styles.map((s) => {
+        const style = s;
+        if (style.style === action.mapConfig.style) style.current = true;
+        return style;
       });
-      return state;
+      return styles;
+    }
+    case 'CHANGE_STYLE': {
+      const updatedStyles = state.map((s) => {
+        const style = s;
+        if (action.style === style.style) {
+          style.current = true;
+        } else style.current = false;
+        return style;
+      });
+      return updatedStyles;
+    }
     default:
       return state;
   }
@@ -79,7 +90,16 @@ function LAYERS(state = defaultState.LAYERS, action) {
 function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case 'INIT_REGIONS': {
-      return [...state, ...action.regions];
+      const regions = action.regions.map((r) => {
+        const region = r;
+        if (
+          region.center[0] === action.mapConfig.center[0] &&
+          region.center[1] === action.mapConfig.center[1]) {
+          region.current = true;
+        }
+        return region;
+      });
+      return regions;
     }
     case 'CHANGE_REGION': {
       const updatedRegions = state.map((r) => {

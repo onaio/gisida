@@ -40,8 +40,8 @@ export default function initStore(customReducers) {
     }
 
     store.dispatch(initApp(config.APP));
-    store.dispatch(initStyles(config.STYLES));
-    store.dispatch(initRegions(config.REGIONS));
+    store.dispatch(initStyles(config.STYLES, config.APP.mapConfig));
+    store.dispatch(initRegions(config.REGIONS, config.APP.mapConfig));
   }
 
   // Read config.json and add to redux store

@@ -3,14 +3,16 @@ export const initApp = config => ({
   config,
 });
 
-export const initStyles = styles => ({
+export const initStyles = (styles, mapConfig) => ({
   type: 'INIT_STYLES',
   styles,
+  mapConfig
 });
 
-export const initRegions = regions => ({
+export const initRegions = (regions, mapConfig) => ({
   type: 'INIT_REGIONS',
   regions,
+  mapConfig,
 });
 
 export const addLayer = layer => ({
@@ -21,6 +23,11 @@ export const addLayer = layer => ({
 export const changeRegion = region => ({
   type: 'CHANGE_REGION',
   region,
+});
+
+export const changeStyle = style => ({
+  type: 'CHANGE_STYLE',
+  style,
 });
 
 export const toggleLayer = layerId => ({
@@ -55,4 +62,5 @@ export default {
   receiveData,
   mapLoaded,
   changeRegion,
+  changeStyle,
 };
