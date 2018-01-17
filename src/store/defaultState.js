@@ -11,7 +11,6 @@ const defaultState = {
       zoom: 5,
     },
     accessToken: false,
-    appIcon: 'gisida-sample.png',
     appName: 'React Gisida',
   },
   LAYERS: [
@@ -19,17 +18,19 @@ const defaultState = {
   STYLES: [
     {
       label: 'Satelitte',
-      style: 'mapbox://styles/mapbox/satellite-v9',
+      url: 'mapbox://styles/mapbox/satellite-v9',
     },
     {
       label: 'Satelitte Streets',
-      style: 'mapbox://styles/mapbox/satellite-streets-v9',
+      url: 'mapbox://styles/mapbox/satellite-streets-v9',
     },
   ],
   REGIONS: [
   ],
   MAP: {
+    isRendered: false,
     isLoaded: false,
+    currentStyle: '',
     processedLayers: {},
     activeLayers: {},
     layersToRemove: [],

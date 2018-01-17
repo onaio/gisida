@@ -14,7 +14,7 @@ function STYLES(state = defaultState.STYLES, action) {
     case 'INIT_STYLES': {
       const styles = action.styles.map((s) => {
         const style = s;
-        if (style.style === action.mapConfig.style) style.current = true;
+        if (style.url === action.mapConfig.style) style.current = true;
         return style;
       });
       return styles;
@@ -22,7 +22,7 @@ function STYLES(state = defaultState.STYLES, action) {
     case 'CHANGE_STYLE': {
       const updatedStyles = state.map((s) => {
         const style = s;
-        if (action.style === style.style) {
+        if (action.style === style.url) {
           style.current = true;
         } else style.current = false;
         return style;
@@ -124,10 +124,25 @@ function MAP(state = defaultState.MAP, action) {
   let layersToAdd;
 
   switch (action.type) {
-    case 'IS_LOADED':
+    case 'MAP_RENDERED':
+      return {
+        ...state,
+        isRendered: true,
+      };
+    case 'MAP_LOADED':
       return {
         ...state,
         isLoaded: true,
+      };
+    case 'STYLE_CHANGED':
+      return {
+        ...state,
+        styleChanged: action.isStyleChanged,
+      };
+    case 'CHANGE_STYLE':
+      return {
+        ...state,
+        currentStyle: action.style,
       };
     case 'ADD_LAYERS':
       processedLayers = { ...state.processedLayers };
