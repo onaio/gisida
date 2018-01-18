@@ -133,11 +133,18 @@ function MAP(state = defaultState.MAP, action) {
       return {
         ...state,
         isLoaded: true,
+        reloadLayers: true,
       };
     case 'STYLE_CHANGED':
       return {
         ...state,
         styleChanged: action.isStyleChanged,
+      };
+
+    case 'RELOAD_LAYERS':
+      return {
+        ...state,
+        reloadLayers: action.reload,
       };
     case 'CHANGE_STYLE':
       return {

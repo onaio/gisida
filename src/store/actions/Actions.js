@@ -46,7 +46,6 @@ export const receiveData = layer => ({
   layer,
 });
 
-
 export const mapRendered = isRendered => ({
   type: 'MAP_RENDERED',
   isRendered,
@@ -57,9 +56,9 @@ export const mapLoaded = isLoaded => ({
   isLoaded,
 });
 
-export const styleChanged = isStyleChanged => ({
-  type: 'STYLE_CHANGED',
-  isStyleChanged,
+export const reloadLayers = reload => ({
+  type: 'RELOAD_LAYERS',
+  reload,
 });
 
 export default {
@@ -68,8 +67,8 @@ export default {
   initRegions,
   mapRendered,
   mapLoaded,
-  styleChanged,
   addLayer,
+  reloadLayers,
   toggleLayer,
   requestData,
   receiveData,

@@ -30,6 +30,7 @@ const defaultState = {
   MAP: {
     isRendered: false,
     isLoaded: false,
+    reloadLayers: false,
     currentStyle: '',
     processedLayers: {},
     activeLayers: {},
