@@ -3,14 +3,31 @@ export const initApp = config => ({
   config,
 });
 
-export const initStyles = styles => ({
+export const initStyles = (styles, mapConfig) => ({
   type: 'INIT_STYLES',
   styles,
+  mapConfig
+});
+
+export const initRegions = (regions, mapConfig) => ({
+  type: 'INIT_REGIONS',
+  regions,
+  mapConfig,
 });
 
 export const addLayer = layer => ({
   type: 'ADD_LAYER',
   layer,
+});
+
+export const changeRegion = region => ({
+  type: 'CHANGE_REGION',
+  region,
+});
+
+export const changeStyle = style => ({
+  type: 'CHANGE_STYLE',
+  style,
 });
 
 export const toggleLayer = layerId => ({
@@ -29,18 +46,32 @@ export const receiveData = layer => ({
   layer,
 });
 
+export const mapRendered = isRendered => ({
+  type: 'MAP_RENDERED',
+  isRendered,
+});
+
 export const mapLoaded = isLoaded => ({
-  type: 'IS_LOADED',
+  type: 'MAP_LOADED',
   isLoaded,
 });
 
+export const reloadLayers = reload => ({
+  type: 'RELOAD_LAYERS',
+  reload,
+});
 
 export default {
   initApp,
   initStyles,
+  initRegions,
+  mapRendered,
+  mapLoaded,
   addLayer,
+  reloadLayers,
   toggleLayer,
   requestData,
   receiveData,
-  mapLoaded,
+  changeRegion,
+  changeStyle,
 };

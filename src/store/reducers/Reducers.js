@@ -11,13 +11,24 @@ function APP(state = defaultState.APP, action) {
 
 function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
-    case 'INIT_STYLES':
-      return [...state, ...action.styles.slice(0)];
-    case 'CHANGE_STYLE':
-      state.map((style) => {
-        // if (style.style===action.style)
+    case 'INIT_STYLES': {
+      const styles = action.styles.map((s) => {
+        const style = s;
+        if (style.url === action.mapConfig.style) style.current = true;
+        return style;
       });
-      return state;
+      return styles;
+    }
+    case 'CHANGE_STYLE': {
+      const updatedStyles = state.map((s) => {
+        const style = s;
+        if (action.style === style.url) {
+          style.current = true;
+        } else style.current = false;
+        return style;
+      });
+      return updatedStyles;
+    }
     default:
       return state;
   }
@@ -75,6 +86,36 @@ function LAYERS(state = defaultState.LAYERS, action) {
   }
 }
 
+
+function REGIONS(state = defaultState.REGIONS, action) {
+  switch (action.type) {
+    case 'INIT_REGIONS': {
+      const regions = action.regions.map((r) => {
+        const region = r;
+        if (
+          region.center[0] === action.mapConfig.center[0] &&
+          region.center[1] === action.mapConfig.center[1]) {
+          region.current = true;
+        }
+        return region;
+      });
+      return regions;
+    }
+    case 'CHANGE_REGION': {
+      const updatedRegions = state.map((r) => {
+        const region = r;
+        if (action.region === region.name) {
+          region.current = true;
+        } else region.current = false;
+        return region;
+      });
+      return updatedRegions;
+    }
+    default:
+      return state;
+  }
+}
+
 function MAP(state = defaultState.MAP, action) {
   let activeLayers;
   let activeLayerKeys;
@@ -83,10 +124,32 @@ function MAP(state = defaultState.MAP, action) {
   let layersToAdd;
 
   switch (action.type) {
-    case 'IS_LOADED':
+    case 'MAP_RENDERED':
+      return {
+        ...state,
+        isRendered: true,
+      };
+    case 'MAP_LOADED':
       return {
         ...state,
         isLoaded: true,
+        reloadLayers: true,
+      };
+    case 'STYLE_CHANGED':
+      return {
+        ...state,
+        styleChanged: action.isStyleChanged,
+      };
+
+    case 'RELOAD_LAYERS':
+      return {
+        ...state,
+        reloadLayers: action.reload,
+      };
+    case 'CHANGE_STYLE':
+      return {
+        ...state,
+        currentStyle: action.style,
       };
     case 'ADD_LAYERS':
       processedLayers = { ...state.processedLayers };
@@ -140,5 +203,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, LAYERS, STYLES, MAP,
+  APP, LAYERS, STYLES, MAP, REGIONS,
 };
