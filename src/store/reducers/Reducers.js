@@ -37,7 +37,7 @@ function STYLES(state = defaultState.STYLES, action) {
 function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case 'INIT_REGIONS': {
-      const regions = action.regions.map((r) => {
+      const regions = action.regions ? action.regions.map((r) => {
         const region = r;
         if (
           region.center[0] === action.mapConfig.center[0] &&
@@ -45,7 +45,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
           region.current = true;
         }
         return region;
-      });
+      }) : [];
       return regions;
     }
     case 'CHANGE_REGION': {
