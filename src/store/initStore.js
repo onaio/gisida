@@ -23,7 +23,7 @@ export default function initStore(customReducers) {
       config.LAYERS.map((layer) => {
         // todo: check if `layer` is full URL e.g http://mydomailn/mylayer.json
         // and load it directly
-        const path = `${config.APP.layersPath}/${layer}.json`;
+        const path = `config/${config.APP.layersPath}/${layer}.json`;
 
         function addLayerToStore(responseObj) {
           const layerObj = responseObj;
@@ -44,7 +44,7 @@ export default function initStore(customReducers) {
     store.dispatch(initRegions(config.REGIONS, config.APP.mapConfig));
   }
 
-  // Read config.json and add to redux store
-  loadJSON('config.json', addConfigToStore);
+  // Read site-config.json and add to redux store
+  loadJSON('config/site-config.json', addConfigToStore);
   return store;
 }
