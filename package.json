@@ -19,10 +19,12 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "colorbrewer": "^1.0.0",
+    "highcharts": "^6.0.4",
     "jsx-loader": "^0.13.2",
     "mustache": "^2.3.0",
     "papaparse": "^4.3.6",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "simple-statistics": "^5.2.0",
     "webpack": "^3.8.1"
   },

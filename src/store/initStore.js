@@ -1,9 +1,9 @@
-import { createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 import { initApp, initStyles, initRegions, addLayer } from './actions/Actions';
 import defaultReducers from './reducers/Reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
-
 
 export default function initStore(customReducers) {
   let reducers;
@@ -14,17 +14,16 @@ export default function initStore(customReducers) {
   }
 
   // Create initial store
-  const store = createStore(reducers);
+  const store = createStore(reducers, applyMiddleware(thunk));
 
   // Add config to redux store
   function addConfigToStore(config) {
     // Check if config has list of layers and add them to store
-    if (config.LAYERS.length > 0 && config.APP.layersPath) {
+    if (config.LAYERS.length > 0) {
       config.LAYERS.map((layer) => {
         // todo: check if `layer` is full URL e.g http://mydomailn/mylayer.json
         // and load it directly
-        const path = `${config.APP.layersPath}/${layer}.json`;
-
+        const path = `config/layers/${layer}.json`;
         function addLayerToStore(responseObj) {
           const layerObj = responseObj;
           layerObj.id = layer;
@@ -44,7 +43,7 @@ export default function initStore(customReducers) {
     store.dispatch(initRegions(config.REGIONS, config.APP.mapConfig));
   }
 
-  // Read config.json and add to redux store
-  loadJSON('config.json', addConfigToStore);
+  // Read site-config.json and add to redux store
+  loadJSON('config/site-config.json', addConfigToStore);
   return store;
 }

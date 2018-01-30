@@ -28,6 +28,7 @@ const getColor = function getColor(c, i) {
 };
 
 function getStops(layer) {
+  console.log(layer);
   const colorsStops = [];
   const radiusStops = [];
   const radius = layer.radiusRange || defaultRadiusRange;
@@ -131,5 +132,7 @@ export default function (layer, timefield) {
     }
   }
 
-  return getStops({ data, colors, osmIDs, periods, limit, clusters, radiusRange });
+  return getStops({
+    data, colors, osmIDs, periods, limit, clusters, radiusRange,
+  });
 }

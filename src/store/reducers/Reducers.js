@@ -34,63 +34,10 @@ function STYLES(state = defaultState.STYLES, action) {
   }
 }
 
-function LAYERS(state = defaultState.LAYERS, action) {
-  switch (action.type) {
-    case 'ADD_LAYER': {
-      const updatedState = {};
-      updatedState[action.layer.id] = action.layer;
-      return { ...state, ...updatedState };
-    }
-    case 'TOGGLE_LAYER': {
-      const { layerId } = action;
-      const layer = state[layerId];
-      return {
-        ...state,
-        // Update visible property
-        [layerId]: {
-          ...layer,
-          visible: !layer.visible,
-        },
-      };
-    }
-    case 'REQUEST_DATA': {
-      const { layerId } = action;
-      const layer = state[layerId];
-      return {
-        ...state,
-        // Update isLoading property
-        [layerId]: {
-          ...layer,
-          isLoading: true,
-          loaded: false,
-        },
-      };
-    }
-    case 'RECEIVE_DATA': {
-      const { layer } = action;
-      const oldLayer = state[layer.id];
-      return {
-        ...state,
-        // Update isLoading property
-        [layer.id]: {
-          ...oldLayer,
-          source: layer.source,
-          labels: layer.labels,
-          isLoading: false,
-          loaded: true,
-        },
-      };
-    }
-    default:
-      return state;
-  }
-}
-
-
 function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case 'INIT_REGIONS': {
-      const regions = action.regions.map((r) => {
+      const regions = action.regions ? action.regions.map((r) => {
         const region = r;
         if (
           region.center[0] === action.mapConfig.center[0] &&
@@ -98,7 +45,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
           region.current = true;
         }
         return region;
-      });
+      }) : [];
       return regions;
     }
     case 'CHANGE_REGION': {
@@ -117,12 +64,6 @@ function REGIONS(state = defaultState.REGIONS, action) {
 }
 
 function MAP(state = defaultState.MAP, action) {
-  let activeLayers;
-  let activeLayerKeys;
-  let processedLayers;
-  let layersToRemove;
-  let layersToAdd;
-
   switch (action.type) {
     case 'MAP_RENDERED':
       return {
@@ -151,57 +92,74 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         currentStyle: action.style,
       };
-    case 'ADD_LAYERS':
-      processedLayers = { ...state.processedLayers };
-      activeLayers = { ...state.activeLayers };
-      layersToAdd = [];
-
-      action.layers.forEach((l) => {
-        processedLayers[l.id] = l;
-        if (!Object.keys(activeLayers).includes(l.id)) {
-          layersToAdd.push(l.id);
-        }
-        activeLayers[l.id] = l;
-      });
+    case 'ADD_LAYER': {
+      const layers = {};
+      layers[action.layer.id] = action.layer;
+      const updatedLayers = { ...state.layers, ...layers };
       return {
         ...state,
-        processedLayers,
-        activeLayers,
-        layersToAdd,
+        layers: updatedLayers,
       };
-    case 'REMOVE_LAYERS':
-      activeLayerKeys = Object.keys(state.activeLayers);
-      activeLayers = {};
-      layersToRemove = [];
-
-      activeLayerKeys.forEach((l) => {
-        if (!action.layers.includes(l)) {
-          activeLayers[l] = { ...state.activeLayers[l] };
-        } else {
-          layersToRemove.push(l);
-        }
-      });
-
+    }
+    case 'TOGGLE_LAYER': {
+      const { layerId } = action;
+      const layer = state.layers[layerId];
+      const updatedLayers = {
+        ...state.layers,
+        [layerId]: {
+          ...layer,
+          visible: !layer.visible,
+        },
+      };
       return {
         ...state,
-        activeLayers,
-        layersToRemove,
+        // Update visible property
+        layers: updatedLayers,
+        reloadLayers: Math.random(),
       };
-    case 'LAYERS_REMOVED':
+    }
+    case 'REQUEST_DATA': {
+      const { layerId } = action;
+      const layer = state.layers[layerId];
+      const updatedLayers = {
+        ...state.layers,
+        [layerId]: {
+          ...layer,
+          isLoading: true,
+          loaded: false,
+        },
+      };
       return {
         ...state,
-        layersToRemove: [],
+        // Update isLoading property
+        layers: updatedLayers,
       };
-    case 'LAYERS_ADDED':
+    }
+    case 'RECEIVE_DATA': {
+      const { layer } = action;
+      const oldLayer = state.layers[layer.id];
+      const updatedLayers = {
+        ...state.layers,
+        [layer.id]: {
+          ...oldLayer,
+          source: layer.source,
+          labels: layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      };
       return {
         ...state,
-        layersToAdd: [],
+        // Update isLoading property
+        layers: updatedLayers,
+        reloadLayers: Math.random(),
       };
+    }
     default:
       return state;
   }
 }
 
 export default {
-  APP, LAYERS, STYLES, MAP, REGIONS,
+  APP, STYLES, MAP, REGIONS,
 };

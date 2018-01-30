@@ -13,8 +13,6 @@ const defaultState = {
     accessToken: false,
     appName: 'React Gisida',
   },
-  LAYERS: [
-  ],
   STYLES: [
     {
       label: 'Satelitte',
@@ -32,10 +30,7 @@ const defaultState = {
     isLoaded: false,
     reloadLayers: false,
     currentStyle: '',
-    processedLayers: {},
-    activeLayers: {},
-    layersToRemove: [],
-    layersToAdd: [],
+    layers: {},
   },
 };
 

@@ -6,5 +6,6 @@ gisida.Actions = require('./store/actions/Actions').default;
 gisida.Reducers = require('./store/reducers/Reducers').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addLayer = require('./map/addLayer').default;
+gisida.addPopUp = require('./map/addPopUp').default;
 
 module.exports = gisida;

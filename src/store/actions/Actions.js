@@ -61,6 +61,10 @@ export const reloadLayers = reload => ({
   reload,
 });
 
+export const getCurrentState = () => function (dispatch, getState) {
+  return getState();
+};
+
 export default {
   initApp,
   initStyles,
@@ -74,4 +78,5 @@ export default {
   receiveData,
   changeRegion,
   changeStyle,
+  getCurrentState,
 };

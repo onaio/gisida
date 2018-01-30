@@ -19,11 +19,7 @@ Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need
 $ npm install gisida
 ```
 
-or
-
-```
-$ yarn add gisida
-```
+**NOTE:** You can alternetively use [`yarn`](https://yarnpkg.com/en/docs/getting-started) to manage your node packages.
 
 ### UMD build
 
@@ -147,16 +143,12 @@ To locally develop and make changes to gisida:
 $ git clone git@github.com:onaio/gisida.git
 ```
 
-- Link local module  using [`npm link`](https://docs.npmjs.com/cli/link) or [`yarn link`](https://yarnpkg.com/lang/en/docs/cli/link/)
+- Link the project folder as local module within your project using [`npm link`](https://docs.npmjs.com/cli/link) or [`yarn link`](https://yarnpkg.com/lang/en/docs/cli/link/) if you use yarn as your preferred node package manager. 
 
 - Run development build:
 
 ```
 $ npm develop
-```
-or 
-```
-$ yarn develop
 ```
 
 ### Prodcution build 
@@ -166,8 +158,7 @@ $ yarn develop
 $ npm build
 ```
 
-or 
-
+- Publish to npm
 ```
-$ yarn build
+$ npm publish
 ```

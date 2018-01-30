@@ -1,6 +1,72 @@
 import { ckmeans } from 'simple-statistics';
+import Highcharts from 'highcharts';
 
-export default function addChart(layer, data) {
+function drawDoughnutChart(container, data, dimension) {
+  Highcharts.chart(container, {
+    chart: {
+      type: 'pie',
+      spacing: 0,
+      backgroundColor: 'transparent',
+      height: dimension,
+      width: dimension,
+    },
+    title: {
+      text: '',
+    },
+    credits: {
+      enabled: false,
+    },
+    tooltip: {
+      enabled: false,
+      backgroundColor: 'rgba(255,255,255,0)',
+      borderWidth: 0,
+      shadow: false,
+      useHTML: true,
+      formatter() {
+        if (this.point.options.label !== undefined) {
+          return `<div class="chart-Tooltip"><b>${this.point.options.label}: 
+            ${this.point.options.y.toFixed(0)}%</b></div>`;
+        }
+        return '';
+      },
+    },
+    plotOptions: {
+      series: {
+        animation: true,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+      pie: {
+        allowPointSelect: false,
+        // borderWidth: 0,
+        borderColor: '#fff',
+        dataLabels: {
+          enabled: false,
+          distance: 80,
+          crop: false,
+          overflow: 'none',
+          formatter() {
+            if (this.point.scoreLabel !== undefined) {
+              return `<b>${this.point.label}</b>`;
+            }
+            return '';
+          },
+          style: {
+            fontWeight: 'bold',
+          },
+        },
+        center: ['50%', '50%'],
+      },
+    },
+    series: data,
+  });
+}
+
+export default function addChart(map, layer, data) {
+  const mapId = 'map-1';
   const population = data.map(d => d[layer.categories.total]);
   const clusters = ckmeans(population, layer.categories.clusters);
 
@@ -58,11 +124,11 @@ export default function addChart(layer, data) {
     const content = `<div><b>${district[layer.source.join[1]]}</b></div>${chartProp}`;
 
     const el = document.createElement('div');
-    el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${this.props.mapId}`;
-    el.className = `marker-chart marker-chart-${layer.id}-${this.props.mapId}`;
+    el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${mapId}`;
+    el.className = `marker-chart marker-chart-${layer.id}-${mapId}`;
     el.style.width = layer.chart.width;
     el.style.height = layer.chart.height;
-    $(el).attr('data-map', this.props.mapId);
+    $(el).attr('data-map', mapId);
     $(el).attr('data-lng', district[layer.chart.coordinates[0]]);
     $(el).attr('data-lat', district[layer.chart.coordinates[1]]);
     $(el).attr('data-popup', content);
@@ -72,9 +138,9 @@ export default function addChart(layer, data) {
       offset: layer.chart.offset,
     })
       .setLngLat([district[layer.chart.coordinates[0]], district[layer.chart.coordinates[1]]])
-      .addTo(this.map);
+      .addTo(map);
 
-    const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${this.props.mapId}`)[0];
-    Map.drawDoughnutChart(container, chartData, dimension);
+    const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${mapId}`)[0];
+    drawDoughnutChart(container, chartData, dimension);
   });
 }
