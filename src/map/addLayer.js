@@ -319,7 +319,7 @@ export default function addLayer(map, layer, mapConfig) {
       newStops = { id: layer.id, period, timefield };
       data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
     }
-    addChart(layer, data);
+    addChart(map, layer, data);
   }
 
   // Generate layersObj

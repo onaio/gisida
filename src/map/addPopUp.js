@@ -15,35 +15,35 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
     const { layers } = currentState.MAP;
+
     // Generate list of active layers
     const activeLayers = [];
     Object.keys(layers).forEach((key) => {
       const layer = layers[key];
-      if (layer.visible) {
+      if (layer.visible && layer.type !== 'chart') {
         activeLayers.push(key);
       }
     });
+
     // Get rendered features from active layers under mouse pointer
     const features = map.queryRenderedFeatures(e.point, {
       layers: activeLayers,
     });
+
     // Remove pop up if no features under mouse pointer
     if (!features || !features.length > 0) {
       popup.remove();
       return false;
     }
-
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
+    // Get layer data for feature under mouse pointer
     const feature = features[0];
-    // self.popupFeature = feature;
-    // self.popupFeatureId = feature.properties[layers[features[0].layer.id].source.join[0]];
-
     const activeLayerId = feature.layer.id;
     const layer = layers[activeLayerId];
 
-    if (layer.type !== 'chart' && layer.popup) {
+    if (layer.popup && layer.type !== 'chart') {
       let periodData = [];
       // Assign period data if layer has time series
       if (layer.aggregate && layer.aggregate.timeseries) {
@@ -82,16 +82,13 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
     return true;
   });
 
-  // TODO: add popups for marker charts
-  // $(document).on('mousemove', '.marker-chart', (e) => {
-  //   const mapId = $(e.currentTarget).data('map');
-  //   const lng = $(e.currentTarget).data('lng');
-  //   const lat = $(e.currentTarget).data('lat');
-  //   const content = $(e.currentTarget).data('popup');
-  //   if (mapId === self.props.mapId) {
-  //     popup.setLngLat([parseFloat(lng), parseFloat(lat)])
-  //       .setHTML(content)
-  //       .addTo(map);
-  //   }
-  // });
+  // add popups for marker charts
+  $(document).on('mousemove', '.marker-chart', (e) => {
+    const lng = $(e.currentTarget).data('lng');
+    const lat = $(e.currentTarget).data('lat');
+    content = $(e.currentTarget).data('popup');
+    popup.setLngLat([parseFloat(lng), parseFloat(lat)])
+      .setHTML(content)
+      .addTo(map);
+  });
 }
