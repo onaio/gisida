@@ -319,9 +319,9 @@ class App extends React.Component {
         row.country))].filter(country => country !== undefined);
       const countries = {};
       headers.forEach((country) => {
-        if (country !== 'Ethiopia') {
-          countries[country] = [];
-        }
+        // if (country !== 'Ethiopia') {
+        countries[country] = [];
+        // }
       });
       for (let i = 0; i < this.state.indicatorData.length; i += 1) {
         const row = this.state.indicatorData[i];
