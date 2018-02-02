@@ -1,8 +1,27 @@
-import { getLastIndex } from '../utils/getLastIndex';
+import { getCurrentState } from '../store/actions/Actions';
+import getLastIndex from '../utils/getLastIndex';
 
-export default function buildTimeseriesData(Stops) {
-  const timeSeriesLayers = this.getSliderLayers();
-  const activeLayers = this.state.layers.map(layer => layer.title);
+function getSliderLayers(layers) {
+  const sliderIds = [];
+  Object.keys(layers).forEach((key) => {
+    sliderIds.push(key);
+  });
+
+  const sliderLayers = [];
+  for (let i = 0; i < sliderIds.length; i += 1) {
+    if ('aggregate' in layers[sliderIds[i]] &&
+      'timeseries' in layers[sliderIds[i]].aggregate) {
+      sliderLayers.push(sliderIds[i]);
+    }
+  }
+  return sliderLayers;
+}
+
+
+export default function buildTimeseriesData(Stops, layers) {
+  console.log(layers);
+  const timeSeriesLayers = getSliderLayers();
+  const activeLayers = layers.layers.map(layer => layer.title);
   const timeseriesMap = {};
 
   let layerId;
@@ -38,7 +57,7 @@ export default function buildTimeseriesData(Stops) {
 
     if (activeLayers.includes(layerId) && !this.state.timeseries[layerId]) {
       index = getLastIndex(activeLayers, layerId);
-      layerObj = this.props.layerData[layerId];
+      layerObj = layers[layerId];
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
 
       if (this.state && this.state.layers[index] && this.state.layers[index].visible === true &&

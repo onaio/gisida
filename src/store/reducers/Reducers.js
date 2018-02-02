@@ -140,17 +140,16 @@ function MAP(state = defaultState.MAP, action) {
       const oldLayer = state.layers[layer.id];
       const updatedLayers = {
         ...state.layers,
-        [layer.id]: {
-          ...oldLayer,
+        [layer.id]: Object.assign({}, oldLayer, layer, {
           source: layer.source,
           labels: layer.labels,
           isLoading: false,
           loaded: true,
-        },
+          visible: true,
+        }),
       };
       return {
         ...state,
-        // Update isLoading property
         layers: updatedLayers,
         reloadLayers: Math.random(),
       };

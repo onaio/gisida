@@ -1,10 +1,9 @@
-/* eslint-disable import/first */
+import * as d3 from 'd3';
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData } from '../store/actions/Actions';
-import * as d3 from 'd3';
 
 
 /**
@@ -73,19 +72,18 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
         const mergedData = [].concat(...data);
         processedLayer.mergedData = mergedData;
         if (layerSpec.aggregate && layerSpec.aggregate.filter) {
-          generateFilterOptions(layerSpec);
+          generateFilterOptions(processedLayer);
         }
-        processedLayer.source.data = layerSpec.aggregate.type ?
+        processedLayer.source.data = layerSpec.aggregate && layerSpec.aggregate.type ?
           aggregateData(layerSpec, this.props.locations) : mergedData;
-        processedLayer.loaded = true;
-        // renderData(layerSpec);
+        renderData(processedLayer);
       });
     } else if (filterOptions) {
       processedLayer.source.data =
-        layerSpec.aggregate.type ?
-          aggregateData(layerSpec, this.props.locations, filterOptions) :
-          processFilters(layerSpec, filterOptions);
-      // self.addLayer(layerSpec);
+        processedLayer.aggregate.type ?
+          aggregateData(processedLayer, this.props.locations, filterOptions) :
+          processFilters(processedLayer, filterOptions);
+      renderData(processedLayer);
     } else {
       // add the already processed layer
       dispatch(receiveData(layerSpec));

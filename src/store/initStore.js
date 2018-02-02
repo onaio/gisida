@@ -16,6 +16,8 @@ export default function initStore(customReducers) {
   // Create initial store
   const store = createStore(reducers, applyMiddleware(thunk));
 
+  window.dispatch = store.dispatch;
+
   // Add config to redux store
   function addConfigToStore(config) {
     // Check if config has list of layers and add them to store
@@ -26,7 +28,9 @@ export default function initStore(customReducers) {
         const path = `config/layers/${layer}.json`;
         function addLayerToStore(responseObj) {
           const layerObj = responseObj;
-          layerObj.id = layer;
+          const pathSplit = layer.split('/');
+          const layerId = pathSplit[pathSplit.length - 1];
+          layerObj.id = layerId;
           layerObj.loaded = false;
           store.dispatch(addLayer(layerObj));
           if (layerObj.visible && !layerObj.loaded) {

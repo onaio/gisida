@@ -1,10 +1,15 @@
+import Mustache from 'mustache';
 import formatNum from '../utils/formatNum';
 import hexToRgbA from '../utils/hexToRgbA';
+import setPrimaryLayer from './setPrimaryLayer';
+
 
 export default function addLegend(layer, stops, data, breaks, colors) {
   // todo: change for split map
-  const mapId = '01';
 
+  const mapId = '01';
+  const creditContent = Mustache.render(layer.credit);
+  $(`#legend-${layer.id}-${mapId}`).remove();
   if (!layer.visible) {
     // $(`#legend-${layerId}-${mapId} .set-primary-layer`).off('click', this.setPrimaryLayer);
     $(`#legend-${layer.id}-${mapId}`).remove();
@@ -20,8 +25,9 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <span class="circle-md" style="background:${layer.categories.color};"></span>
             <span class="circle-lg" style="background:${layer.categories.color};"></span>
           </div>
-          <span>${layer.credit}</span>
-        </div>`);
+          <span>${creditContent}</span>
+        </div>`,
+      );
 
       // legends for symbol layers
     } else if (layer.credit && layer.categories.shape && layer.type !== 'circle') {
@@ -40,8 +46,9 @@ export default function addLegend(layer, stops, data, breaks, colors) {
           <div class="legend-shapes">
             <ul style="left: 0;">${background}</ul>
           </div>
-          <span>${layer.credit}</span>
-        </div>`);
+          <span>${creditContent}</span>
+        </div>`,
+      );
 
       // legends for fill layers with no breaks
     } else if (layer.credit && layer.categories.breaks === 'no') {
@@ -56,8 +63,9 @@ export default function addLegend(layer, stops, data, breaks, colors) {
           <div class="legend-fill ${layer.categories ? 'legend-label' : ''}">
             <ul>${background}</ul>
           </div>
-          <span>${layer.credit}</span>
-        </div>`);
+          <span>${creditContent}</span>
+        </div>`,
+      );
 
       // legends for fill layrs with breaks
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
@@ -95,8 +103,9 @@ export default function addLegend(layer, stops, data, breaks, colors) {
           <div class="legend-fill">
             <ul id="legend-background">${background}</ul>
           </div>
-          <span>${layer.credit}</span>
-        </div>`);
+          <span>${creditContent}</span>
+        </div>`,
+      );
 
       $(`.background-block-${layer.id}-${mapId}`).hover(() => {
         $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
@@ -111,14 +120,14 @@ export default function addLegend(layer, stops, data, breaks, colors) {
       $('.set-primary-layer.primary').removeClass('primary');
     }
 
-    // $('.set-primary-layer.primary').removeClass('primary');
-    //   $(`#legend-${layer.id}-${mapId} .set-primary-layer`)
-    //     .on('click', this.setPrimaryLayer)
-    //     .addClass('primary');
+    $('.set-primary-layer.primary').removeClass('primary');
+    $(`#legend-${layer.id}-${mapId} .set-primary-layer`)
+      .on('click', setPrimaryLayer)
+      .addClass('primary');
 
     $('.legend-row.primary').removeClass('primary');
     $(`#legend-${layer.id}-${mapId}`)
-      .addClass('primary');
-    // .on('click', this.setPrimaryLayer);
+      .addClass('primary')
+      .on('click', setPrimaryLayer);
   }
 }

@@ -5,7 +5,7 @@ import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
 
-export default function addLayer(map, layer, mapConfig) {
+function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   // let newStops;
@@ -341,10 +341,6 @@ export default function addLayer(map, layer, mapConfig) {
   // }
   // layersObj.push(layer);
 
-
-  // sort the layers
-  // sortLayers();
-
   // disallow multiple fill layers on the map (todo - convert filters to nested for loops)
   // let id;
   // const filterLayerObjs = lo => lo.id !== id;
@@ -365,7 +361,7 @@ export default function addLayer(map, layer, mapConfig) {
   //   }
   // }
 
-  // const timeseriesMap = buildTimeseriesData(newStops);
+  // const timeseriesMap = buildTimeseriesData(newStops, layers);
   // if (timeseriesMap[layer.id]) {
   //   let mbLayer;
   //   switch (layer.type) {
@@ -395,4 +391,16 @@ export default function addLayer(map, layer, mapConfig) {
   // });
 
   return map;
+}
+
+export default function addLayers(map, layers, mapConfig) {
+  Object.keys(layers).forEach((key) => {
+    const layer = layers[key];
+    if (layer.loaded) {
+      addLayer(map, layer, mapConfig);
+    }
+  });
+
+  // sort the layers
+  sortLayers(map, layers);
 }

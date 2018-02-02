@@ -61,6 +61,11 @@ export const reloadLayers = reload => ({
   reload,
 });
 
+export const reloadLayer = reload => ({
+  type: 'RELOAD_LAYER',
+  reload,
+});
+
 export const getCurrentState = () => function (dispatch, getState) {
   return getState();
 };

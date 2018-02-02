@@ -32,20 +32,21 @@ export function generateFilterOptions(layerData) {
   const acceptedFilterValues = getLayerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = getLayerData.aggregate['accepted-sub-filter-values'];
   // get filter options from filter field
-  if (getLayerData.aggregate.filter) {
-    const filterValues = data.map(datum => datum[getLayerData.aggregate.filter]);
-    const subfilterValues = data.map(datum => datum[getLayerData.aggregate['sub-filter']]);
-    let allFilters = [].concat(...[filterValues, subfilterValues]);
-
-    allFilters = allFilters.filter(datum => datum !== undefined);
+  if (layerData.aggregate.filter) {
+    const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
+    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
+    const allFilters = [].concat(...[filterValues, subfilterValues]);
+    const cleanedFilters = allFilters.filter(datum => datum !== undefined
+      && datum !== ''
+        && datum !== 'n/a');
     // check filter values are in accepted values lists, remove those that are not
     let acceptedFilters = [];
     if (acceptedFilterValues || acceptedSubFilterValues) {
-      acceptedFilters = allFilters.filter(datum =>
+      acceptedFilters = cleanedFilters.filter(datum =>
         (datum !== undefined &&
           [].concat(...[acceptedFilterValues, acceptedSubFilterValues]).includes(datum)));
-    } else acceptedFilters = allFilters;
-    getLayerData.filterOptions = [...new Set(acceptedFilters)];
+    } else acceptedFilters = cleanedFilters;
+    layerData.filterOptions = [...new Set(acceptedFilters)];
   }
 }
 const months = ['January', 'February', 'March', 'April', 'May', 'June',

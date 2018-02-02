@@ -28,7 +28,6 @@ const getColor = function getColor(c, i) {
 };
 
 function getStops(layer) {
-  console.log(layer);
   const colorsStops = [];
   const radiusStops = [];
   const radius = layer.radiusRange || defaultRadiusRange;
@@ -78,17 +77,29 @@ function getStops(layer) {
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;
   const osmIDs = layer.limit ? rangeID : osmID;
+  const stopDomains = [];
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
-        colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
-        radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
+        const val = OSMIDsExist ? osmIDs[k] : data[k];
+        if (stopDomains.includes(val)) {
+          // Check for repeating stop domains
+          console.warn(`Reapting stop domain:, ${val}!`);
+        } 
+
+        if (val) {
+          colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
+          radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
+        }
+        stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
+
         break;
       }
     }
   }
+
 
   if (layer.periods) {
     const uniqPeriods = [...new Set(layer.periods)];
@@ -119,12 +130,11 @@ export default function (layer, timefield) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const { clusters } = layer.categories;
+  const { clusters, limit } = layer.categories;
   const colors = getColorBrewerColor(layer.categories.color, clusters) || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join[1]);
-  const { limit } = layer.categories;
   const radiusRange = layer['radius-range'];
 
   for (let i = 0; i < rows.length; i += 1) {
@@ -135,7 +145,16 @@ export default function (layer, timefield) {
       }
     } else {
       periods.push(rows[i][timefield]);
-      data.push(Number(rows[i][layer.property]));
+      const prop = rows[i][layer.property];
+      let property = -1;
+
+      if (isNaN(prop)) {
+        property = (prop === '1' || prop === 'TRUE' || prop === 'yes') ? 1 : 0;
+      } else {
+        property = Number(prop);
+      }
+
+      data.push(property);
       osmIDs.push(rows[i][layer.source.join[1]]);
     }
   }
