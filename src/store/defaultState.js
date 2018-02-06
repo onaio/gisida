@@ -10,6 +10,10 @@ const defaultState = {
       ],
       zoom: 5,
     },
+    loginConfig: {
+      password: '',
+      loginColor: ''
+    },
     accessToken: false,
     appName: 'React Gisida',
   },
