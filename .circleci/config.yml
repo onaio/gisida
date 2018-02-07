@@ -1,0 +1,15 @@
+ version: 2
+ jobs:
+   build:
+     working_directory: ~/gisida
+     docker:
+       - image: circleci/node:6.10.3
+     steps:
+       - checkout
+       - run: 
+           name: Install dependencies
+           command: yarn install
+       - run: 
+           name: Run eslint
+           command: npm run lint
+  
