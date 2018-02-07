@@ -1,3 +1,6 @@
+/* global milia */
+/* eslint no-undef: "error" */
+
 import { processFilters } from './filters';
 
 export default function aggregateData(layerData, locations, filterOptions) {
@@ -23,16 +26,18 @@ export default function aggregateData(layerData, locations, filterOptions) {
     });
   }
 
-  layerData.mergedData = data.filter(datum => datum.district_id !== undefined);
+  const nextLayerData = layerData;
+
+  nextLayerData.mergedData = data.filter(datum => datum.district_id !== undefined);
 
   // Process filters with filterOptions
-  data = processFilters(layerData, filterOptions);
+  data = processFilters(nextLayerData, filterOptions);
   // aggregate raw data
   aggregatedData =
     milia.stats.aggregate_data(
       data,
-      layerData.property,
-      layerData.aggregate,
+      nextLayerData.property,
+      nextLayerData.aggregate,
     );
 
   return aggregatedData;

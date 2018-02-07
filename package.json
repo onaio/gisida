@@ -19,7 +19,9 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "colorbrewer": "^1.0.0",
+    "d3": "^4.13.0",
     "highcharts": "^6.0.4",
+    "js-cookie": "^2.2.0",
     "jsx-loader": "^0.13.2",
     "mustache": "^2.3.0",
     "papaparse": "^4.3.6",
@@ -46,6 +48,7 @@
   "main": "dist/gisida.js",
   "scripts": {
     "lint": "eslint src --ext=jsx --ext=js",
+    "fix": "eslint src --ext=jsx --ext=js --fix",
     "build": "webpack --progress --env.production=true",
     "develop": "webpack --progress --watch --env.production=false"
   }

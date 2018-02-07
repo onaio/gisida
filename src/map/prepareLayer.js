@@ -1,9 +1,10 @@
-
+/* eslint-disable import/first */
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData } from '../store/actions/Actions';
+import * as d3 from 'd3';
 
 
 /**
@@ -24,7 +25,8 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
       dispatch(receiveData(spec));
     } else {
       loadCSV(spec.labels.data, (labels) => {
-        spec.labels.data = labels;
+        const nextSpec = spec;
+        nextSpec.labels.data = labels;
         dispatch(receiveData(spec));
       });
     }

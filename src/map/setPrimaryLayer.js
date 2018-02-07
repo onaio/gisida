@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+
 export default function setPrimaryLayer(e) {
   e.preventDefault();
   const $target = $(e.target).hasClass('legend-row')

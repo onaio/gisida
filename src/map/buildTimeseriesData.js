@@ -1,3 +1,5 @@
+import { getLastIndex } from '../utils/getLastIndex';
+
 export default function buildTimeseriesData(Stops) {
   const timeSeriesLayers = this.getSliderLayers();
   const activeLayers = this.state.layers.map(layer => layer.title);
@@ -43,16 +45,18 @@ export default function buildTimeseriesData(Stops) {
         layerObj.source.data instanceof Object && stops && layerObj.id === stops.id) {
         // Determine later stops
         if (layerObj.type === 'chart') {
-          period = this.state.stops.period;
+          ({ period } = this.state.stops.period);
           colorStops = layerObj.source.data;
         } else {
           const paintStops = stops.stops;
-          colorStops = paintStops[0];
-          radiusStops = paintStops[1];
-          period = paintStops[2];
-          breaks = paintStops[3];
-          colors = paintStops[4];
-          strokeWidthStops = paintStops[5];
+          const [first, second, third, fourth, fifth, sixth] = paintStops;
+          // referenced from http://www.deadcoderising.com/2017-03-28-es6-destructuring-an-elegant-way-of-extracting-data-from-arrays-and-objects-in-javascript/
+          colorStops = first;
+          radiusStops = second;
+          period = third;
+          breaks = fourth;
+          colors = fifth;
+          strokeWidthStops = sixth;
           stops = layerObj.type === 'circle' ? radiusStops : colorStops;
         }
 
@@ -66,9 +70,9 @@ export default function buildTimeseriesData(Stops) {
           periodData = {};
           period.forEach(periodDataFilter);
 
-          data = periodData[period[temporalIndex]].data;
+          ({ data } = periodData[period[temporalIndex]]);
         } else {
-          data = layerObj.source.data;
+          ({ data } = layerObj.source);
         }
       }
 

@@ -44,7 +44,8 @@ export default function addLabels(map, layer, data) {
     }
 
     if (typeof layer.labels.maxzoom === 'undefined') {
-      layer.labels.maxzoom = 22;
+      const nextLayer = layer;
+      nextLayer.labels.maxzoom = 22;
     }
     map.on('zoom', () => {
       if (map.getZoom() > layer.labels.minzoom
