@@ -35,10 +35,9 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
     const features = [];
     let propertiesMap;
     let datum;
-    let properties;
     let prop;
-    const longProp = spec["geo-columns"] && spec["geo-columns"][0] || "Longitude";
-    const latProp = spec["geo-columns"] && spec["geo-columns"][1] || "Latitude";
+    const longProp = (spec['geo-columns'] && spec['geo-columns'][0]) || 'Longitude';
+    const latProp = (spec['geo-columns'] && spec['geo-columns'][1]) || 'Latitude';
 
     for (let d = 0; d < data.length; d += 1) {
       datum = data[d];
@@ -46,7 +45,7 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
       if (spec.properties) {
         for (let p = 0; p < spec.properties.length; p += 1) {
           prop = spec.properties[p];
-          propertiesMap[prop] = isNaN(datum[prop]) ? datum[prop] : Number(datum[prop]);
+          propertiesMap[prop] = Number.isNaN(datum[prop]) ? datum[prop] : Number(datum[prop]);
         }
       }
 
