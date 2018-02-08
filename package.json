@@ -45,7 +45,7 @@
     "mapspec"
   ],
   "license": "MIT",
-  "main": "build/gisida.js",
+  "main": "build/index.js",
   "scripts": {
     "lint": "eslint src --ext=jsx --ext=js",
     "fix": "eslint src --ext=jsx --ext=js --fix",

@@ -7,8 +7,8 @@ const config = {
   },
   output: {
     path: path.resolve('./build/'),
-    filename: 'gisida.js',
-    libraryTarget: 'umd',
+    filename: 'index.js',
+    libraryTarget: 'commonjs',
   },
   devtool: 'eval-source-map',
   module: {
