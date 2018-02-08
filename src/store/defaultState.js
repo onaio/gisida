@@ -30,6 +30,7 @@ const defaultState = {
     isLoaded: false,
     reloadLayers: false,
     currentStyle: '',
+    currentRegion: '',
     layers: {},
   },
 };

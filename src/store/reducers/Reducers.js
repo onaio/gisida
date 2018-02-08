@@ -39,6 +39,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
     case 'INIT_REGIONS': {
       const regions = action.regions ? action.regions.map((r) => {
         const region = r;
+        // check if mapconfig center matches region center to set current region
         if (
           region.center[0] === action.mapConfig.center[0] &&
           region.center[1] === action.mapConfig.center[1]) {
@@ -75,6 +76,7 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         isLoaded: true,
         reloadLayers: true,
+        currentRegion: Math.random(),
       };
     case 'STYLE_CHANGED':
       return {
@@ -91,6 +93,11 @@ function MAP(state = defaultState.MAP, action) {
       return {
         ...state,
         currentStyle: action.style,
+      };
+    case 'CHANGE_REGION':
+      return {
+        ...state,
+        currentRegion: action.region,
       };
     case 'ADD_LAYER': {
       const layers = {};
