@@ -6,7 +6,7 @@ export const initApp = config => ({
 export const initStyles = (styles, mapConfig) => ({
   type: 'INIT_STYLES',
   styles,
-  mapConfig
+  mapConfig,
 });
 
 export const initRegions = (regions, mapConfig) => ({

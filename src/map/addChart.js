@@ -89,13 +89,13 @@ export default function addChart(map, layer, data) {
     for (let i = 0; i < layer.categories.property.length; i += 1) {
       chartArr.push({
         color: layer.categories.color[i],
-        y: parseInt(district[layer.categories.property[i]] / total * 100, 10),
+        y: parseInt((district[layer.categories.property[i]] / total) * 100, 10),
         label: layer.categories.label[i],
       });
-      propTotal += parseInt(district[layer.categories.property[i]] / total * 100, 10);
+      propTotal += parseInt((district[layer.categories.property[i]] / total) * 100, 10);
       chartProp += `<div><span class="swatch" style="background: ${layer.categories.color[i]};"></span>
           ${layer.categories.label[i]}:
-          <b>${(district[layer.categories.property[i]] / total * 100).toFixed(1)}%</b></div>`;
+          <b>${((district[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
     }
 
     if (layer.categories.difference) {

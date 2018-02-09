@@ -12,8 +12,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
     let background = '';
     // legends for circle layers
     if (layer.credit && layer.type === 'circle' && !layer.categories.shape) {
-      $(`.legend.${mapId}`).prepend(
-        `<div id="legend-${layer.id}-${mapId}"
+      $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}"
           class="legend-shapes legend-row" data-layer="${layer.id}">
           <b>${layer.label}</b>
           <div class="legend-symbols">
@@ -22,8 +21,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <span class="circle-lg" style="background:${layer.categories.color};"></span>
           </div>
           <span>${layer.credit}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for symbol layers
     } else if (layer.credit && layer.categories.shape && layer.type !== 'circle') {
@@ -37,33 +35,29 @@ export default function addLegend(layer, stops, data, breaks, colors) {
           layer.categories.label[index]}</li>`;
       });
 
-      $(`.legend.${mapId}`).prepend(
-        `<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
+      $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
           <b>${layer.label}</b>
           <div class="legend-shapes">
             <ul style="left: 0;">${background}</ul>
           </div>
           <span>${layer.credit}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for fill layers with no breaks
     } else if (layer.credit && layer.categories.breaks === 'no') {
       layer.categories.color.forEach((color, index) => {
         background += `<li style="background:${color}; width:${
           100 / layer.categories.color.length
-          }%;">${layer.categories.label[index]}</li>`;
+        }%;">${layer.categories.label[index]}</li>`;
       });
 
-      $(`.legend.${mapId}`).prepend(
-        `<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
+      $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
           <b>${layer.label}</b>
           <div class="legend-fill ${layer.categories ? 'legend-label' : ''}">
             <ul>${background}</ul>
           </div>
           <span>${layer.credit}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for fill layrs with breaks
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
@@ -86,8 +80,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
           }%;"></li > `;
       });
 
-      $(`.legend.${mapId}`).prepend(
-        `<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
+      $(`.legend.${mapId}`).prepend(`<div id="legend-${layer.id}-${mapId}" class="legend-row" data-layer="${layer.id}">
           <b>${layer.label}</b>
           <ul class="legend-limit" style="padding: 0% 0% 3% 0%;"> 
             <li id="first-limit-${layer.id}" class="${mapId}"
@@ -103,8 +96,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <ul id="legend-background">${background}</ul>
           </div>
           <span>${layer.credit}</span>
-        </div>`,
-      );
+        </div>`);
 
       $(`.background-block-${layer.id}-${mapId}`).hover(() => {
         $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());
@@ -127,6 +119,6 @@ export default function addLegend(layer, stops, data, breaks, colors) {
     $('.legend-row.primary').removeClass('primary');
     $(`#legend-${layer.id}-${mapId}`)
       .addClass('primary');
-      // .on('click', this.setPrimaryLayer);
+    // .on('click', this.setPrimaryLayer);
   }
 }

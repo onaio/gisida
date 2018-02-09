@@ -40,11 +40,15 @@ function getStops(layer) {
     osmIDs: layer.osmIDs[i],
     periods: layer.periods[i],
   }), this);
-  list.sort((a, b) => ((a.data < b.data)
-    ? -1
-    : ((a.data === b.data)
-      ? 0
-      : 1)));
+  list.sort((a, b) => {
+    if (a.data < b.data) {
+      return -1;
+    }
+    if (a.data === b.data) {
+      return 0;
+    }
+    return 1;
+  });
   const sortedData = list.map(items => items.data);
   const osmID = list.map(items => items.osmIDs);
   const period = list.map(items => items.periods);
@@ -55,11 +59,15 @@ function getStops(layer) {
     data: layer.data[i],
     periods: layer.periods[i],
   }), this);
-  dataList.sort((a, b) => ((a.osmIDs < b.osmIDs)
-    ? -1
-    : ((a.osmIDs === b.osmIDs)
-      ? 0
-      : 1)));
+  dataList.sort((a, b) => {
+    if (a.osmIDs < b.osmIDs) {
+      return -1;
+    }
+    if (a.osmIDs === b.osmIDs) {
+      return 0;
+    }
+    return 1;
+  });
   const rangeData = dataList.map(l => l.data);
   const rangeID = dataList.map(l => l.osmIDs);
   const rangePeriod = dataList.map(l => l.periods);
@@ -111,12 +119,12 @@ export default function (layer, timefield) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const clusters = layer.categories.clusters;
+  const { clusters } = layer.categories;
   const colors = getColorBrewerColor(layer.categories.color, clusters) || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join[1]);
-  const limit = layer.categories.limit;
+  const { limit } = layer.categories;
   const radiusRange = layer['radius-range'];
 
   for (let i = 0; i < rows.length; i += 1) {
