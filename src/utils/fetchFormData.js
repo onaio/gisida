@@ -1,3 +1,6 @@
+/* global milia */
+/* eslint no-undef: "error" */
+
 const protocol = 'https';
 const host = 'api.ona.io';
 

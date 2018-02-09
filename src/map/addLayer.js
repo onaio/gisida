@@ -1,5 +1,5 @@
-import sortLayers from './sortLayers';
-import buildTimeseriesData from './buildTimeseriesData';
+// import sortLayers from './sortLayers';
+// import buildTimeseriesData from './buildTimeseriesData';
 import generateStops from './generateStops';
 import addChart from './addChart';
 import addLegend from './addLegend';
@@ -8,7 +8,7 @@ import addLabels from './addLabels';
 export default function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
-  let newStops;
+  // let newStops;
   let circleLayer;
   let fillLayer;
   let lineLayer;
@@ -29,7 +29,7 @@ export default function addLayer(map, layer, mapConfig) {
   }
 
   if (stops) {
-    newStops = { stops, id: layer.id };
+    // newStops = { stops, id: layer.id };
     const colorStops = timefield ? stops[0][stops[0].length - 1] : stops[0][0];
     const radiusStops = stops[1][0];
     const stopsData = layer.type === 'circle' ? radiusStops : colorStops;
@@ -95,9 +95,19 @@ export default function addLayer(map, layer, mapConfig) {
 
     if (layer.source.data) {
       if (layer.source.type === 'vector') {
-        const layerStops = stops ?
-          timefield ? stops[1][stops[1].length - 1] : stops[1][0] :
-          [[0, 0]];
+        let layerStops;
+        // eslint doesnt allow nested ternary expressions
+        if (stops) {
+          if (timefield) {
+            layerStops = stops[1][stops[1].length - 1];
+          } else {
+            const [, second] = stops;
+            const [first] = second;
+            layerStops = first;
+          }
+        } else {
+          layerStops = [[0, 0]];
+        }
         circleLayer.paint['circle-radius'] = {
           property: layer.source.join[0],
           stops: layerStops,
@@ -259,7 +269,7 @@ export default function addLayer(map, layer, mapConfig) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = isNaN(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = Number.isNaN(d[prop]) ? d[prop] : Number(d[prop]);
             });
             return {
               type: 'Feature',
@@ -313,10 +323,10 @@ export default function addLayer(map, layer, mapConfig) {
    * CHART ==========================================================
    */
   if (layer.type === 'chart') {
-    let data = layer.source.data;
+    let { data } = layer.source;
     if (timefield) {
       const period = [...new Set(layer.source.data.map(p => p[timefield]))];
-      newStops = { id: layer.id, period, timefield };
+      // newStops = { id: layer.id, period, timefield };
       data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
     }
     addChart(map, layer, data);
