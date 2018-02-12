@@ -51,6 +51,7 @@ export default function addLayer(map, layer, mapConfig) {
    * CIRCLE ==========================================================
    */
   if (layer.type === 'circle') {
+    console.log('property', layer.properties);
     circleLayer = {
       id: layer.id,
       visible: layer.visible,
@@ -264,6 +265,7 @@ export default function addLayer(map, layer, mapConfig) {
         && layer.source.data.features[0].geometry) {
         symbolLayer.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
+        console.log('blah');
         symbolLayer.source.data = {
           type: 'FeatureCollection',
           features: layer.source.data.map((d) => {

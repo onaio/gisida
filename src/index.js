@@ -7,5 +7,7 @@ gisida.Reducers = require('./store/reducers/Reducers').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addLayer = require('./map/addLayer').default;
 gisida.addPopUp = require('./map/addPopUp').default;
+gisida.buildFilters = require('./map/buildFilters').default;
+gisida.mergeFilters = require('./map/mergeFilters').default;
 
 module.exports = gisida;
