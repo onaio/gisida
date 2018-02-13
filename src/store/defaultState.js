@@ -31,7 +31,7 @@ const defaultState = {
     reloadLayers: false,
     currentStyle: '',
     layers: {},
-    toggledLayer: '',
+    showFilterBtn: '',
   },
 };
 

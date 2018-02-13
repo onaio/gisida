@@ -104,6 +104,7 @@ function MAP(state = defaultState.MAP, action) {
     case 'TOGGLE_LAYER': {
       const { layerId } = action;
       const layer = state.layers[layerId];
+      console.log("toggledLayer", layer);
       const updatedLayers = {
         ...state.layers,
         [layerId]: {
@@ -116,7 +117,7 @@ function MAP(state = defaultState.MAP, action) {
         // Update visible property
         layers: updatedLayers,
         reloadLayers: Math.random(),
-        toggledLayer: layerId,
+        showFilterBtn: !layer.visible && (layer.aggregate && layer.aggregate.filter) ? layerId : false,
       };
     }
     case 'REQUEST_DATA': {
