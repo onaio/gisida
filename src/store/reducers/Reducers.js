@@ -116,6 +116,7 @@ function MAP(state = defaultState.MAP, action) {
         // Update visible property
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        toggledLayer: layerId,
       };
     }
     case 'REQUEST_DATA': {
