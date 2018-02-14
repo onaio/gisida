@@ -298,7 +298,8 @@ export default function addLayer(map, layer, mapConfig) {
     }
 
     if (!map.getLayer(symbolLayer.id)) {
-      if (layer['highlight-layout'] || layer['highlight-paint']) {
+      if (layer.filters && layer['highlight-filter-property'] &&
+        layer['highlight-layout'] || layer['highlight-paint']) {
         const highlightLayer = Object.assign({}, symbolLayer);
 
         if (layer['highlight-layout']) {
@@ -307,12 +308,11 @@ export default function addLayer(map, layer, mapConfig) {
         if (layer['highlight-paint']) {
           highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
         }
+        layer.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+        layer.filters.highlight = ['==', layer['highlight-filter-property'], ''];
 
         highlightLayer.id += '-highlight';
-        highlightLayer.filter = ['==', 'Fixed Site Unique ID', ''];
         map.addLayer(highlightLayer);
-
-        symbolLayer.filter = ['!=', 'Fixed Site Unique ID', ''];
       }
 
       map.addLayer(symbolLayer);
