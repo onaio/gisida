@@ -19,10 +19,19 @@ export default function addLayer(map, layer, mapConfig) {
   }
 
   const layerObj = layer;
+  layer.filters = layerObj.filters || {};
   if (typeof layerObj.isChartMin === 'undefined') {
     layerObj.isChartMin = true;
     layerObj.legendBottom = 40;
   }
+
+  /*let layersObj = [];
+    for (let lo = 0; lo < this.state.layersObj.length; lo += 1) {
+      if (this.state.layersObj[lo].id !== layer.id) {
+        layersObj.push(this.state.layersObj[lo]);
+      }
+    }
+  layersObj.push(layer);*/
 
   if (layer.property) {
     stops = generateStops(layer, timefield);
@@ -256,7 +265,7 @@ export default function addLayer(map, layer, mapConfig) {
 
     // add filter
     if (layer.filter) {
-      symbolLayer.filter = layer.filter;
+      layer.filters.base = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
@@ -265,7 +274,6 @@ export default function addLayer(map, layer, mapConfig) {
         && layer.source.data.features[0].geometry) {
         symbolLayer.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
-        console.log('blah');
         symbolLayer.source.data = {
           type: 'FeatureCollection',
           features: layer.source.data.map((d) => {
