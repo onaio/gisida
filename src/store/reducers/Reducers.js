@@ -129,6 +129,13 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
+    case 'TOGGLE_FILTER': {
+      return {
+        ...state,
+        showFilterPanel: !state.showFilterPanel
+      };
+    }
+
     case 'REQUEST_DATA': {
       const { layerId } = action;
       const layer = state.layers[layerId];
