@@ -5,7 +5,7 @@ import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
 
-export default function addLayer(map, layer, mapConfig) {
+export default function addLayer(map, layer, mapConfig, layersObj) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   // let newStops;
@@ -25,13 +25,13 @@ export default function addLayer(map, layer, mapConfig) {
     layerObj.legendBottom = 40;
   }
 
-  /*let layersObj = [];
-    for (let lo = 0; lo < this.state.layersObj.length; lo += 1) {
-      if (this.state.layersObj[lo].id !== layer.id) {
-        layersObj.push(this.state.layersObj[lo]);
+  let layersData = [];
+    for (let lo = 0; lo < layersObj.length; lo += 1) {
+      if (layersObj[lo].id !== layer.id) {
+        layersData.push(layersObj[lo]);
       }
     }
-  layersObj.push(layer);*/
+  layersData.push(layer);
 
   if (layer.property) {
     stops = generateStops(layer, timefield);
