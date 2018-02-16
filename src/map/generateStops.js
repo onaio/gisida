@@ -83,23 +83,19 @@ function getStops(layer) {
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
-        const val = OSMIDsExist ? osmIDs[k] : data[k];
-        if (stopDomains.includes(val)) {
-          // Check for repeating stop domains
-          console.warn(`Reapting stop domain:, ${val}!`);
-        } 
-
-        if (val) {
-          colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
-          radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
+        // Check for repeating stop domains
+        const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
+        if (stopDomains.includes(stopVal)) {
+          console.warn(`Repeating stop domain:, ${stopVal}!`);
         }
         stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
 
+        colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
+        radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
         break;
       }
     }
   }
-
 
   if (layer.periods) {
     const uniqPeriods = [...new Set(layer.periods)];
@@ -145,16 +141,7 @@ export default function (layer, timefield) {
       }
     } else {
       periods.push(rows[i][timefield]);
-      const prop = rows[i][layer.property];
-      let property = -1;
-
-      if (isNaN(prop)) {
-        property = (prop === '1' || prop === 'TRUE' || prop === 'yes') ? 1 : 0;
-      } else {
-        property = Number(prop);
-      }
-
-      data.push(property);
+      data.push(Number(rows[i][layer.property]));
       osmIDs.push(rows[i][layer.source.join[1]]);
     }
   }
