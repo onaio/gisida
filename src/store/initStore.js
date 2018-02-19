@@ -1,9 +1,10 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { initApp, initStyles, initRegions, addLayer } from './actions/Actions';
 import defaultReducers from './reducers/Reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
+import { persistStore } from 'redux-persist';
 
 export default function initStore(customReducers) {
   let reducers;
@@ -15,6 +16,7 @@ export default function initStore(customReducers) {
 
   // Create initial store
   const store = createStore(reducers, applyMiddleware(thunk));
+  persistStore(store);
 
   // Add config to redux store
   function addConfigToStore(config) {

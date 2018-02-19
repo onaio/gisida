@@ -1,7 +1,16 @@
 import defaultState from '../defaultState';
+import { REHYDRATE } from 'redux-persist';
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
+    case 'REHYDRATE':
+      return {
+        ...state,
+        mapConfig: action.config.mapConfig,
+        appName: action.appName,
+        appColor: action.appColor,
+        appIcon: action.appIcon,
+      }
     case 'INIT_APP':
       return { ...state, ...action.config };
     default:
@@ -64,7 +73,20 @@ function REGIONS(state = defaultState.REGIONS, action) {
 }
 
 function MAP(state = defaultState.MAP, action) {
+  console.log("map actions", action);
   switch (action.type) {
+    case 'REHYDRATE':
+      const layers = {};
+      layers[action.layer.id] = action.layer;
+      const updatedLayers = { ...state.layers, ...layers };
+      return {
+        ...state,
+        layers: updatedLayers,
+      };
+      return {
+        ...state,
+        layers: updatedLayers,
+      }
     case 'MAP_RENDERED':
       return {
         ...state,
