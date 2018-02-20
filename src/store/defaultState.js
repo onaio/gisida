@@ -12,6 +12,7 @@ const defaultState = {
     },
     accessToken: false,
     appName: 'React Gisida',
+    loaded: false,
   },
   STYLES: [
     {
