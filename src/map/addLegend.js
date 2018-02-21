@@ -50,6 +50,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
 
       // legends for fill layers with no breaks
     } else if (layer.credit && layer.categories.breaks === 'no') {
+      console.log('condition 2');
       layer.categories.color.forEach((color, index) => {
         background += `<li style="background:${color}; width:${
           100 / layer.categories.color.length
@@ -66,6 +67,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
 
       // legends for fill layrs with breaks
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
+      console.log('condition 3');
       const dataValues = data.map(values => values[layer.property]);
       const colorLegend = [...new Set(stops.map(stop => stop[1]))];
       const legendSuffix = layer.categories.suffix ? layer.categories.suffix : '';
@@ -113,7 +115,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
 
       // no legend
     } else {
-      $('.set-primary-layer.primary').removeClass('primary');
+      // $('.legend-row.primary').removeClass('primary');
     }
 
     $('.set-primary-layer.primary').removeClass('primary');
@@ -121,7 +123,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
       .on('click', setPrimaryLayer)
       .addClass('primary');
 
-    $('.legend-row.primary').removeClass('primary');
+    // $('.legend-row.primary').removeClass('primary');
     $(`#legend-${layer.id}-${mapId}`)
       .addClass('primary')
       .on('click', setPrimaryLayer);

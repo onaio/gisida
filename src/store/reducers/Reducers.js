@@ -135,6 +135,7 @@ function MAP(state = defaultState.MAP, action) {
       return {
         ...state,
         // Update visible property
+        activeLayerId: layerId,
         layers: updatedLayers,
         reloadLayers: Math.random(),
         filter: {
