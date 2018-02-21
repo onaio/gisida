@@ -1,5 +1,8 @@
 // import sortLayers from './sortLayers';
 // import buildTimeseriesData from './buildTimeseriesData';
+/* global location */
+/* eslint no-restricted-globals: ["off", "isNaN"] */
+/* eslint-disable no-param-reassign */
 import generateStops from './generateStops';
 import addChart from './addChart';
 import addLegend from './addLegend';
@@ -52,7 +55,6 @@ export default function addLayer(map, layer, mapConfig) {
    * CIRCLE ==========================================================
    */
   if (layer.type === 'circle') {
-    console.log('property', layer.properties);
     circleLayer = {
       id: layer.id,
       visible: layer.visible,
@@ -298,8 +300,8 @@ export default function addLayer(map, layer, mapConfig) {
     }
 
     if (!map.getLayer(symbolLayer.id)) {
-      if (layer.filters && layer['highlight-filter-property'] &&
-        layer['highlight-layout'] || layer['highlight-paint']) {
+      if ((layer.filters && layer['highlight-filter-property']) &&
+        (layer['highlight-layout'] || layer['highlight-paint'])) {
         const highlightLayer = Object.assign({}, symbolLayer);
 
         if (layer['highlight-layout']) {

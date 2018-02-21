@@ -66,8 +66,9 @@ export default function buildFilters(filters, layerFilters, prevFilters) {
       if (layerFilters[f] instanceof Array) {
         for (o = 0; o < layerFilters[f].length; o += 1) {
           if (layerFilters[f][o] instanceof Array) {
-            filterKey = layerFilters[f][o][1];
-            optionKey = layerFilters[f][o][2];
+            const [first, second] = layerFilters[f][o];
+            filterKey = first;
+            optionKey = second;
             filterMap[filterKey].options[optionKey].enabled = true;
             filterMap[filterKey].options[optionKey].hidden = false;
             if (!filterMap[filterKey]) filterMap[filterKey].isFiltered = true;

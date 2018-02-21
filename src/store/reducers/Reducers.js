@@ -132,7 +132,7 @@ function MAP(state = defaultState.MAP, action) {
     case 'TOGGLE_FILTER': {
       return {
         ...state,
-        showFilterPanel: !state.showFilterPanel
+        showFilterPanel: !state.showFilterPanel,
       };
     }
 

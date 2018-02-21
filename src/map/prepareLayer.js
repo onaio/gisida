@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+/* global location */
+/* eslint no-restricted-globals: ["off", "isNaN"] */
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';

@@ -43,7 +43,7 @@ const defaultState = {
       globalSearchField: false,
     },
     showProfile: false,
-    showFilterPanel: false
+    showFilterPanel: false,
   },
 };
 
