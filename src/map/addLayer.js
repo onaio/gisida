@@ -5,7 +5,7 @@ import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
 
-export default function addLayer(map, layer, mapConfig, layersObj) {
+export default function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   // let newStops;
@@ -24,14 +24,6 @@ export default function addLayer(map, layer, mapConfig, layersObj) {
     layerObj.isChartMin = true;
     layerObj.legendBottom = 40;
   }
-
-  let layersData = [];
-    for (let lo = 0; lo < layersObj.length; lo += 1) {
-      if (layersObj[lo].id !== layer.id) {
-        layersData.push(layersObj[lo]);
-      }
-    }
-  layersData.push(layer);
 
   if (layer.property) {
     stops = generateStops(layer, timefield);
@@ -279,7 +271,7 @@ export default function addLayer(map, layer, mapConfig, layersObj) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = Number.isNaN(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = isNaN(d[prop]) ? d[prop] : Number(d[prop]);
             });
             return {
               type: 'Feature',
