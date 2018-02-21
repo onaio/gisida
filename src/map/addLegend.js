@@ -8,12 +8,12 @@ export default function addLegend(layer, stops, data, breaks, colors) {
   // todo: change for split map
 
   const mapId = '01';
-  const creditContent = Mustache.render(layer.credit);
   $(`#legend-${layer.id}-${mapId}`).remove();
   if (!layer.visible) {
     // $(`#legend-${layerId}-${mapId} .set-primary-layer`).off('click', this.setPrimaryLayer);
     $(`#legend-${layer.id}-${mapId}`).remove();
   } else {
+    const creditContent = Mustache.render(layer.credit);
     let background = '';
     // legends for circle layers
     if (layer.credit && layer.type === 'circle' && !layer.categories.shape) {

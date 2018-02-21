@@ -18,15 +18,14 @@ function getSliderLayers(layers) {
 }
 
 
-export default function buildTimeseriesData(Stops, layers) {
-  console.log(layers);
-  const timeSeriesLayers = getSliderLayers();
-  const activeLayers = layers.layers.map(layer => layer.title);
+export default function buildTimeseriesData(layer, Stops) {
+  const layerObj = { ...layer };
+  const timeSeriesLayers = this.getSliderLayers();
+  const activeLayers = this.state.layers.map(layer => layer.title);
   const timeseriesMap = {};
 
   let layerId;
   let index;
-  let layerObj;
   let temporalIndex;
   let data;
   let layerProperty;
@@ -57,7 +56,6 @@ export default function buildTimeseriesData(Stops, layers) {
 
     if (activeLayers.includes(layerId) && !this.state.timeseries[layerId]) {
       index = getLastIndex(activeLayers, layerId);
-      layerObj = layers[layerId];
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
 
       if (this.state && this.state.layers[index] && this.state.layers[index].visible === true &&

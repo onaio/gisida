@@ -3,17 +3,25 @@ import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
-import { requestData, receiveData } from '../store/actions/Actions';
-import addLayer from './addLayers/'
+import { requestData, receiveData, getCurrentState } from '../store/actions/Actions';
+import { addLayer } from './addLayers';
+import addLegend from './addLegend';
 
 /**
- * Dispaches actions indicatino layer is readyt to render
+ * Dispaches actions indicating layer is ready to render
  * @param {*} layer
  * @param {*} dispatch
  */
 function renderData(layer, dispatch) {
-  const layerObj = { ...layer };
-  if (!(layerObj.labels)) {
+  let layerObj = { ...layer };
+  const currentState = dispatch(getCurrentState());
+  const { mapConfig } = currentState.APP;
+
+  // Generate Mapbox StyleSpec
+  layerObj = addLayer(layerObj, mapConfig);
+  layerObj.visible = true;
+  // Check if layer has labels and add before dispatch
+  if (!layerObj.labels) {
     dispatch(receiveData(layerObj));
   } else {
     loadCSV(layerObj.labels.data, (labels) => {
@@ -21,6 +29,7 @@ function renderData(layer, dispatch) {
       dispatch(receiveData(layerObj));
     });
   }
+  addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
 }
 
 /**
@@ -29,9 +38,10 @@ function renderData(layer, dispatch) {
  * @param {*} source
  * @param {*} dispatch
  */
-function readData(layer, source, dispatch) {
+function readData(layer, dispatch) {
   const layerObj = { ...layer };
-  const fileType = source.split('.').pop();
+  const sourceURL = layer.source.data;
+  const fileType = sourceURL.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
       layerObj.source.data = data;
@@ -96,27 +106,26 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
   if (layerObj.source) {
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
-      readData(layerObj, layerObj.source.data, dispatch);
+      readData(layerObj, dispatch);
     } else
-      // grab from multiple sources
-      if (layerObj.source.data instanceof Array &&
-        !(layerObj.source.data[0] instanceof Object) &&
-        layerObj.source.data.length >= 1 &&
-        !layerObj.loaded) {
-        fetchMultipleSources(layerObj, dispatch);
-      } else
-        // TODO: remove or refactor
-        // only filter option
-        if (filterOptions) {
-          layerObj.source.data =
-            layerObj.aggregate.type ?
-              aggregateData(layerObj, this.props.locations, filterOptions) :
-              processFilters(layerObj, filterOptions);
-          renderData(layerObj);
-        } else {
-          // add the already processed layerObj
-          dispatch(receiveData(layerObj));
-        }
+    // grab from multiple sources
+    if (layerObj.source.data instanceof Array &&
+      !(layerObj.source.data[0] instanceof Object) &&
+      layerObj.source.data.length >= 1 &&
+      !layerObj.loaded) {
+      fetchMultipleSources(layerObj, dispatch);
+    } else
+    // TODO: remove or refactor
+    // only filter option
+    if (filterOptions) {
+      layerObj.source.data =
+        layerObj.aggregate.type ?
+          aggregateData(layerObj, this.props.locations, filterOptions) :
+          processFilters(layerObj, filterOptions);
+      renderData(layerObj, dispatch);
+    } else {
+      renderData(layerObj, dispatch);
+    }
   } else if (layerObj.layers) {
     // TODO: fix for grouped layers
     // if layer has sublayers, add all sublayers

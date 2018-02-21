@@ -2,23 +2,21 @@
 // import buildTimeseriesData from './buildTimeseriesData';
 import generateStops from './generateStops';
 import addChart from './addChart';
-import addLegend from './addLegend';
 import addLabels from './addLabels';
 
-function addLayer(map, layer, mapConfig) {
+export function addLayer(layer, mapConfig) {
+  let layerObj = { ...layer };
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
-  // let newStops;
-  let circleLayer;
-  let fillLayer;
-  let lineLayer;
-  let symbolLayer;
+  let newStops;
+  let styleSpec;
+
 
   if (layer === undefined) {
     return null;
   }
 
-  const layerObj = layer;
+
   if (typeof layerObj.isChartMin === 'undefined') {
     layerObj.isChartMin = true;
     layerObj.legendBottom = 40;
@@ -39,10 +37,11 @@ function addLayer(map, layer, mapConfig) {
     const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
     const Data = timefield ? currData : layer.source.data;
 
-    addLegend(layer, stopsData, Data, breaks, colors);
-    addLabels(map, layer, Data);
-  } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
-    addLegend(layer);
+
+    layerObj.stopsData = stopsData;
+    layerObj.breaks = breaks;
+    layerObj.colors = colors;
+    layerObj.Data = Data;
   } else {
     $('.legend-row.primary').removeClass('primary');
   }
@@ -51,7 +50,7 @@ function addLayer(map, layer, mapConfig) {
    * CIRCLE ==========================================================
    */
   if (layer.type === 'circle') {
-    circleLayer = {
+    styleSpec = {
       id: layer.id,
       visible: layer.visible,
       type: 'circle',
@@ -83,14 +82,14 @@ function addLayer(map, layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      circleLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
 
     if (layer.source.minzoom) {
-      circleLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.source.maxzoom) {
-      circleLayer.maxzoom = layer.source.maxzoom;
+      styleSpec.maxzoom = layer.source.maxzoom;
     }
 
     if (layer.source.data) {
@@ -108,32 +107,27 @@ function addLayer(map, layer, mapConfig) {
         } else {
           layerStops = [[0, 0]];
         }
-        circleLayer.paint['circle-radius'] = {
+        styleSpec.paint['circle-radius'] = {
           property: layer.source.join[0],
           stops: layerStops,
           type: 'categorical',
           default: stops ? 0 : 3,
         };
-        circleLayer.source.url = layer.source.url;
-        circleLayer['source-layer'] = layer.source.layer;
+        styleSpec.source.url = layer.source.url;
+        styleSpec['source-layer'] = layer.source.layer;
       } else if (layer.source.type === 'geojson') {
         if (stops) {
-          circleLayer.paint['circle-radius'] = {
+          styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
           };
         }
-        circleLayer.source.data = layer.source.data;
+        styleSpec.source.data = layer.source.data;
       }
     }
     // add filter
     if (layer.filter) {
-      circleLayer.filter = layer.filter;
-    }
-
-    if (!map.getLayer(circleLayer.id)) map.addLayer(circleLayer);
-    if (map.getLayer(circleLayer.id)) {
-      map.setLayoutProperty(circleLayer.id, 'visibility', circleLayer.visible ? 'visible' : 'none');
+      styleSpec.filter = layer.filter;
     }
   }
 
@@ -141,7 +135,7 @@ function addLayer(map, layer, mapConfig) {
    * FILL ==========================================================
    */
   if (layer.type === 'fill') {
-    fillLayer = {
+    styleSpec = {
       id: layer.id,
       visible: layer.visible,
       type: 'fill',
@@ -157,30 +151,30 @@ function addLayer(map, layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      fillLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
     if (layer.source.minzoom) {
-      fillLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.maxzoom) {
-      fillLayer.maxzoom = layer.maxzoom;
+      styleSpec.maxzoom = layer.maxzoom;
     }
 
     if (!(layer['no-outline'])) {
-      fillLayer.paint['fill-outline-color'] = '#fff';
+      styleSpec.paint['fill-outline-color'] = '#fff';
     }
 
     if (layer.source.type === 'geojson') {
-      fillLayer.source.data = layer.source.data;
+      styleSpec.source.data = layer.source.data;
     } else {
-      fillLayer.source.url = layer.source.url;
-      fillLayer['source-layer'] = layer.source.layer;
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
 
     if (layer.source.data && !layer.paint) {
       const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
 
-      fillLayer.paint['fill-color'] = {
+      styleSpec.paint['fill-color'] = {
         property: layer.source.join[0],
         stops: layerStops,
         type: 'categorical',
@@ -189,12 +183,7 @@ function addLayer(map, layer, mapConfig) {
     }
     // add filter
     if (layer.filter) {
-      fillLayer.filter = layer.filter;
-    }
-
-    if (!map.getLayer(fillLayer.id)) map.addLayer(fillLayer);
-    if (map.getLayer(fillLayer.id)) {
-      map.setLayoutProperty(fillLayer.id, 'visibility', fillLayer.visible ? 'visible' : 'none');
+      styleSpec.filter = layer.filter;
     }
   }
 
@@ -202,7 +191,7 @@ function addLayer(map, layer, mapConfig) {
    * LINE ==========================================================
    */
   if (layer.type === 'line') {
-    lineLayer = {
+    styleSpec = {
       id: layer.id,
       type: 'line',
       visible: layer.visible,
@@ -216,23 +205,19 @@ function addLayer(map, layer, mapConfig) {
       },
     };
     if (layer.paint) {
-      lineLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
     if (layer.source.minzoom) {
-      lineLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.maxzoom) {
-      lineLayer.maxzoom = layer.maxzoom;
+      styleSpec.maxzoom = layer.maxzoom;
     }
     if (layer.source.type === 'geojson') {
-      lineLayer.source.data = layer.source.data;
+      styleSpec.source.data = layer.source.data;
     } else {
-      lineLayer.source.url = layer.source.url;
-      lineLayer['source-layer'] = layer.source.layer;
-    }
-    if (!map.getLayer(lineLayer.id)) map.addLayer(lineLayer);
-    if (map.getLayer(lineLayer.id)) {
-      map.setLayoutProperty(lineLayer.id, 'visibility', lineLayer.visible ? 'visible' : 'none');
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
   }
 
@@ -240,9 +225,8 @@ function addLayer(map, layer, mapConfig) {
    * SYMBOL ==========================================================
    */
   if (layer.type === 'symbol') {
-    symbolLayer = {
+    styleSpec = {
       id: layer.id,
-      visible: layer.visible,
       type: 'symbol',
       source: {
         type: layer.source.type,
@@ -255,16 +239,16 @@ function addLayer(map, layer, mapConfig) {
 
     // add filter
     if (layer.filter) {
-      symbolLayer.filter = layer.filter;
+      styleSpec.filters.base = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
       if (layer.source.data.features
         && layer.source.data.features[0]
         && layer.source.data.features[0].geometry) {
-        symbolLayer.source.data = layer.source.data;
+        styleSpec.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
-        symbolLayer.source.data = {
+        styleSpec.source.data = {
           type: 'FeatureCollection',
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
@@ -283,8 +267,8 @@ function addLayer(map, layer, mapConfig) {
         };
       }
     } else {
-      symbolLayer.source.url = layer.source.url;
-      symbolLayer['source-layer'] = layer.source.layer;
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
 
     if (layer.categories && layer.categories.shape) {
@@ -292,12 +276,13 @@ function addLayer(map, layer, mapConfig) {
       layer.categories.type.forEach((type, index) => {
         iconStops.push([type, layer.categories.shape[index]]);
       });
-      symbolLayer.layout['icon-image'].stops = iconStops;
+      styleSpec.layout['icon-image'].stops = iconStops;
     }
 
-    if (!map.getLayer(symbolLayer.id)) {
-      if (layer['highlight-layout'] || layer['highlight-paint']) {
-        const highlightLayer = Object.assign({}, symbolLayer);
+    if (!this.map.getLayer(styleSpec.id)) {
+      if (layer['highlight-filter-property'] &&
+        layer['highlight-layout'] || layer['highlight-paint']) {
+        const highlightLayer = Object.assign({}, styleSpec);
 
         if (layer['highlight-layout']) {
           highlightLayer.layout = Object.assign({}, highlightLayer.layout, layer['highlight-layout']);
@@ -306,31 +291,27 @@ function addLayer(map, layer, mapConfig) {
           highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
         }
 
+        layer.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+        layer.filters.highlight = ['==', layer['highlight-filter-property'], ''];
+
         highlightLayer.id += '-highlight';
-        highlightLayer.filter = ['==', 'Fixed Site Unique ID', ''];
-        map.addLayer(highlightLayer);
-
-        symbolLayer.filter = ['!=', 'Fixed Site Unique ID', ''];
+        this.map.addLayer(highlightLayer);
+        styleSpec = highlightLayer
       }
-
-      map.addLayer(symbolLayer);
-    }
-    if (map.getLayer(symbolLayer.id)) {
-      map.setLayoutProperty(symbolLayer.id, 'visibility', symbolLayer.visible ? 'visible' : 'none');
     }
   }
   /*
    * CHART ==========================================================
    */
-  if (layer.type === 'chart') {
-    let { data } = layer.source;
-    if (timefield) {
-      const period = [...new Set(layer.source.data.map(p => p[timefield]))];
-      // newStops = { id: layer.id, period, timefield };
-      data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
-    }
-    addChart(map, layer, data);
-  }
+  // if (layer.type === 'chart') {
+  //   let { data } = layer.source;
+  //   if (timefield) {
+  //     const period = [...new Set(layer.source.data.map(p => p[timefield]))];
+  //     newStops = { id: layer.id, period, timefield };
+  //     data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
+  //   }
+  //   addChart(map, layer, data);
+  // }
 
   // Generate layersObj
   // let layersObj = [];
@@ -361,21 +342,22 @@ function addLayer(map, layer, mapConfig) {
   //   }
   // }
 
-  // const timeseriesMap = buildTimeseriesData(newStops, layers);
+
+  // const timeseriesMap = buildTimeseriesData(newStops);
   // if (timeseriesMap[layer.id]) {
   //   let mbLayer;
   //   switch (layer.type) {
   //     case 'circle':
-  //       mbLayer = circleLayer;
+  //       mbLayer = styleSpec;
   //       break;
   //     case 'fill':
-  //       mbLayer = fillLayer;
+  //       mbLayer = styleSpec;
   //       break;
   //     case 'line':
-  //       mbLayer = lineLayer;
+  //       mbLayer = styleSpec;
   //       break;
   //     case 'symbol':
-  //       mbLayer = symbolLayer;
+  //       mbLayer = styleSpec;
   //       break;
   //     default:
   //       mbLayer = null;
@@ -384,16 +366,20 @@ function addLayer(map, layer, mapConfig) {
   // }
 
   // this.setState({
-  //   layerObj,
-  //   layersObj,
+  //  - layerObj,
+  //   - layersObj,
   //   stops: newStops,
   //   timeseries: Object.assign({}, this.state.timeseries, timeseriesMap),
   // });
 
-  return map;
+  layerObj.styleSpec = styleSpec;
+
+  // layerObj.timeseries = Object.assign({}, this.state.timeseries, timeseriesMap)
+  return layerObj;
 }
 
-export default function addLayers(map, layers, mapConfig) {
+
+export function addLayers(map, layers, mapConfig) {
   Object.keys(layers).forEach((key) => {
     const layer = layers[key];
     if (layer.loaded) {
