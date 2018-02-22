@@ -37,7 +37,7 @@ function readData(layer, source, dispatch) {
   const fileType = source.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      const parsedData = spec.source.type === 'geojson' ? csvToGEOjson(spec, data) : data;
+      const parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
       layerObj.source.data = parsedData;
       layerObj.mergedData = parsedData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
