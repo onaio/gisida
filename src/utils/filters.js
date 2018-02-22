@@ -26,15 +26,15 @@ export function processFilters(layerData, filterOptions) {
   return data;
 }
 
-export function generateFilterOptions(layerData) {
-  const getLayerData = layerData;
-  const data = getLayerData.mergedData || getLayerData.source.data;
-  const acceptedFilterValues = getLayerData.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues = getLayerData.aggregate['accepted-sub-filter-values'];
+export function generateFilterOptions(layer) {
+  const layerObj = { ...layer };
+  const data = layerObj.mergedData || layerObj.source.data;
+  const acceptedFilterValues = layerObj.aggregate['accepted-filter-values'];
+  const acceptedSubFilterValues = layerObj.aggregate['accepted-sub-filter-values'];
   // get filter options from filter field
-  if (layerData.aggregate.filter) {
-    const filterValues = data.map(datum => datum[layerData.aggregate.filter]);
-    const subfilterValues = data.map(datum => datum[layerData.aggregate['sub-filter']]);
+  if (layerObj.aggregate.filter) {
+    const filterValues = data.map(datum => datum[layerObj.aggregate.filter]);
+    const subfilterValues = data.map(datum => datum[layerObj.aggregate['sub-filter']]);
     const allFilters = [].concat(...[filterValues, subfilterValues]);
     const cleanedFilters = allFilters.filter(datum => datum !== undefined
       && datum !== ''
@@ -46,7 +46,7 @@ export function generateFilterOptions(layerData) {
         (datum !== undefined &&
           [].concat(...[acceptedFilterValues, acceptedSubFilterValues]).includes(datum)));
     } else acceptedFilters = cleanedFilters;
-    layerData.filterOptions = [...new Set(acceptedFilters)];
+    layerObj.filterOptions = [...new Set(acceptedFilters)];
   }
 }
 const months = ['January', 'February', 'March', 'April', 'May', 'June',

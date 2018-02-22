@@ -1,5 +1,3 @@
-import { reloadLayer } from '../store/actions/Actions';
-
 export default function setPrimaryLayer(e) {
   e.preventDefault();
   const $target = $(e.target).hasClass('legend-row')

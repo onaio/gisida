@@ -1,14 +1,9 @@
-// import sortLayers from './sortLayers';
-// import buildTimeseriesData from './buildTimeseriesData';
 import generateStops from './generateStops';
-import addChart from './addChart';
-import addLabels from './addLabels';
 
-export function addLayer(layer, mapConfig) {
+export default function addLayer(layer, mapConfig) {
   const layerObj = { ...layer };
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
-  let newStops;
   let styleSpec;
 
 
@@ -282,7 +277,7 @@ export function addLayer(layer, mapConfig) {
 
     if (!this.map.getLayer(styleSpec.id)) {
       if (layer['highlight-filter-property'] &&
-        layer['highlight-layout'] || layer['highlight-paint']) {
+        (layer['highlight-layout'] || layer['highlight-paint'])) {
         const highlightLayer = Object.assign({}, styleSpec);
 
         if (layer['highlight-layout']) {
@@ -292,8 +287,8 @@ export function addLayer(layer, mapConfig) {
           highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
         }
 
-        layer.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
-        layer.filters.highlight = ['==', layer['highlight-filter-property'], ''];
+        layerObj.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+        layerObj.filters.highlight = ['==', layer['highlight-filter-property'], ''];
 
         highlightLayer.id += '-highlight';
         this.map.addLayer(highlightLayer);
@@ -357,15 +352,3 @@ export function addLayer(layer, mapConfig) {
   return layerObj;
 }
 
-
-export function addLayers(map, layers, mapConfig) {
-  Object.keys(layers).forEach((key) => {
-    const layer = layers[key];
-    if (layer.loaded) {
-      addLayer(map, layer, mapConfig);
-    }
-  });
-
-  // sort the layers
-  sortLayers(map, layers);
-}

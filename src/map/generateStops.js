@@ -86,7 +86,7 @@ function getStops(layer) {
         // Check for repeating stop domains
         const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
         if (stopDomains.includes(stopVal)) {
-          console.warn(`Repeating stop domain:, ${stopVal}!`);
+          // debug repeating balues console.warn(`Repeating stop domain:, ${stopVal}!`);
         }
         stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
 
