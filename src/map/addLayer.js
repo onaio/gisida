@@ -1,12 +1,12 @@
 // import sortLayers from './sortLayers';
 // import buildTimeseriesData from './buildTimeseriesData';
 /* global location */
-/* eslint no-restricted-globals: ["off", "isNaN"] */
 /* eslint-disable no-param-reassign */
 import generateStops from './generateStops';
 import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
+import { isNumber } from '../utils/files';
 
 export default function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
@@ -273,7 +273,7 @@ export default function addLayer(map, layer, mapConfig) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = isNaN(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = isNumber(d[prop]) ? d[prop] : Number(d[prop]);
             });
             return {
               type: 'Feature',
