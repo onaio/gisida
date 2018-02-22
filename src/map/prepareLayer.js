@@ -5,6 +5,7 @@ import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
+import csvToGEOjson from './csvToGEOjson';
 import { requestData, receiveData } from '../store/actions/Actions';
 import * as d3 from 'd3';
 
@@ -36,8 +37,9 @@ function readData(layer, source, dispatch) {
   const fileType = source.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      layerObj.source.data = data;
-      layerObj.mergedData = data;
+      const parsedData = spec.source.type === 'geojson' ? csvToGEOjson(spec, data) : data;
+      layerObj.source.data = parsedData;
+      layerObj.mergedData = parsedData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
