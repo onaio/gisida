@@ -6,6 +6,8 @@ import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/Actions';
 import { addLayer } from './addLayers';
 import addLegend from './addLegend';
+import getSliderLayers from './getSliderLayers';
+import buildTimeseriesData from './buildTimeseriesData';
 
 /**
  * Dispaches actions indicating layer is ready to render
@@ -16,19 +18,54 @@ function renderData(layer, dispatch) {
   let layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { mapConfig } = currentState.APP;
+  const { timeseries } = currentState.MAP;
+  let { layers } = currentState.MAP;
 
   // Generate Mapbox StyleSpec
   layerObj = addLayer(layerObj, mapConfig);
   layerObj.visible = true;
+  layers = { ...layers, [layerObj.id]: layerObj };
+  const sliderLayers = getSliderLayers(layers);
+  const newStops = { stops: layerObj.stops, id: layer.id };
+  const timeseriesMap = buildTimeseriesData(
+    layerObj,
+    newStops,
+    sliderLayers,
+    timeseries,
+    layers,
+  );
+  if (timeseriesMap[layer.id]) {
+    let mbLayer = null;
+    switch (layer.type) {
+      case 'circle':
+        mbLayer = layerObj.styleSpec;
+        break;
+      case 'fill':
+        mbLayer = layerObj.styleSpec;
+        break;
+      case 'line':
+        mbLayer = layerObj.styleSpec;
+        break;
+      case 'symbol':
+        mbLayer = layerObj.styleSpec;
+        break;
+      default:
+        mbLayer = null;
+    }
+    timeseriesMap[layer.id].mapBoxLayer = mbLayer;
+  }
+  const newTimeSeries = Object.assign({}, timeseries, timeseriesMap);
+
   // Check if layer has labels and add before dispatch
   if (!layerObj.labels) {
-    dispatch(receiveData(layerObj));
+    dispatch(receiveData(layerObj, newTimeSeries));
   } else {
     loadCSV(layerObj.labels.data, (labels) => {
       layerObj.labels.data = labels;
-      dispatch(receiveData(layerObj));
+      dispatch(receiveData(layerObj, newTimeSeries));
     });
   }
+
   addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
 }
 
@@ -98,7 +135,7 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
   // Sets state to loading;
   dispatch(requestData(layerObj.id));
 
-  // TODO: figure out what this does
+  // // add to active layers?
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
   //   this.activeLayers.push(layerSpec.id);
   // }

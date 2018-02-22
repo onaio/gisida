@@ -5,7 +5,7 @@ import addChart from './addChart';
 import addLabels from './addLabels';
 
 export function addLayer(layer, mapConfig) {
-  let layerObj = { ...layer };
+  const layerObj = { ...layer };
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   let newStops;
@@ -42,6 +42,7 @@ export function addLayer(layer, mapConfig) {
     layerObj.breaks = breaks;
     layerObj.colors = colors;
     layerObj.Data = Data;
+    layerObj.stops = stops;
   } else {
     $('.legend-row.primary').removeClass('primary');
   }
@@ -296,7 +297,7 @@ export function addLayer(layer, mapConfig) {
 
         highlightLayer.id += '-highlight';
         this.map.addLayer(highlightLayer);
-        styleSpec = highlightLayer
+        styleSpec = highlightLayer;
       }
     }
   }
@@ -342,28 +343,6 @@ export function addLayer(layer, mapConfig) {
   //   }
   // }
 
-
-  // const timeseriesMap = buildTimeseriesData(newStops);
-  // if (timeseriesMap[layer.id]) {
-  //   let mbLayer;
-  //   switch (layer.type) {
-  //     case 'circle':
-  //       mbLayer = styleSpec;
-  //       break;
-  //     case 'fill':
-  //       mbLayer = styleSpec;
-  //       break;
-  //     case 'line':
-  //       mbLayer = styleSpec;
-  //       break;
-  //     case 'symbol':
-  //       mbLayer = styleSpec;
-  //       break;
-  //     default:
-  //       mbLayer = null;
-  //   }
-  //   timeseriesMap[layer.id].mapBoxLayer = mbLayer;
-  // }
 
   // this.setState({
   //  - layerObj,

@@ -159,6 +159,14 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        timeseries: action.timeseries,
+        visibleLayerId: layer.id,
+      };
+    }
+    case 'UPDATE_TIMESERIES': {
+      return {
+        ...state,
+        timeseries: action.timeseries,
       };
     }
     default:

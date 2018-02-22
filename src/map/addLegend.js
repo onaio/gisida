@@ -12,7 +12,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
   if (!layer.visible) {
     // $(`#legend-${layerId}-${mapId} .set-primary-layer`).off('click', this.setPrimaryLayer);
     $(`#legend-${layer.id}-${mapId}`).remove();
-  } else {
+  } else if (layer.credit) {
     const creditContent = Mustache.render(layer.credit);
     let background = '';
     // legends for circle layers
@@ -26,8 +26,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <span class="circle-lg" style="background:${layer.categories.color};"></span>
           </div>
           <span>${creditContent}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for symbol layers
     } else if (layer.credit && layer.categories.shape && layer.type !== 'circle') {
@@ -47,8 +46,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <ul style="left: 0;">${background}</ul>
           </div>
           <span>${creditContent}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for fill layers with no breaks
     } else if (layer.credit && layer.categories.breaks === 'no') {
@@ -64,8 +62,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <ul>${background}</ul>
           </div>
           <span>${creditContent}</span>
-        </div>`,
-      );
+        </div>`);
 
       // legends for fill layrs with breaks
     } else if (layer.credit && layer.type !== 'circle' && layer.type !== 'chart') {
@@ -104,8 +101,7 @@ export default function addLegend(layer, stops, data, breaks, colors) {
             <ul id="legend-background">${background}</ul>
           </div>
           <span>${creditContent}</span>
-        </div>`,
-      );
+        </div>`);
 
       $(`.background-block-${layer.id}-${mapId}`).hover(() => {
         $(`#first-limit-${layer.id}.${mapId}`).text($('first-limit').text());

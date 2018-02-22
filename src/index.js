@@ -8,5 +8,6 @@ gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addLayers = require('./map/addLayers').default;
 gisida.addPopUp = require('./map/addPopUp').default;
 gisida.sortLayers = require('./map/sortLayers').default;
+gisida.getSliderLayers = require('./map/getSliderLayers').default;
 
 module.exports = gisida;

@@ -32,6 +32,8 @@ const defaultState = {
     currentStyle: '',
     currentRegion: '',
     layers: {},
+    timeseries: {},
+    visibleLayerId: '',
   },
 };
 
