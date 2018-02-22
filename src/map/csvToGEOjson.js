@@ -3,7 +3,7 @@
 * */
 
 export default function csvToGEOjson(spec, data) {
-  let { featureType } = spec.source;
+  const { featureType } = spec.source;
   const features = [];
   let propertiesMap;
   let datum;
