@@ -3,6 +3,7 @@ import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
+import csvToGEOjson from './csvToGEOjson';
 import { requestData, receiveData } from '../store/actions/Actions';
 import * as d3 from 'd3';
 
@@ -32,47 +33,12 @@ export default function prepareLayer(layerSpec, dispatch, filterOptions = false)
     }
   }
 
-  function dataToGEOjson(spec, data) {
-    const { featureType } = spec.source;
-    const features = [];
-    let propertiesMap;
-    let datum;
-    let prop;
-    const longProp = (spec['geo-columns'] && spec['geo-columns'][0]) || 'Longitude';
-    const latProp = (spec['geo-columns'] && spec['geo-columns'][1]) || 'Latitude';
-
-    for (let d = 0; d < data.length; d += 1) {
-      datum = data[d];
-      propertiesMap = spec.properties ? {} : Object.assign({}, datum);
-      if (spec.properties) {
-        for (let p = 0; p < spec.properties.length; p += 1) {
-          prop = spec.properties[p];
-          propertiesMap[prop] = Number.isNaN(datum[prop]) ? datum[prop] : Number(datum[prop]);
-        }
-      }
-
-      features.push({
-        type: 'Feature',
-        properties: propertiesMap,
-        geometry: {
-          type: featureType,
-          coordinates: [Number(datum[longProp]), Number(datum[latProp])],
-        },
-      });
-    }
-
-    return {
-      type: 'FeatureCollection',
-      features,
-    };
-  }
-
   function readData(spec, source) {
     const layer = { ...spec };
     const fileType = source.split('.').pop();
     if (fileType === 'csv') {
       loadCSV(spec.source.data, (data) => {
-        const parsedData = spec.source.type === 'geojson' ? dataToGEOjson(spec, data) : data;
+        const parsedData = spec.source.type === 'geojson' ? csvToGEOjson(spec, data) : data;
         layer.source.data = parsedData;
         layer.mergedData = parsedData;
         if (spec.aggregate && spec.aggregate.filter) {
