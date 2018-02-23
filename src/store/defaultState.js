@@ -31,6 +31,19 @@ const defaultState = {
     reloadLayers: false,
     currentStyle: '',
     layers: {},
+    filter: {
+      isFiltered: false,
+      prevFilters: null,
+      layerId: '',
+      filters: {},
+      filterOptions: {},
+      isOpen: false,
+      isMac: (window.navigator.platform.indexOf('Mac') !== -1),
+      isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
+      globalSearchField: false,
+    },
+    showProfile: false,
+    showFilterPanel: false,
   },
 };
 

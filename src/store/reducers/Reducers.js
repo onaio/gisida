@@ -76,6 +76,7 @@ function MAP(state = defaultState.MAP, action) {
         isLoaded: true,
         reloadLayers: true,
       };
+
     case 'STYLE_CHANGED':
       return {
         ...state,
@@ -87,11 +88,13 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         reloadLayers: action.reload,
       };
+
     case 'CHANGE_STYLE':
       return {
         ...state,
         currentStyle: action.style,
       };
+
     case 'ADD_LAYER': {
       const layers = {};
       layers[action.layer.id] = action.layer;
@@ -101,6 +104,7 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
+
     case 'TOGGLE_LAYER': {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -116,8 +120,22 @@ function MAP(state = defaultState.MAP, action) {
         // Update visible property
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        filter: {
+          ...state.filter,
+          layerId:
+            !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
+              layerId : false,
+        },
       };
     }
+
+    case 'TOGGLE_FILTER': {
+      return {
+        ...state,
+        showFilterPanel: !state.showFilterPanel,
+      };
+    }
+
     case 'REQUEST_DATA': {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -135,6 +153,7 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
+
     case 'RECEIVE_DATA': {
       const { layer } = action;
       const oldLayer = state.layers[layer.id];
@@ -142,8 +161,8 @@ function MAP(state = defaultState.MAP, action) {
         ...state.layers,
         [layer.id]: {
           ...oldLayer,
-          source: layer.source,
-          labels: layer.labels,
+          ...layer,
+          visible: oldLayer.visible,
           isLoading: false,
           loaded: true,
         },
@@ -155,6 +174,7 @@ function MAP(state = defaultState.MAP, action) {
         reloadLayers: Math.random(),
       };
     }
+
     default:
       return state;
   }

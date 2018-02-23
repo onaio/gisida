@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+/* global location */
+/* eslint no-restricted-globals: ["off", "isNaN"] */
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
@@ -7,95 +9,122 @@ import csvToGEOjson from './csvToGEOjson';
 import { requestData, receiveData } from '../store/actions/Actions';
 import * as d3 from 'd3';
 
+/**
+ * Dispaches actions indicatino layer is readyt to render
+ * @param {*} layer
+ * @param {*} dispatch
+ */
+function renderData(layer, dispatch) {
+  const layerObj = { ...layer };
+  if (!(layerObj.labels)) {
+    dispatch(receiveData(layerObj));
+  } else {
+    loadCSV(layerObj.labels.data, (labels) => {
+      layerObj.labels.data = labels;
+      dispatch(receiveData(layerObj));
+    });
+  }
+}
 
 /**
- * Proceses MapSpec and adds it to state.
-* */
-export default function prepareLayer(layerSpec, dispatch, filterOptions = false) {
+ * Loads layer data from CSV or GeoJSON source
+ * @param {*} layer
+ * @param {*} source
+ * @param {*} dispatch
+ */
+function readData(layer, source, dispatch) {
+  const layerObj = { ...layer };
+  const fileType = source.split('.').pop();
+  if (fileType === 'csv') {
+    loadCSV(layerObj.source.data, (data) => {
+      const parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      layerObj.source.data = parsedData;
+      layerObj.mergedData = parsedData;
+      if (layerObj.aggregate && layerObj.aggregate.filter) {
+        layerObj.filterOptions = generateFilterOptions(layerObj);
+      }
+      renderData(layerObj, dispatch);
+    });
+  }
+  if (fileType === 'geojson') {
+    loadJSON(layerObj.source.data, (data) => {
+      layerObj.source.data = data;
+      renderData(layerObj, dispatch);
+    });
+  }
+}
+/**
+ * Loads layer data from multiple CSV or GeoJSON files
+ * @param {*} layer
+ * @param {*} dispatch
+ */
+function fetchMultipleSources(layer, dispatch) {
+  const layerObj = { ...layer };
+  let q = d3.queue();
+  const filePaths = layerObj.source.data;
+  filePaths.forEach((filePath) => {
+    if (Number.isInteger(filePath)) {
+      q = q.defer(fetchFormData, filePath, layerObj.properties);
+    } else q = q.defer(d3.csv, filePath);
+  });
+  q.awaitAll((error, data) => {
+    const mergedData = [].concat(...data);
+    layerObj.mergedData = mergedData;
+    if (layerObj.aggregate && layerObj.aggregate.filter) {
+      generateFilterOptions(layerObj);
+    }
+    layerObj.source.data = layerObj.aggregate.type ?
+      aggregateData(layerObj, this.props.locations) : mergedData;
+    layerObj.loaded = true;
+    renderData(layerObj, dispatch);
+  });
+}
+
+/**
+ * Proceses MapSpec layer and adds it to redux state.
+ * @param {*} layer
+ * @param {*} dispatch
+ * @param {*} filterOptions
+ */
+export default function prepareLayer(layer, dispatch, filterOptions = false) {
+  const layerObj = { ...layer };
   // Sets state to loading;
-  dispatch(requestData(layerSpec.id));
+  dispatch(requestData(layerObj.id));
 
-  const processedLayer = { ...layerSpec };
-
+  // TODO: figure out what this does
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
   //   this.activeLayers.push(layerSpec.id);
   // }
 
-  function renderData(spec) {
-    if (!(spec.labels)) {
-      dispatch(receiveData(spec));
-    } else {
-      loadCSV(spec.labels.data, (labels) => {
-        const nextSpec = spec;
-        nextSpec.labels.data = labels;
-        dispatch(receiveData(spec));
-      });
-    }
-  }
-
-  function readData(spec, source) {
-    const layer = { ...spec };
-    const fileType = source.split('.').pop();
-    if (fileType === 'csv') {
-      loadCSV(spec.source.data, (data) => {
-        const parsedData = spec.source.type === 'geojson' ? csvToGEOjson(spec, data) : data;
-        layer.source.data = parsedData;
-        layer.mergedData = parsedData;
-        if (spec.aggregate && spec.aggregate.filter) {
-          generateFilterOptions(spec);
-        }
-        renderData(layer);
-      });
-    }
-    if (fileType === 'geojson') {
-      loadJSON(spec.source.data, (data) => {
-        layer.source.data = data;
-        renderData(layer);
-      });
-    }
-  }
-
-  // if layer has source
-  if (layerSpec.source) {
+  if (layerObj.source) {
     // if not processed, grab the csv or geojson data
-    if (typeof layerSpec.source.data === 'string') {
-      readData(layerSpec, layerSpec.source.data);
-    } else if (layerSpec.source.data instanceof Array &&
-      !(layerSpec.source.data[0] instanceof Object) &&
-      layerSpec.source.data.length >= 1 &&
-      !layerSpec.loaded) {
-      let q = d3.queue();
-      const filePaths = layerSpec.source.data;
-      filePaths.forEach((filePath) => {
-        if (Number.isInteger(filePath)) {
-          q = q.defer(fetchFormData, filePath, layerSpec.properties);
-        } else q = q.defer(d3.csv, filePath);
-      });
-      q.awaitAll((error, data) => {
-        const mergedData = [].concat(...data);
-        processedLayer.mergedData = mergedData;
-        if (layerSpec.aggregate && layerSpec.aggregate.filter) {
-          generateFilterOptions(layerSpec);
-        }
-        processedLayer.source.data = layerSpec.aggregate.type ?
-          aggregateData(layerSpec, this.props.locations) : mergedData;
-        processedLayer.loaded = true;
-        // renderData(layerSpec);
-      });
-    } else if (filterOptions) {
-      processedLayer.source.data =
-        layerSpec.aggregate.type ?
-          aggregateData(layerSpec, this.props.locations, filterOptions) :
-          processFilters(layerSpec, filterOptions);
-      // self.addLayer(layerSpec);
+    if (typeof layerObj.source.data === 'string') {
+      readData(layerObj, layerObj.source.data, dispatch);
+    } else
+    // grab from multiple sources
+    if (layerObj.source.data instanceof Array &&
+      !(layerObj.source.data[0] instanceof Object) &&
+      layerObj.source.data.length >= 1 &&
+      !layerObj.loaded) {
+      fetchMultipleSources(layerObj, dispatch);
+    } else
+    // TODO: remove or refactor
+    // only filter option
+    if (filterOptions) {
+      layerObj.source.data =
+        layerObj.aggregate.type ?
+          aggregateData(layerObj, this.props.locations, filterOptions) :
+          processFilters(layerObj, filterOptions);
+      renderData(layerObj);
     } else {
-      // add the already processed layer
-      dispatch(receiveData(layerSpec));
+      // add the already processed layerObj
+      dispatch(receiveData(layerObj));
     }
-  } else if (layerSpec.layers) {
+  } else if (layerObj.layers) {
+    // TODO: fix for grouped layers
     // if layer has sublayers, add all sublayers
     // self.addLegend(layerSpec);
-    layerSpec.layers.forEach((sublayer) => {
+    layerObj.layers.forEach((sublayer) => {
       const subLayer = this.props.layerSpec[sublayer];
       subLayer.id = sublayer;
       if (typeof subLayer.source.data === 'string') {

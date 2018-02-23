@@ -1,9 +1,12 @@
 // import sortLayers from './sortLayers';
 // import buildTimeseriesData from './buildTimeseriesData';
+/* global location */
+/* eslint-disable no-param-reassign */
 import generateStops from './generateStops';
 import addChart from './addChart';
 import addLegend from './addLegend';
 import addLabels from './addLabels';
+import { isNumber } from '../utils/files';
 
 export default function addLayer(map, layer, mapConfig) {
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
@@ -19,6 +22,7 @@ export default function addLayer(map, layer, mapConfig) {
   }
 
   const layerObj = layer;
+  layer.filters = layerObj.filters || {};
   if (typeof layerObj.isChartMin === 'undefined') {
     layerObj.isChartMin = true;
     layerObj.legendBottom = 40;
@@ -255,7 +259,7 @@ export default function addLayer(map, layer, mapConfig) {
 
     // add filter
     if (layer.filter) {
-      symbolLayer.filter = layer.filter;
+      layer.filters.base = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
@@ -269,7 +273,7 @@ export default function addLayer(map, layer, mapConfig) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = Number.isNaN(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = isNumber(d[prop]) ? d[prop] : Number(d[prop]);
             });
             return {
               type: 'Feature',
@@ -296,7 +300,8 @@ export default function addLayer(map, layer, mapConfig) {
     }
 
     if (!map.getLayer(symbolLayer.id)) {
-      if (layer['highlight-layout'] || layer['highlight-paint']) {
+      if ((layer.filters && layer['highlight-filter-property']) &&
+        (layer['highlight-layout'] || layer['highlight-paint'])) {
         const highlightLayer = Object.assign({}, symbolLayer);
 
         if (layer['highlight-layout']) {
@@ -305,12 +310,11 @@ export default function addLayer(map, layer, mapConfig) {
         if (layer['highlight-paint']) {
           highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
         }
+        layer.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+        layer.filters.highlight = ['==', layer['highlight-filter-property'], ''];
 
         highlightLayer.id += '-highlight';
-        highlightLayer.filter = ['==', 'Fixed Site Unique ID', ''];
         map.addLayer(highlightLayer);
-
-        symbolLayer.filter = ['!=', 'Fixed Site Unique ID', ''];
       }
 
       map.addLayer(symbolLayer);

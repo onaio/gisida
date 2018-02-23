@@ -35,6 +35,10 @@ export const toggleLayer = layerId => ({
   layerId,
 });
 
+export const toggleFilter = showFilterPanel => ({
+  type: 'TOGGLE_FILTER',
+  showFilterPanel,
+});
 
 export const requestData = layerId => ({
   type: 'REQUEST_DATA',
@@ -74,6 +78,7 @@ export default {
   addLayer,
   reloadLayers,
   toggleLayer,
+  toggleFilter,
   requestData,
   receiveData,
   changeRegion,

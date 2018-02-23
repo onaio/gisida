@@ -28,7 +28,6 @@ const getColor = function getColor(c, i) {
 };
 
 function getStops(layer) {
-  console.log(layer);
   const colorsStops = [];
   const radiusStops = [];
   const radius = layer.radiusRange || defaultRadiusRange;
