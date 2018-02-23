@@ -1,4 +1,5 @@
 import generateStops from './generateStops';
+import addLabels from './addLabels';
 import { isNumber } from '../utils/files';
 
 
@@ -34,14 +35,12 @@ export default function addLayer(layer, mapConfig) {
     const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
     const Data = timefield ? currData : layer.source.data;
 
-
-    layerObj.stopsData = stopsData;
-    layerObj.breaks = breaks;
-    layerObj.colors = colors;
-    layerObj.Data = Data;
-    layerObj.stops = stops;
+    // addLegend(layer, stopsData, Data, breaks, colors);
+    addLabels(map, layer, Data);
+  } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
+    // addLegend(layer);
   } else {
-    $('.legend-row.primary').removeClass('primary');
+    // $('.legend-row.primary').removeClass('primary');
   }
 
   /*

@@ -1,4 +1,4 @@
-export default function sortLayers(map, layers) {
+export default function sortLayers(map, layer) {
   Object.keys(layers).forEach((key) => {
     if (layers[key].type === 'line') {
       if (map.getLayer(key)) {
