@@ -8,5 +8,8 @@ gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addPopUp = require('./map/addPopUp').default;
 gisida.sortLayers = require('./map/sortLayers').default;
 gisida.getSliderLayers = require('./map/getSliderLayers').default;
+gisida.buildFilters = require('./map/buildFilters').default;
+gisida.mergeFilters = require('./map/mergeFilters').default;
+gisida.generateFilterOptions = require('./utils/filters').generateFilterOptions;
 
 module.exports = gisida;

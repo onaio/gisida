@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import csvToGEOjson from './csvToGEOjson';
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
@@ -81,8 +82,9 @@ function readData(layer, dispatch) {
   const fileType = sourceURL.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      layerObj.source.data = data;
-      layerObj.mergedData = data;
+      const parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      layerObj.source.data = parsedData;
+      layerObj.mergedData = parsedData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }

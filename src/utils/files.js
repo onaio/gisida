@@ -34,3 +34,7 @@ export function loadCSV(path, callback) {
     }
   });
 }
+
+export function isNumber(value) {
+  return !Number.isNaN(parseFloat(value));
+}

@@ -78,6 +78,7 @@ function MAP(state = defaultState.MAP, action) {
         reloadLayers: true,
         currentRegion: Math.random(),
       };
+
     case 'STYLE_CHANGED':
       return {
         ...state,
@@ -89,16 +90,19 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         reloadLayers: action.reload,
       };
+
     case 'CHANGE_STYLE':
       return {
         ...state,
         currentStyle: action.style,
       };
+
     case 'CHANGE_REGION':
       return {
         ...state,
         currentRegion: action.region,
       };
+
     case 'ADD_LAYER': {
       const layers = {};
       layers[action.layer.id] = action.layer;
@@ -108,6 +112,7 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
+
     case 'TOGGLE_LAYER': {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -123,8 +128,22 @@ function MAP(state = defaultState.MAP, action) {
         // Update visible property
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        filter: {
+          ...state.filter,
+          layerId:
+            !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
+              layerId : false,
+        },
       };
     }
+
+    case 'TOGGLE_FILTER': {
+      return {
+        ...state,
+        showFilterPanel: !state.showFilterPanel,
+      };
+    }
+
     case 'REQUEST_DATA': {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -142,18 +161,20 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
+
     case 'RECEIVE_DATA': {
       const { layer } = action;
       const oldLayer = state.layers[layer.id];
       const updatedLayers = {
         ...state.layers,
-        [layer.id]: Object.assign({}, oldLayer, layer, {
-          source: layer.source,
+        [layer.id]: {
+          ...oldLayer,
+          ...layer,
           labels: layer.labels,
+          visible: oldLayer.visible,
           isLoading: false,
           loaded: true,
-          visible: true,
-        }),
+        },
       };
       return {
         ...state,
@@ -169,6 +190,7 @@ function MAP(state = defaultState.MAP, action) {
         timeseries: action.timeseries,
       };
     }
+
     default:
       return state;
   }

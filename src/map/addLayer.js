@@ -1,7 +1,10 @@
 import generateStops from './generateStops';
+import { isNumber } from '../utils/files';
+
 
 export default function addLayer(layer, mapConfig) {
   const layerObj = { ...layer };
+  layerObj.filters = layerObj.filters || {};
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
   let styleSpec;
@@ -10,7 +13,6 @@ export default function addLayer(layer, mapConfig) {
   if (layer === undefined) {
     return null;
   }
-
 
   if (typeof layerObj.isChartMin === 'undefined') {
     layerObj.isChartMin = true;
@@ -249,7 +251,7 @@ export default function addLayer(layer, mapConfig) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = Number.isNaN(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = isNumber(d[prop]) ? d[prop] : Number(d[prop]);
             });
             return {
               type: 'Feature',
@@ -276,7 +278,7 @@ export default function addLayer(layer, mapConfig) {
     }
 
     if (!this.map.getLayer(styleSpec.id)) {
-      if (layer['highlight-filter-property'] &&
+      if ((layer.filters && layer['highlight-filter-property']) &&
         (layer['highlight-layout'] || layer['highlight-paint'])) {
         const highlightLayer = Object.assign({}, styleSpec);
 
