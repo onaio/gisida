@@ -3,7 +3,11 @@ import defaultState from '../defaultState';
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
     case 'INIT_APP':
-      return { ...state, ...action.config };
+      return {
+        ...state,
+        ...action.config,
+        loaded: true,
+      };
     default:
       return state;
   }
