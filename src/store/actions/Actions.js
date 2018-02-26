@@ -45,9 +45,10 @@ export const requestData = layerId => ({
   layerId,
 });
 
-export const receiveData = layer => ({
+export const receiveData = (layer, timeseries) => ({
   type: 'RECEIVE_DATA',
   layer,
+  timeseries,
 });
 
 export const mapRendered = isRendered => ({
@@ -63,6 +64,17 @@ export const mapLoaded = isLoaded => ({
 export const reloadLayers = reload => ({
   type: 'RELOAD_LAYERS',
   reload,
+});
+
+export const reloadLayer = reload => ({
+  type: 'RELOAD_LAYER',
+  reload,
+});
+
+
+export const updateTimeseries = timeseries => ({
+  type: 'UPDATE_TIMESERIES',
+  timeseries,
 });
 
 export const getCurrentState = () => function (dispatch, getState) {
@@ -84,4 +96,5 @@ export default {
   changeRegion,
   changeStyle,
   getCurrentState,
+  updateTimeseries,
 };

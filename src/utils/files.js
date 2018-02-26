@@ -25,7 +25,10 @@ export function loadJSON(path, callback) {
 export function loadCSV(path, callback) {
   fetchURL(path, 'text/csv', (response) => {
     try {
-      callback(parse(response, { header: true }).data);
+      callback(parse(response, {
+        header: true,
+        skipEmptyLines: true,
+      }).data);
     } catch (e) {
       console.error(`Error loading ${path} (${e})`);
     }

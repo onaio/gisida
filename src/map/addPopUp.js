@@ -7,14 +7,14 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
     closeOnClick: true,
     closeButton: false,
   });
-  const self = {};
+
   let content;
 
   // Add mousemove event to map
   map.on('mousemove', (e) => {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers } = currentState.MAP;
+    const { layers, timeseries, visibleLayerId } = currentState.MAP;
 
     // Generate list of active layers
     const activeLayers = [];
@@ -47,7 +47,7 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
       let periodData = [];
       // Assign period data if layer has time series
       if (layer.aggregate && layer.aggregate.timeseries) {
-        const tsLayer = self.state.timeseries[self.state.layerObj.id];
+        const tsLayer = timeseries[visibleLayerId];
         if (tsLayer) {
           const currPeriod = Object.keys(tsLayer.periodData)[tsLayer.temporalIndex];
           periodData = tsLayer.periodData[currPeriod].data;

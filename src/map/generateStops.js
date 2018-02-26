@@ -77,11 +77,19 @@ function getStops(layer) {
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;
   const osmIDs = layer.limit ? rangeID : osmID;
+  const stopDomains = [];
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
+        // Check for repeating stop domains
+        const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
+        if (stopDomains.includes(stopVal)) {
+          // debug repeating balues console.warn(`Repeating stop domain:, ${stopVal}!`);
+        }
+        stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
+
         colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
         radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
         break;
@@ -118,12 +126,11 @@ export default function (layer, timefield) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const { clusters } = layer.categories;
+  const { clusters, limit } = layer.categories;
   const colors = getColorBrewerColor(layer.categories.color, clusters) || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join[1]);
-  const { limit } = layer.categories;
   const radiusRange = layer['radius-range'];
 
   for (let i = 0; i < rows.length; i += 1) {

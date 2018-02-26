@@ -43,6 +43,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
     case 'INIT_REGIONS': {
       const regions = action.regions ? action.regions.map((r) => {
         const region = r;
+        // check if mapconfig center matches region center to set current region
         if (
           region.center[0] === action.mapConfig.center[0] &&
           region.center[1] === action.mapConfig.center[1]) {
@@ -79,6 +80,7 @@ function MAP(state = defaultState.MAP, action) {
         ...state,
         isLoaded: true,
         reloadLayers: true,
+        currentRegion: Math.random(),
       };
 
     case 'STYLE_CHANGED':
@@ -97,6 +99,12 @@ function MAP(state = defaultState.MAP, action) {
       return {
         ...state,
         currentStyle: action.style,
+      };
+
+    case 'CHANGE_REGION':
+      return {
+        ...state,
+        currentRegion: action.region,
       };
 
     case 'ADD_LAYER': {
@@ -166,6 +174,7 @@ function MAP(state = defaultState.MAP, action) {
         [layer.id]: {
           ...oldLayer,
           ...layer,
+          labels: layer.labels,
           visible: oldLayer.visible,
           isLoading: false,
           loaded: true,
@@ -173,9 +182,16 @@ function MAP(state = defaultState.MAP, action) {
       };
       return {
         ...state,
-        // Update isLoading property
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        timeseries: action.timeseries,
+        visibleLayerId: layer.id,
+      };
+    }
+    case 'UPDATE_TIMESERIES': {
+      return {
+        ...state,
+        timeseries: action.timeseries,
       };
     }
 

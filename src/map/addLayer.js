@@ -1,28 +1,19 @@
-// import sortLayers from './sortLayers';
-// import buildTimeseriesData from './buildTimeseriesData';
-/* global location */
-/* eslint-disable no-param-reassign */
 import generateStops from './generateStops';
-import addChart from './addChart';
-import addLegend from './addLegend';
-import addLabels from './addLabels';
 import { isNumber } from '../utils/files';
 
-export default function addLayer(map, layer, mapConfig) {
+
+export default function addLayer(layer, mapConfig) {
+  const layerObj = { ...layer };
+  layerObj.filters = layerObj.filters || {};
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
   let stops;
-  // let newStops;
-  let circleLayer;
-  let fillLayer;
-  let lineLayer;
-  let symbolLayer;
+  let styleSpec;
+
 
   if (layer === undefined) {
     return null;
   }
 
-  const layerObj = layer;
-  layer.filters = layerObj.filters || {};
   if (typeof layerObj.isChartMin === 'undefined') {
     layerObj.isChartMin = true;
     layerObj.legendBottom = 40;
@@ -43,10 +34,12 @@ export default function addLayer(map, layer, mapConfig) {
     const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
     const Data = timefield ? currData : layer.source.data;
 
-    addLegend(layer, stopsData, Data, breaks, colors);
-    addLabels(map, layer, Data);
-  } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
-    addLegend(layer);
+
+    layerObj.stopsData = stopsData;
+    layerObj.breaks = breaks;
+    layerObj.colors = colors;
+    layerObj.Data = Data;
+    layerObj.stops = stops;
   } else {
     $('.legend-row.primary').removeClass('primary');
   }
@@ -55,7 +48,7 @@ export default function addLayer(map, layer, mapConfig) {
    * CIRCLE ==========================================================
    */
   if (layer.type === 'circle') {
-    circleLayer = {
+    styleSpec = {
       id: layer.id,
       visible: layer.visible,
       type: 'circle',
@@ -87,14 +80,14 @@ export default function addLayer(map, layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      circleLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
 
     if (layer.source.minzoom) {
-      circleLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.source.maxzoom) {
-      circleLayer.maxzoom = layer.source.maxzoom;
+      styleSpec.maxzoom = layer.source.maxzoom;
     }
 
     if (layer.source.data) {
@@ -112,32 +105,27 @@ export default function addLayer(map, layer, mapConfig) {
         } else {
           layerStops = [[0, 0]];
         }
-        circleLayer.paint['circle-radius'] = {
+        styleSpec.paint['circle-radius'] = {
           property: layer.source.join[0],
           stops: layerStops,
           type: 'categorical',
           default: stops ? 0 : 3,
         };
-        circleLayer.source.url = layer.source.url;
-        circleLayer['source-layer'] = layer.source.layer;
+        styleSpec.source.url = layer.source.url;
+        styleSpec['source-layer'] = layer.source.layer;
       } else if (layer.source.type === 'geojson') {
         if (stops) {
-          circleLayer.paint['circle-radius'] = {
+          styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
           };
         }
-        circleLayer.source.data = layer.source.data;
+        styleSpec.source.data = layer.source.data;
       }
     }
     // add filter
     if (layer.filter) {
-      circleLayer.filter = layer.filter;
-    }
-
-    if (!map.getLayer(circleLayer.id)) map.addLayer(circleLayer);
-    if (map.getLayer(circleLayer.id)) {
-      map.setLayoutProperty(circleLayer.id, 'visibility', circleLayer.visible ? 'visible' : 'none');
+      styleSpec.filter = layer.filter;
     }
   }
 
@@ -145,7 +133,7 @@ export default function addLayer(map, layer, mapConfig) {
    * FILL ==========================================================
    */
   if (layer.type === 'fill') {
-    fillLayer = {
+    styleSpec = {
       id: layer.id,
       visible: layer.visible,
       type: 'fill',
@@ -161,30 +149,30 @@ export default function addLayer(map, layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      fillLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
     if (layer.source.minzoom) {
-      fillLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.maxzoom) {
-      fillLayer.maxzoom = layer.maxzoom;
+      styleSpec.maxzoom = layer.maxzoom;
     }
 
     if (!(layer['no-outline'])) {
-      fillLayer.paint['fill-outline-color'] = '#fff';
+      styleSpec.paint['fill-outline-color'] = '#fff';
     }
 
     if (layer.source.type === 'geojson') {
-      fillLayer.source.data = layer.source.data;
+      styleSpec.source.data = layer.source.data;
     } else {
-      fillLayer.source.url = layer.source.url;
-      fillLayer['source-layer'] = layer.source.layer;
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
 
     if (layer.source.data && !layer.paint) {
       const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
 
-      fillLayer.paint['fill-color'] = {
+      styleSpec.paint['fill-color'] = {
         property: layer.source.join[0],
         stops: layerStops,
         type: 'categorical',
@@ -193,12 +181,7 @@ export default function addLayer(map, layer, mapConfig) {
     }
     // add filter
     if (layer.filter) {
-      fillLayer.filter = layer.filter;
-    }
-
-    if (!map.getLayer(fillLayer.id)) map.addLayer(fillLayer);
-    if (map.getLayer(fillLayer.id)) {
-      map.setLayoutProperty(fillLayer.id, 'visibility', fillLayer.visible ? 'visible' : 'none');
+      styleSpec.filter = layer.filter;
     }
   }
 
@@ -206,7 +189,7 @@ export default function addLayer(map, layer, mapConfig) {
    * LINE ==========================================================
    */
   if (layer.type === 'line') {
-    lineLayer = {
+    styleSpec = {
       id: layer.id,
       type: 'line',
       visible: layer.visible,
@@ -220,23 +203,19 @@ export default function addLayer(map, layer, mapConfig) {
       },
     };
     if (layer.paint) {
-      lineLayer.paint = layer.paint;
+      styleSpec.paint = layer.paint;
     }
     if (layer.source.minzoom) {
-      lineLayer.minzoom = layer.source.minzoom;
+      styleSpec.minzoom = layer.source.minzoom;
     }
     if (layer.maxzoom) {
-      lineLayer.maxzoom = layer.maxzoom;
+      styleSpec.maxzoom = layer.maxzoom;
     }
     if (layer.source.type === 'geojson') {
-      lineLayer.source.data = layer.source.data;
+      styleSpec.source.data = layer.source.data;
     } else {
-      lineLayer.source.url = layer.source.url;
-      lineLayer['source-layer'] = layer.source.layer;
-    }
-    if (!map.getLayer(lineLayer.id)) map.addLayer(lineLayer);
-    if (map.getLayer(lineLayer.id)) {
-      map.setLayoutProperty(lineLayer.id, 'visibility', lineLayer.visible ? 'visible' : 'none');
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
   }
 
@@ -244,9 +223,8 @@ export default function addLayer(map, layer, mapConfig) {
    * SYMBOL ==========================================================
    */
   if (layer.type === 'symbol') {
-    symbolLayer = {
+    styleSpec = {
       id: layer.id,
-      visible: layer.visible,
       type: 'symbol',
       source: {
         type: layer.source.type,
@@ -259,16 +237,16 @@ export default function addLayer(map, layer, mapConfig) {
 
     // add filter
     if (layer.filter) {
-      layer.filters.base = layer.filter;
+      styleSpec.filters.base = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
       if (layer.source.data.features
         && layer.source.data.features[0]
         && layer.source.data.features[0].geometry) {
-        symbolLayer.source.data = layer.source.data;
+        styleSpec.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
-        symbolLayer.source.data = {
+        styleSpec.source.data = {
           type: 'FeatureCollection',
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
@@ -287,8 +265,8 @@ export default function addLayer(map, layer, mapConfig) {
         };
       }
     } else {
-      symbolLayer.source.url = layer.source.url;
-      symbolLayer['source-layer'] = layer.source.layer;
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
 
     if (layer.categories && layer.categories.shape) {
@@ -296,13 +274,13 @@ export default function addLayer(map, layer, mapConfig) {
       layer.categories.type.forEach((type, index) => {
         iconStops.push([type, layer.categories.shape[index]]);
       });
-      symbolLayer.layout['icon-image'].stops = iconStops;
+      styleSpec.layout['icon-image'].stops = iconStops;
     }
 
-    if (!map.getLayer(symbolLayer.id)) {
+    if (!this.map.getLayer(styleSpec.id)) {
       if ((layer.filters && layer['highlight-filter-property']) &&
         (layer['highlight-layout'] || layer['highlight-paint'])) {
-        const highlightLayer = Object.assign({}, symbolLayer);
+        const highlightLayer = Object.assign({}, styleSpec);
 
         if (layer['highlight-layout']) {
           highlightLayer.layout = Object.assign({}, highlightLayer.layout, layer['highlight-layout']);
@@ -310,31 +288,28 @@ export default function addLayer(map, layer, mapConfig) {
         if (layer['highlight-paint']) {
           highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
         }
-        layer.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
-        layer.filters.highlight = ['==', layer['highlight-filter-property'], ''];
+
+        layerObj.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+        layerObj.filters.highlight = ['==', layer['highlight-filter-property'], ''];
 
         highlightLayer.id += '-highlight';
-        map.addLayer(highlightLayer);
+        this.map.addLayer(highlightLayer);
+        styleSpec = highlightLayer;
       }
-
-      map.addLayer(symbolLayer);
-    }
-    if (map.getLayer(symbolLayer.id)) {
-      map.setLayoutProperty(symbolLayer.id, 'visibility', symbolLayer.visible ? 'visible' : 'none');
     }
   }
   /*
    * CHART ==========================================================
    */
-  if (layer.type === 'chart') {
-    let { data } = layer.source;
-    if (timefield) {
-      const period = [...new Set(layer.source.data.map(p => p[timefield]))];
-      // newStops = { id: layer.id, period, timefield };
-      data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
-    }
-    addChart(map, layer, data);
-  }
+  // if (layer.type === 'chart') {
+  //   let { data } = layer.source;
+  //   if (timefield) {
+  //     const period = [...new Set(layer.source.data.map(p => p[timefield]))];
+  //     newStops = { id: layer.id, period, timefield };
+  //     data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
+  //   }
+  //   addChart(map, layer, data);
+  // }
 
   // Generate layersObj
   // let layersObj = [];
@@ -344,10 +319,6 @@ export default function addLayer(map, layer, mapConfig) {
   //   }
   // }
   // layersObj.push(layer);
-
-
-  // sort the layers
-  // sortLayers();
 
   // disallow multiple fill layers on the map (todo - convert filters to nested for loops)
   // let id;
@@ -369,34 +340,17 @@ export default function addLayer(map, layer, mapConfig) {
   //   }
   // }
 
-  // const timeseriesMap = buildTimeseriesData(newStops);
-  // if (timeseriesMap[layer.id]) {
-  //   let mbLayer;
-  //   switch (layer.type) {
-  //     case 'circle':
-  //       mbLayer = circleLayer;
-  //       break;
-  //     case 'fill':
-  //       mbLayer = fillLayer;
-  //       break;
-  //     case 'line':
-  //       mbLayer = lineLayer;
-  //       break;
-  //     case 'symbol':
-  //       mbLayer = symbolLayer;
-  //       break;
-  //     default:
-  //       mbLayer = null;
-  //   }
-  //   timeseriesMap[layer.id].mapBoxLayer = mbLayer;
-  // }
 
   // this.setState({
-  //   layerObj,
-  //   layersObj,
+  //  - layerObj,
+  //   - layersObj,
   //   stops: newStops,
   //   timeseries: Object.assign({}, this.state.timeseries, timeseriesMap),
   // });
 
-  return map;
+  layerObj.styleSpec = styleSpec;
+
+  // layerObj.timeseries = Object.assign({}, this.state.timeseries, timeseriesMap)
+  return layerObj;
 }
+

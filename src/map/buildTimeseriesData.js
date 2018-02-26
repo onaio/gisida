@@ -1,13 +1,25 @@
-import { getLastIndex } from '../utils/getLastIndex';
+import getLastIndex from '../utils/getLastIndex';
 
-export default function buildTimeseriesData(Stops) {
-  const timeSeriesLayers = this.getSliderLayers();
-  const activeLayers = this.state.layers.map(layer => layer.title);
+export default function buildTimeseriesData(
+  layer,
+  Stops,
+  timeSeriesLayers,
+  timeseries,
+  loadedlayers,
+) {
+  const layerObj = { ...layer };
+  const activeLayers = [];
+  const layers = [];
+  Object.keys(loadedlayers).forEach((key) => {
+    if (loadedlayers[key].visible) {
+      activeLayers.push(loadedlayers[key].id);
+      layers.push(loadedlayers[key]);
+    }
+  });
   const timeseriesMap = {};
 
   let layerId;
   let index;
-  let layerObj;
   let temporalIndex;
   let data;
   let layerProperty;
@@ -36,16 +48,15 @@ export default function buildTimeseriesData(Stops) {
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
 
-    if (activeLayers.includes(layerId) && !this.state.timeseries[layerId]) {
+    if (activeLayers.includes(layerId) && !timeseries[layerId]) {
       index = getLastIndex(activeLayers, layerId);
-      layerObj = this.props.layerData[layerId];
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
 
-      if (this.state && this.state.layers[index] && this.state.layers[index].visible === true &&
+      if (layers[index] && layers[index].visible === true &&
         layerObj.source.data instanceof Object && stops && layerObj.id === stops.id) {
         // Determine later stops
         if (layerObj.type === 'chart') {
-          ({ period } = this.state.stops.period);
+          ({ period } = stops.period);
           colorStops = layerObj.source.data;
         } else {
           const paintStops = stops.stops;

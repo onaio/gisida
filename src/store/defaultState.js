@@ -31,7 +31,10 @@ const defaultState = {
     isLoaded: false,
     reloadLayers: false,
     currentStyle: '',
+    currentRegion: '',
     layers: {},
+    timeseries: {},
+    visibleLayerId: '',
     filter: {
       isFiltered: false,
       prevFilters: null,
