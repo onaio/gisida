@@ -7,7 +7,6 @@ import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/Actions';
 import addLayer from './addLayer';
-import addLegend from './addLegend';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
 
@@ -124,8 +123,6 @@ function renderData(layer, dispatch) {
     layerObj.labels.labels = buildLabels(layerObj);
     dispatch(receiveData(layerObj, newTimeSeries));
   }
-
-  addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
 }
 
 

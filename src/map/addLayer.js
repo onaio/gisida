@@ -1,5 +1,4 @@
 import generateStops from './generateStops';
-import addLabels from './addLabels';
 import { isNumber } from '../utils/files';
 
 
@@ -22,13 +21,6 @@ export default function addLayer(layer, mapConfig) {
 
   if (layer.property) {
     stops = generateStops(layer, timefield);
-  }
-
-  if (stops) {
-    const currPeriod = stops[2][stops[2].length - 1];
-    const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
-    const Data = timefield ? currData : layer.source.data;
-    addLabels(map, layer, Data);
   }
 
   /*
