@@ -25,22 +25,10 @@ export default function addLayer(layer, mapConfig) {
   }
 
   if (stops) {
-    // newStops = { stops, id: layer.id };
-    const colorStops = timefield ? stops[0][stops[0].length - 1] : stops[0][0];
-    const radiusStops = stops[1][0];
-    const stopsData = layer.type === 'circle' ? radiusStops : colorStops;
-    const breaks = stops[3];
-    const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
     const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
     const Data = timefield ? currData : layer.source.data;
-
-    // addLegend(layer, stopsData, Data, breaks, colors);
     addLabels(map, layer, Data);
-  } else if (layer.credit && layer.categories && layer.categories.breaks === 'no') {
-    // addLegend(layer);
-  } else {
-    // $('.legend-row.primary').removeClass('primary');
   }
 
   /*
