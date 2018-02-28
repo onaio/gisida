@@ -1,11 +1,25 @@
 {
   "name": "gisida",
+  "version": "0.0.2",
   "description": "A dashboard builder library for map visualizations",
-  "version": "0.0.1",
+  "keywords": [
+    "data visualization",
+    "mapping",
+    "maps",
+    "mapspec"
+  ],
+  "license": "MIT",
   "author": "Ona Systems Inc.",
+  "main": "build/gisida.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/onaio/gisida#gisida"
+  },
+  "scripts": {
+    "build": "webpack --progress --env.production=true",
+    "develop": "webpack --progress --watch --env.production=false",
+    "fix": "eslint src --ext=jsx --ext=js --fix",
+    "lint": "eslint src --ext=jsx --ext=js"
   },
   "jest": {
     "transform": {
@@ -37,19 +51,5 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1"
-  },
-  "keywords": [
-    "mapping",
-    "maps",
-    "data visualization",
-    "mapspec"
-  ],
-  "license": "MIT",
-  "main": "build/gisida.js",
-  "scripts": {
-    "lint": "eslint src --ext=jsx --ext=js",
-    "fix": "eslint src --ext=jsx --ext=js --fix",
-    "build": "webpack --progress --env.production=true",
-    "develop": "webpack --progress --watch --env.production=false"
   }
 }
