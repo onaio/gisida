@@ -277,25 +277,10 @@ export default function addLayer(layer, mapConfig) {
       styleSpec.layout['icon-image'].stops = iconStops;
     }
 
-    if (!this.map.getLayer(styleSpec.id)) {
-      if ((layer.filters && layer['highlight-filter-property']) &&
-        (layer['highlight-layout'] || layer['highlight-paint'])) {
-        const highlightLayer = Object.assign({}, styleSpec);
-
-        if (layer['highlight-layout']) {
-          highlightLayer.layout = Object.assign({}, highlightLayer.layout, layer['highlight-layout']);
-        }
-        if (layer['highlight-paint']) {
-          highlightLayer.paint = Object.assign({}, highlightLayer.paint, layer['highlight-paint']);
-        }
-
-        layerObj.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
-        layerObj.filters.highlight = ['==', layer['highlight-filter-property'], ''];
-
-        highlightLayer.id += '-highlight';
-        this.map.addLayer(highlightLayer);
-        styleSpec = highlightLayer;
-      }
+    if (layer['highlight-filter-property']
+      && (layer['highlight-layout'] || layer['highlight-paint'])) {
+      layerObj.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
+      layerObj.filters.highlight = ['==', layer['highlight-filter-property'], ''];
     }
   }
   /*

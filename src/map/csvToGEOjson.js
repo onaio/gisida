@@ -17,7 +17,7 @@ export default function csvToGEOjson(spec, data) {
     if (spec.properties) {
       for (let p = 0; p < spec.properties.length; p += 1) {
         prop = spec.properties[p];
-        propertiesMap[prop] = Number.isNaN(datum[prop]) ? datum[prop] : Number(datum[prop]);
+        propertiesMap[prop] = Number.isNaN(Number(datum[prop])) ? datum[prop] : Number(datum[prop]);
       }
     }
 
