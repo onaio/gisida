@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
@@ -9,7 +10,6 @@ import addLayer from './addLayer';
 import addLegend from './addLegend';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
-import Mustache from 'mustache';
 
 /**
  * Dispaches actions indicating layer is ready to render
@@ -85,7 +85,7 @@ function renderData(layer, dispatch) {
             // stash datum and coordi ates in label, push to labels array
             labels.push({
               ...labelData[l],
-              data: {...layerData[d]},
+              data: { ...layerData[d] },
               label: Mustache.render(label, layerData[d]),
               coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
             });
@@ -104,7 +104,6 @@ function renderData(layer, dispatch) {
 
   addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
 }
-
 
 
 /**
