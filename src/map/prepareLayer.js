@@ -9,6 +9,7 @@ import addLayer from './addLayer';
 import addLegend from './addLegend';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
+import Mustache from 'mustache';
 
 /**
  * Dispaches actions indicating layer is ready to render
@@ -61,14 +62,50 @@ function renderData(layer, dispatch) {
   if (!layerObj.labels) {
     dispatch(receiveData(layerObj, newTimeSeries));
   } else {
-    loadCSV(layerObj.labels.data, (labels) => {
-      layerObj.labels.data = labels;
+    // check if labels are loaded already, then rebuild array
+    loadCSV(layerObj.labels.data, (labelData) => {
+      // build array of labels here and save to layerObj.labels.labels
+      // use builder func to rebuild labels when updating timeseries
+      const layerData = [...layerObj.source.data];
+      const labels = [];
+      const { coordinates, join, label } = layerObj.labels;
+
+      // loop through all labels
+      for (let l = 0; l < labelData.length; l += 1) {
+        // loop through all data
+        for (let d = 0; d < layerData.length; d += 1) {
+          // check for matching timeseries
+          // if (timeseries condition) {
+          //   layerData.splice(d, 1);
+          //   break;
+          // }
+
+          // check for join match between label and datum
+          if (labelData[l][join[0]] === layerData[d][join[1]]) {
+            // stash datum and coordi ates in label, push to labels array
+            labels.push({
+              ...labelData[l],
+              data: {...layerData[d]},
+              label: Mustache.render(label, layerData[d]),
+              coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
+            });
+            // remove datum from layerData for faster looping
+            layerData.splice(d, 1);
+            // stop looping throuh layerData for this label
+            break;
+          }
+        }
+      }
+
+      layerObj.labels.labels = labels;
       dispatch(receiveData(layerObj, newTimeSeries));
     });
   }
 
   addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
 }
+
+
 
 /**
  * Loads layer data from CSV or GeoJSON source
