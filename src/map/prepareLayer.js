@@ -12,6 +12,49 @@ import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
 
 /**
+ * Builds labels based on label spec and layer data
+ * @param {*} layerObj
+ * @param {*} labels
+ */
+function buildLabels(layerObj) {
+  const labels = [];
+  const layerData = [...layerObj.source.data];
+  const {
+    coordinates, join, label, labelData,
+  } = layerObj.labels;
+
+  // loop through all labels
+  for (let l = 0; l < labelData.length; l += 1) {
+    // loop through all data
+    for (let d = 0; d < layerData.length; d += 1) {
+      // TODO: check for matching timeseries
+      // if (timeseries condition) {
+      //   layerData.splice(d, 1);
+      //   break;
+      // }
+
+      // check for join match between label and datum
+      if (labelData[l][join[0]] === layerData[d][join[1]]) {
+        // stash datum and coordi ates in label, push to labels array
+        labels.push({
+          ...labelData[l],
+          data: { ...layerData[d] },
+          label: Mustache.render(label, layerData[d]),
+          coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
+        });
+        // remove datum from layerData for faster looping
+        layerData.splice(d, 1);
+        // stop looping throuh layerData for this label
+        break;
+      }
+    }
+  }
+
+  return labels;
+}
+
+
+/**
  * Dispaches actions indicating layer is ready to render
  * @param {*} layer
  * @param {*} dispatch
@@ -61,45 +104,16 @@ function renderData(layer, dispatch) {
   // Check if layer has labels and add before dispatch
   if (!layerObj.labels) {
     dispatch(receiveData(layerObj, newTimeSeries));
-  } else {
-    // check if labels are loaded already, then rebuild array
+  } else if (!layerObj.labels.labelData) {
+    // Load labels from CSV
     loadCSV(layerObj.labels.data, (labelData) => {
-      // build array of labels here and save to layerObj.labels.labels
-      // use builder func to rebuild labels when updating timeseries
-      const layerData = [...layerObj.source.data];
-      const labels = [];
-      const { coordinates, join, label } = layerObj.labels;
-
-      // loop through all labels
-      for (let l = 0; l < labelData.length; l += 1) {
-        // loop through all data
-        for (let d = 0; d < layerData.length; d += 1) {
-          // check for matching timeseries
-          // if (timeseries condition) {
-          //   layerData.splice(d, 1);
-          //   break;
-          // }
-
-          // check for join match between label and datum
-          if (labelData[l][join[0]] === layerData[d][join[1]]) {
-            // stash datum and coordi ates in label, push to labels array
-            labels.push({
-              ...labelData[l],
-              data: { ...layerData[d] },
-              label: Mustache.render(label, layerData[d]),
-              coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
-            });
-            // remove datum from layerData for faster looping
-            layerData.splice(d, 1);
-            // stop looping throuh layerData for this label
-            break;
-          }
-        }
-      }
-
-      layerObj.labels.labels = labels;
+      layerObj.labels.labelData = labelData;
+      layerObj.labels.labels = buildLabels(layerObj);
       dispatch(receiveData(layerObj, newTimeSeries));
     });
+  } else {
+    layerObj.labels.labels = buildLabels(layerObj);
+    dispatch(receiveData(layerObj, newTimeSeries));
   }
 
   addLegend(layerObj, layerObj.stopsData, layerObj.Data, layerObj.breaks, layerObj.colors);
