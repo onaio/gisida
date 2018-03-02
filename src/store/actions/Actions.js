@@ -1,47 +1,65 @@
+import {
+  INIT_APP,
+  INIT_STYLES,
+  INIT_REGIONS,
+  ADD_LAYER,
+  CHANGE_REGION,
+  CHANGE_STYLE,
+  TOGGLE_LAYER,
+  TOGGLE_FILTER,
+  REQUEST_DATA,
+  RECEIVE_DATA,
+  MAP_RENDERED,
+  MAP_LOADED,
+  RELOAD_LAYERS,
+  UPDATE_TIMESERIES,
+  UPDATE_PRIMARY_LAYER,
+} from '../constants';
+
 export const initApp = config => ({
-  type: 'INIT_APP',
+  type: INIT_APP,
   config,
 });
 
 export const initStyles = (styles, mapConfig) => ({
-  type: 'INIT_STYLES',
+  type: INIT_STYLES,
   styles,
   mapConfig,
 });
 
 export const initRegions = (regions, mapConfig) => ({
-  type: 'INIT_REGIONS',
+  type: INIT_REGIONS,
   regions,
   mapConfig,
 });
 
 export const addLayer = layer => ({
-  type: 'ADD_LAYER',
+  type: ADD_LAYER,
   layer,
 });
 
 export const changeRegion = region => ({
-  type: 'CHANGE_REGION',
+  type: CHANGE_REGION,
   region,
 });
 
 export const changeStyle = style => ({
-  type: 'CHANGE_STYLE',
+  type: CHANGE_STYLE,
   style,
 });
 
 export const toggleLayer = layerId => ({
-  type: 'TOGGLE_LAYER',
+  type: TOGGLE_LAYER,
   layerId,
 });
 
 export const toggleFilter = showFilterPanel => ({
-  type: 'TOGGLE_FILTER',
+  type: TOGGLE_FILTER,
   showFilterPanel,
 });
 
 export const requestData = layerId => ({
-  type: 'REQUEST_DATA',
+  type: REQUEST_DATA,
   layerId,
 });
 
@@ -51,34 +69,28 @@ export const updatePrimaryLayer = primaryLayer => ({
 });
 
 export const receiveData = (layer, timeseries) => ({
-  type: 'RECEIVE_DATA',
+  type: RECEIVE_DATA,
   layer,
   timeseries,
 });
 
 export const mapRendered = isRendered => ({
-  type: 'MAP_RENDERED',
+  type: MAP_RENDERED,
   isRendered,
 });
 
 export const mapLoaded = isLoaded => ({
-  type: 'MAP_LOADED',
+  type: MAP_LOADED,
   isLoaded,
 });
 
 export const reloadLayers = reload => ({
-  type: 'RELOAD_LAYERS',
+  type: RELOAD_LAYERS,
   reload,
 });
-
-export const reloadLayer = reload => ({
-  type: 'RELOAD_LAYER',
-  reload,
-});
-
 
 export const updateTimeseries = timeseries => ({
-  type: 'UPDATE_TIMESERIES',
+  type: UPDATE_TIMESERIES,
   timeseries,
 });
 
