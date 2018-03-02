@@ -40,8 +40,6 @@ export default function addLayer(layer, mapConfig) {
     layerObj.colors = colors;
     layerObj.Data = Data;
     layerObj.stops = stops;
-  } else {
-    $('.legend-row.primary').removeClass('primary');
   }
 
   /*
@@ -338,4 +336,3 @@ export default function addLayer(layer, mapConfig) {
   // layerObj.timeseries = Object.assign({}, this.state.timeseries, timeseriesMap)
   return layerObj;
 }
-

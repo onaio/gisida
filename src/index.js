@@ -11,5 +11,8 @@ gisida.getSliderLayers = require('./map/getSliderLayers').default;
 gisida.buildFilters = require('./map/buildFilters').default;
 gisida.mergeFilters = require('./map/mergeFilters').default;
 gisida.generateFilterOptions = require('./utils/filters').generateFilterOptions;
+gisida.generateStops = require('./map/generateStops').default;
+gisida.formatNum = require('./utils/formatNum').default;
+gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 
 module.exports = gisida;

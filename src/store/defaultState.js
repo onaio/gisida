@@ -48,6 +48,8 @@ const defaultState = {
     },
     showProfile: false,
     showFilterPanel: false,
+    activeLayerId: '',
+    primaryLayer: '',
   },
 };
 

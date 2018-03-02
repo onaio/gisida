@@ -45,6 +45,11 @@ export const requestData = layerId => ({
   layerId,
 });
 
+export const updatePrimaryLayer = primaryLayer => ({
+  type: 'UPDATE_PRIMARY_LAYER',
+  primaryLayer,
+});
+
 export const receiveData = (layer, timeseries) => ({
   type: 'RECEIVE_DATA',
   layer,
@@ -92,6 +97,7 @@ export default {
   toggleLayer,
   toggleFilter,
   requestData,
+  updatePrimaryLayer,
   receiveData,
   changeRegion,
   changeStyle,

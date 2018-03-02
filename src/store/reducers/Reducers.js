@@ -135,8 +135,10 @@ function MAP(state = defaultState.MAP, action) {
       return {
         ...state,
         // Update visible property
+        activeLayerId: layerId,
         layers: updatedLayers,
         reloadLayers: Math.random(),
+        primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
         filter: {
           ...state.filter,
           layerId:
@@ -145,6 +147,12 @@ function MAP(state = defaultState.MAP, action) {
         },
       };
     }
+
+    case 'UPDATE_PRIMARY_LAYER':
+      return {
+        ...state,
+        primaryLayer: action.primaryLayer,
+      };
 
     case 'TOGGLE_FILTER': {
       return {
