@@ -127,6 +127,11 @@ function MAP(state = defaultState.MAP, action) {
           visible: !layer.visible,
         },
       };
+      if (layer.layers) {
+        layer.layers.forEach((subLayerId) => {
+          updatedLayers[subLayerId].visible = !layer.visible;
+        });
+      }
       return {
         ...state,
         // Update visible property
@@ -175,7 +180,6 @@ function MAP(state = defaultState.MAP, action) {
           ...oldLayer,
           ...layer,
           labels: layer.labels,
-          visible: oldLayer.visible,
           isLoading: false,
           loaded: true,
         },

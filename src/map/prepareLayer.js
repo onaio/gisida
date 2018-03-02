@@ -191,7 +191,6 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
   //   this.activeLayers.push(layerSpec.id);
   // }
-
   if (layerObj.source) {
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
@@ -219,14 +218,18 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
     // TODO: fix for grouped layers
     // if layer has sublayers, add all sublayers
     // self.addLegend(layerSpec);
+
+    const currentState = dispatch(getCurrentState());
+
     layerObj.layers.forEach((sublayer) => {
-      const subLayer = this.props.layerSpec[sublayer];
+      const subLayer = currentState.MAP.layers[sublayer];
       subLayer.id = sublayer;
       if (typeof subLayer.source.data === 'string') {
-        readData(subLayer, subLayer.source.data);
+        readData(subLayer, dispatch);
       } else {
-        // self.addLayer(subLayer);
+        renderData(subLayer, dispatch);
       }
     });
+    renderData(layerObj, dispatch);
   }
 }
