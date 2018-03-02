@@ -16,9 +16,11 @@ import buildTimeseriesData from './buildTimeseriesData';
  * @param {*} layerObj
  * @param {*} labels
  */
-function buildLabels(layerObj) {
+export function buildLabels(layerObj, tsLayerObj, period) {
   const labels = [];
-  const layerData = [...layerObj.source.data];
+  const layerData = typeof tsLayerObj !== 'undefined'
+    ? tsLayerObj.periodData[period].data
+    : [...layerObj.source.data];
   const {
     coordinates, join, label, labelData,
   } = layerObj.labels;
@@ -27,12 +29,6 @@ function buildLabels(layerObj) {
   for (let l = 0; l < labelData.length; l += 1) {
     // loop through all data
     for (let d = 0; d < layerData.length; d += 1) {
-      // TODO: check for matching timeseries
-      // if (timeseries condition) {
-      //   layerData.splice(d, 1);
-      //   break;
-      // }
-
       // check for join match between label and datum
       if (labelData[l][join[0]] === layerData[d][join[1]]) {
         // stash datum and coordi ates in label, push to labels array
@@ -81,6 +77,7 @@ function renderData(layer, dispatch) {
   );
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
+    // TODO - simplify this
     switch (layer.type) {
       case 'circle':
         mbLayer = layerObj.styleSpec;
@@ -108,7 +105,19 @@ function renderData(layer, dispatch) {
     // Load labels from CSV
     loadCSV(layerObj.labels.data, (labelData) => {
       layerObj.labels.labelData = labelData;
-      layerObj.labels.labels = buildLabels(layerObj);
+
+      // if no timeseries, build one set of labels
+      if (!newTimeSeries[layerObj.id]) {
+        layerObj.labels.labels = buildLabels(layerObj);
+      // if timeseries, build labels for every timeperiod
+      } else {
+        layerObj.labels.labels = {};
+        newTimeSeries[layerObj.id].period.forEach((period) => {
+          layerObj.labels.labels[period] =
+            buildLabels(layerObj, newTimeSeries[layerObj.id], period);
+        });
+      }
+
       dispatch(receiveData(layerObj, newTimeSeries));
     });
   } else {
