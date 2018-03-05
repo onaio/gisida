@@ -82,6 +82,12 @@ export const updateTimeseries = timeseries => ({
   timeseries,
 });
 
+export const detailView = (properties, layerId) => ({
+  type: 'DETAIL_VIEW',
+  properties,
+  layerId,
+});
+
 export const getCurrentState = () => function (dispatch, getState) {
   return getState();
 };
@@ -103,4 +109,5 @@ export default {
   changeStyle,
   getCurrentState,
   updateTimeseries,
+  detailView,
 };
