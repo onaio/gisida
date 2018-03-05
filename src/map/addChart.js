@@ -65,7 +65,7 @@ function drawDoughnutChart(container, data, dimension) {
   });
 }
 
-export default function addChart(map, layer, data) {
+export default function addChart(layer, data, map) {
   const mapId = 'map-1';
   const population = data.map(d => d[layer.categories.total]);
   const clusters = ckmeans(population, layer.categories.clusters);
@@ -77,6 +77,7 @@ export default function addChart(map, layer, data) {
     let chartProp = '';
     let propTotal = 0;
     let dimension;
+    let i;
 
     if (layer.categories.title) {
       chartProp += `<div><b>${district[layer.categories.title]}</b></div>`;
@@ -86,7 +87,7 @@ export default function addChart(map, layer, data) {
       chartProp += `<div>${layer.categories['total-label']}: <b>${total}</b></div>`;
     }
 
-    for (let i = 0; i < layer.categories.property.length; i += 1) {
+    for (i = 0; i < layer.categories.property.length; i += 1) {
       chartArr.push({
         color: layer.categories.color[i],
         y: parseInt((district[layer.categories.property[i]] / total) * 100, 10),
@@ -94,14 +95,14 @@ export default function addChart(map, layer, data) {
       });
       propTotal += parseInt((district[layer.categories.property[i]] / total) * 100, 10);
       chartProp += `<div><span class="swatch" style="background: ${layer.categories.color[i]};"></span>
-          ${layer.categories.label[i]}:
-          <b>${((district[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
+        ${layer.categories.label[i]}:
+        <b>${((district[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
     }
 
     if (layer.categories.difference) {
       chartProp +=
         `<div><span class="swatch" style="background: ${layer.categories.difference[1]};"></span>
-            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+          ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
       chartArr.splice(0, 0, {
         color: layer.categories.difference[1],
         y: (100 - propTotal),
@@ -109,9 +110,9 @@ export default function addChart(map, layer, data) {
       });
     }
 
-    for (let i = 0; i < clusters.length; i += 1) {
-      if (clusters[i].includes(total)) {
-        dimension = layer.categories.dimension[i];
+    for (let c = 0; c < clusters.length; c += 1) {
+      if (clusters[c].includes(total)) {
+        dimension = layer.categories.dimension[c];
       }
     }
 
