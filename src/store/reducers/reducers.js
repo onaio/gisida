@@ -1,25 +1,9 @@
 import defaultState from '../defaultState';
-import {
-  INIT_APP,
-  INIT_STYLES,
-  INIT_REGIONS,
-  ADD_LAYER,
-  CHANGE_REGION,
-  CHANGE_STYLE,
-  TOGGLE_LAYER,
-  TOGGLE_FILTER,
-  REQUEST_DATA,
-  RECEIVE_DATA,
-  MAP_RENDERED,
-  MAP_LOADED,
-  RELOAD_LAYERS,
-  UPDATE_TIMESERIES,
-  UPDATE_PRIMARY_LAYER,
-} from '../constants';
+import * as types from '../constants/actionTypes';
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
-    case INIT_APP:
+    case types.INIT_APP:
       return {
         ...state,
         ...action.config,
@@ -32,7 +16,7 @@ function APP(state = defaultState.APP, action) {
 
 function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
-    case INIT_STYLES: {
+    case types.INIT_STYLES: {
       const styles = action.styles.map((s) => {
         const style = s;
         if (style.url === action.mapConfig.style) style.current = true;
@@ -40,7 +24,7 @@ function STYLES(state = defaultState.STYLES, action) {
       });
       return styles;
     }
-    case CHANGE_STYLE: {
+    case types.CHANGE_STYLE: {
       const updatedStyles = state.map((s) => {
         const style = s;
         if (action.style === style.url) {
@@ -57,7 +41,7 @@ function STYLES(state = defaultState.STYLES, action) {
 
 function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
-    case INIT_REGIONS: {
+    case types.INIT_REGIONS: {
       const regions = action.regions ? action.regions.map((r) => {
         const region = r;
         // check if mapconfig center matches region center to set current region
@@ -70,7 +54,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
       }) : [];
       return regions;
     }
-    case CHANGE_REGION: {
+    case types.CHANGE_REGION: {
       const updatedRegions = state.map((r) => {
         const region = r;
         if (action.region === region.name) {
@@ -87,12 +71,12 @@ function REGIONS(state = defaultState.REGIONS, action) {
 
 function MAP(state = defaultState.MAP, action) {
   switch (action.type) {
-    case MAP_RENDERED:
+    case types.MAP_RENDERED:
       return {
         ...state,
         isRendered: true,
       };
-    case MAP_LOADED:
+    case types.MAP_LOADED:
       return {
         ...state,
         isLoaded: true,
@@ -100,25 +84,25 @@ function MAP(state = defaultState.MAP, action) {
         currentRegion: Math.random(),
       };
 
-    case RELOAD_LAYERS:
+    case types.RELOAD_LAYERS:
       return {
         ...state,
         reloadLayers: action.reload,
       };
 
-    case CHANGE_STYLE:
+    case types.CHANGE_STYLE:
       return {
         ...state,
         currentStyle: action.style,
       };
 
-    case CHANGE_REGION:
+    case types.CHANGE_REGION:
       return {
         ...state,
         currentRegion: action.region,
       };
 
-    case ADD_LAYER: {
+    case types.ADD_LAYER: {
       const layers = {};
       layers[action.layer.id] = action.layer;
       const updatedLayers = { ...state.layers, ...layers };
@@ -128,7 +112,7 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
-    case TOGGLE_LAYER: {
+    case types.TOGGLE_LAYER: {
       const { layerId } = action;
       const layer = state.layers[layerId];
       const updatedLayers = {
@@ -160,21 +144,21 @@ function MAP(state = defaultState.MAP, action) {
     }
 
 
-    case UPDATE_PRIMARY_LAYER:
+    case types.UPDATE_PRIMARY_LAYER:
       return {
         ...state,
         primaryLayer: action.primaryLayer,
       };
 
 
-    case TOGGLE_FILTER: {
+    case types.TOGGLE_FILTER: {
       return {
         ...state,
         showFilterPanel: !state.showFilterPanel,
       };
     }
 
-    case REQUEST_DATA: {
+    case types.REQUEST_DATA: {
       const { layerId } = action;
       const layer = state.layers[layerId];
       const updatedLayers = {
@@ -192,7 +176,7 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
-    case RECEIVE_DATA: {
+    case types.RECEIVE_DATA: {
       const { layer } = action;
       const oldLayer = state.layers[layer.id];
       const updatedLayers = {
@@ -213,7 +197,7 @@ function MAP(state = defaultState.MAP, action) {
         visibleLayerId: layer.id,
       };
     }
-    case UPDATE_TIMESERIES: {
+    case types.UPDATE_TIMESERIES: {
       return {
         ...state,
         timeseries: action.timeseries,
