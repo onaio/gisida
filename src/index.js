@@ -14,5 +14,6 @@ gisida.generateFilterOptions = require('./utils/filters').generateFilterOptions;
 gisida.generateStops = require('./map/generateStops').default;
 gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
+gisida.parseMustache = require('./utils/parseMustache').default;
 
 module.exports = gisida;

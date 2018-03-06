@@ -164,6 +164,7 @@ function MAP(state = defaultState.MAP, action) {
     case 'DETAIL_VIEW': {
       const { properties, layerId } = action;
       const showDetailView = !!properties && !!layerId;
+
       return {
         ...state,
         showFilterPanel: showDetailView ? false : state.showFilterPanel,
