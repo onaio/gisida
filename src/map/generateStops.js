@@ -130,12 +130,13 @@ export default function (layer, timefield) {
   const colors = getColorBrewerColor(layer.categories.color, clusters) || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
-  const geoJSONWithOSMKey = (isGeoJSON && layer.source.join[1]);
+  const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
   const radiusRange = layer['radius-range'];
 
   for (let i = 0; i < rows.length; i += 1) {
     if (isGeoJSON) {
       data.push(Number(rows[i].properties[layer.property]));
+      periods.push(rows[i].properties[timefield]);
       if (geoJSONWithOSMKey) {
         osmIDs.push(rows[i].properties[layer.source.join[1]]);
       }
