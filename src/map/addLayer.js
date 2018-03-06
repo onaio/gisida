@@ -284,15 +284,6 @@ export default function addLayer(layer, mapConfig) {
   /*
    * CHART ==========================================================
    */
-  // if (layer.type === 'chart') {
-  //   let { data } = layer.source;
-  //   if (timefield) {
-  //     const period = [...new Set(layer.source.data.map(p => p[timefield]))];
-  //     newStops = { id: layer.id, period, timefield };
-  //     data = layer.source.data.filter(d => d[timefield] === period[period.length - 1]);
-  //   }
-  //   addChart(map, layer, data);
-  // }
 
   // Generate layersObj
   // let layersObj = [];
