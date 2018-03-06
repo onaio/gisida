@@ -1,5 +1,4 @@
 import generateStops from './generateStops';
-import addChart from './addChart';
 import { isNumber } from '../utils/files';
 
 
