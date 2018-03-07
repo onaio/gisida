@@ -173,8 +173,8 @@ function MAP(state = defaultState.MAP, action) {
         showFilterPanel: showDetailView ? false : state.showFilterPanel,
         detailView: showDetailView ? {
           model: detailView,
-          spec: {...detailSpec},
-          properties: {...properties},
+          spec: { ...detailSpec },
+          properties: { ...properties },
           layerId,
         } : null,
       };

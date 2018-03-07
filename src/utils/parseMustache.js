@@ -1,5 +1,3 @@
 import Mustache from 'mustache';
 
-export default (spec, datum) => {
-  return Mustache.render(spec, datum);
-}
+export default (spec, datum) => Mustache.render(spec, datum);

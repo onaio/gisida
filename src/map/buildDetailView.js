@@ -2,7 +2,7 @@ import parseMustache from '../utils/parseMustache';
 
 const parseDetailValue = (spec, datum) => {
   // 1) protect against empty strings, nulls, and undefineds
-  if (!!!spec) return false;
+  if (!spec) return false;
 
   // 2) if single property then just get it from the datum
   if (typeof spec === 'string' && datum[spec]) {
@@ -29,7 +29,7 @@ const parseDetailValue = (spec, datum) => {
     return value.length ? value.join(spec.join) : false;
   }
 
-  // 6) if array of props has no join value, reduce and return the first passing prop 
+  // 6) if array of props has no join value, reduce and return the first passing prop
   if (Array.isArray(spec.prop)) {
     for (let p = 0; p < spec.prop.length; p += 1) {
       if (datum[spec.prop[p]] || datum[spec.prop[p].prop]) {
@@ -40,7 +40,7 @@ const parseDetailValue = (spec, datum) => {
 
   // 7) if all else fails, return false
   return false;
-}
+};
 
 const parseDetailAlt = (spec, datum) => {
   // 1) if icon is a simple string, return it
@@ -55,7 +55,7 @@ const parseDetailAlt = (spec, datum) => {
 
   // 3) if all else fails, return false
   return false;
-}
+};
 
 const parseDetailIcon = (spec, datum) => {
   // 1) if icon is a simple string, return it
@@ -76,39 +76,44 @@ const parseDetailIcon = (spec, datum) => {
 
   // 3) if all else fails, return false
   return false;
-}
+};
 
 const buildParsedBasicDetailItem = (detail, properties) => {
-  let value;
   let icon;
   let iconColor;
   let alt;
 
   // 1) Parse list item innerHTML (text) from prop(s)
-  value = parseDetailValue(detail.value, properties);
+  const value = parseDetailValue(detail.value, properties);
   if (!value) return false;
 
   // 2) Parse glyphicon from icon (options); Note: this doesn't work with multiple props
   icon = parseDetailIcon(detail.icon, properties);
   if (icon instanceof Object) {
+    // eslint-disable-next-line prefer-destructuring
     alt = icon.alt;
     iconColor = icon.color;
+    // eslint-disable-next-line prefer-destructuring
     icon = icon.icon;
   }
   if (!icon) return false;
-  
+
   // 3) Parse text for databallon
   if (!alt && detail.alt) {
     alt = parseDetailAlt(detail.alt, properties);
   }
 
-  return { value, icon, iconColor, alt };
-}
+  return {
+    value, icon, iconColor, alt,
+  };
+};
 
 const build = (DetailViewSpec, FeatureProperties) => {
-  const detailViewSpec = {...DetailViewSpec};
-  const featureProperties = {...FeatureProperties};
-  const { UID, title, 'sub-title':subTitle, 'basic-info':basicInfo } = detailViewSpec;
+  const detailViewSpec = { ...DetailViewSpec };
+  const featureProperties = { ...FeatureProperties };
+  const {
+    UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
+  } = detailViewSpec;
 
   const detailViewModel = {
     UID: featureProperties[UID],
@@ -127,7 +132,7 @@ const build = (DetailViewSpec, FeatureProperties) => {
   }
 
   return detailViewModel;
-}
+};
 
 export default {
   build,
