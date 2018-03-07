@@ -65,43 +65,44 @@ function drawDoughnutChart(container, data, dimension) {
   });
 }
 
-export default function addChart(map, layer, data) {
+export default function addChart(layer, data, map) {
   const mapId = 'map-1';
   const population = data.map(d => d[layer.categories.total]);
   const clusters = ckmeans(population, layer.categories.clusters);
 
   // create a DOM element for the marker
-  data.forEach((district) => {
-    const total = district[layer.categories.total];
+  data.forEach((row) => {
+    const total = row[layer.categories.total];
     const chartArr = [];
     let chartProp = '';
     let propTotal = 0;
     let dimension;
+    let i;
 
     if (layer.categories.title) {
-      chartProp += `<div><b>${district[layer.categories.title]}</b></div>`;
+      chartProp += `<div><b>${row[layer.categories.title]}</b></div>`;
     }
 
     if (layer.categories['total-label']) {
       chartProp += `<div>${layer.categories['total-label']}: <b>${total}</b></div>`;
     }
 
-    for (let i = 0; i < layer.categories.property.length; i += 1) {
+    for (i = 0; i < layer.categories.property.length; i += 1) {
       chartArr.push({
         color: layer.categories.color[i],
-        y: parseInt((district[layer.categories.property[i]] / total) * 100, 10),
+        y: parseInt((row[layer.categories.property[i]] / total) * 100, 10),
         label: layer.categories.label[i],
       });
-      propTotal += parseInt((district[layer.categories.property[i]] / total) * 100, 10);
+      propTotal += parseInt((row[layer.categories.property[i]] / total) * 100, 10);
       chartProp += `<div><span class="swatch" style="background: ${layer.categories.color[i]};"></span>
-          ${layer.categories.label[i]}:
-          <b>${((district[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
+        ${layer.categories.label[i]}:
+        <b>${((row[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
     }
 
     if (layer.categories.difference) {
       chartProp +=
         `<div><span class="swatch" style="background: ${layer.categories.difference[1]};"></span>
-            ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
+          ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
       chartArr.splice(0, 0, {
         color: layer.categories.difference[1],
         y: (100 - propTotal),
@@ -109,9 +110,9 @@ export default function addChart(map, layer, data) {
       });
     }
 
-    for (let i = 0; i < clusters.length; i += 1) {
-      if (clusters[i].includes(total)) {
-        dimension = layer.categories.dimension[i];
+    for (let c = 0; c < clusters.length; c += 1) {
+      if (clusters[c].includes(total)) {
+        dimension = layer.categories.dimension[c];
       }
     }
 
@@ -121,26 +122,26 @@ export default function addChart(map, layer, data) {
       innerSize: layer.chart.innerSize,
     }];
 
-    const content = `<div><b>${district[layer.source.join[1]]}</b></div>${chartProp}`;
+    const content = `<div><b>${row[layer.source.join[1]]}</b></div>${chartProp}`;
 
     const el = document.createElement('div');
-    el.id = `chart-${district[layer.source.join[1]]}-${layer.id}-${mapId}`;
+    el.id = `chart-${row[layer.source.join[1]]}-${layer.id}-${mapId}`;
     el.className = `marker-chart marker-chart-${layer.id}-${mapId}`;
     el.style.width = layer.chart.width;
     el.style.height = layer.chart.height;
     $(el).attr('data-map', mapId);
-    $(el).attr('data-lng', district[layer.chart.coordinates[0]]);
-    $(el).attr('data-lat', district[layer.chart.coordinates[1]]);
+    $(el).attr('data-lng', row[layer.chart.coordinates[0]]);
+    $(el).attr('data-lat', row[layer.chart.coordinates[1]]);
     $(el).attr('data-popup', content);
 
     // add marker to map
     new mapboxgl.Marker(el, {
       offset: layer.chart.offset,
     })
-      .setLngLat([district[layer.chart.coordinates[0]], district[layer.chart.coordinates[1]]])
+      .setLngLat([row[layer.chart.coordinates[0]], row[layer.chart.coordinates[1]]])
       .addTo(map);
 
-    const container = $(`#chart-${district[layer.source.join[1]]}-${layer.id}-${mapId}`)[0];
+    const container = $(`#chart-${row[layer.source.join[1]]}-${layer.id}-${mapId}`)[0];
     drawDoughnutChart(container, chartData, dimension);
   });
 }
