@@ -139,11 +139,13 @@ function readData(layer, dispatch) {
   const fileType = sourceURL.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      let parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      let parsedData;
       if (layerObj.source.type === 'geojson') {
         parsedData = csvToGEOjson(layerObj, data);
+      } else if (layerObj['data-parse']) {
+        parsedData = parseData(layerObj['data-parse'], data);
       } else {
-        parsedData = parseData(layerObj, data);
+        parsedData = data;
       }
       layerObj.source.data = parsedData;
       layerObj.mergedData = parsedData;
@@ -155,7 +157,14 @@ function readData(layer, dispatch) {
   }
   if (fileType === 'geojson') {
     loadJSON(layerObj.source.data, (data) => {
-      layerObj.source.data = data;
+      if (layerObj['data-parse']) {
+        layerObj.source.data = {
+          ...data,
+          features: parseData(layerObj['data-parse'], data.features)
+        };
+      } else {
+        layerObj.source.data = data;
+      }
       renderData(layerObj, dispatch);
     });
   }
