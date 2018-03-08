@@ -163,16 +163,22 @@ function MAP(state = defaultState.MAP, action) {
     }
 
     case 'DETAIL_VIEW': {
-      const { properties, layerId } = action;
+      if (!action.payload) {
+        return {
+          ...state,
+          detailView: null,
+          showFilterPanel: state.showFilterPanel,
+        };
+      }
+
+      const { properties, layerId, model, detailSpec } = action.payload;
       const showDetailView = !!properties && !!layerId;
-      const detailSpec = state.layers[layerId] && state.layers[layerId]['detail-view'];
-      const detailView = showDetailView ? buildDetailView.build(detailSpec, properties) : null;
 
       return {
         ...state,
         showFilterPanel: showDetailView ? false : state.showFilterPanel,
         detailView: showDetailView ? {
-          model: detailView,
+          model: { ...model },
           spec: { ...detailSpec },
           properties: { ...properties },
           layerId,

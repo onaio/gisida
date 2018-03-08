@@ -1,4 +1,5 @@
 import parseMustache from '../utils/parseMustache';
+import Actions from '../store/actions/Actions';
 
 const parseDetailValue = (spec, datum) => {
   // 1) protect against empty strings, nulls, and undefineds
@@ -108,12 +109,19 @@ const buildParsedBasicDetailItem = (detail, properties) => {
   };
 };
 
-const build = (DetailViewSpec, FeatureProperties) => {
-  const detailViewSpec = { ...DetailViewSpec };
+ export default (LayerObj, FeatureProperties, dispatch) => {
+  if (!LayerObj && !FeatureProperties) {
+    dispatch(Actions.detailView(null));
+    return false;
+  }
+
+  const layerObj = { ...LayerObj };
   const featureProperties = { ...FeatureProperties };
   const {
     UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
-  } = detailViewSpec;
+  } = layerObj['detail-view'];
+
+  if (!UID) return false;
 
   const detailViewModel = {
     UID: featureProperties[UID],
@@ -130,14 +138,12 @@ const build = (DetailViewSpec, FeatureProperties) => {
       if (parsedDetail) detailViewModel.parsedBasicInfo.push(parsedDetail);
     }
   }
+  const payload = {
+    model: detailViewModel,
+    layerId: layerObj.id,
+    properties: featureProperties,
+    detailSpec: layerObj['detail-view'],
+  };
 
-  return detailViewModel;
-};
-
-export default {
-  build,
-  buildParsedBasicDetailItem,
-  parseDetailValue,
-  parseDetailIcon,
-  parseDetailAlt,
+  dispatch(Actions.detailView(payload));
 };

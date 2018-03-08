@@ -82,10 +82,9 @@ export const updateTimeseries = timeseries => ({
   timeseries,
 });
 
-export const detailView = (properties, layerId) => ({
+export const detailView = payload => ({
   type: 'DETAIL_VIEW',
-  properties,
-  layerId,
+  payload,
 });
 
 export const getCurrentState = () => function (dispatch, getState) {

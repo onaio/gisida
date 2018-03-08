@@ -16,5 +16,6 @@ gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
 gisida.addChart = require('./map/addChart').default;
+gisida.buildDetailView = require('./map/buildDetailView').default;
 
 module.exports = gisida;
