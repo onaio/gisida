@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
-import aggregateData from '../utils/aggregateData';
+import aggregateData from './../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
-import { loadJSON, loadCSV } from '../utils/files';
-import { generateFilterOptions, processFilters } from '../utils/filters';
-import { requestData, receiveData, getCurrentState } from '../store/actions/Actions';
+import { loadJSON, loadCSV } from './../utils/files';
+import { generateFilterOptions, processFilters } from './../utils/filters';
+import parseData from './../utils/parseData';
+import { requestData, receiveData, getCurrentState } from './../store/actions/Actions';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
@@ -138,7 +139,12 @@ function readData(layer, dispatch) {
   const fileType = sourceURL.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      const parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      let parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      if (layerObj.source.type === 'geojson') {
+        parsedData = csvToGEOjson(layerObj, data);
+      } else {
+        parsedData = parseData(layerObj, data);
+      }
       layerObj.source.data = parsedData;
       layerObj.mergedData = parsedData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
