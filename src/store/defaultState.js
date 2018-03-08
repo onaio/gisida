@@ -33,7 +33,9 @@ const defaultState = {
     currentStyle: '',
     currentRegion: '',
     layers: {},
-    timeseries: {},
+    timeseries: {
+      visibility: false,
+    },
     visibleLayerId: '',
     filter: {
       isFiltered: false,
