@@ -12,4 +12,7 @@
        - run: 
            name: Run eslint
            command: npm run lint
+       - run: 
+           name: Run jest
+           command: jest
   
