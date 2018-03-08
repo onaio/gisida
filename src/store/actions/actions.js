@@ -78,11 +78,11 @@ export const updateTimeseries = timeseries => ({
   timeseries,
 });
 
-// export function returnState(dispatch, getState) {
-//   return getState();
-// }
+export function returnState(dispatch, getState) {
+  return getState();
+}
 
-// export const getCurrentState = () => returnState;
+export const getCurrentState = () => returnState;
 
 export default {
   initApp,

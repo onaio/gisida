@@ -5,7 +5,7 @@ import aggregateData from '../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
-import { requestData, receiveData, getCurrentState } from '../store/actions/Actions';
+import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';

@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import { getCurrentState } from '../store/actions/Actions';
+import { getCurrentState } from '../store/actions/actions';
 
 export default function addMousemoveEvent(mapboxGLMap, dispatch) {
   const map = mapboxGLMap;
