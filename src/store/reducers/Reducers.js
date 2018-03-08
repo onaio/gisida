@@ -1,5 +1,4 @@
 import defaultState from '../defaultState';
-import buildDetailView from '../../map/buildDetailView'; // todo - move this to a helpers folder?
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
@@ -171,7 +170,9 @@ function MAP(state = defaultState.MAP, action) {
         };
       }
 
-      const { properties, layerId, model, detailSpec } = action.payload;
+      const {
+        properties, layerId, model, detailSpec,
+      } = action.payload;
       const showDetailView = !!properties && !!layerId;
 
       return {
