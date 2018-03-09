@@ -31,9 +31,17 @@ export default function addLayer(layer, mapConfig) {
     const breaks = stops[3];
     const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
-    const currData = layer.source.data.filter(data => data[timefield] === currPeriod);
-    const Data = timefield ? currData : layer.source.data;
-
+    const { features } = layer.source.data;
+    let Data;
+    if (timefield) {
+      Data = features ?
+        features.filter(({ properties }) => properties[timefield] === currPeriod) :
+        layer.source.data.filter(data => data[timefield] === currPeriod);
+    } else {
+      Data = features ?
+        layer.source.data.features.map(({ properties }) => properties) :
+        layer.source.data;
+    }
 
     layerObj.stopsData = stopsData;
     layerObj.breaks = breaks;
