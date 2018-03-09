@@ -229,7 +229,13 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
 
     layerObj.layers.forEach((sublayer) => {
       const subLayer = currentState.MAP.layers[sublayer];
+
+      if (layerObj.aggregate) {
+        subLayer.aggregate = layerObj.aggregate;
+      }
+
       subLayer.id = sublayer;
+      subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
         readData(subLayer, dispatch);
       } else {
