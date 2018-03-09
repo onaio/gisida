@@ -161,6 +161,32 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
+    case 'DETAIL_VIEW': {
+      if (!action.payload) {
+        return {
+          ...state,
+          detailView: null,
+          showFilterPanel: state.showFilterPanel,
+        };
+      }
+
+      const {
+        properties, layerId, model, detailSpec,
+      } = action.payload;
+      const showDetailView = !!properties && !!layerId;
+
+      return {
+        ...state,
+        showFilterPanel: showDetailView ? false : state.showFilterPanel,
+        detailView: showDetailView ? {
+          model: { ...model },
+          spec: { ...detailSpec },
+          properties: { ...properties },
+          layerId,
+        } : null,
+      };
+    }
+
     case 'REQUEST_DATA': {
       const { layerId } = action;
       const layer = state.layers[layerId];
