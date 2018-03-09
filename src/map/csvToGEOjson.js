@@ -12,7 +12,7 @@ export default function csvToGEOjson(spec, data) {
   let prop;
   const longProp = (spec['geo-columns'] && spec['geo-columns'][0]) || 'Longitude';
   const latProp = (spec['geo-columns'] && spec['geo-columns'][1]) || 'Latitude';
-  const parseSpec = spec['data-parse']
+  const parseSpec = spec['data-parse'];
 
   for (let d = 0; d < data.length; d += 1) {
     datum = data[d];

@@ -160,7 +160,7 @@ function readData(layer, dispatch) {
       if (layerObj['data-parse']) {
         layerObj.source.data = {
           ...data,
-          features: parseData(layerObj['data-parse'], data.features)
+          features: parseData(layerObj['data-parse'], data.features),
         };
       } else {
         layerObj.source.data = data;
