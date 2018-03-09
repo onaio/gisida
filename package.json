@@ -19,7 +19,8 @@
     "build": "webpack --progress --env.production=true",
     "develop": "webpack --progress --watch --env.production=false",
     "fix": "eslint src --ext=jsx --ext=js --fix",
-    "lint": "eslint src --ext=jsx --ext=js"
+    "lint": "eslint src --ext=jsx --ext=js",
+    "test": "jest"
   },
   "jest": {},
   "dependencies": {

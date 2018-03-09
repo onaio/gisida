@@ -46,6 +46,7 @@ const defaultState = {
       isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
       globalSearchField: false,
     },
+    detailView: null,
     showProfile: false,
     showFilterPanel: false,
     activeLayerId: '',
