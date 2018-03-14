@@ -15,7 +15,7 @@ function fetchURL(path, mimeType, callback) {
 export function loadJSON(path, callback) {
   fetchURL(path, 'application/json', (response) => {
     callback(JSON.parse(response));
- });
+  });
 }
 
 export function loadCSV(path, callback) {
