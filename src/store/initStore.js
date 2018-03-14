@@ -25,7 +25,7 @@ export default function initStore(customReducers) {
       config.LAYERS.map((layer) => {
         // todo: check if `layer` is full URL e.g http://mydomailn/mylayer.json
         // and load it directly
-        const path = `config/layers/${layer}.json`;
+        const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
         function addLayerToStore(responseObj) {
           const layerObj = responseObj;
           const pathSplit = layer.split('/');
