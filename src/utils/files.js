@@ -14,24 +14,16 @@ function fetchURL(path, mimeType, callback) {
 
 export function loadJSON(path, callback) {
   fetchURL(path, 'application/json', (response) => {
-    try {
-      callback(JSON.parse(response));
-    } catch (e) {
-      console.error(`Error loading ${path} (${e})`);
-    }
+    callback(JSON.parse(response));
   });
 }
 
 export function loadCSV(path, callback) {
   fetchURL(path, 'text/csv', (response) => {
-    try {
-      callback(parse(response, {
-        header: true,
-        skipEmptyLines: true,
-      }).data);
-    } catch (e) {
-      console.error(`Error loading ${path} (${e})`);
-    }
+    callback(parse(response, {
+      header: true,
+      skipEmptyLines: true,
+    }).data);
   });
 }
 
