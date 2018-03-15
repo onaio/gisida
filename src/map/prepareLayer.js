@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
-import aggregateData from '../utils/aggregateData';
+import aggregateData from './../utils/aggregateData';
 import fetchFormData from './../utils/fetchFormData';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
+import parseData from './../utils/parseData';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
@@ -138,7 +139,14 @@ function readData(layer, dispatch) {
   const fileType = sourceURL.split('.').pop();
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
-      const parsedData = layerObj.source.type === 'geojson' ? csvToGEOjson(layerObj, data) : data;
+      let parsedData;
+      if (layerObj.source.type === 'geojson') {
+        parsedData = csvToGEOjson(layerObj, data);
+      } else if (layerObj['data-parse']) {
+        parsedData = parseData(layerObj['data-parse'], data);
+      } else {
+        parsedData = data;
+      }
       layerObj.source.data = parsedData;
       layerObj.mergedData = parsedData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
@@ -149,7 +157,14 @@ function readData(layer, dispatch) {
   }
   if (fileType === 'geojson') {
     loadJSON(layerObj.source.data, (data) => {
-      layerObj.source.data = data;
+      if (layerObj['data-parse']) {
+        layerObj.source.data = {
+          ...data,
+          features: parseData(layerObj['data-parse'], data.features),
+        };
+      } else {
+        layerObj.source.data = data;
+      }
       renderData(layerObj, dispatch);
     });
   }
@@ -229,7 +244,13 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
 
     layerObj.layers.forEach((sublayer) => {
       const subLayer = currentState.MAP.layers[sublayer];
+
+      if (layerObj.aggregate) {
+        subLayer.aggregate = layerObj.aggregate;
+      }
+
       subLayer.id = sublayer;
+      subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
         readData(subLayer, dispatch);
       } else {

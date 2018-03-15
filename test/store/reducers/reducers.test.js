@@ -45,7 +45,7 @@ describe('reducers.APP', () => {
           reloadLayers: false,
           showFilterPanel: false,
           showProfile: false,
-          timeseries: {},
+          timeseries: { visibility: false },
           visibleLayerId: '',
         },
       REGIONS: [],

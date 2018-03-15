@@ -122,6 +122,12 @@ function MAP(state = defaultState.MAP, action) {
           visible: !layer.visible,
         },
       };
+      const updatedTimeSeries = {
+        ...state.timeseries,
+        visibility: layer
+          && layer.aggregate
+          && layer.aggregate.timeseries ? !layer.visible : false,
+      };
       if (layer.layers) {
         layer.layers.forEach((subLayerId) => {
           updatedLayers[subLayerId].visible = !layer.visible;
@@ -134,6 +140,7 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
         reloadLayers: Math.random(),
         primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
+        timeseries: updatedTimeSeries,
         filter: {
           ...state.filter,
           layerId:
