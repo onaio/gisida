@@ -150,29 +150,5 @@ describe('actions', () => {
     const expectedAction = actions.returnState;
     expect(actions.getCurrentState()).toEqual(expectedAction);
   });
-
-
-  test('should return function to get current state', () => {
-    const expectedAction = {
-      initApp: actions.initApp,
-      initStyles: actions.initStyles,
-      initRegions: actions.initRegions,
-      mapRendered: actions.mapRendered,
-      mapLoaded: actions.mapLoaded,
-      addLayer: actions.addLayer,
-      reloadLayers: actions.reloadLayers,
-      toggleLayer: actions.toggleLayer,
-      toggleFilter: actions.toggleFilter,
-      requestData: actions.requestData,
-      updatePrimaryLayer: actions.updatePrimaryLayer,
-      receiveData: actions.receiveData,
-      changeRegion: actions.changeRegion,
-      changeStyle: actions.changeStyle,
-      getCurrentState: actions.getCurrentState,
-      updateTimeseries: actions.updateTimeseries,
-    };
-    expect(actions.default).toEqual(expectedAction);
-  });
-
 });
 
