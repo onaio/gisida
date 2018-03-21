@@ -2,7 +2,7 @@ import generateStops from './generateStops';
 import { isNumber } from '../utils/files';
 
 
-export default function addLayer(layer, mapConfig) {
+export default function (layer, mapConfig) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
@@ -322,16 +322,7 @@ export default function addLayer(layer, mapConfig) {
   //   }
   // }
 
-
-  // this.setState({
-  //  - layerObj,
-  //   - layersObj,
-  //   stops: newStops,
-  //   timeseries: Object.assign({}, this.state.timeseries, timeseriesMap),
-  // });
-
   layerObj.styleSpec = styleSpec;
 
-  // layerObj.timeseries = Object.assign({}, this.state.timeseries, timeseriesMap)
   return layerObj;
 }

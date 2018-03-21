@@ -1,0 +1,9 @@
+{
+  "container": "map",
+  "style": "mapbox://styles/mapbox/satellite-streets-v9",
+  "center": [
+    42.516,
+    5.55
+  ],
+  "zoom": 5
+}

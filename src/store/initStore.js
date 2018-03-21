@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { initApp, initStyles, initRegions, addLayer } from './actions/Actions';
-import defaultReducers from './reducers/Reducers';
+import { initApp, initStyles, initRegions, addLayer } from './actions/actions';
+import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 

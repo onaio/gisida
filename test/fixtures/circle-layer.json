@@ -1,0 +1,625 @@
+{
+  "label": "Cases (Wk 1-31)",
+  "source": {
+    "type": "vector",
+    "data": [
+      {
+        "district": "Afgooye",
+        "district_id": "R1720070",
+        "live": "677",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Baardheere",
+        "district_id": "R1720072",
+        "live": "1174",
+        "dead": "10",
+        "cfr": "0.9"
+      },
+      {
+        "district": "Berdale",
+        "district_id": "R1720074",
+        "live": "13092",
+        "dead": "182",
+        "cfr": "1.4"
+      },
+      {
+        "district": "Balcad",
+        "district_id": "R1720076",
+        "live": "718",
+        "dead": "2",
+        "cfr": "0.3"
+      },
+      {
+        "district": "Belet weyne",
+        "district_id": "R1720079",
+        "live": "345",
+        "dead": "2",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Bossaso",
+        "district_id": "R1720083",
+        "live": "646",
+        "dead": "5",
+        "cfr": "0.8"
+      },
+      {
+        "district": "Bulo Burto",
+        "district_id": "R1720085",
+        "live": "10",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Burtinle",
+        "district_id": "R1720087",
+        "live": "931",
+        "dead": "6",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Buuhoodle",
+        "district_id": "R1720088",
+        "live": "3773",
+        "dead": "69",
+        "cfr": "1.8"
+      },
+      {
+        "district": "Buur Hakaba",
+        "district_id": "R1720089",
+        "live": "908",
+        "dead": "24",
+        "cfr": "2.6"
+      },
+      {
+        "district": "Cabudwaaq",
+        "district_id": "R1720090",
+        "live": "1828",
+        "dead": "11",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Cadaado",
+        "district_id": "R1720091",
+        "live": "846",
+        "dead": "7",
+        "cfr": "0.8"
+      },
+      {
+        "district": "Dhahar",
+        "district_id": "R1720095",
+        "live": "1144",
+        "dead": "16",
+        "cfr": "1.4"
+      },
+      {
+        "district": "Ceel Barde",
+        "district_id": "R1720096",
+        "live": "382",
+        "dead": "8",
+        "cfr": "2.1"
+      },
+      {
+        "district": "Ceel Dheer",
+        "district_id": "R1720098",
+        "live": "85",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Dhuusamarreeb",
+        "district_id": "R1720100",
+        "live": "1291",
+        "dead": "4",
+        "cfr": "0.3"
+      },
+      {
+        "district": "Diinsoor",
+        "district_id": "R1720101",
+        "live": "425",
+        "dead": "1",
+        "cfr": "0.2"
+      },
+      {
+        "district": "Doolow",
+        "district_id": "R1720102",
+        "live": "1427",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Eyl",
+        "district_id": "R1720104",
+        "live": "74",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Galdogob",
+        "district_id": "R1720106",
+        "live": "543",
+        "dead": "6",
+        "cfr": "1.1"
+      },
+      {
+        "district": "Xarfo",
+        "district_id": "R1720107",
+        "live": "1689",
+        "dead": "10",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Garbahaarey",
+        "district_id": "R1720108",
+        "live": "1706",
+        "dead": "14",
+        "cfr": "0.8"
+      },
+      {
+        "district": "Garoowe",
+        "district_id": "R1720109",
+        "live": "1475",
+        "dead": "24",
+        "cfr": "1.6"
+      },
+      {
+        "district": "Ufayn",
+        "district_id": "R1720112",
+        "live": "1",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Jalalaqsi",
+        "district_id": "R1720113",
+        "live": "21",
+        "dead": "1",
+        "cfr": "4.8"
+      },
+      {
+        "district": "Jariiban",
+        "district_id": "R1720115",
+        "live": "469",
+        "dead": "1",
+        "cfr": "0.2"
+      },
+      {
+        "district": "Jowhar",
+        "district_id": "R1720117",
+        "live": "1732",
+        "dead": "21",
+        "cfr": "1.2"
+      },
+      {
+        "district": "Kismaayo",
+        "district_id": "R1720118",
+        "live": "2974",
+        "dead": "15",
+        "cfr": "0.5"
+      },
+      {
+        "district": "Kurtunwaarey",
+        "district_id": "R1720119",
+        "live": "175",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Bo'ame",
+        "district_id": "R1720120",
+        "live": "725",
+        "dead": "0",
+        "cfr": "0"
+      },
+      {
+        "district": "Luuq",
+        "district_id": "R1720123",
+        "live": "1315",
+        "dead": "29",
+        "cfr": "2.2"
+      },
+      {
+        "district": "Marka",
+        "district_id": "R1720124",
+        "live": "2188",
+        "dead": "31",
+        "cfr": "1.4"
+      },
+      {
+        "district": "Banadir",
+        "district_id": "R1720125",
+        "live": "6700",
+        "dead": "121",
+        "cfr": "1.8"
+      },
+      {
+        "district": "Qandala",
+        "district_id": "R1720127",
+        "live": "488",
+        "dead": "7",
+        "cfr": "1.4"
+      },
+      {
+        "district": "Qardho",
+        "district_id": "R1720129",
+        "live": "1111",
+        "dead": "5",
+        "cfr": "0.5"
+      },
+      {
+        "district": "Qoryooley",
+        "district_id": "R1720130",
+        "live": "926",
+        "dead": "13",
+        "cfr": "1.4"
+      },
+      {
+        "district": "Taleex",
+        "district_id": "R1720135",
+        "live": "692",
+        "dead": "7",
+        "cfr": "1"
+      },
+      {
+        "district": "Tayeeglow",
+        "district_id": "R1720136",
+        "live": "236",
+        "dead": "17",
+        "cfr": "7.2"
+      },
+      {
+        "district": "Waajid",
+        "district_id": "R1720137",
+        "live": "2309",
+        "dead": "113",
+        "cfr": "4.9"
+      },
+      {
+        "district": "Wanla Weyn",
+        "district_id": "R1720138",
+        "live": "1590",
+        "dead": "18",
+        "cfr": "1.1"
+      },
+      {
+        "district": "Xudur",
+        "district_id": "R1720141",
+        "live": "953",
+        "dead": "18",
+        "cfr": "1.9"
+      }
+    ],
+    "layer": "som_adm_2_centroids-2boneo",
+    "url": "mapbox://ona.5tgmvwqy",
+    "join": [
+      "osm_id",
+      "district_id"
+    ]
+  },
+  "type": "circle",
+  "property": "dead",
+  "categories": {
+    "breaks": "yes",
+    "color": "#D80000",
+    "clusters": 7
+  },
+  "labels": {
+    "data": "data/som_district_labels.csv",
+    "label": "{{dead}}",
+    "join": [
+      "osm_id",
+      "district_id"
+    ],
+    "coordinates": [
+      "longitude",
+      "latitude"
+    ],
+    "minzoom": 4.5,
+    "height": 30,
+    "width": 30,
+    "offset": [
+      -18,
+      10
+    ]
+  },
+  "popup": {
+    "header": "district",
+    "body": "{{dead}}"
+  },
+  "visible": false,
+  "credit": "Somalia Health Cluster",
+  "category": "Health Cluster",
+  "id": "awd-deaths",
+  "loaded": false,
+  "mergedData": [
+    {
+      "district": "Afgooye",
+      "district_id": "R1720070",
+      "live": "677",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Baardheere",
+      "district_id": "R1720072",
+      "live": "1174",
+      "dead": "10",
+      "cfr": "0.9"
+    },
+    {
+      "district": "Berdale",
+      "district_id": "R1720074",
+      "live": "13092",
+      "dead": "182",
+      "cfr": "1.4"
+    },
+    {
+      "district": "Balcad",
+      "district_id": "R1720076",
+      "live": "718",
+      "dead": "2",
+      "cfr": "0.3"
+    },
+    {
+      "district": "Belet weyne",
+      "district_id": "R1720079",
+      "live": "345",
+      "dead": "2",
+      "cfr": "0.6"
+    },
+    {
+      "district": "Bossaso",
+      "district_id": "R1720083",
+      "live": "646",
+      "dead": "5",
+      "cfr": "0.8"
+    },
+    {
+      "district": "Bulo Burto",
+      "district_id": "R1720085",
+      "live": "10",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Burtinle",
+      "district_id": "R1720087",
+      "live": "931",
+      "dead": "6",
+      "cfr": "0.6"
+    },
+    {
+      "district": "Buuhoodle",
+      "district_id": "R1720088",
+      "live": "3773",
+      "dead": "69",
+      "cfr": "1.8"
+    },
+    {
+      "district": "Buur Hakaba",
+      "district_id": "R1720089",
+      "live": "908",
+      "dead": "24",
+      "cfr": "2.6"
+    },
+    {
+      "district": "Cabudwaaq",
+      "district_id": "R1720090",
+      "live": "1828",
+      "dead": "11",
+      "cfr": "0.6"
+    },
+    {
+      "district": "Cadaado",
+      "district_id": "R1720091",
+      "live": "846",
+      "dead": "7",
+      "cfr": "0.8"
+    },
+    {
+      "district": "Dhahar",
+      "district_id": "R1720095",
+      "live": "1144",
+      "dead": "16",
+      "cfr": "1.4"
+    },
+    {
+      "district": "Ceel Barde",
+      "district_id": "R1720096",
+      "live": "382",
+      "dead": "8",
+      "cfr": "2.1"
+    },
+    {
+      "district": "Ceel Dheer",
+      "district_id": "R1720098",
+      "live": "85",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Dhuusamarreeb",
+      "district_id": "R1720100",
+      "live": "1291",
+      "dead": "4",
+      "cfr": "0.3"
+    },
+    {
+      "district": "Diinsoor",
+      "district_id": "R1720101",
+      "live": "425",
+      "dead": "1",
+      "cfr": "0.2"
+    },
+    {
+      "district": "Doolow",
+      "district_id": "R1720102",
+      "live": "1427",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Eyl",
+      "district_id": "R1720104",
+      "live": "74",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Galdogob",
+      "district_id": "R1720106",
+      "live": "543",
+      "dead": "6",
+      "cfr": "1.1"
+    },
+    {
+      "district": "Xarfo",
+      "district_id": "R1720107",
+      "live": "1689",
+      "dead": "10",
+      "cfr": "0.6"
+    },
+    {
+      "district": "Garbahaarey",
+      "district_id": "R1720108",
+      "live": "1706",
+      "dead": "14",
+      "cfr": "0.8"
+    },
+    {
+      "district": "Garoowe",
+      "district_id": "R1720109",
+      "live": "1475",
+      "dead": "24",
+      "cfr": "1.6"
+    },
+    {
+      "district": "Ufayn",
+      "district_id": "R1720112",
+      "live": "1",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Jalalaqsi",
+      "district_id": "R1720113",
+      "live": "21",
+      "dead": "1",
+      "cfr": "4.8"
+    },
+    {
+      "district": "Jariiban",
+      "district_id": "R1720115",
+      "live": "469",
+      "dead": "1",
+      "cfr": "0.2"
+    },
+    {
+      "district": "Jowhar",
+      "district_id": "R1720117",
+      "live": "1732",
+      "dead": "21",
+      "cfr": "1.2"
+    },
+    {
+      "district": "Kismaayo",
+      "district_id": "R1720118",
+      "live": "2974",
+      "dead": "15",
+      "cfr": "0.5"
+    },
+    {
+      "district": "Kurtunwaarey",
+      "district_id": "R1720119",
+      "live": "175",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Bo'ame",
+      "district_id": "R1720120",
+      "live": "725",
+      "dead": "0",
+      "cfr": "0"
+    },
+    {
+      "district": "Luuq",
+      "district_id": "R1720123",
+      "live": "1315",
+      "dead": "29",
+      "cfr": "2.2"
+    },
+    {
+      "district": "Marka",
+      "district_id": "R1720124",
+      "live": "2188",
+      "dead": "31",
+      "cfr": "1.4"
+    },
+    {
+      "district": "Banadir",
+      "district_id": "R1720125",
+      "live": "6700",
+      "dead": "121",
+      "cfr": "1.8"
+    },
+    {
+      "district": "Qandala",
+      "district_id": "R1720127",
+      "live": "488",
+      "dead": "7",
+      "cfr": "1.4"
+    },
+    {
+      "district": "Qardho",
+      "district_id": "R1720129",
+      "live": "1111",
+      "dead": "5",
+      "cfr": "0.5"
+    },
+    {
+      "district": "Qoryooley",
+      "district_id": "R1720130",
+      "live": "926",
+      "dead": "13",
+      "cfr": "1.4"
+    },
+    {
+      "district": "Taleex",
+      "district_id": "R1720135",
+      "live": "692",
+      "dead": "7",
+      "cfr": "1"
+    },
+    {
+      "district": "Tayeeglow",
+      "district_id": "R1720136",
+      "live": "236",
+      "dead": "17",
+      "cfr": "7.2"
+    },
+    {
+      "district": "Waajid",
+      "district_id": "R1720137",
+      "live": "2309",
+      "dead": "113",
+      "cfr": "4.9"
+    },
+    {
+      "district": "Wanla Weyn",
+      "district_id": "R1720138",
+      "live": "1590",
+      "dead": "18",
+      "cfr": "1.1"
+    },
+    {
+      "district": "Xudur",
+      "district_id": "R1720141",
+      "live": "953",
+      "dead": "18",
+      "cfr": "1.9"
+    }
+  ]
+}
