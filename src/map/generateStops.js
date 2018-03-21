@@ -136,12 +136,12 @@ export default function (layer, timefield) {
   for (let i = 0; i < rows.length; i += 1) {
     if (isGeoJSON) {
       data.push(Number(rows[i].properties[layer.property]));
-      periods.push(rows[i].properties[timefield]);
+      periods.push(rows[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
         osmIDs.push(rows[i].properties[layer.source.join[1]]);
       }
     } else {
-      periods.push(rows[i][timefield]);
+      periods.push(rows[i][timefield] || null);
       data.push(Number(rows[i][layer.property]));
       osmIDs.push(rows[i][layer.source.join[1]]);
     }

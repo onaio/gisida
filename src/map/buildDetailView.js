@@ -1,5 +1,5 @@
 import parseMustache from '../utils/parseMustache';
-import { detailView } from '../store/actions/Actions';
+import { detailView } from '../store/actions/actions';
 
 const parseDetailValue = (spec, datum) => {
   // 1) protect against empty strings, nulls, and undefineds
