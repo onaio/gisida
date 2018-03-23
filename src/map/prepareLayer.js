@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateData from './../utils/aggregateData';
-import fetchFormData from './../utils/fetchFormData';
+import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
@@ -181,7 +181,8 @@ function fetchMultipleSources(layer, dispatch) {
   const filePaths = layerObj.source.data;
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
-      q = q.defer(fetchFormData, filePath, layerObj.properties);
+      const currentState = dispatch(getCurrentState());
+      q = q.defer(getData, filePath, layerObj.properties, currentState.APP.apiAccessToken);
     } else q = q.defer(d3.csv, filePath);
   });
   q.awaitAll((error, data) => {
@@ -191,7 +192,8 @@ function fetchMultipleSources(layer, dispatch) {
       generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
-      aggregateData(layerObj, this.props.locations) : mergedData;
+    // add functionality to pull locations into currentState.LOCATIONS;  
+      aggregateData(layerObj, {}) : mergedData;
     layerObj.loaded = true;
     renderData(layerObj, dispatch);
   });
@@ -236,10 +238,6 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
       renderData(layerObj, dispatch);
     }
   } else if (layerObj.layers) {
-    // TODO: fix for grouped layers
-    // if layer has sublayers, add all sublayers
-    // self.addLegend(layerSpec);
-
     const currentState = dispatch(getCurrentState());
 
     layerObj.layers.forEach((sublayer) => {
