@@ -165,6 +165,34 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
+    case types.SET_LAYER_FILTERS: {
+      const { layerId, layerFilters } = action;
+      const layer = state.layers[layerId];
+      const filters  = layer.filters ? { ...layer.filters } : {};
+      const updatedLayers = {
+        ...state.layers,
+        [layerId]: {
+          ...layer,
+          filters: {
+            ...filters,
+            layerFilters,
+          },
+        },
+      };
+      return {
+        ...state,
+        layers: updatedLayers,
+        doApplyFilters: true,
+      };
+    }
+
+    case types.FILTERS_UPDATED: {
+      return {
+        ...state,
+        doApplyFilters: false,
+      };
+    }
+
     case types.DETAIL_VIEW: {
       if (!action.payload) {
         return {
