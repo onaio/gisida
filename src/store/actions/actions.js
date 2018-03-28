@@ -52,6 +52,12 @@ export const filtersUpdated = () => ({
   type: types.FILTERS_UPDATED,
 });
 
+export const saveFilterState = (layerId, filterState) => ({
+  type: types.SAVE_FILTER_STATE,
+  layerId,
+  filterState,
+});
+
 export const updatePrimaryLayer = primaryLayer => ({
   type: types.UPDATE_PRIMARY_LAYER,
   primaryLayer,
@@ -119,4 +125,5 @@ export default {
   detailView,
   setLayerFilter,
   filtersUpdated,
+  saveFilterState,
 };

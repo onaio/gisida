@@ -69,22 +69,20 @@ function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
-const defaultStateFILTER = {
-  filters: null,
-  filterOptions: {},
-  layersObj: [],
-  doShowProfile: false,
-  globalSearchField: false,
-  isFiltered: false,
-  isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
-  isMac: (window.navigator.platform.indexOf('Mac') !== -1),
-  isOpen: false,
-  layerId: null,
-  prevFilters: null,
-}
-
-function FILTER(state = defaultStateFILTER, action) {
+function FILTER(state = defaultState.FILTER, action) {
   switch (action.type) {
+    case types.SAVE_FILTER_STATE: {
+      const layers = {
+        ...state.layers,
+        [action.layerId]: {
+          ...action.filterState,
+        },
+      };
+      return {
+        ...state,
+        layers,
+      }
+    }
     default:
       return state;
   }
