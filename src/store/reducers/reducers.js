@@ -69,6 +69,27 @@ function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
+const defaultStateFILTER = {
+  filters: null,
+  filterOptions: {},
+  layersObj: [],
+  doShowProfile: false,
+  globalSearchField: false,
+  isFiltered: false,
+  isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
+  isMac: (window.navigator.platform.indexOf('Mac') !== -1),
+  isOpen: false,
+  layerId: null,
+  prevFilters: null,
+}
+
+function FILTER(state = defaultStateFILTER, action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
 function MAP(state = defaultState.MAP, action) {
   switch (action.type) {
     case types.MAP_RENDERED:
@@ -271,5 +292,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, STYLES, MAP, REGIONS,
+  APP, STYLES, MAP, REGIONS, FILTER,
 };
