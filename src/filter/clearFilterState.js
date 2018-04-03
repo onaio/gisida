@@ -1,10 +1,5 @@
 import { saveFilterState } from '../store/actions/actions';
 
-export default function clearFilterState(filterOptions, aggregate, layerId, dispatch) {
-  const filterState = {
-    filterOptions,
-    aggregate,
-    isFiltered: false,
-  };
+export default function clearFilterState(filterState, layerId, dispatch) {
   dispatch(saveFilterState(layerId, filterState));
 }

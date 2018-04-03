@@ -72,16 +72,13 @@ function REGIONS(state = defaultState.REGIONS, action) {
 function FILTER(state = defaultState.FILTER, action) {
   switch (action.type) {
     case types.SAVE_FILTER_STATE: {
-      const layers = {
-        ...state.layers,
-        [action.layerId]: {
-          ...action.filterState,
-        },
-      };
       return {
         ...state,
-        layers,
-      }
+        [action.layerId]: {
+          ...action.filterState,
+          doUpdate: true,
+        }
+      };
     }
     default:
       return state;
