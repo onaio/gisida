@@ -80,6 +80,15 @@ function FILTER(state = defaultState.FILTER, action) {
         }
       };
     }
+    case types.FILTERS_UPDATED: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...state[action.layerId],
+          doUpdate: false,
+        },
+      };
+    }
     default:
       return state;
   }

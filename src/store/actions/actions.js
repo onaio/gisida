@@ -48,8 +48,9 @@ export const setLayerFilter = (layerId, layerFilters) => ({
   layerFilters,
 });
 
-export const filtersUpdated = () => ({
+export const filtersUpdated = (layerId) => ({
   type: types.FILTERS_UPDATED,
+  layerId,
 });
 
 export const saveFilterState = (layerId, filterState) => ({
