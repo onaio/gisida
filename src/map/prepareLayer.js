@@ -176,12 +176,12 @@ function readData(layer, dispatch) {
  */
 function fetchMultipleSources(layer, dispatch) {
   const layerObj = { ...layer };
+  const currentState = dispatch(getCurrentState());
   let q = d3.queue();
 
   const filePaths = layerObj.source.data;
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
-      const currentState = dispatch(getCurrentState());
       q = q.defer(getData, filePath, layerObj.properties, currentState.APP.apiAccessToken);
     } else q = q.defer(d3.csv, filePath);
   });
@@ -192,8 +192,7 @@ function fetchMultipleSources(layer, dispatch) {
       generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
-    // add functionality to pull locations into currentState.LOCATIONS;  
-      aggregateData(layerObj, {}) : mergedData;
+      aggregateData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
     renderData(layerObj, dispatch);
   });
@@ -229,9 +228,10 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
     // TODO: remove or refactor
     // only filter option
     if (filterOptions) {
+      const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
-          aggregateData(layerObj, this.props.locations, filterOptions) :
+          aggregateData(layerObj, currentState.locations, filterOptions) :
           processFilters(layerObj, filterOptions);
       renderData(layerObj, dispatch);
     } else {

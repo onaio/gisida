@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { initApp, initStyles, initRegions, addLayer } from './actions/actions';
+import { initApp, initStyles, initRegions, addLayer, initLocations } from './actions/actions';
 import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
@@ -43,6 +43,7 @@ export default function initStore(customReducers) {
     store.dispatch(initApp(config.APP));
     store.dispatch(initStyles(config.STYLES, config.APP.mapConfig));
     store.dispatch(initRegions(config.REGIONS, config.APP.mapConfig));
+    loadJSON('config/locations.json', locations => store.dispatch(initLocations(locations)));
   }
 
   // Read site-config.json and add to redux store

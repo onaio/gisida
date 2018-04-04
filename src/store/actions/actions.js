@@ -17,6 +17,11 @@ export const initRegions = (regions, mapConfig) => ({
   mapConfig,
 });
 
+export const initLocations = locations => ({
+  type: types.INIT_LOCATIONS,
+  locations,
+});
+
 export const addLayer = layer => ({
   type: types.ADD_LAYER,
   layer,

@@ -69,6 +69,16 @@ function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
+function LOCATIONS(state = {}, action) {
+  switch (action.type) {
+    case types.INIT_LOCATIONS: {
+      return { ...state, ...action.locations };
+    }
+    default:
+      return state;
+  }
+}
+
 function MAP(state = defaultState.MAP, action) {
   switch (action.type) {
     case types.MAP_RENDERED:
@@ -243,5 +253,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, STYLES, MAP, REGIONS,
+  APP, STYLES, MAP, REGIONS, LOCATIONS,
 };

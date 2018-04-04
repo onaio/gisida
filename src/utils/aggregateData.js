@@ -1,9 +1,8 @@
-/* global milia */
-/* eslint no-undef: "error" */
-
 import { processFilters } from './filters';
+import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 
 export default function aggregateData(layerData, locations, filterOptions) {
+  const layer = layerData;
   let data = layerData.mergedData;
   let aggregatedData = [];
   // merge OSM Ids
@@ -25,20 +24,13 @@ export default function aggregateData(layerData, locations, filterOptions) {
       return row;
     });
   }
-
-  const nextLayerData = layerData;
-
-  nextLayerData.mergedData = data.filter(datum => datum.district_id !== undefined);
+  data = data.filter(datum => datum.district_id !== undefined);
 
   // Process filters with filterOptions
-  data = processFilters(nextLayerData, filterOptions);
+  data = processFilters(layer, filterOptions);
+
   // aggregate raw data
-  aggregatedData =
-    milia.stats.aggregate_data(
-      data,
-      nextLayerData.property,
-      nextLayerData.aggregate,
-    );
+  aggregatedData = aggregateFormData(data, layer.property, layer.aggregate);
 
   return aggregatedData;
 }
