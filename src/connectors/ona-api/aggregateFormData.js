@@ -9,6 +9,7 @@ export default function aggregateFormData(formData, indicatorField, aggregateOpt
   const matchingValues = aggregateOptions['filter-values'];
   const submissionDateField = 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
+  const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
   // Filter data where survey_intro / consent = 1(Yes)
   data = data.filter(datum => datum['survey_intro/consent'] === '1');
@@ -66,14 +67,21 @@ export default function aggregateFormData(formData, indicatorField, aggregateOpt
     // Get data for each group and aggreage the indicator field for each group
     const availableGroups = Object.keys(groupedPeriodData);
     for (let j = 0; j < availableGroups.length; j += 1) {
+      let prevRowsCount = 0;
+      let prevTotal = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
+      const previousAggregatedDatum = aggregatedData[aggregatedData.length - 1];
+      if (isCumulative && previousAggregatedDatum) {
+        prevRowsCount = previousAggregatedDatum['value-count'] || 0;
+        prevTotal = previousAggregatedDatum.total || 0;
+      }
 
       // Count rows that match the values list for the indicator field
       const matchingRows = groupData.filter(datum =>
         matchingValues.includes(datum[indicatorField]));
-      const matchingRowsCount = matchingRows.length;
+      const matchingRowsCount = matchingRows.length + prevRowsCount;
       // Get the total number of rows for the group
-      const groupTotal = groupData.length;
+      const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
       const percentage = (matchingRowsCount / groupTotal) * 100;
       // Push aggregated group values to aggregatedData array
