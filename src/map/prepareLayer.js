@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
-import aggregateData from './../utils/aggregateData';
+import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
@@ -192,7 +192,7 @@ function fetchMultipleSources(layer, dispatch) {
       generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
-      aggregateData(layerObj, currentState.LOCATIONS) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
     renderData(layerObj, dispatch);
   });
@@ -231,7 +231,7 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
-          aggregateData(layerObj, currentState.locations, filterOptions) :
+          aggregateFormData(layerObj, currentState.locations, filterOptions) :
           processFilters(layerObj, filterOptions);
       renderData(layerObj, dispatch);
     } else {

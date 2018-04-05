@@ -1,8 +1,8 @@
 import moment from 'moment';
+import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 
-
-export default function aggregateFormData(formData, indicatorField, aggregateOptions) {
+function processFormData(formData, indicatorField, aggregateOptions) {
   let data = formData;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
@@ -10,6 +10,8 @@ export default function aggregateFormData(formData, indicatorField, aggregateOpt
   const submissionDateField = 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
+
+  console.log('test', aggregateOptions.timeseries.type);
 
   // Filter data where survey_intro / consent = 1(Yes)
   data = data.filter(datum => datum['survey_intro/consent'] === '1');
@@ -71,7 +73,10 @@ export default function aggregateFormData(formData, indicatorField, aggregateOpt
       let prevTotal = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
       const previousAggregatedDatum = aggregatedData[aggregatedData.length - 1];
-      if (isCumulative && previousAggregatedDatum) {
+
+      if (isCumulative &&
+        previousAggregatedDatum &&
+        previousAggregatedDatum[groupByField] === availableGroups[j]) {
         prevRowsCount = previousAggregatedDatum['value-count'] || 0;
         prevTotal = previousAggregatedDatum.total || 0;
       }
@@ -100,6 +105,46 @@ export default function aggregateFormData(formData, indicatorField, aggregateOpt
   }
   // filter out groups whose total value are below the required minimum total value
   aggregatedData = aggregatedData.filter(datum => datum.total >= minTotal);
+
+  return aggregatedData;
+}
+
+function assignLocationIDs(data, locations) {
+  let dataWithLocationID = data.map((datum) => {
+    const row = datum;
+    if (!datum.district_id) {
+      // add district_id if not defined
+      row.district_id = locations[datum.District];
+      if (!(datum.district_id)) {
+        // Use alternative district field
+        row.district_id = locations[datum['survey_intro/District_miss']];
+      }
+      if (!(datum.district_id)) {
+        // Use alternative region miss field
+        row.district_id = locations[datum['survey_intro/Region_miss']];
+      }
+    }
+    return row;
+  });
+  dataWithLocationID = dataWithLocationID.filter(datum => datum.district_id !== undefined);
+  return dataWithLocationID;
+}
+
+export default function aggregateFormData(layerData, locations, filterOptions) {
+  const layer = layerData;
+  let data = layerData.mergedData;
+  let aggregatedData = [];
+
+  // Assign location IDs
+  if (layerData['merge-locations']) {
+    data = assignLocationIDs(data, locations);
+  }
+
+  // Process filters with filterOptions
+  data = processFilters(layer, filterOptions);
+
+  // Process data
+  aggregatedData = processFormData(data, layer.property, layer.aggregate);
 
   return aggregatedData;
 }
