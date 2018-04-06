@@ -11,8 +11,6 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
-  console.log('test', aggregateOptions.timeseries.type);
-
   // Filter data where survey_intro / consent = 1(Yes)
   data = data.filter(datum => datum['survey_intro/consent'] === '1');
 
@@ -72,13 +70,13 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let prevRowsCount = 0;
       let prevTotal = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
-      const previousAggregatedDatum = aggregatedData[aggregatedData.length - 1];
-
+      // Get group data from previous period
+      const previousPeriodGroupData =
+        aggregatedData.filter(d => d[groupByField] === availableGroups[j]);
       if (isCumulative &&
-        previousAggregatedDatum &&
-        previousAggregatedDatum[groupByField] === availableGroups[j]) {
-        prevRowsCount = previousAggregatedDatum['value-count'] || 0;
-        prevTotal = previousAggregatedDatum.total || 0;
+        previousPeriodGroupData.length > 0) {
+        prevRowsCount = previousPeriodGroupData[previousPeriodGroupData.length - 1]['value-count'] || 0;
+        prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
       }
 
       // Count rows that match the values list for the indicator field
