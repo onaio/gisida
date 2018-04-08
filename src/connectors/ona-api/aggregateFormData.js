@@ -37,8 +37,10 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   });
   // Group data by period property
   data = groupBy(data, 'period');
-
+  let currentPeriod;
   let aggregatedData = [];
+  let currentPeriodaggregatedData = [];
+  let previousPeriodaggregatedData = [];
 
   let availablePeriods = Object.keys(data);
 
@@ -52,18 +54,30 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     if (a[2] > b[2]) return 1;
     return 0;
   }
+
   availablePeriods = availablePeriods.map((p) => {
     const [y, m, wkm] = p.split(',');
     return [Number.parseInt(y, 10), Number.parseInt(m, 10), Number.parseInt(wkm, 10)];
   }).sort(comparator);
   availablePeriods = availablePeriods.map(p => p.toString());
 
+  const replacePeriod = function (period, weekYear) {
+    return (d) => {
+      const newd = { ...d };
+      newd.period = period;
+      newd.weekYear = weekYear;
+      return newd;
+    };
+  };
+
   // loop through available periods
   for (let i = 0; i < availablePeriods.length; i += 1) {
     // Get data for each period and group it using the group-by field
     const periodData = data[availablePeriods[i]];
     const groupedPeriodData = groupBy(periodData, groupByField);
-
+    const [year, month, weekMonth] = availablePeriods[i].split(',');
+    currentPeriod = `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`;
+    currentPeriodaggregatedData = [];
     // Get data for each group and aggreage the indicator field for each group
     const availableGroups = Object.keys(groupedPeriodData);
     for (let j = 0; j < availableGroups.length; j += 1) {
@@ -87,19 +101,26 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
       const percentage = (matchingRowsCount / groupTotal) * 100;
-      // Push aggregated group values to aggregatedData array
-
-      const [year, month, weekMonth] = availablePeriods[i].split(',');
-      const period = `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`;
-      aggregatedData.push({
+      // Push aggregated group values to currentPeriodaggregatedData array
+      currentPeriodaggregatedData.push({
         [groupByField]: availableGroups[j],
         [indicatorField]: percentage.toFixed(0),
-        period,
+        period: currentPeriod,
         'value-count': matchingRowsCount,
         total: groupTotal,
         weekYear: availablePeriods[i],
       });
     }
+    let previousGroups = [];
+    // Add aggregated data from previous group if cumulative
+    if (isCumulative) {
+      const currentGroupValues = currentPeriodaggregatedData.map(d => d[groupByField]);
+      previousGroups =
+        previousPeriodaggregatedData.filter(d => !currentGroupValues.includes(d[groupByField]));
+      previousGroups = previousGroups.map(replacePeriod(currentPeriod, availablePeriods[i]));
+    }
+    previousPeriodaggregatedData = [...currentPeriodaggregatedData, ...previousGroups];
+    aggregatedData = aggregatedData.concat(previousPeriodaggregatedData);
   }
   // filter out groups whose total value are below the required minimum total value
   aggregatedData = aggregatedData.filter(datum => datum.total >= minTotal);
@@ -124,7 +145,7 @@ function assignLocationIDs(data, locations) {
     }
     return row;
   });
-  dataWithLocationID = dataWithLocationID.filter(datum => datum.district_id !== undefined);
+  dataWithLocationID = dataWithLocationID.filter(datum => datum.district_id);
   return dataWithLocationID;
 }
 
@@ -143,6 +164,5 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
 
   // Process data
   aggregatedData = processFormData(data, layer.property, layer.aggregate);
-
   return aggregatedData;
 }
