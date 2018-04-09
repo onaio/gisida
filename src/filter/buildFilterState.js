@@ -49,6 +49,11 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
       }
     // } else if (dataType === 'quantitative') {
     //   aggregate['accepted-filter-values'][f] = filter.isFiltered ?
+    } else if (filter.dataType === 'quantitative') {
+      aggregate['accepted-filter-values'][f] = filter.queriedOptionKeys
+        && filter.queriedOptionKeys.length !== [...new Set(filter.options)].length
+        ? filter.queriedOptionKeys
+        : 'quant';
     } else if (!filter.isFiltered)  {
       // if (filters[filterKey].isOriginal) {
       aggregate['accepted-filter-values'][f] = filter.dataType === 'ordinal' ? 'all' : 'quant';
