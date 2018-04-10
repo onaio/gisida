@@ -119,7 +119,7 @@ function MAP(state = defaultState.MAP, action) {
         ...state.layers,
         [layerId]: {
           ...layer,
-          visible: !layer.visible,
+          visible: action.isInit ? layer.visible : !layer.visible,
         },
       };
       const updatedTimeSeries = {
@@ -144,7 +144,7 @@ function MAP(state = defaultState.MAP, action) {
         filter: {
           ...state.filter,
           layerId:
-            !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
+            updatedLayers[layerId].visible && (layer.aggregate && layer.aggregate.filter) ?
               layerId : false,
         },
       };
