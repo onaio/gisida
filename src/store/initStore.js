@@ -4,19 +4,32 @@ import { initApp, initStyles, initRegions, addLayer, initLocations } from './act
 import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
+import reducerRegistry from './reducerRegistry';
 
-export default function initStore(customReducers) {
-  let reducers;
-  if (customReducers) {
-    reducers = combineReducers({ ...defaultReducers, ...customReducers });
-  } else {
-    reducers = combineReducers(defaultReducers);
-  }
-
+export default function initStore(customReducers = {}) {
+  // Register initial reducers
+  const reducersToRegiser = { ...defaultReducers, customReducers };
+  Object.keys(reducersToRegiser).forEach((reducerName) => {
+    reducerRegistry.register(reducerName, reducersToRegiser[reducerName]);
+  });
+  // Preserve initial state for not-yet-loaded reducers
+  const combine = (r) => {
+    const reducers = { ...r };
+    const reducerNames = Object.keys(reducers);
+    Object.keys(defaultReducers).forEach((item) => {
+      if (reducerNames.indexOf(item) === -1) {
+        reducers[item] = (state = null) => state;
+      }
+    });
+    return combineReducers(reducers);
+  };
+  // Get combined reducer from registry
+  const reducer = combine(reducerRegistry.getReducers());
   // Create initial store
-  const store = createStore(reducers, applyMiddleware(thunk));
+  const store = createStore(reducer, applyMiddleware(thunk));
 
-  window.dispatch = store.dispatch;
+  // Replace the store's reducer whenever a new reducer is registered.
+  reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Add config to redux store
   function addConfigToStore(config) {

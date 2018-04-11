@@ -2,6 +2,7 @@ const gisida = {};
 
 gisida.version = require('../package.json').version;
 gisida.initStore = require('./store/initStore').default;
+gisida.reducerRegistry = require('./store/reducerRegistry').default;
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addPopUp = require('./map/addPopUp').default;

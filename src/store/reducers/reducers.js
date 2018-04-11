@@ -93,25 +93,21 @@ function MAP(state = defaultState.MAP, action) {
         reloadLayers: true,
         currentRegion: Math.random(),
       };
-
     case types.RELOAD_LAYERS:
       return {
         ...state,
         reloadLayers: action.reload,
       };
-
     case types.CHANGE_STYLE:
       return {
         ...state,
         currentStyle: action.style,
       };
-
     case types.CHANGE_REGION:
       return {
         ...state,
         currentRegion: action.region,
       };
-
     case types.ADD_LAYER: {
       const layers = {};
       layers[action.layer.id] = action.layer;
@@ -121,7 +117,6 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
-
     case types.TOGGLE_LAYER: {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -159,22 +154,17 @@ function MAP(state = defaultState.MAP, action) {
         },
       };
     }
-
-
     case types.UPDATE_PRIMARY_LAYER:
       return {
         ...state,
         primaryLayer: action.primaryLayer,
       };
-
-
     case types.TOGGLE_FILTER: {
       return {
         ...state,
         showFilterPanel: !state.showFilterPanel,
       };
     }
-
     case types.DETAIL_VIEW: {
       if (!action.payload) {
         return {
@@ -200,7 +190,6 @@ function MAP(state = defaultState.MAP, action) {
         } : null,
       };
     }
-
     case types.REQUEST_DATA: {
       const { layerId } = action;
       const layer = state.layers[layerId];
@@ -218,7 +207,6 @@ function MAP(state = defaultState.MAP, action) {
         layers: updatedLayers,
       };
     }
-
     case types.RECEIVE_DATA: {
       const { layer } = action;
       const oldLayer = state.layers[layer.id];
@@ -246,7 +234,6 @@ function MAP(state = defaultState.MAP, action) {
         timeseries: action.timeseries,
       };
     }
-
     default:
       return state;
   }
