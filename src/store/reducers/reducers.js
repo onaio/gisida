@@ -77,7 +77,7 @@ function FILTER(state = defaultState.FILTER, action) {
         [action.layerId]: {
           ...action.filterState,
           doUpdate: true,
-        }
+        },
       };
     }
     case types.FILTERS_UPDATED: {
@@ -193,7 +193,7 @@ function MAP(state = defaultState.MAP, action) {
     case types.SET_LAYER_FILTERS: {
       const { layerId, layerFilters } = action;
       const layer = state.layers[layerId];
-      const filters  = layer.filters ? { ...layer.filters } : {};
+      const filters = layer.filters ? { ...layer.filters } : {};
       const updatedLayers = {
         ...state.layers,
         [layerId]: {
