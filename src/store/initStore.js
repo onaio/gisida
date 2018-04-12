@@ -8,7 +8,10 @@ import reducerRegistry from './reducerRegistry';
 
 export default function initStore(customReducers = {}) {
   // Register initial reducers
-  const reducersToRegiser = { ...defaultReducers, customReducers };
+  const reducersToRegiser = {
+    ...defaultReducers,
+    ...customReducers,
+  };
   Object.keys(reducersToRegiser).forEach((reducerName) => {
     reducerRegistry.register(reducerName, reducersToRegiser[reducerName]);
   });
@@ -43,9 +46,9 @@ export default function initStore(customReducers = {}) {
           const layerId = pathSplit[pathSplit.length - 1];
           layerObj.id = layerId;
           layerObj.loaded = false;
-          store.dispatch(addLayer(layerObj));
+          store.dispatch(addLayer('map-1', layerObj));
           if (layerObj.visible && !layerObj.loaded) {
-            prepareLayer(layerObj, store.dispatch);
+            prepareLayer('map-1', layerObj, store.dispatch);
           }
         }
 
