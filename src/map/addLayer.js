@@ -86,7 +86,8 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      // styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint)
     }
 
     if (layer.source.minzoom) {
