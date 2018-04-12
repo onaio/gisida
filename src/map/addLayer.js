@@ -5,7 +5,7 @@ import { isNumber } from '../utils/files';
 export default function (layer, mapConfig) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
-  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
+  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : null;
   let stops;
   let styleSpec;
 
@@ -19,7 +19,7 @@ export default function (layer, mapConfig) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
+  if (layer.property && layer.categories) {
     stops = generateStops(layer, timefield);
   }
 
@@ -63,23 +63,23 @@ export default function (layer, mapConfig) {
       },
       layout: {},
       paint: {
-        'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
-          {
+        'circle-color': (layer.categories && layer.categories.color instanceof Array && !layer.paint)
+        ? {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
-          } :
-          layer.categories.color,
+          } 
+        : layer.categories && layer.categories.color,
         'circle-opacity': 0.8,
         'circle-stroke-color': '#fff',
-        'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
-          {
+        'circle-stroke-width': (layer.categories && layer.categories.color instanceof Array && !layer.paint)
+          ? {
             property: layer.source.join[0],
             stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
             type: 'categorical',
             default: 0,
-          } :
-          1,
+          }
+          : 1,
         'circle-stroke-opacity': 1,
       },
     };
