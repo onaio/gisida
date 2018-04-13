@@ -43,6 +43,23 @@ export const toggleFilter = showFilterPanel => ({
   showFilterPanel,
 });
 
+export const setLayerFilter = (layerId, layerFilters) => ({
+  type: types.SET_LAYER_FILTERS,
+  layerId,
+  layerFilters,
+});
+
+export const filtersUpdated = layerId => ({
+  type: types.FILTERS_UPDATED,
+  layerId,
+});
+
+export const saveFilterState = (layerId, filterState) => ({
+  type: types.SAVE_FILTER_STATE,
+  layerId,
+  filterState,
+});
+
 export const updatePrimaryLayer = primaryLayer => ({
   type: types.UPDATE_PRIMARY_LAYER,
   primaryLayer,
@@ -108,4 +125,7 @@ export default {
   getCurrentState,
   updateTimeseries,
   detailView,
+  setLayerFilter,
+  filtersUpdated,
+  saveFilterState,
 };

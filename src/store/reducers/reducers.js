@@ -69,6 +69,31 @@ function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
+function FILTER(state = defaultState.FILTER, action) {
+  switch (action.type) {
+    case types.SAVE_FILTER_STATE: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...action.filterState,
+          doUpdate: true,
+        },
+      };
+    }
+    case types.FILTERS_UPDATED: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...state[action.layerId],
+          doUpdate: false,
+        },
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 function MAP(state = defaultState.MAP, action) {
   switch (action.type) {
     case types.MAP_RENDERED:
@@ -165,6 +190,34 @@ function MAP(state = defaultState.MAP, action) {
       };
     }
 
+    case types.SET_LAYER_FILTERS: {
+      const { layerId, layerFilters } = action;
+      const layer = state.layers[layerId];
+      const filters = layer.filters ? { ...layer.filters } : {};
+      const updatedLayers = {
+        ...state.layers,
+        [layerId]: {
+          ...layer,
+          filters: {
+            ...filters,
+            layerFilters,
+          },
+        },
+      };
+      return {
+        ...state,
+        layers: updatedLayers,
+        doApplyFilters: true,
+      };
+    }
+
+    case types.FILTERS_UPDATED: {
+      return {
+        ...state,
+        doApplyFilters: false,
+      };
+    }
+
     case types.DETAIL_VIEW: {
       if (!action.payload) {
         return {
@@ -243,5 +296,5 @@ function MAP(state = defaultState.MAP, action) {
 }
 
 export default {
-  APP, STYLES, MAP, REGIONS,
+  APP, STYLES, MAP, REGIONS, FILTER,
 };
