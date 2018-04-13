@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { initApp, initStyles, initRegions, addLayer } from './actions/actions';
+import { initApp, initStyles, initRegions, addLayer, toggleLayer } from './actions/actions';
 import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
@@ -32,6 +32,7 @@ export default function initStore(customReducers) {
           layerObj.loaded = false;
           store.dispatch(addLayer(layerObj));
           if (layerObj.visible && !layerObj.loaded) {
+            store.dispatch(toggleLayer(layerObj.id, true));
             prepareLayer(layerObj, store.dispatch);
           }
         }

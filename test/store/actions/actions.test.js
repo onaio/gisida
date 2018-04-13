@@ -68,11 +68,13 @@ describe('actions', () => {
 
 
   test('should create an action to toggle layer', () => {
+    const isInit = true;
     const expectedAction = {
       type: types.TOGGLE_LAYER,
       layerId,
+      isInit,
     };
-    expect(actions.toggleLayer(layerId)).toEqual(expectedAction);
+    expect(actions.toggleLayer(layerId, isInit)).toEqual(expectedAction);
   });
 
   test('should create an action to toggle filter', () => {
