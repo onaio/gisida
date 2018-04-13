@@ -57,7 +57,9 @@ describe('reducers.APP', () => {
         {
           label: 'Satelitte Streets',
           url: 'mapbox://styles/mapbox/satellite-streets-v9',
-        }],
+        }
+      ],
+      FILTER: {},
       accessToken: false,
       appName: 'React Gisida',
       loaded: true,
