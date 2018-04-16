@@ -71,7 +71,7 @@ export function generateFilterOptions(layer) {
           doPushDatum = false;
           break;
         }
-      } else if (acceptedFilterValues === 'quant' && isNaN(datum[filter]) ) {
+      } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
         // check datum[filter] value against quantitative condition
         doPushDatum = false;
       }
@@ -87,15 +87,16 @@ export function generateFilterOptions(layer) {
 
         if (!filterOptions[filter].filterValues[datum[filter]]) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
-          if ((acceptedFilterValues === 'quant'
-            || Array.isArray(acceptedFilterValues) && !isNaN(acceptedFilterValues[0]))
+          if ((acceptedFilterValues === 'quant' ||
+            (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
             && !filterOptions[filter].quantitativeValues) {
             filterOptions[filter].quantitativeValues = [];
           }
         }
         filterOptions[filter].filterValues[datum[filter]] += 1;
         if ((acceptedFilterValues === 'quant'
-            || Array.isArray(acceptedFilterValues) && !isNaN(acceptedFilterValues[0]))) {
+            || (Array.isArray(acceptedFilterValues)
+            && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         }
       }
