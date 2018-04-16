@@ -32,9 +32,10 @@ export const changeStyle = style => ({
   style,
 });
 
-export const toggleLayer = layerId => ({
+export const toggleLayer = (layerId, isInit = false) => ({
   type: types.TOGGLE_LAYER,
   layerId,
+  isInit,
 });
 
 export const toggleFilter = showFilterPanel => ({
@@ -48,7 +49,7 @@ export const setLayerFilter = (layerId, layerFilters) => ({
   layerFilters,
 });
 
-export const filtersUpdated = (layerId) => ({
+export const filtersUpdated = layerId => ({
   type: types.FILTERS_UPDATED,
   layerId,
 });

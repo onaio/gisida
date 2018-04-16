@@ -18,7 +18,6 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
   let filterKey;
   let filter;
 
-  let options;
   let option;
   let optionKeys;
 
@@ -34,7 +33,7 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
     aggregate['filter-label'][f] = filter.label || '';
 
     if (filter.isFiltered && filter.dataType === 'ordinal') {
-      options = filter.options;
+      const { options } = filter;
       optionKeys = Object.keys(options);
       for (let o = 0; o < optionKeys.length; o += 1) {
         option = options[optionKeys[o]];
@@ -54,7 +53,7 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
         && filter.queriedOptionKeys.length !== [...new Set(filter.options)].length
         ? filter.queriedOptionKeys
         : 'quant';
-    } else if (!filter.isFiltered)  {
+    } else if (!filter.isFiltered) {
       // if (filters[filterKey].isOriginal) {
       aggregate['accepted-filter-values'][f] = filter.dataType === 'ordinal' ? 'all' : 'quant';
     }

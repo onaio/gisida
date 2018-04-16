@@ -54,7 +54,7 @@ const defaultState = {
     activeLayerId: '',
     primaryLayer: '',
   },
-  FILTER: {}
+  FILTER: {},
 };
 
 export default defaultState;
