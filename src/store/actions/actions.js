@@ -22,6 +22,11 @@ export const initLocations = locations => ({
   locations,
 });
 
+export const addLayersList = layers => ({
+  type: types.ADD_LAYERS_LIST,
+  layers,
+});
+
 export const addLayer = (mapId, layer) => ({
   type: types.ADD_LAYER,
   layer,

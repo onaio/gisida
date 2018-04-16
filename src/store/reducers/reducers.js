@@ -79,6 +79,16 @@ function LOCATIONS(state = {}, action) {
   }
 }
 
+function LAYERS(state = [], action) {
+  switch (action.type) {
+    case types.ADD_LAYERS_LIST: {
+      return [...state, ...action.layers];
+    }
+    default:
+      return state;
+  }
+}
+
 export function createMapReducer(mapId) {
   const initialState = defaultState.MAP;
   initialState.mapId = mapId;
@@ -246,5 +256,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, STYLES, REGIONS, LOCATIONS, 'map-1': createMapReducer('map-1'),
+  APP, STYLES, REGIONS, LOCATIONS, LAYERS, 'map-1': createMapReducer('map-1'),
 };

@@ -1,10 +1,43 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { initApp, initStyles, initRegions, addLayer, initLocations } from './actions/actions';
+import * as actions from './actions/actions';
 import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
+
+
+export function loadLayers(mapId, dispatch, layers) {
+  // Check if config has list of layers and add them to store
+  if (layers.length > 0) {
+    dispatch(actions.addLayersList(layers));
+    layers.map((layer) => {
+      const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+      function addLayerToStore(responseObj) {
+        const layerObj = responseObj;
+        const pathSplit = layer.split('/');
+        const layerId = pathSplit[pathSplit.length - 1];
+        layerObj.id = layerId;
+        layerObj.loaded = false;
+        dispatch(actions.addLayer(mapId, layerObj));
+        if (layerObj.visible && !layerObj.loaded) {
+          prepareLayer(mapId, layerObj, dispatch);
+        }
+      }
+      return loadJSON(path, addLayerToStore);
+    });
+  }
+}
+
+
+// Add config to redux store
+function addConfigToStore(store, config) {
+  store.dispatch(actions.initApp(config.APP));
+  store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
+  store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
+  loadLayers('map-1', store.dispatch, config.LAYERS);
+  loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
+}
 
 export default function initStore(customReducers = {}) {
   // Register initial reducers
@@ -34,35 +67,7 @@ export default function initStore(customReducers = {}) {
   // Replace the store's reducer whenever a new reducer is registered.
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
-  // Add config to redux store
-  function addConfigToStore(config) {
-    // Check if config has list of layers and add them to store
-    if (config.LAYERS.length > 0) {
-      config.LAYERS.map((layer) => {
-        const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
-        function addLayerToStore(responseObj) {
-          const layerObj = responseObj;
-          const pathSplit = layer.split('/');
-          const layerId = pathSplit[pathSplit.length - 1];
-          layerObj.id = layerId;
-          layerObj.loaded = false;
-          store.dispatch(addLayer('map-1', layerObj));
-          if (layerObj.visible && !layerObj.loaded) {
-            prepareLayer('map-1', layerObj, store.dispatch);
-          }
-        }
-
-        return loadJSON(path, addLayerToStore);
-      });
-    }
-
-    store.dispatch(initApp(config.APP));
-    store.dispatch(initStyles(config.STYLES, config.APP.mapConfig));
-    store.dispatch(initRegions(config.REGIONS, config.APP.mapConfig));
-    loadJSON('config/locations.json', locations => store.dispatch(initLocations(locations)));
-  }
-
   // Read site-config.json and add to redux store
-  loadJSON('config/site-config.json', addConfigToStore);
+  loadJSON('config/site-config.json', config => addConfigToStore(store, config));
   return store;
 }
