@@ -41,6 +41,7 @@ describe('reducers.APP', () => {
           isLoaded: false,
           isRendered: false,
           layers: {},
+          mapId: 'map-1',
           primaryLayer: '',
           reloadLayers: false,
           showFilterPanel: false,
