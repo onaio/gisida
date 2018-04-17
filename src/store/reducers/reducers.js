@@ -28,7 +28,11 @@ function STYLES(state = defaultState.STYLES, action) {
       const updatedStyles = state.map((s) => {
         const style = s;
         if (action.style === style.url) {
-          style.current = true;
+          if (action.mapId) {
+            style[action.mapId] = { current: true };
+          } else style.current = true;
+        } else if (action.mapId) {
+          style[action.mapId] = { current: false };
         } else style.current = false;
         return style;
       });
