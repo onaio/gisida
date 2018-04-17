@@ -21,6 +21,7 @@ export function loadLayers(mapId, dispatch, layers) {
         layerObj.loaded = false;
         dispatch(actions.addLayer(mapId, layerObj));
         if (layerObj.visible && !layerObj.loaded) {
+          dispatch(actions.toggleLayer(mapId, layerObj.id, true));
           prepareLayer(mapId, layerObj, dispatch);
         }
       }
@@ -28,7 +29,6 @@ export function loadLayers(mapId, dispatch, layers) {
     });
   }
 }
-
 
 // Add config to redux store
 function addConfigToStore(store, config) {

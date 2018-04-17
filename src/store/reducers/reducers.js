@@ -73,6 +73,31 @@ function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
+function FILTER(state = defaultState.FILTER, action) {
+  switch (action.type) {
+    case types.SAVE_FILTER_STATE: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...action.filterState,
+          doUpdate: true,
+        },
+      };
+    }
+    case types.FILTERS_UPDATED: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...state[action.layerId],
+          doUpdate: false,
+        },
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 function LOCATIONS(state = {}, action) {
   switch (action.type) {
     case types.INIT_LOCATIONS: {
@@ -142,7 +167,7 @@ export function createMapReducer(mapId) {
             ...state.layers,
             [layerId]: {
               ...layer,
-              visible: !layer.visible,
+              visible: action.isInit ? layer.visible : !layer.visible,
             },
           };
           const updatedTimeSeries = {
@@ -183,6 +208,34 @@ export function createMapReducer(mapId) {
             showFilterPanel: !state.showFilterPanel,
           };
         }
+        case types.SET_LAYER_FILTERS: {
+          const { layerId, layerFilters } = action;
+          const layer = state.layers[layerId];
+          const filters = layer.filters ? { ...layer.filters } : {};
+          const updatedLayers = {
+            ...state.layers,
+            [layerId]: {
+              ...layer,
+              filters: {
+                ...filters,
+                layerFilters,
+              },
+            },
+          };
+          return {
+            ...state,
+            layers: updatedLayers,
+            doApplyFilters: true,
+          };
+        }
+
+        case types.FILTERS_UPDATED: {
+          return {
+            ...state,
+            doApplyFilters: false,
+          };
+        }
+
         case types.DETAIL_VIEW: {
           if (!action.payload) {
             return {
@@ -260,5 +313,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, STYLES, REGIONS, LOCATIONS, LAYERS, 'map-1': createMapReducer('map-1'),
+  APP, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

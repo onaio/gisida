@@ -20,4 +20,7 @@ gisida.parseMustache = require('./utils/parseMustache').default;
 gisida.addChart = require('./map/addChart').default;
 gisida.buildDetailView = require('./map/buildDetailView').default;
 
+gisida.buildFilterState = require('./filter/buildFilterState').default;
+gisida.clearFilterState = require('./filter/clearFilterState').default;
+
 module.exports = gisida;

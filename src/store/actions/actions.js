@@ -45,15 +45,34 @@ export const changeStyle = (mapId, style) => ({
   mapId,
 });
 
-export const toggleLayer = (mapId, layerId) => ({
+export const toggleLayer = (mapId, layerId, isInit = false) => ({
   type: types.TOGGLE_LAYER,
   layerId,
   mapId,
+  isInit,
 });
 
 export const toggleFilter = showFilterPanel => ({
   type: types.TOGGLE_FILTER,
   showFilterPanel,
+});
+
+
+export const setLayerFilter = (layerId, layerFilters) => ({
+  type: types.SET_LAYER_FILTERS,
+  layerId,
+  layerFilters,
+});
+
+export const filtersUpdated = layerId => ({
+  type: types.FILTERS_UPDATED,
+  layerId,
+});
+
+export const saveFilterState = (layerId, filterState) => ({
+  type: types.SAVE_FILTER_STATE,
+  layerId,
+  filterState,
 });
 
 export const updatePrimaryLayer = (mapId, primaryLayer) => ({
@@ -128,4 +147,7 @@ export default {
   getCurrentState,
   updateTimeseries,
   detailView,
+  setLayerFilter,
+  filtersUpdated,
+  saveFilterState,
 };
