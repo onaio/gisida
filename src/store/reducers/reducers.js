@@ -192,7 +192,7 @@ export function createMapReducer(mapId) {
             filter: {
               ...state.filter,
               layerId:
-                !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
+                updatedLayers[layerId].visible && (layer.aggregate && layer.aggregate.filter) ?
                   layerId : false,
             },
           };
