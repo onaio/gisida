@@ -163,13 +163,6 @@ export function createMapReducer(mapId) {
         case types.TOGGLE_LAYER: {
           const { layerId } = action;
           const layer = state.layers[layerId];
-          const updatedLayers = {
-            ...state.layers,
-            [layerId]: {
-              ...layer,
-              visible: action.isInit ? layer.visible : !layer.visible,
-            },
-          };
 
           const updatedTimeSeries = {
             ...state.timeseries,
@@ -182,28 +175,29 @@ export function createMapReducer(mapId) {
               updatedLayers[subLayerId].visible = !layer.visible;
             });
           }
-          const activeFilterLayerIds = [];
-          const activeLayerIds = [];
-          const layerKeys = Object.keys(updatedLayers);
-          layerKeys.forEach((key) => {
-            const layerObj = updatedLayers[key];
-            if (layerObj.visible && layerObj.aggregate && layerObj.aggregate.filter) {
-              activeFilterLayerIds.push(layerObj.id);
-            }
-          });
+          const updatedLayers = {
+            ...state.layers,
+            [layerId]: {
+              ...layer,
+              visible: action.isInit ? layer.visible : !layer.visible,
+            },
+          };
+
+          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible);
+          const activeFilterLayerIds = activeLayerIds.filter(l =>
+            updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
+
           let filterLayerId = '';
           if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
             filterLayerId = layerId;
           } else if (activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
-          } else {}
-          let activeLayer;
-          Object.keys(updatedLayers).map((key) => {
-            activeLayer = updatedLayers[key];
-            if (activeLayer.visible) {
-              activeLayerIds.push(key);
-            }
-          });
+          }
+
+          if (activeLayerIds.length && activeLayerIds[activeLayerIds.length - 1] !== filterLayerId) {
+            filterLayerId = '';
+          }
+
           return {
             ...state,
             // Update visible property
@@ -212,7 +206,8 @@ export function createMapReducer(mapId) {
               : activeLayerIds[activeLayerIds.length - 1],
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            primaryLayer: updatedLayers[layerId].visible && layer.credit ? layer.id : activeLayerIds[activeLayerIds.length - 1],
+            primaryLayer: updatedLayers[layerId].visible && layer.credit
+              ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
             filter: {
               ...state.filter,
@@ -224,6 +219,7 @@ export function createMapReducer(mapId) {
               && updatedLayers[filterLayerId].visible,
           };
         }
+
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
             && state.layers[action.primaryLayer].aggregate.filter;
