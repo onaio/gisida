@@ -194,6 +194,7 @@ export function createMapReducer(mapId) {
               layerId: !layer.visible && (layer.aggregate && layer.aggregate.filter)
                 ? layerId : false,
             },
+            showFilterPanel: state.showFilterPanel && !layer.visible,
           };
         }
         case types.UPDATE_PRIMARY_LAYER:

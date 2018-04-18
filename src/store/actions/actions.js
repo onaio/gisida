@@ -52,10 +52,11 @@ export const toggleLayer = (mapId, layerId, isInit = false) => ({
   isInit,
 });
 
-export const toggleFilter = (mapId, showFilterPanel) => ({
+export const toggleFilter = (mapId, layerId, showFilterPanel) => ({
   type: types.TOGGLE_FILTER,
   showFilterPanel,
   mapId,
+  layerId,
 });
 
 
