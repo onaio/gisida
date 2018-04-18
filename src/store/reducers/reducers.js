@@ -170,6 +170,16 @@ export function createMapReducer(mapId) {
               visible: action.isInit ? layer.visible : !layer.visible,
             },
           };
+
+          const visibleLayers = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible);
+          const activeLayerId = !visibleLayers.length
+            ? null
+            : visibleLayers.includes(layerId)
+            ? layerId
+            : visibleLayers.pop();
+          const activeLayerHasFilter = updatedLayers[activeLayerId].aggregate
+                && updatedLayers[activeLayerId].aggregate.filter;
+
           const updatedTimeSeries = {
             ...state.timeseries,
             visibility: layer
@@ -184,24 +194,34 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             // Update visible property
-            activeLayerId: layerId,
+            activeLayerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
             primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
             timeseries: updatedTimeSeries,
             filter: {
               ...state.filter,
-              layerId: !layer.visible && (layer.aggregate && layer.aggregate.filter)
-                ? layerId : false,
+              layerId: updatedLayers[activeLayerId].visible && activeLayerHasFilter
+                ? activeLayerId : false,
             },
-            showFilterPanel: state.showFilterPanel && !layer.visible,
+            showFilterPanel: state.showFilterPanel
+              && activeLayerHasFilter
+              && updatedLayers[activeLayerId].visible,
           };
         }
-        case types.UPDATE_PRIMARY_LAYER:
+        case types.UPDATE_PRIMARY_LAYER: {
+          const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
+            && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
             primaryLayer: action.primaryLayer,
+            filter: {
+              ...state.filter,
+              layerId: primaryLayerHasFilter ? action.primaryLayer : false,
+            },
+            showFilterPanel: primaryLayerHasFilter && state.showFilterPanel,
           };
+        }
         case types.TOGGLE_FILTER: {
           return {
             ...state,
