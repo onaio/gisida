@@ -181,19 +181,39 @@ export function createMapReducer(mapId) {
               updatedLayers[subLayerId].visible = !layer.visible;
             });
           }
+          const activeFilterLayerIds = [];
+          const activeLayerIds = [];
+          const layerKeys = Object.keys(updatedLayers);
+          layerKeys.forEach((key) => {
+            const layerObj = updatedLayers[key];
+            if (layerObj.visible && layerObj.aggregate && layerObj.aggregate.filter) {
+              activeFilterLayerIds.push(layerObj.id);
+            }
+          });
+          let filterLayerId = '';
+          if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
+            filterLayerId = layerId;
+          } else if (activeFilterLayerIds.length) {
+            filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
+          }
+          let activeLayer;
+          Object.keys(updatedLayers).map((key) => {
+            activeLayer = updatedLayers[key];
+            if (activeLayer.visible) {
+              activeLayerIds.push(key);
+            }
+          });
           return {
             ...state,
             // Update visible property
             activeLayerId: layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
+            primaryLayer: updatedLayers[layerId].visible && layer.credit ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
             filter: {
               ...state.filter,
-              layerId:
-                !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
-                  layerId : false,
+              layerId: filterLayerId,
             },
           };
         }
