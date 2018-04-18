@@ -17,31 +17,47 @@ export const initRegions = (regions, mapConfig) => ({
   mapConfig,
 });
 
-export const addLayer = layer => ({
+export const initLocations = locations => ({
+  type: types.INIT_LOCATIONS,
+  locations,
+});
+
+export const addLayersList = layers => ({
+  type: types.ADD_LAYERS_LIST,
+  layers,
+});
+
+export const addLayer = (mapId, layer) => ({
   type: types.ADD_LAYER,
   layer,
+  mapId,
 });
 
-export const changeRegion = region => ({
+export const changeRegion = (mapId, region) => ({
   type: types.CHANGE_REGION,
   region,
+  mapId,
 });
 
-export const changeStyle = style => ({
+export const changeStyle = (mapId, style) => ({
   type: types.CHANGE_STYLE,
   style,
+  mapId,
 });
 
-export const toggleLayer = (layerId, isInit = false) => ({
+export const toggleLayer = (mapId, layerId, isInit = false) => ({
   type: types.TOGGLE_LAYER,
   layerId,
+  mapId,
   isInit,
 });
 
-export const toggleFilter = showFilterPanel => ({
+export const toggleFilter = (mapId, showFilterPanel) => ({
   type: types.TOGGLE_FILTER,
   showFilterPanel,
+  mapId,
 });
+
 
 export const setLayerFilter = (layerId, layerFilters) => ({
   type: types.SET_LAYER_FILTERS,
@@ -60,40 +76,47 @@ export const saveFilterState = (layerId, filterState) => ({
   filterState,
 });
 
-export const updatePrimaryLayer = primaryLayer => ({
+export const updatePrimaryLayer = (mapId, primaryLayer) => ({
   type: types.UPDATE_PRIMARY_LAYER,
   primaryLayer,
+  mapId,
 });
 
-export const requestData = layerId => ({
+export const requestData = (mapId, layerId) => ({
   type: types.REQUEST_DATA,
   layerId,
+  mapId,
 });
 
-export const receiveData = (layer, timeseries) => ({
+export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
   timeseries,
+  mapId,
 });
 
-export const mapRendered = isRendered => ({
+export const mapRendered = (mapId, isRendered) => ({
   type: types.MAP_RENDERED,
   isRendered,
+  mapId,
 });
 
-export const mapLoaded = isLoaded => ({
+export const mapLoaded = (mapId, isLoaded) => ({
   type: types.MAP_LOADED,
   isLoaded,
+  mapId,
 });
 
-export const reloadLayers = reload => ({
+export const reloadLayers = (mapId, reload) => ({
   type: types.RELOAD_LAYERS,
   reload,
+  mapId,
 });
 
-export const updateTimeseries = timeseries => ({
+export const updateTimeseries = (mapId, timeseries) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
+  mapId,
 });
 
 export const detailView = payload => ({

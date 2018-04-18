@@ -1,9 +1,9 @@
-export function processFilters(layerObj, filterOptions) {
-  let data = layerObj.mergedData || layerObj.source.data;
-  const acceptedFilterValues = layerObj.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues = layerObj.aggregate['accepted-sub-filter-values'];
+export function processFilters(layerData, filterOptions) {
+  let data = layerData.mergedData || layerData.source.data;
+  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
+  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
-  if (layerObj.aggregate.filter && filterOptions) {
+  if (layerData.aggregate.filter && filterOptions) {
     // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
@@ -12,23 +12,22 @@ export function processFilters(layerObj, filterOptions) {
     });
     // apply filters
     data = data.filter((datum) => {
-      if (acceptedFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(datum[layerObj.aggregate['sub-filter']])) {
+      if (acceptedFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
         // remove rows that should be filtered out, ignore rows with values from second filter field
-        return !filters.includes(datum[layerObj.aggregate.filter]);
-      } else if (acceptedSubFilterValues && acceptedSubFilterValues.includes(datum[layerObj.aggregate['sub-filter']])) {
+        return !filters.includes(datum[layerData.aggregate.filter]);
+      } else if (acceptedSubFilterValues && acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
         // remove rows that should be filtered out, ignore rows with values from first filter field
-        return !filters.includes(datum[layerObj.aggregate['sub-filter']]);
+        return !filters.includes(datum[layerData.aggregate['sub-filter']]);
       } else if (!acceptedFilterValues && !acceptedSubFilterValues) {
-        return !filters.includes(datum[layerObj.aggregate.filter]);
+        return !filters.includes(datum[layerData.aggregate.filter]);
       } return true;
     });
   }
   return data;
 }
 
-export function generateFilterOptions(layer) {
-  const layerObj = { ...layer };
-  let data = layerObj.mergedData || layerObj.source.data;
+export function generateFilterOptions(layerData) {
+  let data = layerData.mergedData || layerData.source.data;
   // if it's geojson data, set use features array
   if (data.type) {
     data = data.features;
@@ -41,12 +40,12 @@ export function generateFilterOptions(layer) {
   let datum;
 
   // loop through all filters
-  for (let f = 0; f < layerObj.aggregate.filter.length; f += 1) {
+  for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
     // define filter, subFilter, and filter label
-    filter = layerObj.aggregate.filter[f];
-    filterLabel = layerObj.aggregate['filter-label'][f]
-      && layerObj.aggregate['filter-label'][f].length
-      ? layerObj.aggregate['filter-label'][f] : filter;
+    filter = layerData.aggregate.filter[f];
+    filterLabel = layerData.aggregate['filter-label'] && layerData.aggregate['filter-label'][f]
+      && layerData.aggregate['filter-label'][f].length
+      ? layerData.aggregate['filter-label'][f] : filter;
 
     // define unique filter and sub-filter values on filterOptions object
     filterOptions[filter] = {
@@ -61,10 +60,10 @@ export function generateFilterOptions(layer) {
     doPushDatum = true;
 
     // loop through the fiters and see if datum passes filter requirements
-    for (let f = 0; f < layerObj.aggregate.filter.length; f += 1) {
-      filter = layerObj.aggregate.filter[f];
-      acceptedFilterValues = layerObj.aggregate['accepted-filter-values']
-        && layerObj.aggregate['accepted-filter-values'][f];
+    for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
+      filter = layerData.aggregate.filter[f];
+      acceptedFilterValues = layerData.aggregate['accepted-filter-values']
+        && layerData.aggregate['accepted-filter-values'][f];
 
       if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string') {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
@@ -79,11 +78,10 @@ export function generateFilterOptions(layer) {
 
     // if datum passes all conditions
     if (doPushDatum) {
-      // loop through all filters to add datum to filter/quant values
-      for (let f = 0; f < layerObj.aggregate.filter.length; f += 1) {
-        filter = layerObj.aggregate.filter[f];
-        acceptedFilterValues = layerObj.aggregate['accepted-filter-values']
-          && layerObj.aggregate['accepted-filter-values'][f];
+      for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
+        filter = layerData.aggregate.filter[f];
+        acceptedFilterValues = layerData.aggregate['accepted-filter-values']
+          && layerData.aggregate['accepted-filter-values'][f];
 
         if (!filterOptions[filter].filterValues[datum[filter]]) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
@@ -105,11 +103,12 @@ export function generateFilterOptions(layer) {
 
   return filterOptions;
 }
+
 const months = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
 
-export function filterDataByPeriod(layerObj, periodField, period) {
-  let periods = period ? [period] : layerObj.map(datum => datum[periodField]);
+export function filterDataByPeriod(layerData, periodField, period) {
+  let periods = period ? [period] : layerData.map(datum => datum[periodField]);
   if (!period) periods = Array.from(new Set(periods));
 
   if (months.indexOf(periods[0]) !== false) {
@@ -120,5 +119,5 @@ export function filterDataByPeriod(layerObj, periodField, period) {
 
   const periodFilter = periods[periods.length - 1];
 
-  return layerObj.filter(datum => datum[periodField] === periodFilter);
+  return layerData.filter(datum => datum[periodField] === periodFilter);
 }

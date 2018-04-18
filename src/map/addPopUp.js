@@ -1,7 +1,7 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
 
-export default function addMousemoveEvent(mapboxGLMap, dispatch) {
+export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   const map = mapboxGLMap;
   const popup = new mapboxgl.Popup({
     closeOnClick: true,
@@ -14,7 +14,7 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
   map.on('mousemove', (e) => {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, visibleLayerId } = currentState.MAP;
+    const { layers, timeseries, visibleLayerId } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -42,7 +42,6 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
     const feature = features[0];
     const activeLayerId = feature.layer.id;
     const layer = layers[activeLayerId];
-
     if (layer.popup && layer.type !== 'chart') {
       let periodData = [];
       // Assign period data if layer has time series
@@ -55,7 +54,6 @@ export default function addMousemoveEvent(mapboxGLMap, dispatch) {
       }
       // Assign layer data
       const data = (layer.aggregate && layer.aggregate.timeseries) ? periodData : layer.source.data;
-
       if (data && data.length) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
