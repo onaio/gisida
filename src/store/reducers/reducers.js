@@ -181,19 +181,31 @@ export function createMapReducer(mapId) {
               updatedLayers[subLayerId].visible = !layer.visible;
             });
           }
+          const activeLayerIds = [];
+          const layerKeys = Object.keys(updatedLayers);
+          layerKeys.forEach((key) => {
+            const layerObj = updatedLayers[key];
+            if (layerObj.visible && layerObj.aggregate && layerObj.aggregate.filter) {
+              activeLayerIds.push(layerObj.id);
+            }
+          });
+          let filterLayerId = '';
+          if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
+            filterLayerId = layerId;
+          } else if (activeLayerIds.length) {
+            filterLayerId = activeLayerIds[activeLayerIds.length - 1];
+          }
           return {
             ...state,
             // Update visible property
             activeLayerId: layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
+            primaryLayer: updatedLayers[layerId].visible ? layer.id : state.primaryLayer,
             timeseries: updatedTimeSeries,
             filter: {
               ...state.filter,
-              layerId:
-                updatedLayers[layerId].visible && (layer.aggregate && layer.aggregate.filter) ?
-                  layerId : false,
+              layerId: filterLayerId,
             },
           };
         }
