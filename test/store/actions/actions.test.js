@@ -83,12 +83,11 @@ describe('actions', () => {
   });
 
   test('should create an action to toggle filter', () => {
-    const showFilterPanel = Math.random() >= 0.5;
     const expectedAction = {
       type: types.TOGGLE_FILTER,
-      showFilterPanel,
+      mapId,
     };
-    expect(actions.toggleFilter(showFilterPanel)).toEqual(expectedAction);
+    expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
   test('should create an action to update primary layer', () => {

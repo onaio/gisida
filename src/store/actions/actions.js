@@ -59,7 +59,6 @@ export const toggleFilter = (mapId, layerId, showFilterPanel) => ({
   layerId,
 });
 
-
 export const setLayerFilter = (mapId, layerId, layerFilters) => ({
   type: types.SET_LAYER_FILTERS,
   layerId,
@@ -77,6 +76,7 @@ export const saveFilterState = (mapId, layerId, filterState) => ({
   type: types.SAVE_FILTER_STATE,
   layerId,
   filterState,
+  mapId,
 });
 
 export const updatePrimaryLayer = (mapId, primaryLayer) => ({
