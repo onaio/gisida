@@ -170,11 +170,6 @@ export function createMapReducer(mapId) {
               && layer.aggregate
               && layer.aggregate.timeseries ? !layer.visible : false,
           };
-          if (layer.layers) {
-            layer.layers.forEach((subLayerId) => {
-              updatedLayers[subLayerId].visible = !layer.visible;
-            });
-          }
           const updatedLayers = {
             ...state.layers,
             [layerId]: {
@@ -182,6 +177,11 @@ export function createMapReducer(mapId) {
               visible: action.isInit ? layer.visible : !layer.visible,
             },
           };
+          if (layer.layers) {
+            layer.layers.forEach((subLayerId) => {
+              updatedLayers[subLayerId].visible = !layer.visible;
+            });
+          }
 
           const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
@@ -190,12 +190,8 @@ export function createMapReducer(mapId) {
           let filterLayerId = '';
           if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
             filterLayerId = layerId;
-          } else if (activeFilterLayerIds.length) {
+          } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
-          }
-
-          if (activeLayerIds.length && activeLayerIds[activeLayerIds.length - 1] !== filterLayerId) {
-            filterLayerId = '';
           }
 
           return {
