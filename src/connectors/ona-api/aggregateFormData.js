@@ -12,7 +12,13 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
   // Filter data where survey_intro / consent = 1(Yes)
-  data = data.filter(datum => datum['survey_intro/consent'] === '1');
+  data = data.filter((datum) => {
+    // TODO: move this filter to mapspec
+    const consent = datum['survey_intro/consent'];
+    if (consent) {
+      return consent === '1';
+    } return true;
+  });
 
   // Add week number to data
   data = data.map((datum) => {
