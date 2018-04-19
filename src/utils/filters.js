@@ -70,16 +70,33 @@ export function generateFilterOptions(layerData) {
           doPushDatum = false;
           break;
         }
+      } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
+        // check datum[filter] value against quantitative condition
+        doPushDatum = false;
       }
     }
 
+    // if datum passes all conditions
     if (doPushDatum) {
       for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
         filter = layerData.aggregate.filter[f];
+        acceptedFilterValues = layerData.aggregate['accepted-filter-values']
+          && layerData.aggregate['accepted-filter-values'][f];
+
         if (!filterOptions[filter].filterValues[datum[filter]]) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
+          if ((acceptedFilterValues === 'quant' ||
+            (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
+            && !filterOptions[filter].quantitativeValues) {
+            filterOptions[filter].quantitativeValues = [];
+          }
         }
         filterOptions[filter].filterValues[datum[filter]] += 1;
+        if ((acceptedFilterValues === 'quant'
+            || (Array.isArray(acceptedFilterValues)
+            && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
+          filterOptions[filter].quantitativeValues.push(datum[filter]);
+        }
       }
     }
   }

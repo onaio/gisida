@@ -163,6 +163,13 @@ export function createMapReducer(mapId) {
         case types.TOGGLE_LAYER: {
           const { layerId } = action;
           const layer = state.layers[layerId];
+
+          const updatedTimeSeries = {
+            ...state.timeseries,
+            visibility: layer
+              && layer.aggregate
+              && layer.aggregate.timeseries ? !layer.visible : false,
+          };
           const updatedLayers = {
             ...state.layers,
             [layerId]: {
@@ -170,38 +177,58 @@ export function createMapReducer(mapId) {
               visible: action.isInit ? layer.visible : !layer.visible,
             },
           };
-          const updatedTimeSeries = {
-            ...state.timeseries,
-            visibility: layer
-              && layer.aggregate
-              && layer.aggregate.timeseries ? !layer.visible : false,
-          };
           if (layer.layers) {
             layer.layers.forEach((subLayerId) => {
               updatedLayers[subLayerId].visible = !layer.visible;
             });
           }
+
+          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible);
+          const activeFilterLayerIds = activeLayerIds.filter(l =>
+            updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
+
+          let filterLayerId = '';
+          if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
+            filterLayerId = layerId;
+          } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
+            filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
+          }
+
           return {
             ...state,
             // Update visible property
-            activeLayerId: layerId,
+            activeLayerId: updatedLayers[layerId].visible
+              ? layerId
+              : activeLayerIds[activeLayerIds.length - 1],
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            primaryLayer: !layer.visible ? layer.id : state.primaryLayer,
+            primaryLayer: updatedLayers[layerId].visible && layer.credit
+              ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
             filter: {
               ...state.filter,
-              layerId:
-                !layer.visible && (layer.aggregate && layer.aggregate.filter) ?
-                  layerId : false,
+              layerId: filterLayerId,
             },
+            showFilterPanel: state.showFilterPanel
+              && filterLayerId !== ''
+              && updatedLayers[filterLayerId]
+              && updatedLayers[filterLayerId].visible,
           };
         }
-        case types.UPDATE_PRIMARY_LAYER:
+
+        case types.UPDATE_PRIMARY_LAYER: {
+          const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
+            && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
             primaryLayer: action.primaryLayer,
+            filter: {
+              ...state.filter,
+              layerId: primaryLayerHasFilter ? action.primaryLayer : false,
+            },
+            showFilterPanel: primaryLayerHasFilter && state.showFilterPanel,
           };
+        }
         case types.TOGGLE_FILTER: {
           return {
             ...state,

@@ -34,7 +34,7 @@
     "highcharts": "^6.0.4",
     "js-cookie": "^2.2.0",
     "jsx-loader": "^0.13.2",
-    "moment": "^2.22.0",
+    "moment": "^2.22.1",
     "mustache": "^2.3.0",
     "papaparse": "^4.3.6",
     "redux": "^3.7.2",
