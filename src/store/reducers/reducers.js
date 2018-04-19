@@ -159,7 +159,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             layers: updatedLayers,
-            defaultLayers: defaultLayers,
+            defaultLayers,
           };
         }
         case types.TOGGLE_LAYER: {
