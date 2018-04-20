@@ -110,7 +110,7 @@ function LOCATIONS(state = {}, action) {
 
 const defaultStateLAYERS = {
   layers: [],
-  groups: {}
+  groups: {},
 };
 
 function LAYERS(state = defaultStateLAYERS, action) {
@@ -118,7 +118,7 @@ function LAYERS(state = defaultStateLAYERS, action) {
     case types.ADD_LAYERS_LIST: {
       return {
         ...state,
-        layers: [...state.layers, ...action.layers]
+        layers: [...state.layers, ...action.layers],
       };
     }
     case types.ADD_LAYER_GROUP: {
@@ -135,8 +135,8 @@ function LAYERS(state = defaultStateLAYERS, action) {
         groups: {
           ...state.groups,
           [action.groupId]: group,
-        }
-      }
+        },
+      };
     }
     default:
       return state;

@@ -13,7 +13,7 @@ export function loadLayers(mapId, dispatch, layers) {
     // helper function to handle layers from spec
     const mapLayers = (layer) => {
       const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
-      
+
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
