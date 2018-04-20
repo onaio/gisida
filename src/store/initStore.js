@@ -13,19 +13,27 @@ export function loadLayers(mapId, dispatch, layers) {
     // helper function to handle layers from spec
     const mapLayers = (layer) => {
       const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+      
+      // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
+        // parse layer id from action.group for urls
         const pathSplit = layer.split('/');
         const layerId = pathSplit[pathSplit.length - 1];
         layerObj.id = layerId;
-        layerObj.loaded = false;
 
+        // add layer to MAP.layers store
+        layerObj.loaded = false;
         dispatch(actions.addLayer(mapId, layerObj));
+
+        // load and prepare layer if visible and not loaded
         if (layerObj.visible && !layerObj.loaded) {
           dispatch(actions.toggleLayer(mapId, layerObj.id, true));
           prepareLayer(mapId, layerObj, dispatch);
         }
       }
+
+      // load local or remote layer spec
       return loadJSON(path, addLayerToStore);
     };
 

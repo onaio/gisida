@@ -122,12 +122,19 @@ function LAYERS(state = defaultStateLAYERS, action) {
       };
     }
     case types.ADD_LAYER_GROUP: {
-      console.log('REDUCER', action.groupId, action.group);
+      // parse action.group for urls
+      const group = action.group.map((layer) => {
+        if (layer.indexOf('http') === -1) {
+          return layer;
+        }
+        const pathSplit = layer.split('/');
+        return pathSplit[pathSplit.length - 1];
+      });
       return {
         ...state,
         groups: {
           ...state.groups,
-          [action.groupId]: action.group,
+          [action.groupId]: group,
         }
       }
     }
