@@ -33,6 +33,7 @@ const defaultState = {
     currentStyle: '',
     currentRegion: '',
     layers: {},
+    defaultLayers: [],
     timeseries: {
       visibility: false,
     },

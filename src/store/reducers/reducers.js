@@ -155,9 +155,11 @@ export function createMapReducer(mapId) {
           const layers = {};
           layers[action.layer.id] = action.layer;
           const updatedLayers = { ...state.layers, ...layers };
+          const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible);
           return {
             ...state,
             layers: updatedLayers,
+            defaultLayers,
           };
         }
         case types.TOGGLE_LAYER: {
