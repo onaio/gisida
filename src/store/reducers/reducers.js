@@ -108,10 +108,28 @@ function LOCATIONS(state = {}, action) {
   }
 }
 
-function LAYERS(state = [], action) {
+const defaultStateLAYERS = {
+  layers: [],
+  groups: {}
+};
+
+function LAYERS(state = defaultStateLAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
-      return [...state, ...action.layers];
+      return {
+        ...state,
+        layers: [...state.layers, ...action.layers]
+      };
+    }
+    case types.ADD_LAYER_GROUP: {
+      console.log('REDUCER', action.groupId, action.group);
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          [action.groupId]: action.group,
+        }
+      }
     }
     default:
       return state;

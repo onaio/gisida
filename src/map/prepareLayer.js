@@ -49,7 +49,6 @@ export function buildLabels(layerObj, tsLayerObj, period) {
   return labels;
 }
 
-
 /**
  * Dispaches actions indicating layer is ready to render
  * @param {*} layer
@@ -126,7 +125,6 @@ function renderData(mapId, layer, dispatch) {
   }
 }
 
-
 /**
  * Loads layer data from CSV or GeoJSON source
  * @param {*} layer
@@ -169,6 +167,7 @@ function readData(mapId, layer, dispatch) {
     });
   }
 }
+
 /**
  * Loads layer data from multiple CSV or GeoJSON files
  * @param {*} layer
