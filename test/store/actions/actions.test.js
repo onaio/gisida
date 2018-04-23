@@ -6,6 +6,7 @@ import defaultState from '../../../src/store/defaultState';
 const layerId = 'test-layer';
 const layer = { id: layerId };
 const timeseries = { [layerId]: {} };
+const mapId = 'map-1';
 
 describe('actions', () => {
   test('should create an action to init app', () => {
@@ -43,8 +44,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.ADD_LAYER,
       layer,
+      mapId
     };
-    expect(actions.addLayer(layer)).toEqual(expectedAction);
+    expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
 
 
@@ -53,8 +55,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.CHANGE_REGION,
       region,
+      mapId,
     };
-    expect(actions.changeRegion(region)).toEqual(expectedAction);
+    expect(actions.changeRegion(mapId, region)).toEqual(expectedAction);
   });
 
   test('should create an action to change style', () => {
@@ -62,8 +65,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.CHANGE_STYLE,
       style,
+      mapId,
     };
-    expect(actions.changeStyle(style)).toEqual(expectedAction);
+    expect(actions.changeStyle(mapId, style)).toEqual(expectedAction);
   });
 
 
@@ -73,33 +77,35 @@ describe('actions', () => {
       type: types.TOGGLE_LAYER,
       layerId,
       isInit,
+      mapId,
     };
-    expect(actions.toggleLayer(layerId, isInit)).toEqual(expectedAction);
+    expect(actions.toggleLayer(mapId, layerId, isInit)).toEqual(expectedAction);
   });
 
   test('should create an action to toggle filter', () => {
-    const showFilterPanel = Math.random() >= 0.5;
     const expectedAction = {
       type: types.TOGGLE_FILTER,
-      showFilterPanel,
+      mapId,
     };
-    expect(actions.toggleFilter(showFilterPanel)).toEqual(expectedAction);
+    expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
   test('should create an action to update primary layer', () => {
     const expectedAction = {
       type: types.UPDATE_PRIMARY_LAYER,
       primaryLayer: layerId,
+      mapId,
     };
-    expect(actions.updatePrimaryLayer(layerId)).toEqual(expectedAction);
+    expect(actions.updatePrimaryLayer(mapId, layerId)).toEqual(expectedAction);
   });
 
   test('should create an action to request data', () => {
     const expectedAction = {
       type: types.REQUEST_DATA,
       layerId,
+      mapId,
     };
-    expect(actions.requestData(layerId)).toEqual(expectedAction);
+    expect(actions.requestData(mapId, layerId)).toEqual(expectedAction);
   });
 
   test('should create an action to recieve data', () => {
@@ -107,8 +113,9 @@ describe('actions', () => {
       type: types.RECEIVE_DATA,
       layer,
       timeseries,
+      mapId,
     };
-    expect(actions.receiveData(layer, timeseries)).toEqual(expectedAction);
+    expect(actions.receiveData(mapId, layer, timeseries)).toEqual(expectedAction);
   });
 
   test('should create an action to indicate map rendered', () => {
@@ -116,8 +123,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.MAP_RENDERED,
       isRendered,
+      mapId,
     };
-    expect(actions.mapRendered(isRendered)).toEqual(expectedAction);
+    expect(actions.mapRendered(mapId, isRendered)).toEqual(expectedAction);
   });
 
   test('should create an action to indicate map loaded', () => {
@@ -125,8 +133,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.MAP_LOADED,
       isLoaded,
+      mapId,
     };
-    expect(actions.mapLoaded(isLoaded)).toEqual(expectedAction);
+    expect(actions.mapLoaded(mapId, isLoaded)).toEqual(expectedAction);
   });
 
   test('should create an action to reload layers', () => {
@@ -134,8 +143,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.RELOAD_LAYERS,
       reload,
+      mapId,
     };
-    expect(actions.reloadLayers(reload)).toEqual(expectedAction);
+    expect(actions.reloadLayers(mapId, reload)).toEqual(expectedAction);
   });
 
 
@@ -143,8 +153,9 @@ describe('actions', () => {
     const expectedAction = {
       type: types.UPDATE_TIMESERIES,
       timeseries,
+      mapId,
     };
-    expect(actions.updateTimeseries(timeseries)).toEqual(expectedAction);
+    expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
   });
 
 
