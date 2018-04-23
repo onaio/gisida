@@ -84,10 +84,10 @@ function getStops(layer) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
         // Check for repeating stop domains
-        const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
-        if (stopDomains.includes(stopVal)) {
-          // debug repeating balues console.warn(`Repeating stop domain:, ${stopVal}!`);
-        }
+        // const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
+        // if (stopDomains.includes(stopVal)) {
+        //   console.warn(`Repeating stop domain:, ${stopVal}!`);
+        // }
         stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
 
         colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
