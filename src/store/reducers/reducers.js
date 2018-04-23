@@ -108,12 +108,7 @@ function LOCATIONS(state = {}, action) {
   }
 }
 
-const defaultStateLAYERS = {
-  layers: [],
-  groups: {},
-};
-
-function LAYERS(state = defaultStateLAYERS, action) {
+function LAYERS(state = defaultState.LAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
       return {
