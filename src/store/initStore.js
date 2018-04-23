@@ -9,24 +9,51 @@ import reducerRegistry from './reducerRegistry';
 
 export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
-  if (layers.length > 0) {
-    dispatch(actions.addLayersList(layers));
-    layers.map((layer) => {
+  if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
+    // helper function to handle layers from spec
+    const mapLayers = (layer) => {
       const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+
+      // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
+        // parse layer id from action.group for urls
         const pathSplit = layer.split('/');
         const layerId = pathSplit[pathSplit.length - 1];
         layerObj.id = layerId;
+
+        // add layer to MAP.layers store
         layerObj.loaded = false;
         dispatch(actions.addLayer(mapId, layerObj));
+
+        // load and prepare layer if visible and not loaded
         if (layerObj.visible && !layerObj.loaded) {
           dispatch(actions.toggleLayer(mapId, layerObj.id, true));
           prepareLayer(mapId, layerObj, dispatch);
         }
       }
+
+      // load local or remote layer spec
       return loadJSON(path, addLayerToStore);
-    });
+    };
+
+    if (Array.isArray(layers)) {
+      // add layers to store array
+      dispatch(actions.addLayersList(layers));
+      // handle all layers
+      layers.map(mapLayers);
+    } else {
+      const groupKeys = Object.keys(layers);
+      // loop through all groups of layers
+      for (let g = 0; g < groupKeys.length; g += 1) {
+        // add layers to store array
+        dispatch(actions.addLayersList(layers[groupKeys[g]]));
+        // add group to store object
+        dispatch(actions.addLayerGroup(mapId, groupKeys[g], layers[groupKeys[g]]));
+        // handle layers from group
+        layers[groupKeys[g]].map(mapLayers);
+      }
+    }
   }
 }
 

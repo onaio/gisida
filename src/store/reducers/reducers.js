@@ -108,10 +108,30 @@ function LOCATIONS(state = {}, action) {
   }
 }
 
-function LAYERS(state = [], action) {
+function LAYERS(state = defaultState.LAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
-      return [...state, ...action.layers];
+      return {
+        ...state,
+        layers: [...state.layers, ...action.layers],
+      };
+    }
+    case types.ADD_LAYER_GROUP: {
+      // parse action.group for urls
+      const group = action.group.map((layer) => {
+        if (layer.indexOf('http') === -1) {
+          return layer;
+        }
+        const pathSplit = layer.split('/');
+        return pathSplit[pathSplit.length - 1];
+      });
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          [action.groupId]: group,
+        },
+      };
     }
     default:
       return state;
