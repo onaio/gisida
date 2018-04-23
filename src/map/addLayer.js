@@ -237,7 +237,14 @@ export default function (layer, mapConfig) {
       },
       minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
       maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
-      layout: layer.layout,
+      layout: Object.assign(
+        {},
+        {
+          'icon-allow-overlap': true, // default icon overlap to true
+          'icon-ignore-placement': true, // default icon overlap to true
+        },
+        layer.layout
+      ),
       paint: layer.paint,
     };
 
