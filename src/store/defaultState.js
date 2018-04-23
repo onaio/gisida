@@ -56,7 +56,7 @@ const defaultState = {
     primaryLayer: '',
   },
   FILTER: {},
-    LAYERS: {
+  LAYERS: {
     layers: [],
     groups: {},
   },
