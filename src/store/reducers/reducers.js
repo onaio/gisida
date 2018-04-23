@@ -226,6 +226,7 @@ export function createMapReducer(mapId) {
               : activeLayerIds[activeLayerIds.length - 1],
             layers: updatedLayers,
             reloadLayers: Math.random(),
+            showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
             primaryLayer: updatedLayers[layerId].visible && layer.credit
               ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
@@ -355,6 +356,12 @@ export function createMapReducer(mapId) {
             ...state,
             timeseries: action.timeseries,
           };
+        }
+        case types.TRIGGER_SPINNER: {
+          return {
+            ...state,
+            showSpinner: action.isLoaded,
+          }
         }
         default:
           return state;

@@ -34,6 +34,7 @@ const defaultState = {
     currentRegion: '',
     layers: {},
     defaultLayers: [],
+    showSpinner: false,
     timeseries: {
       visibility: false,
     },

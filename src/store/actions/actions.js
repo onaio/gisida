@@ -134,6 +134,12 @@ export const detailView = payload => ({
   payload,
 });
 
+export const triggerSpinner = (mapId, isLoaded = false) => ({
+  type: types.TRIGGER_SPINNER,
+  isLoaded,
+  mapId,
+});
+
 export function returnState(dispatch, getState) {
   return getState();
 }
@@ -162,4 +168,5 @@ export default {
   setLayerFilter,
   filtersUpdated,
   saveFilterState,
+  triggerSpinner,
 };
