@@ -186,7 +186,8 @@ export function createMapReducer(mapId) {
             });
           }
 
-          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible && !updatedLayers[l].parent);
+          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
+            && !updatedLayers[l].parent);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
             updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
 
