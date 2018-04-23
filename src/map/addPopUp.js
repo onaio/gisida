@@ -27,7 +27,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Get rendered features from active layers under mouse pointer
     const features = map.queryRenderedFeatures(e.point, {
-      layers: activeLayers,
+      layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
     });
 
     // Remove pop up if no features under mouse pointer
