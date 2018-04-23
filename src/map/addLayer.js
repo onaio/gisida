@@ -243,7 +243,7 @@ export default function (layer, mapConfig) {
           'icon-allow-overlap': true, // default icon overlap to true
           'icon-ignore-placement': true, // default icon overlap to true
         },
-        layer.layout
+        layer.layout,
       ),
       paint: layer.paint,
     };
