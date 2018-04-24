@@ -202,10 +202,12 @@ export function createMapReducer(mapId) {
           if (layer.layers) {
             layer.layers.forEach((subLayerId) => {
               updatedLayers[subLayerId].visible = !layer.visible;
+              updatedLayers[subLayerId].parent = layer.id;
             });
           }
 
-          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible);
+          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
+            && !updatedLayers[l].parent);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
             updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
 
