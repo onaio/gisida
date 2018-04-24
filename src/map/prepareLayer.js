@@ -186,20 +186,65 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   });
 
   q.awaitAll((error, data) => {
-    let mergedData = Array.isArray(data[0])
+    const { join, relation } = layerObj.source;
+    const isManyToOne = relation && relation.type === 'many-to-one';
+
+    let mergedData = isManyToOne
+      ? {}
+      : Array.isArray(data[0])
       ? [...data[0]]
-      : {...data[0]};
+      : { ...data[0] };
+
+    // Helper func for combining arrays of data
+    function basicMerge (prevData, nextData) {
+      if (!nextData || typeof nextData === 'string') {
+        return {...prevData};
+      } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
+        return [...prevData, ...data[i]];
+      } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
+        return [...prevData, ...data[i].features];
+      } else if (prevData.features && Array.isArray(prevData.features)) {
+        return {
+          ...prevData,
+          features: [...prevData.features, ...(data[i].features || data[i])]
+        };
+      }
+    }
+
+    // Helper func for joining "manys" to "ones"
+    function manyToOneMerge (i, prevData, NextData) {
+      const nextData = NextData.features || NextData;
+      let datum;
+      for (let d = 0; d < nextData.length; d += 1) {
+        datum = nextData[d];
+        if (i < relation.uniques && datum[join[i]]) {
+          // Add unique "one"s to mergedData
+          prevData[datum[join[i]]] = {...datum};
+          prevData[datum[join[i]]][(relation['many-prop']||'many')] = [];
+        } else if (datum[join[i]] && prevData[datum[join[i]]]) {
+          // Add non-unique "many" to corresponding "one"
+          prevData[datum[join[i]]][(relation['many-prop']||'many')].push(
+            layerObj['data-parse'] ? parseData(layerObj['data-parse'], datum) : {...datum}
+          );
+        }
+      }
+      return {...prevData};
+    }
 
     // loop through remaining data to basic join with merged data
-    for (let i = 1; i < data.length; i += 1) {
-      if (!data[i] || typeof data[i] === 'string') continue;
-      if (Array.isArray(mergedData) && Array.isArray(data[i])) {
-        mergedData = [...mergedData, ...data[i]];
-      } else if (Array.isArray(mergedData) && Array.isArray(data[i].features)) {
-        mergedData = [...mergedData, ...data[i].features];
-      } else if (mergedData.features && Array.isArray(mergedData.features)) {
-        mergedData.features = [...mergedData.features, ...(data[i].features || data[i])];
+    for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
+      if (!relation || !isManyToOne) {
+        mergedData = basicMerge(mergedData, data[i]);
+      } else if (isManyToOne) {
+        mergedData = manyToOneMerge(i, mergedData, data[i]);
       }
+    }
+
+    if (isManyToOne) {
+      layerObj.joinedData = { ...mergedData };
+      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }))
+        // .filter(jd => jd[(relation['many-prop']||'many')].length) // check for "one"s with joined "many"s
+      ;
     }
 
     // convert to geojson format if necessary
@@ -212,7 +257,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
-    layerObj.mergedData = {...mergedData};
+    layerObj.mergedData = { ...mergedData };
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       generateFilterOptions(layerObj);
     }
