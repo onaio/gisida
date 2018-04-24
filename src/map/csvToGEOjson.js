@@ -10,6 +10,7 @@ export default function csvToGEOjson(spec, data) {
   let properties;
   let datum;
   let prop;
+  const gpsProp = spec['geo-column'];
   const longProp = (spec['geo-columns'] && spec['geo-columns'][0]) || 'Longitude';
   const latProp = (spec['geo-columns'] && spec['geo-columns'][1]) || 'Latitude';
   const parseSpec = spec['data-parse'];
@@ -33,7 +34,9 @@ export default function csvToGEOjson(spec, data) {
       properties,
       geometry: {
         type: featureType,
-        coordinates: [Number(datum[longProp]), Number(datum[latProp])],
+        coordinates: gpsProp && datum[gpsProp] && Array.isArray(datum[gpsProp])
+          ? [datum[gpsProp][1], datum[gpsProp][0]]
+          : [Number(datum[longProp]), Number(datum[latProp])],
       },
     });
   }
