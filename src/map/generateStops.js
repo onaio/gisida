@@ -77,21 +77,15 @@ function getStops(layer) {
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;
   const osmIDs = layer.limit ? rangeID : osmID;
-  const stopDomains = [];
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
         // Check for repeating stop domains
-        // const stopVal = OSMIDsExist ? osmIDs[k] : data[k];
-        // if (stopDomains.includes(stopVal)) {
-        //   console.warn(`Repeating stop domain:, ${stopVal}!`);
-        // }
-        stopDomains.push(OSMIDsExist ? osmIDs[k] : data[k]);
-
-        colorsStops.push([OSMIDsExist ? osmIDs[k] : data[k], getColor(layer.colors, i)]);
-        radiusStops.push([OSMIDsExist ? osmIDs[k] : data[k], (Number(radius[i]))]);
+        const stopValue = OSMIDsExist ? osmIDs[k] : data[k];
+        colorsStops.push([stopValue, getColor(layer.colors, i)]);
+        radiusStops.push([stopValue, (Number(radius[i]))]);
         break;
       }
     }
