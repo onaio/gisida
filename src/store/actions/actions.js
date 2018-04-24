@@ -33,6 +33,13 @@ export const addLayer = (mapId, layer) => ({
   mapId,
 });
 
+export const addLayerGroup = (mapId, groupId, group) => ({
+  type: types.ADD_LAYER_GROUP,
+  mapId,
+  groupId,
+  group,
+});
+
 export const changeRegion = (mapId, region) => ({
   type: types.CHANGE_REGION,
   region,
@@ -140,6 +147,7 @@ export default {
   mapRendered,
   mapLoaded,
   addLayer,
+  addLayerGroup,
   reloadLayers,
   toggleLayer,
   toggleFilter,

@@ -71,6 +71,10 @@ describe('reducers.APP', () => {
         style: '',
         zoom: 5,
       },
+      LAYERS: {
+        layers: [],
+        groups: {},
+      },
     };
     expect(reducers.APP(defaultState, action)).toEqual(state);
   });
