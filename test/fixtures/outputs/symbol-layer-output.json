@@ -28959,6 +28959,7 @@
       ],
       "icon-image": "hospital-11",
       "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
       "text-transform": "uppercase"
     },
     "paint": {

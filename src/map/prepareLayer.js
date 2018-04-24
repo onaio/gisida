@@ -19,7 +19,7 @@ import buildTimeseriesData from './buildTimeseriesData';
 export function buildLabels(layerObj, tsLayerObj, period) {
   const labels = [];
   const layerData = typeof tsLayerObj !== 'undefined'
-    ? tsLayerObj.periodData[period].data
+    ? [...tsLayerObj.periodData[period].data]
     : [...layerObj.source.data];
   const {
     coordinates, join, label, labelData,
