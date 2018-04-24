@@ -6,13 +6,17 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   let data = formData;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
-  const matchingValues = aggregateOptions['filter-values'];
+  const matchingValues = aggregateOptions['matching-values'];
+  const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
-  // Filter data where survey_intro / consent = 1(Yes)
-  data = data.filter(datum => datum['survey_intro/consent'] === '1');
+  if (includeRows) {
+    includeRows.forEach(([field, values]) => {
+      data = data.filter(datum => values.includes(datum[field]));
+    });
+  }
 
   // Add week number to data
   data = data.map((datum) => {
@@ -83,6 +87,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     for (let j = 0; j < availableGroups.length; j += 1) {
       let prevRowsCount = 0;
       let prevTotal = 0;
+      let prevSumTotal = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
       // Get group data from previous period
       const previousPeriodGroupData =
@@ -90,21 +95,35 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       if (isCumulative &&
         previousPeriodGroupData.length > 0) {
         prevRowsCount = previousPeriodGroupData[previousPeriodGroupData.length - 1]['value-count'] || 0;
+        prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
+          || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
       }
+      let sumTotal = 0;
+      let matchingRows = 0;
 
-      // Count rows that match the values list for the indicator field
-      const matchingRows = groupData.filter(datum =>
-        matchingValues.includes(datum[indicatorField]));
+      if (aggregateOptions.type === 'count') {
+        // Count rows that match the values list for the indicator field
+        matchingRows = groupData.filter(datum =>
+          matchingValues.includes(datum[indicatorField]));
+      } else if (aggregateOptions.type === 'sum') {
+        for (let x = 1; x < groupData.length; x += 1) {
+          sumTotal += parseInt(groupData[x][indicatorField] || 0, 10) + prevSumTotal;
+        }
+      }
       const matchingRowsCount = matchingRows.length + prevRowsCount;
       // Get the total number of rows for the group
       const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
-      const percentage = (matchingRowsCount / groupTotal) * 100;
+      const percentage = ((matchingRowsCount / groupTotal) * 100).toFixed(0);
       // Push aggregated group values to currentPeriodaggregatedData array
+
+      // Final aggregated indicator value for  group
+      const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
+
       currentPeriodaggregatedData.push({
         [groupByField]: availableGroups[j],
-        [indicatorField]: percentage.toFixed(0),
+        [indicatorField]: indicatorValue,
         period: currentPeriod,
         'value-count': matchingRowsCount,
         total: groupTotal,
