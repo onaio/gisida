@@ -129,8 +129,9 @@ export const updateTimeseries = (mapId, timeseries) => ({
   mapId,
 });
 
-export const detailView = payload => ({
+export const detailView = (mapId, payload) => ({
   type: types.DETAIL_VIEW,
+  mapId,
   payload,
 });
 
