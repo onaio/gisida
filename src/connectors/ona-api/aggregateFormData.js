@@ -7,18 +7,16 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
   const matchingValues = aggregateOptions['matching-values'];
+  const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
-  // Filter data where survey_intro / consent = 1(Yes)
-  data = data.filter((datum) => {
-    // TODO: move this filter to mapspec
-    const consent = datum['survey_intro/consent'];
-    if (consent) {
-      return consent === '1';
-    } return true;
-  });
+  if (includeRows) {
+    includeRows.forEach(([field, values]) => {
+      data = data.filter(datum => values.includes(datum[field]));
+    });
+  }
 
   // Add week number to data
   data = data.map((datum) => {
