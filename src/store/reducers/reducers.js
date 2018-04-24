@@ -361,7 +361,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             showSpinner: action.isLoaded,
-          }
+          };
         }
         default:
           return state;

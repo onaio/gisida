@@ -158,6 +158,15 @@ describe('actions', () => {
     expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
   });
 
+  test('should create an action to turn off spinner', () => {
+    const isLoaded = false;
+    const expectedAction = {
+      type: types.TRIGGER_SPINNER,
+      isLoaded,
+      mapId,
+    };
+    expect(actions.triggerSpinner(mapId, isLoaded)).toEqual(expectedAction);
+  });
 
   test('should return function to get current state', () => {
     const expectedAction = actions.returnState;
