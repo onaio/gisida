@@ -4,13 +4,16 @@ const endpoint = 'api/v1/data';
 
 
 function formatParams(params) {
+  if (!params) {
+    return '';
+  }
   const paramsList = Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`);
   return `?${paramsList.join('&')}`;
 }
 
 export default function getData(formID, properties, accessToken, callback) {
-  const fields = properties.map(p => `"${p}"`).join();
-  const queryParams = { fields: `[${fields}]` };
+  const fields = properties && properties.map(p => `"${p}"`).join();
+  const queryParams = fields && { fields: `[${fields}]` };
   const xobj = new XMLHttpRequest();
   const mimeType = 'application/json';
   const path = `${protocol}://${host}/${endpoint}/${formID}.json${formatParams(queryParams)}`;
