@@ -184,9 +184,35 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       q = q.defer(getData, filePath, layerObj.properties, currentState.APP.apiAccessToken);
     } else q = q.defer(d3.csv, filePath);
   });
+
   q.awaitAll((error, data) => {
-    const mergedData = [].concat(...data);
-    layerObj.mergedData = mergedData;
+    let mergedData = Array.isArray(data[0])
+      ? [...data[0]]
+      : {...data[0]};
+
+    // loop through remaining data to basic join with merged data
+    for (let i = 1; i < data.length; i += 1) {
+      if (!data[i] || typeof data[i] === 'string') continue;
+      if (Array.isArray(mergedData) && Array.isArray(data[i])) {
+        mergedData = [...mergedData, ...data[i]];
+      } else if (Array.isArray(mergedData) && Array.isArray(data[i].features)) {
+        mergedData = [...mergedData, ...data[i].features];
+      } else if (mergedData.features && Array.isArray(mergedData.features)) {
+        mergedData.features = [...mergedData.features, ...(data[i].features || data[i])];
+      }
+    }
+
+    // convert to geojson format if necessary
+    if (layerObj.source.type === 'geojson' && !mergedData.features) {
+      mergedData = csvToGEOjson(layerObj, mergedData);
+    } else if (layerObj['data-parse']) {
+      // parse data if necessary
+      mergedData = mergedData.features && layerObj.source.type === 'geojson'
+        ? mergedData.features = parseData(layerObj['data-parse'], mergedData.features)
+        : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
+    }
+
+    layerObj.mergedData = {...mergedData};
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       generateFilterOptions(layerObj);
     }
