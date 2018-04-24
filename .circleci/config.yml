@@ -14,5 +14,20 @@
            command: npm run lint
        - run: 
            name: Run jest
-           command: npm test
+           command: npm test  
+    publish:
+      docker:
+        - image: circleci/<language>:<version TAG>
+      steps:
+        - checkout
+        - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        - run: npm publish
+workflows:
+  version: 2
+  tagged-build:
+    jobs:
+      - publish:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
   
