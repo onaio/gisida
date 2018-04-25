@@ -250,6 +250,8 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };
       mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }));
+        // .filter(jd => jd.reports.length);
+
     }
 
     // convert to geojson format if necessary
