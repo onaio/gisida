@@ -258,7 +258,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
 
     layerObj.mergedData = { ...mergedData };
     if (layerObj.aggregate && layerObj.aggregate.filter) {
-      generateFilterOptions(layerObj);
+      layerObj.filterOptions = generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
