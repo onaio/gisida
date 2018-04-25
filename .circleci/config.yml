@@ -30,6 +30,8 @@ workflows:
     jobs:
       - build
       - publish:
+          requires:
+            - build
           filters:
             branches:
               only: /[0-9]+(\.[0-9]+)*/
