@@ -217,7 +217,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       let datum;
       for (let d = 0; d < nextData.length; d += 1) {
         datum = nextData[d];
-        if (i < relation.uniques && datum[join[i]]) {
+        if (relation.key[i] === "one" && datum[join[i]] && prevData[datum[join[i]]]) {
+          // Merge unique "one" properties from and datum onto prevData[oneId]
+          prevData[datum[join[i]]] = {
+            ...prevData[datum[join[i]]],
+            ...datum,
+          };
+        } else if (relation.key[i] === "one" && datum[join[i]]) {
           // Add unique "one"s to mergedData
           prevData[datum[join[i]]] = { ...datum };
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
