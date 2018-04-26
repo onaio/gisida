@@ -257,6 +257,7 @@ export function createMapReducer(mapId) {
         case types.TOGGLE_FILTER: {
           return {
             ...state,
+            detailView: null,
             showFilterPanel: !state.showFilterPanel,
           };
         }
