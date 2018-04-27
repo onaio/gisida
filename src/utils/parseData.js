@@ -72,6 +72,9 @@ export default function parseData(spec, datum) {
           return propSpec.key[splitVal[v]];
         }
       }
+
+      // if above loop doesn't find match, return prop value
+      return propSpec.key[itemProp];
     }
     // if all else fails, simply return the itemProp
     return itemProp;
