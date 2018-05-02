@@ -4,7 +4,7 @@ import { saveFilterState } from '../store/actions/actions';
 // to be used in conjunction with initial layerObj.filterOptions to regenerate filters
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
-export default function buildFilterState(filterOptions, filters, layerId, dispatch) {
+export default function buildFilterState(mapId, filterOptions, filters, layerId, dispatch) {
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -48,6 +48,11 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
       }
     // } else if (dataType === 'quantitative') {
     //   aggregate['accepted-filter-values'][f] = filter.isFiltered ?
+    } else if (filter.dataType === 'quantitative') {
+      aggregate['accepted-filter-values'][f] = filter.queriedOptionKeys
+        && filter.queriedOptionKeys.length !== [...new Set(filter.options)].length
+        ? filter.queriedOptionKeys
+        : 'quant';
     } else if (!filter.isFiltered) {
       // if (filters[filterKey].isOriginal) {
       aggregate['accepted-filter-values'][f] = filter.dataType === 'ordinal' ? 'all' : 'quant';
@@ -61,5 +66,5 @@ export default function buildFilterState(filterOptions, filters, layerId, dispat
     isFiltered: true,
   };
 
-  dispatch(saveFilterState(layerId, filterState));
+  dispatch(saveFilterState(mapId, layerId, filterState));
 }

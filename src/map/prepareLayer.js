@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import csvToGEOjson from './csvToGEOjson';
-import aggregateData from './../utils/aggregateData';
-import fetchFormData from './../utils/fetchFormData';
+import aggregateFormData from '../connectors/ona-api/aggregateFormData';
+import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
@@ -19,7 +19,7 @@ import buildTimeseriesData from './buildTimeseriesData';
 export function buildLabels(layerObj, tsLayerObj, period) {
   const labels = [];
   const layerData = typeof tsLayerObj !== 'undefined'
-    ? tsLayerObj.periodData[period].data
+    ? [...tsLayerObj.periodData[period].data]
     : [...layerObj.source.data];
   const {
     coordinates, join, label, labelData,
@@ -49,18 +49,17 @@ export function buildLabels(layerObj, tsLayerObj, period) {
   return labels;
 }
 
-
 /**
  * Dispaches actions indicating layer is ready to render
  * @param {*} layer
  * @param {*} dispatch
  */
-function renderData(layer, dispatch) {
+function renderData(mapId, layer, dispatch) {
   let layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { mapConfig } = currentState.APP;
-  const { timeseries } = currentState.MAP;
-  let { layers } = currentState.MAP;
+  const { timeseries } = currentState[mapId];
+  let { layers } = currentState[mapId];
 
   // Generate Mapbox StyleSpec
   layerObj = addLayer(layerObj, mapConfig);
@@ -100,7 +99,7 @@ function renderData(layer, dispatch) {
 
   // Check if layer has labels and add before dispatch
   if (!layerObj.labels) {
-    dispatch(receiveData(layerObj, newTimeSeries));
+    dispatch(receiveData(mapId, layerObj, newTimeSeries));
   } else if (!layerObj.labels.labelData) {
     // Load labels from CSV
     loadCSV(layerObj.labels.data, (labelData) => {
@@ -118,14 +117,13 @@ function renderData(layer, dispatch) {
         });
       }
 
-      dispatch(receiveData(layerObj, newTimeSeries));
+      dispatch(receiveData(mapId, layerObj, newTimeSeries));
     });
   } else {
     layerObj.labels.labels = buildLabels(layerObj);
-    dispatch(receiveData(layerObj, newTimeSeries));
+    dispatch(receiveData(mapId, layerObj, newTimeSeries));
   }
 }
-
 
 /**
  * Loads layer data from CSV or GeoJSON source
@@ -133,7 +131,7 @@ function renderData(layer, dispatch) {
  * @param {*} source
  * @param {*} dispatch
  */
-function readData(layer, dispatch) {
+function readData(mapId, layer, dispatch) {
   const layerObj = { ...layer };
   const sourceURL = layer.source.data;
   const fileType = sourceURL.split('.').pop();
@@ -152,7 +150,7 @@ function readData(layer, dispatch) {
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
-      renderData(layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch);
     });
   }
   if (fileType === 'geojson') {
@@ -165,35 +163,116 @@ function readData(layer, dispatch) {
       } else {
         layerObj.source.data = data;
       }
-      renderData(layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch);
     });
   }
 }
+
 /**
  * Loads layer data from multiple CSV or GeoJSON files
  * @param {*} layer
  * @param {*} dispatch
  */
-function fetchMultipleSources(layer, dispatch) {
+function fetchMultipleSources(mapId, layer, dispatch) {
   const layerObj = { ...layer };
+  const currentState = dispatch(getCurrentState());
   let q = d3.queue();
 
   const filePaths = layerObj.source.data;
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
-      q = q.defer(fetchFormData, filePath, layerObj.properties);
+      q = q.defer(getData, filePath, layerObj.properties, currentState.APP.apiAccessToken);
     } else q = q.defer(d3.csv, filePath);
   });
+
   q.awaitAll((error, data) => {
-    const mergedData = [].concat(...data);
-    layerObj.mergedData = mergedData;
+    const { join, relation } = layerObj.source;
+    const isManyToOne = relation && relation.type === 'many-to-one';
+
+    let mergedData = isManyToOne
+      ? {}
+      : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
+
+    // Helper func for combining arrays of data
+    function basicMerge(i, prevData, nextData) {
+      if (!nextData || typeof nextData === 'string') {
+        return { ...prevData };
+      } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
+        return [...prevData, ...data[i]];
+      } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
+        return [...prevData, ...data[i].features];
+      } else if (prevData.features && Array.isArray(prevData.features)) {
+        return {
+          ...prevData,
+          features: [...prevData.features, ...(data[i].features || data[i])],
+        };
+      }
+      return { ...prevData };
+    }
+
+    // Helper func for joining "manys" to "ones"
+    function manyToOneMerge(i, PrevData, NextData) {
+      const prevData = PrevData;
+      const nextData = NextData.features || NextData;
+      let datum;
+      for (let d = 0; d < nextData.length; d += 1) {
+        datum = nextData[d];
+        if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
+          // Merge unique "one" properties from and datum onto prevData[oneId]
+          prevData[datum[join[i]]] = {
+            ...prevData[datum[join[i]]],
+            ...datum,
+          };
+        } else if (relation.key[i] === 'one' && datum[join[i]]) {
+          // Add unique "one"s to mergedData
+          prevData[datum[join[i]]] = { ...datum };
+          prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
+        } else if (datum[join[i]] && prevData[datum[join[i]]]) {
+          // Add non-unique "many" to corresponding "one"
+          datum = layerObj['data-parse']
+            ? parseData(layerObj['data-parse'], datum)
+            : { ...datum };
+          prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
+        }
+      }
+      return { ...prevData };
+    }
+
+    // loop through remaining data to basic join with merged data
+    for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
+      if (!relation || !isManyToOne) {
+        mergedData = basicMerge(i, mergedData, data[i]);
+      } else if (isManyToOne) {
+        mergedData = manyToOneMerge(i, mergedData, data[i]);
+      }
+    }
+
+    if (isManyToOne) {
+      layerObj.joinedData = { ...mergedData };
+      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }));
+      // .filter(jd => jd.reports.length);
+    }
+
+    // convert to geojson format if necessary
+    if (layerObj.source.type === 'geojson' && !mergedData.features) {
+      mergedData = csvToGEOjson(layerObj, mergedData);
+    } else if (layerObj['data-parse']) {
+      // parse data if necessary
+      mergedData = mergedData.features && layerObj.source.type === 'geojson'
+        ? mergedData.features = parseData(layerObj['data-parse'], mergedData.features)
+        : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
+    }
+
+    layerObj.mergedData = Array.isArray(mergedData)
+      ? [...mergedData]
+      : { ...mergedData };
     if (layerObj.aggregate && layerObj.aggregate.filter) {
-      generateFilterOptions(layerObj);
+      layerObj.filterOptions = generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
-      aggregateData(layerObj, this.props.locations) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
-    renderData(layerObj, dispatch);
+    renderData(mapId, layerObj, dispatch);
   });
 }
 
@@ -203,10 +282,10 @@ function fetchMultipleSources(layer, dispatch) {
  * @param {*} dispatch
  * @param {*} filterOptions
  */
-export default function prepareLayer(layer, dispatch, filterOptions = false) {
+export default function prepareLayer(mapId, layer, dispatch, filterOptions = false) {
   const layerObj = { ...layer };
   // Sets state to loading;
-  dispatch(requestData(layerObj.id));
+  dispatch(requestData(mapId, layerObj.id));
 
   // // add to active layers?
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
@@ -215,35 +294,32 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
   if (layerObj.source) {
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
-      readData(layerObj, dispatch);
+      readData(mapId, layerObj, dispatch);
     } else
     // grab from multiple sources
     if (layerObj.source.data instanceof Array &&
       !(layerObj.source.data[0] instanceof Object) &&
       layerObj.source.data.length >= 1 &&
       !layerObj.loaded) {
-      fetchMultipleSources(layerObj, dispatch);
+      fetchMultipleSources(mapId, layerObj, dispatch);
     } else
     // TODO: remove or refactor
     // only filter option
     if (filterOptions) {
+      const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
-          aggregateData(layerObj, this.props.locations, filterOptions) :
+          aggregateFormData(layerObj, currentState.locations, filterOptions) :
           processFilters(layerObj, filterOptions);
-      renderData(layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch);
     } else {
-      renderData(layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch);
     }
   } else if (layerObj.layers) {
-    // TODO: fix for grouped layers
-    // if layer has sublayers, add all sublayers
-    // self.addLegend(layerSpec);
-
     const currentState = dispatch(getCurrentState());
 
     layerObj.layers.forEach((sublayer) => {
-      const subLayer = currentState.MAP.layers[sublayer];
+      const subLayer = currentState[mapId].layers[sublayer];
 
       if (layerObj.aggregate) {
         subLayer.aggregate = layerObj.aggregate;
@@ -252,11 +328,11 @@ export default function prepareLayer(layer, dispatch, filterOptions = false) {
       subLayer.id = sublayer;
       subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
-        readData(subLayer, dispatch);
+        readData(mapId, subLayer, dispatch);
       } else {
-        renderData(subLayer, dispatch);
+        renderData(mapId, subLayer, dispatch);
       }
     });
-    renderData(layerObj, dispatch);
+    renderData(mapId, layerObj, dispatch);
   }
 }

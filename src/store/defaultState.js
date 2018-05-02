@@ -33,6 +33,8 @@ const defaultState = {
     currentStyle: '',
     currentRegion: '',
     layers: {},
+    defaultLayers: [],
+    showSpinner: false,
     timeseries: {
       visibility: false,
     },
@@ -55,6 +57,10 @@ const defaultState = {
     primaryLayer: '',
   },
   FILTER: {},
+  LAYERS: {
+    layers: [],
+    groups: {},
+  },
 };
 
 export default defaultState;

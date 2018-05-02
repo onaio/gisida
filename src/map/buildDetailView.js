@@ -109,9 +109,9 @@ const buildParsedBasicDetailItem = (detail, properties) => {
   };
 };
 
-export default (LayerObj, FeatureProperties, dispatch) => {
+export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   if (!LayerObj && !FeatureProperties) {
-    dispatch(detailView(null));
+    dispatch(detailView(mapId, null));
     return false;
   }
 
@@ -145,6 +145,6 @@ export default (LayerObj, FeatureProperties, dispatch) => {
     detailSpec: layerObj['detail-view'],
   };
 
-  dispatch(detailView(payload));
+  dispatch(detailView(mapId, payload));
   return true;
 };

@@ -41,6 +41,9 @@ describe('reducers.APP', () => {
           isLoaded: false,
           isRendered: false,
           layers: {},
+          defaultLayers: [],
+          showSpinner: false,
+          mapId: 'map-1',
           primaryLayer: '',
           reloadLayers: false,
           showFilterPanel: false,
@@ -68,6 +71,10 @@ describe('reducers.APP', () => {
         container: 'map',
         style: '',
         zoom: 5,
+      },
+      LAYERS: {
+        layers: [],
+        groups: {},
       },
     };
     expect(reducers.APP(defaultState, action)).toEqual(state);
