@@ -263,7 +263,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
-    layerObj.mergedData = { ...mergedData };
+    layerObj.mergedData = Array.isArray(mergedData)
+      ? [...mergedData]
+      : { ...mergedData };
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
