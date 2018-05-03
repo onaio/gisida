@@ -186,25 +186,33 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   });
 
   q.awaitAll((error, data) => {
-    const { join, relation } = layerObj.source;
+    const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
+    const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
       ? {}
       : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
+
+    // Filter base data for missing join properties
+    if (Array.isArray(mergedData)) {
+      mergedData = mergedData.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+    } else if (Array.isArray(mergedData.features)) {
+      mergedData.features = mergedData.features.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+    }
 
     // Helper func for combining arrays of data
     function basicMerge(i, prevData, nextData) {
       if (!nextData || typeof nextData === 'string') {
         return { ...prevData };
       } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
-        return [...prevData, ...data[i]];
+        return [...prevData, ...data[i].filter(d => typeof d[join[i]] !== 'undefined')];
       } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
-        return [...prevData, ...data[i].features];
+        return [...prevData, ...data[i].features.filter(d => typeof d[join[i]] !== 'undefined')];
       } else if (prevData.features && Array.isArray(prevData.features)) {
         return {
           ...prevData,
-          features: [...prevData.features, ...(data[i].features || data[i])],
+          features: [...prevData.features, ...(data[i].features || data[i]).filter(d => typeof d[join[i]] !== 'undefined')],
         };
       }
       return { ...prevData };

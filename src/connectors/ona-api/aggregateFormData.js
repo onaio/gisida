@@ -111,7 +111,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
           sumTotal += parseInt(groupData[x][indicatorField] || 0, 10) + prevSumTotal;
         }
       }
-      const matchingRowsCount = matchingRows.length + prevRowsCount;
+      const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
       // Get the total number of rows for the group
       const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
