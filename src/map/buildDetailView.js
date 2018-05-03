@@ -116,7 +116,16 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   }
 
   const layerObj = { ...LayerObj };
-  const featureProperties = { ...FeatureProperties };
+  let featureProperties = { ...FeatureProperties };
+  // todo pass data through Aggregated Data functionality to find in layerObj.Data
+  const featureDatum = layerObj.mergedData.find(d =>
+    d[layerObj.source.join[1]] === featureProperties[layerObj.source.join[0]]);
+  if (featureDatum) {
+    featureProperties = {
+      ...featureProperties,
+      ...featureDatum,
+    };
+  }
   const {
     UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
   } = layerObj['detail-view'];
