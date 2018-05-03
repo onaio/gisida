@@ -188,6 +188,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   q.awaitAll((error, data) => {
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
+    const isOneToMany = relation && relation.type === 'one-to-many';
     const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
@@ -246,12 +247,36 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return { ...prevData };
     }
 
+    function oneToManyMerge(i, PrevData, NextData) {
+      let prevData = PrevData;
+      const nextData = NextData;
+      const j = relation.key.indexOf('many'); // first instance of 'many'
+      let datum;
+
+      const prevDataMap = pd => (pd[join[j]] === datum[join[i]] ? { ...pd, ...datum } : pd);
+      // loop through all next data
+      for (let d = 0; d < nextData.length; d += 1) {
+        datum = nextData[d].properties || nextData[d];
+        // if nextData is another many, add it to the prev data array
+        if (relation.key[i] === 'many' && datum[join[i]] && Array.isArray(prevData)) {
+          prevData = [...prevData, ...(nextData.features || nextData)];
+        // if nextData is one, map it to existing manys in prevData
+        } else if (relation.key[i] === 'one' && datum[join[i]] && Array.isArray(prevData)) {
+          prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;
+        }
+      }
+      return Array.isArray(prevData) ? [...prevData] : { ...prevData };
+    }
+
     // loop through remaining data to basic join with merged data
-    for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
-      if (!relation || !isManyToOne) {
+    let i = isManyToOne ? 0 : 1;
+    for (i; i < data.length; i += 1) {
+      if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        mergedData = manyToOneMerge(i, mergedData, data[i]);
+        mergedData = manyToOneMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      } else if (isOneToMany) {
+        mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
       }
     }
 
