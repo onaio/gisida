@@ -1,5 +1,5 @@
 import parseMustache from '../utils/parseMustache';
-import { detailView } from '../store/actions/actions';
+import { detailView, getCurrentState } from '../store/actions/actions';
 
 const parseDetailValue = (spec, datum) => {
   // 1) protect against empty strings, nulls, and undefineds
@@ -118,8 +118,15 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   const layerObj = { ...LayerObj };
   let featureProperties = { ...FeatureProperties };
   // todo pass data through Aggregated Data functionality to find in layerObj.Data
-  const featureDatum = layerObj.mergedData.find(d =>
+
+  const currentState = dispatch(getCurrentState());
+  // check for timeseries data, otherwise use merged data
+  const featureData = (currentState[mapId].timeseries[layerObj.id]
+    && currentState[mapId].timeseries[layerObj.id].data) || mergedData;
+  // find data from timeseries data or mergedData
+  const featureDatum = featureData.find(d =>
     d[layerObj.source.join[1]] === featureProperties[layerObj.source.join[0]]);
+
   if (featureDatum) {
     featureProperties = {
       ...featureProperties,
