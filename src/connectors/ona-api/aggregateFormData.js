@@ -8,7 +8,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const groupByField = aggregateOptions['group-by'];
   const matchingValues = aggregateOptions['matching-values'];
   const includeRows = aggregateOptions['include-rows'];
-  const submissionDateField = 'today';
+  const submissionDateField = aggregateOptions['date-by'] || 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
 
@@ -37,10 +37,20 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       }
       i += 1;
     } while (!week || Number.isNaN(week));
-    return { ...datum, period: [year, month, weekMonth] };
+    return {
+      ...datum,
+      period: [year, month, weekMonth],
+      [submissionDateField]: datum[submissionDateField]
+    };
   });
   // Group data by period property
   data = groupBy(data, 'period');
+  // Preserve disaggregated values
+  const disaggregatedDates = {};
+  Object.keys(data).forEach(p => {
+    disaggregatedDates[p] = [...new Set(data[p].map(d => d[submissionDateField]))]
+      .sort((a, b) => (Date.parse(a)) - (Date.parse(b)));
+  });
   let currentPeriod;
   let aggregatedData = [];
   let currentPeriodaggregatedData = [];
@@ -128,6 +138,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         'value-count': matchingRowsCount,
         total: groupTotal,
         weekYear: availablePeriods[i],
+        disaggregatedDates: disaggregatedDates[availablePeriods[i]]
       });
     }
     let previousGroups = [];
