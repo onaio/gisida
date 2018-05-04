@@ -41,6 +41,23 @@ export default function buildTimeseriesData(
     periodData[p] = {
       data: layerObj.source.data.filter(d => d[layerObj.aggregate.timeseries.field] === p),
     };
+
+    // if data has been aggregated, add latest disaggregated datum properties per period
+    if (layerObj.aggregate.type) {
+      const dateBy = layer.aggregate['date-by'] || 'today';
+      periodData[p].data = periodData[p].data.map(d => {
+        // define disaggregated data from group-by and date-by properties
+        const disaggregatedDatum = layerObj.mergedData.filter(m =>
+          d[layerObj.aggregate['group-by']] === m[layerObj.aggregate['group-by']]
+          && d.disaggregatedDates.includes(m[dateBy])
+        );
+        if (!disaggregatedDatum.length) {
+          return d;
+        }
+        // merge aggregated data props onto latest disaggregatedDatum
+        return { ...disaggregatedDatum[disaggregatedDatum.length - 1], ...d };
+      });
+    }
     // determine if period data has any non-zero values
     periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));
   };
