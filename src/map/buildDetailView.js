@@ -122,7 +122,8 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   const currentState = dispatch(getCurrentState());
   // check for timeseries data, otherwise use merged data
   const featureData = (currentState[mapId].timeseries[layerObj.id]
-    && currentState[mapId].timeseries[layerObj.id].data) || mergedData;
+    && currentState[mapId].timeseries[layerObj.id].data)
+    || layerObj.mergedData.features || layerObj.mergedData;
   // find data from timeseries data or mergedData
   const featureDatum = featureData.find(d =>
     d[layerObj.source.join[1]] === featureProperties[layerObj.source.join[0]]);
