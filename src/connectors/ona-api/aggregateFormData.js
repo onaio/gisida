@@ -40,14 +40,14 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     return {
       ...datum,
       period: [year, month, weekMonth],
-      [submissionDateField]: datum[submissionDateField]
+      [submissionDateField]: datum[submissionDateField],
     };
   });
   // Group data by period property
   data = groupBy(data, 'period');
   // Preserve disaggregated values
   const disaggregatedDates = {};
-  Object.keys(data).forEach(p => {
+  Object.keys(data).forEach((p) => {
     disaggregatedDates[p] = [...new Set(data[p].map(d => d[submissionDateField]))]
       .sort((a, b) => (Date.parse(a)) - (Date.parse(b)));
   });
@@ -138,7 +138,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         'value-count': matchingRowsCount,
         total: groupTotal,
         weekYear: availablePeriods[i],
-        disaggregatedDates: disaggregatedDates[availablePeriods[i]]
+        disaggregatedDates: disaggregatedDates[availablePeriods[i]],
       });
     }
     let previousGroups = [];

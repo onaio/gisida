@@ -45,12 +45,11 @@ export default function buildTimeseriesData(
     // if data has been aggregated, add latest disaggregated datum properties per period
     if (layerObj.aggregate.type) {
       const dateBy = layer.aggregate['date-by'] || 'today';
-      periodData[p].data = periodData[p].data.map(d => {
+      periodData[p].data = periodData[p].data.map((d) => {
         // define disaggregated data from group-by and date-by properties
         const disaggregatedDatum = layerObj.mergedData.filter(m =>
           d[layerObj.aggregate['group-by']] === m[layerObj.aggregate['group-by']]
-          && d.disaggregatedDates.includes(m[dateBy])
-        );
+          && d.disaggregatedDates.includes(m[dateBy]));
         if (!disaggregatedDatum.length) {
           return d;
         }
