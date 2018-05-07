@@ -148,6 +148,10 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     parsedBasicInfo: [],
   };
 
+  if (layerObj.joinedData && layerObj.joinedData[featureProperties[UID]]) {
+    detailViewModel.joinedDatum = { ...layerObj.joinedData[featureProperties[UID]] };
+  }
+
   let parsedDetail;
   if (basicInfo) {
     for (let i = 0; i < basicInfo.length; i += 1) {
