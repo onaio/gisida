@@ -351,7 +351,7 @@ export function createMapReducer(mapId) {
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
-            showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded
+            showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
           };
         }
         case types.UPDATE_TIMESERIES: {
