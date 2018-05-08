@@ -356,6 +356,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             timeseries: action.timeseries,
+            reloadLayers: Math.random(),
           };
         }
         case types.TRIGGER_SPINNER: {
