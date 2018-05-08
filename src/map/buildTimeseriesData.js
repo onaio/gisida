@@ -31,10 +31,9 @@ export default function buildTimeseriesData(
   let radiusStops;
   let breaks;
   let colors;
-  let stops = Stops;
+  let { stops } = Stops;
   let strokeWidthStops;
 
-  const chartDataFilter = d => d[stops.timefield] === period[temporalIndex];
   const periodHasDataReducer = (sum, d) => sum + Number(d[layerProperty]);
   const periodDataFilter = (p) => {
     // define actual period data
@@ -53,13 +52,13 @@ export default function buildTimeseriesData(
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
 
       if (layers[index] && layers[index].visible === true &&
-        layerObj.source.data instanceof Object && stops && layerObj.id === stops.id) {
-        // Determine later stops
+        layerObj.source.data instanceof Object && stops && layerObj.id === Stops.id) {
+        // Determine layer stops
         if (layerObj.type === 'chart') {
-          ({ period } = stops.period);
+          ({ 2: period } = stops);
           colorStops = layerObj.source.data;
         } else {
-          const paintStops = stops.stops;
+          const paintStops = stops;
           const [first, second, third, fourth, fifth, sixth] = paintStops;
           // referenced from http://www.deadcoderising.com/2017-03-28-es6-destructuring-an-elegant-way-of-extracting-data-from-arrays-and-objects-in-javascript/
           colorStops = first;
@@ -73,9 +72,7 @@ export default function buildTimeseriesData(
 
         temporalIndex = period.length - 1;
 
-        if (layerObj.type === 'chart') {
-          data = stops.filter(chartDataFilter);
-        } else if (layerObj.aggregate && layerObj.aggregate.timeseries) {
+        if (layerObj.aggregate && layerObj.aggregate.timeseries) {
           // define period data for each period
           layerProperty = layerObj.property;
           periodData = {};
