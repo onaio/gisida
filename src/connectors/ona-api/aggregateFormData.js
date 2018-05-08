@@ -117,9 +117,12 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         matchingRows = groupData.filter(datum =>
           matchingValues.includes(datum[indicatorField]));
       } else if (aggregateOptions.type === 'sum') {
-        for (let x = 1; x < groupData.length; x += 1) {
-          sumTotal += parseInt(groupData[x][indicatorField] || 0, 10) + prevSumTotal;
+        // reduce sumTotal for current groupData
+        for (let x = 0; x < groupData.length; x += 1) {
+          sumTotal += parseInt(groupData[x][indicatorField] || 0, 10);
         }
+        // add previous sum total value to current sum total (cumulative sum)
+        sumTotal += prevSumTotal;
       }
       const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
       // Get the total number of rows for the group
