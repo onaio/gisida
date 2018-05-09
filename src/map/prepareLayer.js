@@ -341,7 +341,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
 
-    layerObj.source.data = layerObj.aggregate.type ?
+    layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
@@ -380,7 +380,7 @@ export default function prepareLayer(mapId, layer, dispatch, filterOptions = fal
     if (filterOptions) {
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
-        layerObj.aggregate.type ?
+        layerObj.aggregate && layerObj.aggregate.type ?
           aggregateFormData(layerObj, currentState.locations, filterOptions) :
           processFilters(layerObj, filterOptions);
       renderData(mapId, layerObj, dispatch);
