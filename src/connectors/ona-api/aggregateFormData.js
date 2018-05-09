@@ -41,16 +41,12 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       ...datum,
       period: [year, month, weekMonth],
       [submissionDateField]: datum[submissionDateField],
+      [groupByField]: datum[groupByField],
     };
   });
+
   // Group data by period property
   data = groupBy(data, 'period');
-  // Preserve disaggregated values
-  const disaggregatedDates = {};
-  Object.keys(data).forEach((p) => {
-    disaggregatedDates[p] = [...new Set(data[p].map(d => d[submissionDateField]))]
-      .sort((a, b) => (Date.parse(a)) - (Date.parse(b)));
-  });
   let currentPeriod;
   let aggregatedData = [];
   let currentPeriodaggregatedData = [];
@@ -92,26 +88,31 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     const [year, month, weekMonth] = availablePeriods[i].split(',');
     currentPeriod = `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`;
     currentPeriodaggregatedData = [];
+
     // Get data for each group and aggreage the indicator field for each group
     const availableGroups = Object.keys(groupedPeriodData);
+    let previousGroups = [];
+
+    // loop through all groups within available period
     for (let j = 0; j < availableGroups.length; j += 1) {
       let prevRowsCount = 0;
       let prevTotal = 0;
       let prevSumTotal = 0;
+      let sumTotal = 0;
+      let matchingRows = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
+
       // Get group data from previous period
       const previousPeriodGroupData =
         aggregatedData.filter(d => d[groupByField] === availableGroups[j]);
-      if (isCumulative &&
-        previousPeriodGroupData.length > 0) {
+      if (isCumulative && previousPeriodGroupData.length) {
         prevRowsCount = previousPeriodGroupData[previousPeriodGroupData.length - 1]['value-count'] || 0;
         prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
       }
-      let sumTotal = 0;
-      let matchingRows = 0;
 
+      // Handle actual aggregation
       if (aggregateOptions.type === 'count') {
         // Count rows that match the values list for the indicator field
         matchingRows = groupData.filter(datum =>
@@ -124,16 +125,16 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         // add previous sum total value to current sum total (cumulative sum)
         sumTotal += prevSumTotal;
       }
+
       const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
       // Get the total number of rows for the group
       const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
       const percentage = ((matchingRowsCount / groupTotal) * 100).toFixed(0);
-      // Push aggregated group values to currentPeriodaggregatedData array
-
       // Final aggregated indicator value for  group
       const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
 
+      // Push new aggregated period datum while preserving disaggregated data
       currentPeriodaggregatedData.push({
         [groupByField]: availableGroups[j],
         [indicatorField]: indicatorValue,
@@ -141,10 +142,11 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         'value-count': matchingRowsCount,
         total: groupTotal,
         weekYear: availablePeriods[i],
-        disaggregatedDates: disaggregatedDates[availablePeriods[i]],
+        disaggregatedDates: groupData.map(d => d[submissionDateField]),
+        disaggregatedData: [...groupData],
       });
     }
-    let previousGroups = [];
+
     // Add aggregated data from previous group if cumulative
     if (isCumulative) {
       const currentGroupValues = currentPeriodaggregatedData.map(d => d[groupByField]);
@@ -152,9 +154,12 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         previousPeriodaggregatedData.filter(d => !currentGroupValues.includes(d[groupByField]));
       previousGroups = previousGroups.map(replacePeriod(currentPeriod, availablePeriods[i]));
     }
+
+    // Updadate previous / aggregateted arrays
     previousPeriodaggregatedData = [...currentPeriodaggregatedData, ...previousGroups];
     aggregatedData = aggregatedData.concat(previousPeriodaggregatedData);
   }
+
   // filter out groups whose total value are below the required minimum total value
   aggregatedData = aggregatedData.filter(datum => datum.total >= minTotal);
 
