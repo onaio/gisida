@@ -1,6 +1,6 @@
 {
   "name": "gisida",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "A dashboard builder library for map visualizations",
   "keywords": [
     "data visualization",
