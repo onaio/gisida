@@ -185,7 +185,20 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else q = q.defer(d3.csv, filePath);
   });
 
-  q.awaitAll((error, data) => {
+  q.awaitAll((error, Data) => {
+    // parse all data if layer has data parsing spec
+    const data = !layerObj['data-parse']
+      ? [...Data]
+      : Data.map((D) => {
+        if (Array.isArray(D.features)) {
+          return {
+            ...D,
+            features: parseData(layerObj['data-parse'], D.features),
+          };
+        }
+        return parseData(layerObj['data-parse'], D);
+      });
+
     const { relation, type } = layerObj.source;
     let { join } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
@@ -226,9 +239,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const nextData = NextData.features || NextData;
       let datum;
       for (let d = 0; d < nextData.length; d += 1) {
-        datum = layerObj['data-parse']
-          ? parseData(layerObj['data-parse'], (nextData[d].properties || nextData[d]))
-          : (nextData[d].properties || nextData[d]);
+        datum = nextData[d].properties || nextData[d];
 
         if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
@@ -251,16 +262,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
 
     function oneToManyMerge(i, PrevData, NextData) {
       let prevData = PrevData;
-      const nextData = NextData;
+      const nextData = NextData.features || NextData;
       const j = relation.key.indexOf('many'); // first instance of 'many'
       let datum;
 
       const prevDataMap = pd => (pd[join[j]] === datum[join[i]] ? { ...pd, ...datum } : pd);
       // loop through all next data
       for (let d = 0; d < nextData.length; d += 1) {
-        datum = layerObj['data-parse']
-          ? parseData(layerObj['data-parse'], (nextData[d].properties || nextData[d]))
-          : (nextData[d].properties || nextData[d]);
+        datum = nextData[d].properties || nextData[d];
 
         // if nextData is another many, add it to the prev data array
         if (relation.key[i] === 'many' && datum[join[i]] && Array.isArray(prevData)) {
@@ -319,9 +328,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // convert to geojson format if necessary
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
-    } else if (!isOneToMany && !isManyToOne && layerObj['data-parse']) {
-      // parse data if necessary
-      mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
     layerObj.mergedData = Array.isArray(mergedData)
