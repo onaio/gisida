@@ -250,7 +250,7 @@ export default function (layer, mapConfig) {
     };
 
     // add filter
-    if (layer.filter) {
+    if (layer.filter && styleSpec.filters) {
       styleSpec.filters.base = layer.filter;
     }
 

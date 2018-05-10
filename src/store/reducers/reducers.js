@@ -328,6 +328,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             // Update isLoading property
+            showSpinner: true,
             layers: updatedLayers,
           };
         }
@@ -350,12 +351,14 @@ export function createMapReducer(mapId) {
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
+            showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
           };
         }
         case types.UPDATE_TIMESERIES: {
           return {
             ...state,
             timeseries: action.timeseries,
+            reloadLayers: Math.random(),
           };
         }
         case types.TRIGGER_SPINNER: {
