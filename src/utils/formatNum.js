@@ -3,7 +3,7 @@ export default function formatNum(num, decimal) {
   if (Number.isInteger(num) && x > 3) {
     const pow = 10 ** decimal;
     x -= x % 3;
-    return (Math.round((num * pow) / (10 ** x)) / pow) + (' kMGTPE'[x / 3]);
+    return (Math.round((num * pow) / (10 ** x)) / pow) + ' kMGTPE'[x / 3];
   }
   return num;
 }
