@@ -28,8 +28,8 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let year;
       let period;
       let weekMonth;
-      let i = 0;
-      do {
+
+      for (let i = 0; i < possibleDateFormats.length; i += 1) {
         period = moment(datum[submissionDateField], possibleDateFormats[i], true);
         week = period.week();
         year = period.year();
@@ -38,8 +38,11 @@ function processFormData(formData, indicatorField, aggregateOptions) {
           const m = moment().week(week);
           weekMonth = (m.week() - moment(m).startOf('month').week()) + 1;
         }
-        i += 1;
-      } while (!week || Number.isNaN(week));
+        if (week && !Number.isNaN(week)) {
+          break;
+        }
+      }
+
       return {
         ...datum,
         period: [year, month, weekMonth],
