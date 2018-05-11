@@ -10,7 +10,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
-  
+
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
   const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
 
@@ -59,7 +59,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
       return {
         ...datum,
-        ['period-date']: new Date(datumDate),
+        'period-date': new Date(datumDate),
       };
     });
   }
@@ -78,8 +78,8 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
   // Sort periods in chronological order
   function comparator(a, b) {
-    if (a['date']) {
-      return Date.parse(a['date']) - Date.parse(b['date'])
+    if (a.date) {
+      return Date.parse(a.date) - Date.parse(b.date);
     }
     if (a[0] < b[0]) return -1;
     if (a[0] > b[0]) return 1;
