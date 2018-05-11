@@ -10,7 +10,9 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
+  
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
+  const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
 
   if (includeRows) {
     includeRows.forEach(([field, values]) => {
@@ -19,34 +21,50 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   }
 
   // Add week number to data
-  data = data.map((datum) => {
-    let week;
-    let month;
-    let year;
-    let period;
-    let weekMonth;
-    let i = 0;
-    do {
-      period = moment(datum[submissionDateField], possibleDateFormats[i], true);
-      week = period.week();
-      year = period.year();
-      month = period.month();
-      if (!Number.isNaN(week)) {
-        const m = moment().week(week);
-        weekMonth = (m.week() - moment(m).startOf('month').week()) + 1;
-      }
-      i += 1;
-    } while (!week || Number.isNaN(week));
-    return {
-      ...datum,
-      period: [year, month, weekMonth],
-      [submissionDateField]: datum[submissionDateField],
-      [groupByField]: datum[groupByField],
-    };
-  });
+  if (isUsingToday) {
+    data = data.map((datum) => {
+      let week;
+      let month;
+      let year;
+      let period;
+      let weekMonth;
+      let i = 0;
+      do {
+        period = moment(datum[submissionDateField], possibleDateFormats[i], true);
+        week = period.week();
+        year = period.year();
+        month = period.month();
+        if (!Number.isNaN(week)) {
+          const m = moment().week(week);
+          weekMonth = (m.week() - moment(m).startOf('month').week()) + 1;
+        }
+        i += 1;
+      } while (!week || Number.isNaN(week));
+      return {
+        ...datum,
+        period: [year, month, weekMonth],
+        [submissionDateField]: datum[submissionDateField],
+        [groupByField]: datum[groupByField],
+      };
+    });
+  } else if (aggregateOptions['data-parse']) {
+    data = data.map((datum) => {
+      const { split, chunk } = aggregateOptions['date-parse'];
+      const datumDate = split
+        ? datum[submissionDateField].split(split)[chunk]
+        : datum[submissionDateField];
+
+      return {
+        ...datum,
+        ['period-date']: new Date(datumDate),
+      };
+    });
+  }
+
 
   // Group data by period property
-  data = groupBy(data, 'period');
+  data = groupBy(data, isUsingToday ? 'period' : aggregateOptions['date-by']);
+
   let currentPeriod;
   let aggregatedData = [];
   let currentPeriodaggregatedData = [];
@@ -54,8 +72,12 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
   let availablePeriods = Object.keys(data);
 
+
   // Sort periods in chronological order
   function comparator(a, b) {
+    if (a['date']) {
+      return Date.parse(a['date']) - Date.parse(b['date'])
+    }
     if (a[0] < b[0]) return -1;
     if (a[0] > b[0]) return 1;
     if (a[1] < b[1]) return -1;
@@ -65,11 +87,20 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     return 0;
   }
 
-  availablePeriods = availablePeriods.map((p) => {
-    const [y, m, wkm] = p.split(',');
-    return [Number.parseInt(y, 10), Number.parseInt(m, 10), Number.parseInt(wkm, 10)];
-  }).sort(comparator);
-  availablePeriods = availablePeriods.map(p => p.toString());
+  if (isUsingToday) {
+    availablePeriods = availablePeriods
+      .map((p) => {
+        const [y, m, wkm] = p.split(',');
+        return [Number.parseInt(y, 10), Number.parseInt(m, 10), Number.parseInt(wkm, 10)];
+      })
+      .sort(comparator)
+      .map(p => p.toString());
+  } else if (aggregateOptions['date-parse']) {
+    availablePeriods = availablePeriods
+      .map(p => ({ p, date: data[p][0]['period-date'] }))
+      .sort(comparator)
+      .map(p => p.p);
+  }
 
   const replacePeriod = function (period, weekYear) {
     return (d) => {
@@ -86,7 +117,9 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     const periodData = data[availablePeriods[i]];
     const groupedPeriodData = groupBy(periodData, groupByField);
     const [year, month, weekMonth] = availablePeriods[i].split(',');
-    currentPeriod = `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`;
+    currentPeriod = isUsingToday
+      ? `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`
+      : availablePeriods[i];
     currentPeriodaggregatedData = [];
 
     // Get data for each group and aggreage the indicator field for each group
