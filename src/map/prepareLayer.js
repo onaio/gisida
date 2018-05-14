@@ -185,9 +185,24 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else q = q.defer(d3.csv, filePath);
   });
 
-  q.awaitAll((error, data) => {
-    const { join, relation, type } = layerObj.source;
+  q.awaitAll((error, Data) => {
+    // parse all data if layer has data parsing spec
+    const data = !layerObj['data-parse']
+      ? [...Data]
+      : Data.map((D) => {
+        if (Array.isArray(D.features)) {
+          return {
+            ...D,
+            features: parseData(layerObj['data-parse'], D.features),
+          };
+        }
+        return parseData(layerObj['data-parse'], D);
+      });
+
+    const { relation, type } = layerObj.source;
+    let { join } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
+    const isOneToMany = relation && relation.type === 'one-to-many';
     const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
@@ -224,7 +239,8 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const nextData = NextData.features || NextData;
       let datum;
       for (let d = 0; d < nextData.length; d += 1) {
-        datum = nextData[d];
+        datum = nextData[d].properties || nextData[d];
+
         if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
           prevData[datum[join[i]]] = {
@@ -237,21 +253,69 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
         } else if (datum[join[i]] && prevData[datum[join[i]]]) {
           // Add non-unique "many" to corresponding "one"
-          datum = layerObj['data-parse']
-            ? parseData(layerObj['data-parse'], datum)
-            : { ...datum };
+          datum = { ...datum };
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
         }
       }
       return { ...prevData };
     }
 
+    function oneToManyMerge(i, PrevData, NextData) {
+      let prevData = PrevData;
+      const nextData = NextData.features || NextData;
+      const j = relation.key.indexOf('many'); // first instance of 'many'
+      let datum;
+
+      const prevDataMap = pd => (pd[join[j]] === datum[join[i]] ? { ...pd, ...datum } : pd);
+      // loop through all next data
+      for (let d = 0; d < nextData.length; d += 1) {
+        datum = nextData[d].properties || nextData[d];
+
+        // if nextData is another many, add it to the prev data array
+        if (relation.key[i] === 'many' && datum[join[i]] && Array.isArray(prevData)) {
+          prevData = [...prevData, ...(nextData.features || nextData)];
+        // if nextData is one, map it to existing manys in prevData
+        } else if (relation.key[i] === 'one' && datum[join[i]] && Array.isArray(prevData)) {
+          prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;
+        }
+      }
+      return Array.isArray(prevData) ? [...prevData] : { ...prevData };
+    }
+
     // loop through remaining data to basic join with merged data
-    for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
-      if (!relation || !isManyToOne) {
+    let i = isManyToOne ? 0 : 1;
+    for (i; i < data.length; i += 1) {
+      if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        mergedData = manyToOneMerge(i, mergedData, data[i]);
+        mergedData = manyToOneMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      } else if (isOneToMany) {
+        mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      }
+    }
+
+    // join data as many to one relation for detail view
+    // todo - refactor mapspec source to be array of data sources
+    // todo - refactor to save joined data by type (manyToOneData, oneToManyData, etc)
+    let joinedData = isOneToMany ? {} : null;
+    if (isOneToMany) {
+      let joinData = data.map((d, n) => ({
+        data: d,
+        type: relation.key[(isVectorLayer ? n + 1 : n)],
+        join: join[(isVectorLayer ? n + 1 : n)],
+      }))
+        .sort((a, b) => {
+          if (a.type > b.type) return -1;
+          if (b.type > a.type) return 1;
+          return 0;
+        });
+
+      join = joinData.map(d => d.join);
+      relation.key = joinData.map(d => d.type);
+      joinData = joinData.map(d => d.data);
+
+      for (i = 0; i < data.length; i += 1) {
+        joinedData = manyToOneMerge(i, joinedData, joinData[i]);
       }
     }
 
@@ -264,20 +328,20 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // convert to geojson format if necessary
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
-    } else if (layerObj['data-parse']) {
-      // parse data if necessary
-      mergedData = mergedData.features && layerObj.source.type === 'geojson'
-        ? mergedData.features = parseData(layerObj['data-parse'], mergedData.features)
-        : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
     layerObj.mergedData = Array.isArray(mergedData)
       ? [...mergedData]
       : { ...mergedData };
+
+    if (joinedData) {
+      layerObj.joinedData = { ...joinedData };
+    }
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
-    layerObj.source.data = layerObj.aggregate.type ?
+
+    layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
@@ -316,7 +380,7 @@ export default function prepareLayer(mapId, layer, dispatch, filterOptions = fal
     if (filterOptions) {
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
-        layerObj.aggregate.type ?
+        layerObj.aggregate && layerObj.aggregate.type ?
           aggregateFormData(layerObj, currentState.locations, filterOptions) :
           processFilters(layerObj, filterOptions);
       renderData(mapId, layerObj, dispatch);

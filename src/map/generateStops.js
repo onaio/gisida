@@ -107,7 +107,9 @@ function getStops(layer) {
         if (periodProp[m] === uniqPeriods[n]) {
           periodStops[n].push(colorsStops[m]);
           periodRadius[n].push(radiusStops[m]);
-          periodStroke[n].push([radiusStops[m][0], 1]);
+          if (radiusStops[m]) {
+            periodStroke[n].push([radiusStops[m][0], 1]);
+          }
         }
       }
     }

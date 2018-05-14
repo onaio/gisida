@@ -1,5 +1,5 @@
 import parseMustache from '../utils/parseMustache';
-import { detailView } from '../store/actions/actions';
+import { detailView, getCurrentState } from '../store/actions/actions';
 
 const parseDetailValue = (spec, datum) => {
   // 1) protect against empty strings, nulls, and undefineds
@@ -116,7 +116,24 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   }
 
   const layerObj = { ...LayerObj };
-  const featureProperties = { ...FeatureProperties };
+  let featureProperties = { ...FeatureProperties };
+  // todo pass data through Aggregated Data functionality to find in layerObj.Data
+
+  const currentState = dispatch(getCurrentState());
+  // check for timeseries data, otherwise use merged data
+  const featureData = (currentState[mapId].timeseries[layerObj.id]
+    && currentState[mapId].timeseries[layerObj.id].data)
+    || layerObj.mergedData.features || layerObj.mergedData;
+  // find data from timeseries data or mergedData
+  const featureDatum = featureData.find(d =>
+    d[layerObj.source.join[1]] === featureProperties[layerObj.source.join[0]]);
+
+  if (featureDatum) {
+    featureProperties = {
+      ...featureProperties,
+      ...featureDatum,
+    };
+  }
   const {
     UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
   } = layerObj['detail-view'];
@@ -130,6 +147,10 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     basicInfo,
     parsedBasicInfo: [],
   };
+
+  if (layerObj.joinedData && layerObj.joinedData[featureProperties[UID]]) {
+    detailViewModel.joinedDatum = { ...layerObj.joinedData[featureProperties[UID]] };
+  }
 
   let parsedDetail;
   if (basicInfo) {
