@@ -50,7 +50,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         [groupByField]: datum[groupByField],
       };
     });
-  } else if (aggregateOptions['data-parse']) {
+  } else if (aggregateOptions['date-parse']) {
     data = data.map((datum) => {
       const { split, chunk } = aggregateOptions['date-parse'];
       const datumDate = split
