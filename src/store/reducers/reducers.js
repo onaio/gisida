@@ -224,6 +224,9 @@ export function createMapReducer(mapId) {
             activeLayerId: updatedLayers[layerId].visible
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
+            lastLayerSelected:  updatedLayers[layerId].visible
+            ? layerId
+            : activeLayerIds[activeLayerIds.length - 1],
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
@@ -246,6 +249,7 @@ export function createMapReducer(mapId) {
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
+            activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
             filter: {
               ...state.filter,
