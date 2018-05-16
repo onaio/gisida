@@ -217,13 +217,13 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
-
           return {
             ...state,
             // Update visible property
             activeLayerId: updatedLayers[layerId].visible
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
+            lastLayerSelected: activeLayerIds[activeLayerIds.length - 1],
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
@@ -246,8 +246,8 @@ export function createMapReducer(mapId) {
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
-            primaryLayer: action.primaryLayer,
             activeLayerId: action.primaryLayer,
+            primaryLayer: action.primaryLayer,
             filter: {
               ...state.filter,
               layerId: primaryLayerHasFilter ? action.primaryLayer : false,
