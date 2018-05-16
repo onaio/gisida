@@ -251,6 +251,7 @@ export function createMapReducer(mapId) {
             ...state,
             activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
+            activeLayerId: action.primaryLayer,
             filter: {
               ...state.filter,
               layerId: primaryLayerHasFilter ? action.primaryLayer : false,
