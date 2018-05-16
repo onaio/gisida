@@ -66,7 +66,6 @@ function drawDoughnutChart(container, data, dimension) {
 }
 
 export default function addChart(layer, data, map, mapId) {
-  console.log('mapid', mapId);
   const population = data.map(d => d[layer.categories.total]);
   const clusters = ckmeans(population, layer.categories.clusters);
 

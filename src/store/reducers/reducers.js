@@ -217,7 +217,7 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
-
+          console.log("layer id", layerId);
           return {
             ...state,
             // Update visible property
