@@ -54,6 +54,7 @@ const defaultState = {
     showProfile: false,
     showFilterPanel: false,
     activeLayerId: '',
+    lastLayerSelected: '',
     primaryLayer: '',
   },
   FILTER: {},

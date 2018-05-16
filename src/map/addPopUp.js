@@ -31,7 +31,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     });
 
     // Remove pop up if no features under mouse pointer
-    if (!features || !features.length > 0) {
+    if (!features || !features.length > 0
+        || !layers[features[0].layer.id]
+        || !layers[features[0].layer.id].popup) {
       popup.remove();
       return false;
     }
@@ -58,12 +60,25 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
           row = data[r];
+          const rowItem = row;
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
+            const found = [];
+            const rxp = /{{([^}]+)}/g;
+            const str = layer.labels ? layer.labels.label : null;
+            for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
+              found.push(c[1]);
+            }
+            // while (curMatch = rxp.exec(str)) {
+            //   found.push(curMatch[1]);
+            // }
+            found.forEach((f) => {
+              rowItem[`${f}`] = rowItem[`${f}`].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            });
             // Add header and body to popup with data from layer
             if (row[layer.popup.header]) {
               content =
                 `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, row)}</center></div>`;
+                `<div><center>${Mustache.render(layer.popup.body, rowItem)}</center></div>`;
             } else {
               content = Mustache.render(layer.popup.body, row);
             }
@@ -82,11 +97,14 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
   // add popups for marker charts
   $(document).on('mousemove', '.marker-chart', (e) => {
+    const mapid = $(e.currentTarget).data('map');
     const lng = $(e.currentTarget).data('lng');
     const lat = $(e.currentTarget).data('lat');
     content = $(e.currentTarget).data('popup');
-    popup.setLngLat([parseFloat(lng), parseFloat(lat)])
-      .setHTML(content)
-      .addTo(map);
+    if (mapid === mapId) {
+      popup.setLngLat([parseFloat(lng), parseFloat(lat)])
+        .setHTML(content)
+        .addTo(map);
+    }
   });
 }
