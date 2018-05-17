@@ -34,6 +34,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     if (!features || !features.length > 0
         || !layers[features[0].layer.id]
         || !layers[features[0].layer.id].popup) {
+      content = null;
       popup.remove();
       return false;
     }
