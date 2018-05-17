@@ -223,7 +223,9 @@ export function createMapReducer(mapId) {
             activeLayerId: updatedLayers[layerId].visible
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
-            lastLayerSelected: activeLayerIds[activeLayerIds.length - 1],
+            lastLayerSelected: !updatedLayers[layerId].visible
+              ? activeLayerIds[activeLayerIds.length - 1]
+              : layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
