@@ -185,7 +185,19 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else q = q.defer(d3.csv, filePath);
   });
 
-  q.awaitAll((error, data) => {
+  q.awaitAll((error, Data) => {
+    // parse all data if layer has data parsing spec
+    const data = !layerObj['data-parse']
+      ? [...Data]
+      : Data.map((D) => {
+        if (Array.isArray(D.features)) {
+          return {
+            ...D,
+            features: parseData(layerObj['data-parse'], D.features),
+          };
+        }
+        return parseData(layerObj['data-parse'], D);
+      });
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
     const isVectorLayer = type === 'vector';
@@ -224,7 +236,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const nextData = NextData.features || NextData;
       let datum;
       for (let d = 0; d < nextData.length; d += 1) {
-        datum = nextData[d];
+        datum = nextData[d].properties || nextData[d];
         if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
           prevData[datum[join[i]]] = {
@@ -237,9 +249,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
         } else if (datum[join[i]] && prevData[datum[join[i]]]) {
           // Add non-unique "many" to corresponding "one"
-          datum = layerObj['data-parse']
-            ? parseData(layerObj['data-parse'], datum)
-            : { ...datum };
+          datum = { ...datum };
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
         }
       }
@@ -264,11 +274,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // convert to geojson format if necessary
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
-    } else if (layerObj['data-parse']) {
-      // parse data if necessary
-      mergedData = mergedData.features && layerObj.source.type === 'geojson'
-        ? mergedData.features = parseData(layerObj['data-parse'], mergedData.features)
-        : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
     layerObj.mergedData = Array.isArray(mergedData)
