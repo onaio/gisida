@@ -217,13 +217,15 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
-
           return {
             ...state,
             // Update visible property
             activeLayerId: updatedLayers[layerId].visible
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
+            lastLayerSelected: !updatedLayers[layerId].visible
+              ? activeLayerIds[activeLayerIds.length - 1]
+              : layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
@@ -246,6 +248,7 @@ export function createMapReducer(mapId) {
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
+            activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
             filter: {
               ...state.filter,
@@ -328,6 +331,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             // Update isLoading property
+            showSpinner: true,
             layers: updatedLayers,
           };
         }
@@ -350,6 +354,7 @@ export function createMapReducer(mapId) {
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
+            showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
           };
         }
         case types.UPDATE_TIMESERIES: {

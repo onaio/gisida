@@ -1,6 +1,39 @@
 import generateStops from './generateStops';
 import { isNumber } from '../utils/files';
 
+function buildRadiusAsDistanceExpression(layer) {
+  let distanceInMeters = ['number', ['get', layer.property]];
+
+  // convert distance to meters if necessary
+  if (layer['radius-unit'] === 'km') {
+    distanceInMeters = ['*', distanceInMeters, 1000];
+  }
+
+  // calculate radius in pixles at full 20 zoom (the biggest it can be)
+  const distanceExpression =
+    ['/',
+      ['/',
+        distanceInMeters,
+        0.075,
+      ],
+      ['cos',
+        ['/',
+          ['*',
+            ['number', ['get', 'latitude']],
+            ['pi'],
+          ],
+          180,
+        ],
+      ],
+    ];
+
+  // create an exponential ramp based on the zoom
+  return [
+    'interpolate', ['exponential', 2], ['zoom'],
+    0, 0,
+    20, distanceExpression,
+  ];
+}
 
 export default function (layer, mapConfig) {
   const layerObj = { ...layer };
@@ -72,14 +105,14 @@ export default function (layer, mapConfig) {
           layer.categories.color,
         'circle-opacity': 0.8,
         'circle-stroke-color': '#fff',
-        'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint) ?
-          {
+        'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)
+          ? {
             property: layer.source.join[0],
             stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
             type: 'categorical',
             default: 0,
-          } :
-          1,
+          }
+          : 1,
         'circle-stroke-opacity': 1,
       },
     };
@@ -111,16 +144,24 @@ export default function (layer, mapConfig) {
         } else {
           layerStops = [[0, 0]];
         }
-        styleSpec.paint['circle-radius'] = {
-          property: layer.source.join[0],
-          stops: layerStops,
-          type: 'categorical',
-          default: stops ? 0 : 3,
-        };
+        if (layer['is-radius-distance']) {
+          // handle radius as a distance on the map
+          styleSpec.paint['circle-radius'] = buildRadiusAsDistanceExpression(layer);
+        } else {
+          styleSpec.paint['circle-radius'] = {
+            property: layer.source.join[0],
+            stops: layerStops,
+            type: 'categorical',
+            default: stops ? 0 : 3,
+          };
+        }
         styleSpec.source.url = layer.source.url;
         styleSpec['source-layer'] = layer.source.layer;
       } else if (layer.source.type === 'geojson') {
-        if (stops) {
+        if (layer['is-radius-distance']) {
+          // handle radius as a distance on the map
+          styleSpec.paint['circle-radius'] = buildRadiusAsDistanceExpression(layer);
+        } else if (stops) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
