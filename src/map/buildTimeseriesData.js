@@ -84,6 +84,8 @@ export default function buildTimeseriesData(
         }
       }
 
+      const allPeriods = period;
+
       timeseriesMap[layerId] = {
         layerId,
         index,
@@ -96,6 +98,7 @@ export default function buildTimeseriesData(
         colorStops,
         radiusStops,
         period,
+        allPeriods,
         breaks,
         strokeWidthStops,
         stops,
