@@ -38,7 +38,8 @@ export default function buildTimeseriesData(
   const periodDataFilter = (p) => {
     // define actual period data
     periodData[p] = {
-      data: layerObj.source.data.filter(d => d[layerObj.aggregate.timeseries.field] === p),
+      data: (layerObj.source.data.features||layerObj.source.data).filter(d =>
+        (d.properties||d)[layerObj.aggregate.timeseries.field] === p),
     };
     // determine if period data has any non-zero values
     periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));

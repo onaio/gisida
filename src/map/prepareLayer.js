@@ -276,9 +276,23 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       mergedData = csvToGEOjson(layerObj, mergedData);
     }
 
+    // filter out rows which don't contain layer property
+    if (layerObj.property && !layerObj.keepUndefined) {
+      const mData = [...(mergedData.features || mergedData)];
+      if (Array.isArray(mergedData)) {
+        mergedData = mData.filter(d => d.hasOwnProperty(layerObj.property));
+      } else {
+        mergedData = {
+          ...mergedData,
+          features: mData.filter(d => d.properties.hasOwnProperty(layerObj.property)),
+        };
+      }
+    }
+
     layerObj.mergedData = Array.isArray(mergedData)
       ? [...mergedData]
       : { ...mergedData };
+
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
