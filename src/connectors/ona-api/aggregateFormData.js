@@ -11,7 +11,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const submissionDateField = aggregateOptions['date-by'] || 'today';
   const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
 
-  const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
+  const isCumulative = aggregateOptions.timeseries && aggregateOptions.timeseries.type === 'cumulative';
   const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
 
   if (includeRows) {
@@ -22,7 +22,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
   // Add week number to data
   if (isUsingToday) {
-    data = data.map((datum) => {
+    data = (data.features || data).map((datum) => {
       let week;
       let month;
       let year;
@@ -30,7 +30,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let weekMonth;
 
       for (let i = 0; i < possibleDateFormats.length; i += 1) {
-        period = moment(datum[submissionDateField], possibleDateFormats[i], true);
+        period = moment((datum.properties || datum)[submissionDateField], possibleDateFormats[i], true);
         week = period.week();
         year = period.year();
         month = period.month();
@@ -44,23 +44,31 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       }
 
       return {
-        ...datum,
+        ...(datum.properties || datum),
         period: [year, month, weekMonth],
-        [submissionDateField]: datum[submissionDateField],
-        [groupByField]: datum[groupByField],
+        [submissionDateField]: (datum.properties || datum)[submissionDateField],
+        [groupByField]: (datum.properties || datum)[groupByField],
       };
     });
   } else if (aggregateOptions['date-parse']) {
-    data = data.map((datum) => {
+    data = (data.features || data).map((datum) => {
       const { split, chunk } = aggregateOptions['date-parse'];
       const datumDate = split
-        ? datum[submissionDateField].split(split)[chunk]
-        : datum[submissionDateField];
+        ? (datum.properties || datum)[submissionDateField].split(split)[chunk]
+        : (datum.properties || datum)[submissionDateField];
 
       return {
-        ...datum,
+        ...(datum.properties || datum),
         'period-date': new Date(datumDate),
       };
+    });
+  } else {
+    data = (data.features || data).map((datum) => {
+      const datumDate = (datum.properties || datum)[submissionDateField];
+      return {
+        ...(datum.properties || datum),
+        period: datumDate,
+      }
     });
   }
 
@@ -238,5 +246,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
 
   // Process data
   aggregatedData = processFormData(data, layer.property, layer.aggregate);
+  console.log("aggregated data", aggregatedData);
   return aggregatedData;
 }
