@@ -53,7 +53,8 @@ export default function parseData(spec, datum) {
         if (splitVal[v].length > 1) {
           for (let s = 0; s < splitVal[v].length - (splitStr.length - 1); s += 1) {
             // there's a mismatch, stop checking n items and reset parseValMatch
-            if ((splitStr[i + s + 1]).toLowerCase() !== (splitVal[v][s + 1]).toLowerCase()) {
+            if (splitStr[i + s + 1]
+              && (splitStr[i + s + 1]).toLowerCase() !== (splitVal[v][s + 1]).toLowerCase()) {
               parseValMatch = null;
               break;
             }
