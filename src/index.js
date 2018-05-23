@@ -17,6 +17,10 @@ gisida.generateStops = require('./map/generateStops').default;
 gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
+
+gisida.files = {};
+gisida.files.loadJSON = require('./utils/files').loadJSON;
+gisida.files.loadCSV = require('./utils/files').loadCSV;
 gisida.addChart = require('./map/addChart').default;
 gisida.buildDetailView = require('./map/buildDetailView').default;
 
