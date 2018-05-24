@@ -296,7 +296,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             menuIsOpen: !state.menuIsOpen,
-          }
+          };
         }
 
         case types.DETAIL_VIEW: {
