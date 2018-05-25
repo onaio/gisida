@@ -16,7 +16,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
     'YYYY/MM/DD',
     'YYYY/DD/MM',
     moment.ISO_8601,
-    moment.CUSTOM_FORMAT
+    moment.CUSTOM_FORMAT,
   ];
 
   const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
