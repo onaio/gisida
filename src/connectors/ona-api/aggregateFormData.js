@@ -9,7 +9,15 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   const matchingValues = aggregateOptions['matching-values'];
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
-  const possibleDateFormats = ['YYYY-MM-DD', 'MM/DD/YYYY'];
+  const possibleDateFormats = [
+    'YYYY-MM-DD',
+    'MM/DD/YYYY',
+    'MM-DD-YYYY',
+    'YYYY/MM/DD',
+    'YYYY/DD/MM',
+    moment.ISO_8601,
+    moment.CUSTOM_FORMAT
+  ];
 
   const isCumulative = aggregateOptions.timeseries && aggregateOptions.timeseries.type === 'cumulative';
   const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
@@ -99,6 +107,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   }
 
   if (isUsingToday) {
+    console.log("avai periods", availablePeriods);
     availablePeriods = availablePeriods
       .map((p) => {
         const [y, m, wkm] = p.split(',');

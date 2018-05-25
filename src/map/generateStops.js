@@ -43,10 +43,11 @@ function getStops(layer) {
     if (a.data < b.data) {
       return -1;
     }
-    if (a.data === b.data) {
+    else if (a.data === b.data) {
       return 0;
+    } else {
+      return 1;
     }
-    return 1;
   });
   const sortedData = list.map(items => items.data);
   const osmID = list.map(items => items.osmIDs);
@@ -62,10 +63,11 @@ function getStops(layer) {
     if (a.osmIDs < b.osmIDs) {
       return -1;
     }
-    if (a.osmIDs === b.osmIDs) {
+    else if (a.osmIDs === b.osmIDs) {
       return 0;
+    } else {
+      return 1;
     }
-    return 1;
   });
   const rangeData = dataList.map(l => l.data);
   const rangeID = dataList.map(l => l.osmIDs);
@@ -79,6 +81,7 @@ function getStops(layer) {
   const osmIDs = layer.limit ? rangeID : osmID;
 
   // Assign colors and radius to osmId or data value
+  console.log("data", data);
   for (let k = 0; k < data.length; k += 1) {
     for (let i = 0; i < breaks.length; i += 1) {
       if (data[k] <= breaks[i]) {
@@ -93,9 +96,9 @@ function getStops(layer) {
 
   if (layer.periods) {
     const uniqPeriods = [...new Set(layer.periods)];
-    const periodStops = [];
-    const periodRadius = [];
-    const periodStroke = [];
+    let periodStops = [];
+    let periodRadius = [];
+    let periodStroke = [];
     for (let j = 0; j < uniqPeriods.length; j += 1) {
       periodStops[j] = [];
       periodRadius[j] = [];
@@ -107,7 +110,9 @@ function getStops(layer) {
         if (periodProp[m] === uniqPeriods[n]) {
           periodStops[n].push(colorsStops[m]);
           periodRadius[n].push(radiusStops[m]);
-          periodStroke[n].push([radiusStops[m][0], 1]);
+          if (typeof radiusStops[m] !== 'undefined' && radiusStops[m] > 0) {
+            periodStroke[n].push([radiusStops[m][0], 1]);
+          }
         }
       }
     }

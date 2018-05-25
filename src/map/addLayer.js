@@ -38,7 +38,7 @@ function buildRadiusAsDistanceExpression(layer) {
 export default function (layer, mapConfig) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
-  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
+  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : null;
   let stops;
   let styleSpec;
 
@@ -52,7 +52,7 @@ export default function (layer, mapConfig) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
+  if (layer.property && layer.categories) {
     stops = generateStops(layer, timefield);
   }
 
@@ -119,7 +119,11 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign(
+        {},
+        styleSpec.paint,
+        layer.paint
+      );
     }
 
     if (layer.source.minzoom) {
