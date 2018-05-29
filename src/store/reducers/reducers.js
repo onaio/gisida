@@ -292,6 +292,13 @@ export function createMapReducer(mapId) {
           };
         }
 
+        case types.TOGGLE_MENU: {
+          return {
+            ...state,
+            menuIsOpen: !state.menuIsOpen,
+          };
+        }
+
         case types.DETAIL_VIEW: {
           if (!action.payload) {
             return {

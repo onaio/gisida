@@ -168,6 +168,14 @@ describe('actions', () => {
     expect(actions.triggerSpinner(mapId, isLoaded)).toEqual(expectedAction);
   });
 
+  test('should create an action to toggle menu', () => {
+    const expectedAction = {
+      type: types.TOGGLE_MENU,
+      mapId,
+    };
+    expect(actions.toggleMenu(mapId)).toEqual(expectedAction);
+  });
+
   test('should return function to get current state', () => {
     const expectedAction = actions.returnState;
     expect(actions.getCurrentState()).toEqual(expectedAction);

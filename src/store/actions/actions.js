@@ -98,6 +98,12 @@ export const requestData = (mapId, layerId) => ({
   mapId,
 });
 
+export const toggleMenu = (mapId, menuIsOpen) => ({
+  type: types.TOGGLE_MENU,
+  menuIsOpen,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -158,6 +164,7 @@ export default {
   reloadLayers,
   toggleLayer,
   toggleFilter,
+  toggleMenu,
   requestData,
   updatePrimaryLayer,
   receiveData,
