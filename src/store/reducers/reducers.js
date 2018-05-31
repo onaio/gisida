@@ -236,6 +236,9 @@ export function createMapReducer(mapId) {
               ...state.filter,
               layerId: filterLayerId,
             },
+            detailView: state.detailView
+              && updatedLayers[layerId]
+              && updatedLayers[layerId].visible,
             showFilterPanel: state.showFilterPanel
               && filterLayerId !== ''
               && updatedLayers[filterLayerId]
