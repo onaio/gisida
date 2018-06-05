@@ -73,12 +73,12 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             //   found.push(curMatch[1]);
             // }
             found.forEach((f) => {
-              rowItem[`${f}`] = rowItem[`${f}`].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             });
             // Add header and body to popup with data from layer
-            if (row[layer.popup.header]) {
+            if (rowItem[layer.popup.header]) {
               content =
-                `<div><b>${row[layer.popup.header]}</b></div>` +
+                `<div><b>${rowItem[layer.popup.header]}</b></div>` +
                 `<div><center>${Mustache.render(layer.popup.body, rowItem)}</center></div>`;
             } else {
               content = Mustache.render(layer.popup.body, row);
