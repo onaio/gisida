@@ -149,6 +149,7 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       let prevExtraPropsSumTotal2 = 0;
       let matchingRows = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
+      let parsedLocName = '';
 
       // Get group data from previous period
       const previousPeriodGroupData =
@@ -174,6 +175,8 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
         // reduce sumTotal for current groupData
         for (let x = 0; x < groupData.length; x += 1) {
           sumTotal += parseInt(groupData[x][indicatorField] || 0, 10);
+          const { parsedUID } = groupData[x];
+          parsedLocName = parsedUID;
         }
         // add previous sum total value to current sum total (cumulative sum)
         sumTotal += prevSumTotal;
@@ -199,6 +202,7 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
         [indicatorField]: indicatorValue,
+        parsedUID: parsedLocName,
         period: currentPeriod,
         'value-count': matchingRowsCount,
         total: groupTotal,
