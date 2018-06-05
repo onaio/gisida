@@ -2,7 +2,7 @@ import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 
-function processFormData(formData, indicatorField, aggregateOptions) {
+function processFormData(formData, indicatorField, aggregateOptions, extraProps) {
   let data = formData;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
@@ -143,6 +143,10 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let prevTotal = 0;
       let prevSumTotal = 0;
       let sumTotal = 0;
+      let extraPropsSumTotal1 = 0;
+      let prevExtraPropsSumTotal1 = 0;
+      let extraPropsSumTotal2 = 0;
+      let prevExtraPropsSumTotal2 = 0;
       let matchingRows = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
 
@@ -154,6 +158,11 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
+
+        if (extraProps && extraProps.length) {
+          prevExtraPropsSumTotal1 = previousPeriodGroupData[previousPeriodGroupData.length - 1][extraProps[0]] || 0;
+          prevExtraPropsSumTotal2 = previousPeriodGroupData[previousPeriodGroupData.length - 1][extraProps[1]] || 0;
+        }
       }
 
       // Handle actual aggregation
@@ -168,6 +177,15 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         }
         // add previous sum total value to current sum total (cumulative sum)
         sumTotal += prevSumTotal;
+
+        if (extraProps && extraProps.length) {
+          for (let y = 0; y < groupData.length; y += 1) {
+            extraPropsSumTotal1 += parseInt(groupData[y][extraProps[0]] || 0, 10);
+            extraPropsSumTotal2 += parseInt(groupData[y][extraProps[1]] || 0, 10);
+          }
+          extraPropsSumTotal1 += prevExtraPropsSumTotal1;
+          extraPropsSumTotal2 += prevExtraPropsSumTotal2;
+        }
       }
 
       const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
@@ -178,8 +196,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       // Final aggregated indicator value for  group
       const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
 
-      // Push new aggregated period datum while preserving disaggregated data
-      currentPeriodaggregatedData.push({
+      const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
         [indicatorField]: indicatorValue,
         period: currentPeriod,
@@ -188,7 +205,24 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         weekYear: availablePeriods[i],
         disaggregatedDates: groupData.map(d => d[submissionDateField]),
         disaggregatedData: [...groupData],
-      });
+      };
+
+
+      // Push new aggregated period datum while preserving disaggregated data
+      currentPeriodaggregatedData.push(currentPeriodaggregatedDataObj);
+
+      if (extraProps && extraProps.length) {
+        const extraPropsObj = {
+          [extraProps[0]]: extraPropsSumTotal1,
+          [extraProps[1]]: extraPropsSumTotal2,
+        };
+        const mergedObject = {
+          ...extraPropsObj,
+          ...currentPeriodaggregatedDataObj,
+        };
+        currentPeriodaggregatedData.push(mergedObject);
+        currentPeriodaggregatedData = currentPeriodaggregatedData.filter(d => d[extraProps[0]] || d[extraProps[1]]);
+      }
     }
 
     // Add aggregated data from previous group if cumulative
@@ -245,6 +279,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
-  aggregatedData = processFormData(data, layer.property, layer.aggregate);
+  aggregatedData = processFormData(data, layer.property, layer.aggregate, layer.extraProps);
   return aggregatedData;
 }
