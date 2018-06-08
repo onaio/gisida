@@ -62,7 +62,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         for (let r = 0; r < data.length; r += 1) {
           row = data[r];
           const rowItem = row;
-          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
+          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]
+            || row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]) {
             const found = [];
             const rxp = /{{([^}]+)}/g;
             const str = layer.labels ? layer.labels.label : null;
