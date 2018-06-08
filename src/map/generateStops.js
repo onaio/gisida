@@ -126,18 +126,19 @@ export default function (layer, timefield) {
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
   const radiusRange = layer['radius-range'];
+  const groupByProp = layer.aggregate && layer.aggregate['group-by'];
 
   for (let i = 0; i < rows.length; i += 1) {
     if (isGeoJSON) {
       data.push(Number(rows[i].properties[layer.property]));
       periods.push(rows[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
-        osmIDs.push(rows[i].properties[layer.source.join[1]]);
+        osmIDs.push(rows[i].properties[(groupByProp || layer.source.join[1])]);
       }
     } else {
       periods.push(rows[i][timefield] || null);
       data.push(Number(rows[i][layer.property]));
-      osmIDs.push(rows[i][layer.source.join[1]]);
+      osmIDs.push(rows[i][(groupByProp || layer.source.join[1])]);
     }
   }
 
