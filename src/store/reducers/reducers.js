@@ -185,7 +185,6 @@ export function createMapReducer(mapId) {
         case types.TOGGLE_LAYER: {
           const { layerId } = action;
           const layer = state.layers[layerId];
-
           const updatedTimeSeries = {
             ...state.timeseries,
             visibility: layer
@@ -237,9 +236,11 @@ export function createMapReducer(mapId) {
               layerId: filterLayerId,
             },
             detailView: state.detailView
+              && (state.detailView && state.detailView.layerId === layerId)
               && updatedLayers[layerId]
               && updatedLayers[layerId].visible,
             showFilterPanel: state.showFilterPanel
+              && layerId === filterLayerId
               && filterLayerId !== ''
               && updatedLayers[filterLayerId]
               && updatedLayers[filterLayerId].visible,
@@ -251,6 +252,7 @@ export function createMapReducer(mapId) {
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
+            detailView: null,
             activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
             filter: {
