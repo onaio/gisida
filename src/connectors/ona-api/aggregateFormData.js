@@ -253,15 +253,15 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       currentPeriodaggregatedData.push(currentPeriodaggregatedDataObj);
 
       if (extraProps && extraProps.length) {
-        const extraPropsObj = {};
-        
-        const propsSumArray = extraPropsSumTotal.map(d => d.value);
-        extraProps.forEach((p) => {
-          extraPropsObj[p] = propsSumArray[extraProps.indexOf(p)];
-          return extraPropsObj;
-        });
-
-        console.log("totals", extraPropsSumTotal);
+        // const propsSumArray = extraPropsSumTotal.map(d => d.value);
+        // extraProps.forEach((p) => {
+        //   extraPropsObj[p] = propsSumArray[extraProps.indexOf(p)];
+        //   return extraPropsObj;
+        // });
+        const extraPropsObj = {
+          [extraProps[0]]: extraPropsSumTotal1,
+          [extraProps[1]]: extraPropsSumTotal2,
+        };
 
         const mergedObject = {
           ...extraPropsObj,
