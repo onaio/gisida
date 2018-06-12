@@ -62,8 +62,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         for (let r = 0; r < data.length; r += 1) {
           row = data[r];
           const rowItem = row;
-          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]
-            || row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]) {
+          if ((layer.popup.join
+            && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+            || (!layer.popup.join
+            && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
             const found = [];
             const rxp = /{{([^}]+)}/g;
             const str = layer.labels ? layer.labels.label : null;
@@ -84,6 +86,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             } else {
               content = Mustache.render(layer.popup.body, row);
             }
+            break;
           }
         }
       } else {
