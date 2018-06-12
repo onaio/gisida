@@ -1,6 +1,6 @@
 //file with output for testing parseData util function
 
-export const parseOutputData = 
+export const parseOutputSpecData = 
 [{
   "Type of site":"Hospital",
   "Services":"Outpatient Therapeutic Program",
@@ -31,7 +31,7 @@ export const parseOutputData =
   }
 }];
 
-export const parseOutputDataCmplx = 
+export const parseOutputSpecDataCmplx = 
 [{
   "site_activity":"OTP, TSFP, IYCF, Micronutrient",
   "NU_indicators/site_type":"Fixed",

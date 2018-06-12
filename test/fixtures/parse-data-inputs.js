@@ -1,6 +1,6 @@
 //file with inputs for testing the parse-data util function
 
-export const parseInputObj = 
+export const parseInputSpecObj = 
 {
   'Type of site': 
   {
@@ -25,7 +25,7 @@ export const parseInputObj =
   }
 }
 
-export const parseInputData = [{
+export const parseInputSpecData = [{
   'Type of site': 'Hospital',
   'Services': 'OTP'
 }, {
@@ -37,7 +37,7 @@ export const parseInputData = [{
   'Other Services': 'Nutrition Counseling'
 }];
 
-export const parseInputObjCmplx = 
+export const parseInputSpecObjCmplx = 
 {
 "site_activity": {
   "type": "multiple",
@@ -143,7 +143,7 @@ export const parseInputObjCmplx =
   }
 };
 
-export const parseInputDataCmplx = [
+export const parseInputSpecDataCmplx = [
 {
   'site_activity': 'OTP TSFP IYCF Micronutrient',
   //'mobile_site_activity': ''
