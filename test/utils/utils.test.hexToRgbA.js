@@ -13,11 +13,10 @@ describe('hexToRgbA', () => {
 	test('Converts Hex (without alpha) properly to RGBA', () => {
 		expect(hexToRgbA('#fbafff')).toBe('rgba(251, 175, 255, 1)');
 	});
-
-/* NOT SURE IF THIS IS CORRECT SYNTAX
+	
 	test('Throw an error for a bad hex', () => {
 		expect(hexToRgbA('#fbafff')).toThrow(new Error('Bad Hex'));
 	});	
-*/
+
 
 })

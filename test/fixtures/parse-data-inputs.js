@@ -152,7 +152,7 @@ export const parseInputSpecDataCmplx = [
   //'NU_indicators/donor': '',
   'partner_details/organisation': 'SRCS_Puntland'
 },
-{ //466
+{
   'site_activity': 'OTP SC ',
   //'mobile_site_activity': ''
   'NU_indicators/site_type': '1',
