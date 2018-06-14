@@ -51,12 +51,11 @@ describe('actions', () => {
 
   //added by Philipp
   test('should create an action to add layer group', () => {
-    //need to define groupId and group?
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
       mapId,
-      groupId,
-      group
+      groupId: {'id': 'test-layer'},
+      //group
     };
     expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
   });
@@ -103,11 +102,10 @@ describe('actions', () => {
 
   //added by Philipp
   test('should create an action to set layer filter', () => {
-    //need to define layerFilters?
     const expectedAction = {
       type: types.SET_LAYER_FILTERS,
-      layerId,
-      layerFilters,
+      //layerId,
+      //layerFilters,
       mapId,
     };
     expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
@@ -117,7 +115,6 @@ describe('actions', () => {
   test('should create an action to update filters', () => {
     const expectedAction = {
       type: types.FILTERS_UPDATED,
-      layerId,
       mapId,
     };
     expect(actions.filtersUpdated(mapId)).toEqual(expectedAction);
@@ -125,11 +122,10 @@ describe('actions', () => {
 
   //added by Philipp
   test('should create an action to save filter state', () => {
-    //need to define filterState?
     const expectedAction = {
       type: types.SAVE_FILTER_STATE,
-      layerId,
-      filterState,
+      //layerId,
+      //filterState,
       mapId,
     };
     expect(actions.saveFilterState(mapId)).toEqual(expectedAction);
@@ -205,11 +201,10 @@ describe('actions', () => {
 
   //added by Philipp
   test('should create an action to view in detail', () => {
-    //need to define payload?
     const expectedAction = {
       type: types.DETAIL_VIEW,
       mapId,
-      payload,
+      //payload,
     };
     expect(actions.detailView(mapId)).toEqual(expectedAction);
   });
