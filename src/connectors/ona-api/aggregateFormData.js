@@ -2,8 +2,6 @@ import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 
-const sumObj = obj => Object.keys(obj).reduce((sum, next) => sum + obj[next], 0);
-
 function processFormData(formData, indicatorField, aggregateOptions, extraProps) {
   let data = formData;
   const minTotal = aggregateOptions.min || 0;
@@ -152,10 +150,8 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       let prevExtraPropsSumTotal = [];
 
       if (extraProps && extraProps.length) {
-        prevExtraPropsSumTotal = [...extraProps];
-        extraPropsSumTotal = [...extraProps];
-        prevExtraPropsSumTotal.fill(0);
-        extraPropsSumTotal.fill(0);
+        prevExtraPropsSumTotal = [...extraProps].fill(0);
+        extraPropsSumTotal = [...extraProps].fill(0);
       }
 
       // Get group data from previous period
@@ -168,7 +164,10 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
         if (extraProps && extraProps.length) {
           extraProps.forEach((p, x) => {
-            prevExtraPropsSumTotal[x] = previousPeriodGroupData[previousPeriodGroupData.length - 1][p] || 0;
+            prevExtraPropsSumTotal[x] = previousPeriodGroupData[
+              previousPeriodGroupData.length - 1][p]
+              || 0;
+            return prevExtraPropsSumTotal;
           });
         }
       }
