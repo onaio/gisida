@@ -2,7 +2,7 @@ import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 
-function processFormData(formData, indicatorField, aggregateOptions, extraProps) {
+function processFormData(formData, indicatorField, aggregateOptions) {
   let data = formData;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
@@ -148,6 +148,7 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       let parsedLocName = '';
       let extraPropsSumTotal = [];
       let prevExtraPropsSumTotal = [];
+      const { extraProps } = aggregateOptions;
 
       if (extraProps && extraProps.length) {
         prevExtraPropsSumTotal = [...extraProps].fill(0);
@@ -167,7 +168,6 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
             prevExtraPropsSumTotal[x] = previousPeriodGroupData[
               previousPeriodGroupData.length - 1][p]
               || 0;
-            return prevExtraPropsSumTotal;
           });
         }
       }
@@ -187,7 +187,6 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
           if (extraProps && extraProps.length) {
             extraProps.forEach((e, y) => {
               extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
-              return extraPropsSumTotal;
             });
           }
         }
@@ -295,6 +294,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
-  aggregatedData = processFormData(data, layer.property, layer.aggregate, layer.extraProps);
+  aggregatedData = processFormData(data, layer.property, layer.aggregate);
   return aggregatedData;
 }
