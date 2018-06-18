@@ -145,15 +145,18 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
       let prevTotal = 0;
       let prevSumTotal = 0;
       let sumTotal = 0;
-      let extraPropsSumTotal1 = 0;
-      let prevExtraPropsSumTotal1 = 0;
-      let extraPropsSumTotal2 = 0;
-      let prevExtraPropsSumTotal2 = 0;
       let matchingRows = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
       let parsedLocName = '';
       let extraPropsSumTotal = [];
-      const prevExtraPropsSumTotal = [];
+      let prevExtraPropsSumTotal = [];
+
+      if (extraProps && extraProps.length) {
+        prevExtraPropsSumTotal = [...extraProps];
+        extraPropsSumTotal = [...extraProps];
+        prevExtraPropsSumTotal.fill(0);
+        extraPropsSumTotal.fill(0);
+      }
 
       // Get group data from previous period
       const previousPeriodGroupData =
@@ -163,13 +166,10 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
         prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
-
         if (extraProps && extraProps.length) {
-          extraProps.forEach((p) => {
-            prevExtraPropsSumTotal.push(previousPeriodGroupData[previousPeriodGroupData.length - 1][p] || 0);
+          extraProps.forEach((p, x) => {
+            prevExtraPropsSumTotal[x] = previousPeriodGroupData[previousPeriodGroupData.length - 1][p] || 0;
           });
-          prevExtraPropsSumTotal1 = previousPeriodGroupData[previousPeriodGroupData.length - 1][extraProps[0]] || 0;
-          prevExtraPropsSumTotal2 = previousPeriodGroupData[previousPeriodGroupData.length - 1][extraProps[1]] || 0;
         }
       }
 
@@ -184,48 +184,23 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
           sumTotal += parseInt(groupData[x][indicatorField] || 0, 10);
           const { parsedUID } = groupData[x];
           parsedLocName = parsedUID;
+
+          if (extraProps && extraProps.length) {
+            extraProps.forEach((e, y) => {
+              extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
+              return extraPropsSumTotal;
+            });
+          }
+        }
+
+        if (extraProps && extraProps.length) {
+          extraProps.map((p, f) => {
+            extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
+            return extraPropsSumTotal;
+          });
         }
         // add previous sum total value to current sum total (cumulative sum)
         sumTotal += prevSumTotal;
-
-        if (extraProps && extraProps.length) {
-          const propValues = [];
-          for (let y = 0; y < groupData.length; y += 1) {
-            extraProps.forEach((p) => {
-              propValues.push({
-                locId: parsedLocName,
-                name: [p],
-                value: groupData[y][p],
-              });
-              const holder = {};
-              propValues.forEach((t) => {
-                if (holder.hasOwnProperty(t.name)) {
-                  holder[t.name] += Number(t.value);
-                } else {
-                  holder[t.name] = Number(t.value);
-                }
-              });
-              const newObj = [];
-              for (let prop in holder) {
-                if (holder[prop] !== 0) {
-                  newObj.push({
-                    locId: parsedLocName,
-                    name: prop,
-                    value: holder[prop],
-                  });
-                }
-              }
-              extraPropsSumTotal = [...newObj];
-            });
-            extraPropsSumTotal1 += parseInt(groupData[y][extraProps[0]] || 0, 10);
-            extraPropsSumTotal2 += parseInt(groupData[y][extraProps[1]] || 0, 10);
-          }
-          // extraPropsSumTotal.map((t) => {
-          //   extraPropsSumTotal[extraPropsSumTotal.indexOf[t]] += prevExtraPropsSumTotal[prevExtraPropsSumTotal.indexOf[t]];
-          // });
-          extraPropsSumTotal1 += prevExtraPropsSumTotal1;
-          extraPropsSumTotal2 += prevExtraPropsSumTotal2;
-        }
       }
 
       const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
@@ -248,27 +223,22 @@ function processFormData(formData, indicatorField, aggregateOptions, extraProps)
         disaggregatedData: [...groupData],
       };
 
-
       // Push new aggregated period datum while preserving disaggregated data
-      currentPeriodaggregatedData.push(currentPeriodaggregatedDataObj);
 
       if (extraProps && extraProps.length) {
-        // const propsSumArray = extraPropsSumTotal.map(d => d.value);
-        // extraProps.forEach((p) => {
-        //   extraPropsObj[p] = propsSumArray[extraProps.indexOf(p)];
-        //   return extraPropsObj;
-        // });
-        const extraPropsObj = {
-          [extraProps[0]]: extraPropsSumTotal1,
-          [extraProps[1]]: extraPropsSumTotal2,
-        };
+        const extraPropsObj = {};
+        extraProps.forEach((p, l) => {
+          extraPropsObj[p] = extraPropsSumTotal[l];
+          return extraPropsObj;
+        });
 
         const mergedObject = {
           ...extraPropsObj,
           ...currentPeriodaggregatedDataObj,
         };
         currentPeriodaggregatedData.push(mergedObject);
-        currentPeriodaggregatedData = currentPeriodaggregatedData.filter(d => d[extraProps[0]] || d[extraProps[1]]);
+      } else {
+        currentPeriodaggregatedData.push(currentPeriodaggregatedDataObj);
       }
     }
 
