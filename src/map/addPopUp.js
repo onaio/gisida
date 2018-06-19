@@ -14,7 +14,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   map.on('mousemove', (e) => {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, visibleLayerId } = currentState[mapId];
+    const { layers, timeseries, primaryLayer } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -49,7 +49,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       let periodData = [];
       // Assign period data if layer has time series
       if (layer.aggregate && layer.aggregate.timeseries) {
-        const tsLayer = timeseries[visibleLayerId];
+        const tsLayer = timeseries[primaryLayer];
         if (tsLayer) {
           const currPeriod = Object.keys(tsLayer.periodData)[tsLayer.temporalIndex];
           periodData = tsLayer.periodData[currPeriod].data;
@@ -62,7 +62,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         for (let r = 0; r < data.length; r += 1) {
           row = data[r];
           const rowItem = row;
-          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
+          if ((layer.popup.join
+            && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+            || (!layer.popup.join
+            && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
             const found = [];
             const rxp = /{{([^}]+)}/g;
             const str = layer.labels ? layer.labels.label : null;
@@ -73,16 +76,17 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             //   found.push(curMatch[1]);
             // }
             found.forEach((f) => {
-              rowItem[`${f}`] = rowItem[`${f}`].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             });
             // Add header and body to popup with data from layer
-            if (row[layer.popup.header]) {
+            if (rowItem[layer.popup.header]) {
               content =
-                `<div><b>${row[layer.popup.header]}</b></div>` +
+                `<div><b>${rowItem[layer.popup.header]}</b></div>` +
                 `<div><center>${Mustache.render(layer.popup.body, rowItem)}</center></div>`;
             } else {
               content = Mustache.render(layer.popup.body, row);
             }
+            break;
           }
         }
       } else {

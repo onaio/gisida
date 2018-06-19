@@ -145,6 +145,15 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let sumTotal = 0;
       let matchingRows = 0;
       const groupData = groupedPeriodData[availableGroups[j]];
+      let parsedLocName = '';
+      let extraPropsSumTotal = [];
+      let prevExtraPropsSumTotal = [];
+      const { extraProps } = aggregateOptions;
+
+      if (extraProps && extraProps.length) {
+        prevExtraPropsSumTotal = [...extraProps].fill(0);
+        extraPropsSumTotal = [...extraProps].fill(0);
+      }
 
       // Get group data from previous period
       const previousPeriodGroupData =
@@ -154,6 +163,13 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
+        if (extraProps && extraProps.length) {
+          extraProps.forEach((p, x) => {
+            prevExtraPropsSumTotal[x] = previousPeriodGroupData[
+              previousPeriodGroupData.length - 1][p]
+              || 0;
+          });
+        }
       }
 
       // Handle actual aggregation
@@ -165,6 +181,21 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         // reduce sumTotal for current groupData
         for (let x = 0; x < groupData.length; x += 1) {
           sumTotal += parseInt(groupData[x][indicatorField] || 0, 10);
+          const { parsedUID } = groupData[x];
+          parsedLocName = parsedUID;
+
+          if (extraProps && extraProps.length) {
+            extraProps.forEach((e, y) => {
+              extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
+            });
+          }
+        }
+
+        if (extraProps && extraProps.length) {
+          extraProps.map((p, f) => {
+            extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
+            return extraPropsSumTotal;
+          });
         }
         // add previous sum total value to current sum total (cumulative sum)
         sumTotal += prevSumTotal;
@@ -178,17 +209,35 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       // Final aggregated indicator value for  group
       const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
 
-      // Push new aggregated period datum while preserving disaggregated data
-      currentPeriodaggregatedData.push({
+      const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
         [indicatorField]: indicatorValue,
+        parsedUID: parsedLocName,
         period: currentPeriod,
         'value-count': matchingRowsCount,
         total: groupTotal,
         weekYear: availablePeriods[i],
         disaggregatedDates: groupData.map(d => d[submissionDateField]),
         disaggregatedData: [...groupData],
-      });
+      };
+
+      // Push new aggregated period datum while preserving disaggregated data
+
+      if (extraProps && extraProps.length) {
+        const extraPropsObj = {};
+        extraProps.forEach((p, l) => {
+          extraPropsObj[p] = extraPropsSumTotal[l];
+          return extraPropsObj;
+        });
+
+        const mergedObject = {
+          ...extraPropsObj,
+          ...currentPeriodaggregatedDataObj,
+        };
+        currentPeriodaggregatedData.push(mergedObject);
+      } else {
+        currentPeriodaggregatedData.push(currentPeriodaggregatedDataObj);
+      }
     }
 
     // Add aggregated data from previous group if cumulative
