@@ -211,12 +211,12 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     const intialFilter = (d) => {
       if (!Array.isArray(join[(isVectorLayer ? 1 : 0)])) {
         return typeof d[join[(isVectorLayer ? 1 : 0)]] !== 'undefined';
-      } 
+      }
       for (let j = 0; j < join[(isVectorLayer ? 1 : 0)].length; j += 1) {
         if (typeof d[join[(isVectorLayer ? 1 : 0)][j]] !== 'undefined') return true;
       }
       return false;
-    }
+    };
     if (Array.isArray(mergedData)) {
       mergedData = mergedData.filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
@@ -308,7 +308,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         } else {
           pJoinProp = join[j];
         }
-        return (pd[pJoinProp] === datum[nJoinProp] ? { ...pd, ...datum } : pd)
+        return (pd[pJoinProp] === datum[nJoinProp] ? { ...pd, ...datum } : pd);
       };
       // loop through all next data
       for (let d = 0; d < nextData.length; d += 1) {
@@ -321,7 +321,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         } else {
           nJoinProp = join[i];
         }
-        
+
 
         // if nextData is another many, add it to the prev data array
         if (relation.key[i] === 'many' && datum[nJoinProp] && Array.isArray(prevData)) {
