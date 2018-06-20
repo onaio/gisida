@@ -107,9 +107,9 @@ export default function (layer, mapConfig) {
             {
               property: layer.source.join[0],
               stops: layerObj.colorStops,
-              type: 'categorical'
+              type: 'categorical',
             }
-          : layer.categories.color,
+            : layer.categories.color,
         'circle-opacity': 0.8,
         'circle-stroke-color': '#fff',
         'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)

@@ -5,7 +5,7 @@ import csvToGEOjson from '../../map/csvToGEOjson';
 
 function processFormData(formData, indicatorField, layerObj) {
   let data = formData;
-  const aggregateOptions = layerObj.aggregate
+  const aggregateOptions = layerObj.aggregate;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
   const matchingValues = aggregateOptions['matching-values'];
@@ -64,14 +64,14 @@ function processFormData(formData, indicatorField, layerObj) {
       };
     });
   } else if (aggregateOptions['date-parse']) {
-    data = (data.features||data).map((datum) => {
+    data = (data.features || data).map((datum) => {
       const { split, chunk } = aggregateOptions['date-parse'];
       const datumDate = split
-        ? (datum.properties||datum)[submissionDateField].split(split)[chunk]
-        : (datum.properties||datum)[submissionDateField];
+        ? (datum.properties || datum)[submissionDateField].split(split)[chunk]
+        : (datum.properties || datum)[submissionDateField];
 
       return {
-        ...(datum.properties||datum),
+        ...(datum.properties || datum),
         'period-date': new Date(datumDate),
       };
     });
@@ -119,7 +119,7 @@ function processFormData(formData, indicatorField, layerObj) {
       .map(p => p.p);
   }
 
-  // let 
+  // let
 
   const replacePeriod = function (period, weekYear) {
     return (d) => {
@@ -161,11 +161,17 @@ function processFormData(formData, indicatorField, layerObj) {
         if (!groupProps[availableGroups[j]]) {
           groupProps[availableGroups[j]] = {};
         }
-        groupProps[availableGroups[j]].coordinates = [groupData[0][latProp], groupData[0][longProp]];
+        groupProps[availableGroups[j]].coordinates = [
+          groupData[0][latProp], groupData[0][longProp]];
       }
 
+      let numberProps;
+
       if (extraProps && extraProps.length) {
-        const numberProps = extraProps.filter(p => !Number.isNaN(Number(p)));
+        groupData.map((g) => {
+          numberProps = extraProps.filter(p => !Number.isNaN(Number(g[p])));
+          return numberProps;
+        });
         prevExtraPropsSumTotal = [...numberProps].fill(0);
         extraPropsSumTotal = [...numberProps].fill(0);
       }
@@ -179,7 +185,8 @@ function processFormData(formData, indicatorField, layerObj) {
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
         if (extraProps && extraProps.length) {
-          extraProps.filter(p => !Number.isNaN(Number(p))).forEach((p, x) => {
+          extraProps.filter(p => !Number.isNaN(Number(previousPeriodGroupData[
+            previousPeriodGroupData.length - 1][p]))).forEach((p, x) => {
             prevExtraPropsSumTotal[x] = previousPeriodGroupData[
               previousPeriodGroupData.length - 1][p]
               || 0;
@@ -201,7 +208,7 @@ function processFormData(formData, indicatorField, layerObj) {
 
           if (extraProps && extraProps.length) {
             extraProps.forEach((e, y) => {
-              if (!Number.isNaN(Number(e))) {
+              if (!Number.isNaN(Number(groupData[x][e]))) {
                 extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
               } else {
                 groupProps[availableGroups[j]][e] = groupData[x][e];
@@ -211,7 +218,7 @@ function processFormData(formData, indicatorField, layerObj) {
         }
 
         if (extraProps && extraProps.length) {
-          extraProps.filter(p => !Number.isNaN(Number(p))).map((p, f) => {
+          extraProps.map((p, f) => {
             extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
             return extraPropsSumTotal;
           });
@@ -241,15 +248,17 @@ function processFormData(formData, indicatorField, layerObj) {
       };
 
       if (isGeoJson) {
-        currentPeriodaggregatedDataObj[latProp] = groupProps[availableGroups[j]].coordinates[0];
-        currentPeriodaggregatedDataObj[longProp] = groupProps[availableGroups[j]].coordinates[1];
+        const { coordinates } = groupProps[availableGroups[j]];
+        [currentPeriodaggregatedDataObj[latProp],
+          currentPeriodaggregatedDataObj[longProp]] = coordinates;
       }
 
       // Push new aggregated period datum while preserving disaggregated data
       if (extraProps && extraProps.length) {
         const extraPropsObj = {};
         extraProps.forEach((p, l) => {
-          if (!Number.isNaN(Number(p))) {
+          if (!Number.isNaN(Number(extraPropsSumTotal[l]))
+            && !groupProps[availableGroups[j]]) {
             extraPropsObj[p] = extraPropsSumTotal[l];
           } else {
             extraPropsObj[p] = groupProps[availableGroups[j]][p];
