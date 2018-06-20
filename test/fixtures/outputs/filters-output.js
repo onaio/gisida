@@ -1,4 +1,4 @@
-const filtersOutputObj = {
+const filtersOutputData = [{
 	"NU_indicators/region_label":{
 		"label":"Region",
 		"filterValues":{}
@@ -15,4 +15,6 @@ const filtersOutputObj = {
 		"label":"Max Distance Traveled (km)",
 		"filterValues":{}
 	}
-};
+},
+[292856,285677,292859,285678,"data/Nutrition_Fixed_Sites.csv"]
+];
