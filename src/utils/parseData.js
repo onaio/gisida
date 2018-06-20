@@ -121,7 +121,12 @@ export default function parseData(spec, datum) {
     }
 
     // assign the parsed value into the parsedDatum object
-    parsedDatum[datumProps[p]] = parseVal;
+    if (propSpec && !propSpec.type && propSpec['new-prop-name']) {
+      parsedDatum[datumProps[p]] = datum[datumProps[p]];
+      parsedDatum[propSpec['new-prop-name']] = parseVal;
+    } else {
+      parsedDatum[datumProps[p]] = parseVal;
+    }
   }
 
   parsedDatum.unparsedDatum = { ...datum };
