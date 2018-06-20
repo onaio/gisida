@@ -81,6 +81,7 @@ export default function (layer, mapConfig) {
     layerObj.colors = colors;
     layerObj.Data = Data;
     layerObj.stops = stops;
+    layerObj.colorStops = colorStops;
   }
 
   /*
@@ -102,7 +103,13 @@ export default function (layer, mapConfig) {
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
           } :
-          layer.categories.color,
+          layerObj.colorStops ?
+            {
+              property: layer.source.join[0],
+              stops: layerObj.colorStops,
+              type: 'categorical'
+            }
+          : layer.categories.color,
         'circle-opacity': 0.8,
         'circle-stroke-color': '#fff',
         'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)
@@ -165,6 +172,7 @@ export default function (layer, mapConfig) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
+            type: 'categorical',
           };
         }
         styleSpec.source.data = layer.source.data;
