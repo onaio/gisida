@@ -1,14 +1,19 @@
 import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
+import csvToGEOjson from '../../map/csvToGEOjson';
 
-function processFormData(formData, indicatorField, aggregateOptions) {
+function processFormData(formData, indicatorField, layerObj) {
   let data = formData;
+  const aggregateOptions = layerObj.aggregate
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
   const matchingValues = aggregateOptions['matching-values'];
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
+  const longProp = (layerObj['geo-columns'] && layerObj['geo-columns'][0]) || 'Longitude';
+  const latProp = (layerObj['geo-columns'] && layerObj['geo-columns'][1]) || 'Latitude';
+  const isGeoJson = layerObj.source.type === 'geojson';
   const possibleDateFormats = [
     'YYYY-MM-DD',
     'MM/DD/YYYY',
@@ -59,14 +64,14 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       };
     });
   } else if (aggregateOptions['date-parse']) {
-    data = data.map((datum) => {
+    data = (data.features||data).map((datum) => {
       const { split, chunk } = aggregateOptions['date-parse'];
       const datumDate = split
-        ? datum[submissionDateField].split(split)[chunk]
-        : datum[submissionDateField];
+        ? (datum.properties||datum)[submissionDateField].split(split)[chunk]
+        : (datum.properties||datum)[submissionDateField];
 
       return {
-        ...datum,
+        ...(datum.properties||datum),
         'period-date': new Date(datumDate),
       };
     });
@@ -80,9 +85,10 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   let aggregatedData = [];
   let currentPeriodaggregatedData = [];
   let previousPeriodaggregatedData = [];
-
   let availablePeriods = Object.keys(data);
 
+  // Map to store coordinates of each groupBy item if applicable
+  const groupCoordinates = {};
 
   // Sort periods in chronological order
   function comparator(a, b) {
@@ -112,6 +118,8 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       .sort(comparator)
       .map(p => p.p);
   }
+
+  // let 
 
   const replacePeriod = function (period, weekYear) {
     return (d) => {
@@ -149,6 +157,9 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let extraPropsSumTotal = [];
       let prevExtraPropsSumTotal = [];
       const { extraProps } = aggregateOptions;
+      if (isGeoJson) {
+        groupCoordinates[availableGroups[j]] = [groupData[0][latProp], groupData[0][longProp]];
+      }
 
       if (extraProps && extraProps.length) {
         prevExtraPropsSumTotal = [...extraProps].fill(0);
@@ -221,8 +232,12 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         disaggregatedData: [...groupData],
       };
 
-      // Push new aggregated period datum while preserving disaggregated data
+      if (isGeoJson) {
+        currentPeriodaggregatedDataObj[latProp] = groupCoordinates[availableGroups[j]][0];
+        currentPeriodaggregatedDataObj[longProp] = groupCoordinates[availableGroups[j]][1];
+      }
 
+      // Push new aggregated period datum while preserving disaggregated data
       if (extraProps && extraProps.length) {
         const extraPropsObj = {};
         extraProps.forEach((p, l) => {
@@ -255,7 +270,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
   // filter out groups whose total value are below the required minimum total value
   aggregatedData = aggregatedData.filter(datum => datum.total >= minTotal);
-
+  if (isGeoJson) aggregatedData = csvToGEOjson(layerObj, aggregatedData);
   return aggregatedData;
 }
 
@@ -294,6 +309,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
-  aggregatedData = processFormData(data, layer.property, layer.aggregate);
+  aggregatedData = processFormData(data, layer.property, layer);
   return aggregatedData;
 }
