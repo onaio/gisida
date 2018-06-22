@@ -219,7 +219,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             // Update visible property
-            activeLayerId: updatedLayers[layerId].visible
+            activeLayerId: updatedLayers[layerId].visible && layer.type !== 'line'
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
             lastLayerSelected: !updatedLayers[layerId].visible
