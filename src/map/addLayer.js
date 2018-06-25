@@ -59,7 +59,7 @@ export default function (layer, mapConfig) {
   if (stops) {
     // newStops = { stops, id: layer.id };
     const colorStops = timefield ? stops[0][stops[0].length - 1] : stops[0][0];
-    const radiusStops = stops[1][0];
+    const radiusStops = timefield ? stops[1][stops[1].length - 1]: stops[1][0];
     const stopsData = layer.type === 'circle' ? radiusStops : colorStops;
     const breaks = stops[3];
     const colors = stops[4];
