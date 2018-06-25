@@ -49,6 +49,16 @@ describe('actions', () => {
     expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
 
+  //added by Philipp
+  test('should create an action to add layer group', () => {
+    const expectedAction = {
+      type: types.ADD_LAYER_GROUP,
+      mapId,
+      groupId: {'id': 'test-layer'},
+      //group
+    };
+    expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
+  });
 
   test('should create an action to change region', () => {
     const region = 'Nairobi';
@@ -88,6 +98,37 @@ describe('actions', () => {
       mapId,
     };
     expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
+  });
+
+  //added by Philipp
+  test('should create an action to set layer filter', () => {
+    const expectedAction = {
+      type: types.SET_LAYER_FILTERS,
+      //layerId,
+      //layerFilters,
+      mapId,
+    };
+    expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
+  });
+
+  //added by Philipp
+  test('should create an action to update filters', () => {
+    const expectedAction = {
+      type: types.FILTERS_UPDATED,
+      mapId,
+    };
+    expect(actions.filtersUpdated(mapId)).toEqual(expectedAction);
+  });
+
+  //added by Philipp
+  test('should create an action to save filter state', () => {
+    const expectedAction = {
+      type: types.SAVE_FILTER_STATE,
+      //layerId,
+      //filterState,
+      mapId,
+    };
+    expect(actions.saveFilterState(mapId)).toEqual(expectedAction);
   });
 
   test('should create an action to update primary layer', () => {
@@ -156,6 +197,16 @@ describe('actions', () => {
       mapId,
     };
     expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
+  });
+
+  //added by Philipp
+  test('should create an action to view in detail', () => {
+    const expectedAction = {
+      type: types.DETAIL_VIEW,
+      mapId,
+      //payload,
+    };
+    expect(actions.detailView(mapId)).toEqual(expectedAction);
   });
 
   test('should create an action to turn off spinner', () => {
