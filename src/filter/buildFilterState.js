@@ -1,10 +1,9 @@
-import { saveFilterState } from '../store/actions/actions';
-
 // A function for creating filterOptions based on filters {...} from component state
 // to be used in conjunction with initial layerObj.filterOptions to regenerate filters
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
-export default function buildFilterState(mapId, filterOptions, filters, layerId, dispatch) {
+export default function buildFilterState(filterOptions, filters) {
+
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -59,12 +58,10 @@ export default function buildFilterState(mapId, filterOptions, filters, layerId,
     }
   }
 
-  const filterState = {
+  return {
     filters,
     filterOptions,
     aggregate,
     isFiltered: true,
   };
-
-  dispatch(saveFilterState(mapId, layerId, filterState));
 }
