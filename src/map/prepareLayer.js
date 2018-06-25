@@ -208,20 +208,38 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
 
     // Filter base data for missing join properties
+    const intialFilter = (d) => {
+      if (!Array.isArray(join[(isVectorLayer ? 1 : 0)])) {
+        return typeof d[join[(isVectorLayer ? 1 : 0)]] !== 'undefined';
+      }
+      for (let j = 0; j < join[(isVectorLayer ? 1 : 0)].length; j += 1) {
+        if (typeof d[join[(isVectorLayer ? 1 : 0)][j]] !== 'undefined') return true;
+      }
+      return false;
+    };
     if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+      mergedData = mergedData.filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
-      mergedData.features = mergedData.features.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+      mergedData.features = mergedData.features.filter(intialFilter);
     }
 
     // Helper func for combining arrays of data
     function basicMerge(i, prevData, nextData) {
+      // Helper func to check nextData datum for single or multiple join props
+      const basicMergeFilter = (d) => {
+        if (!Array.isArray(join[i])) return typeof d[join[i]] !== 'undefined';
+        for (let j = 0; j < join[i].length; j += 1) {
+          if (typeof d[join[i][j]] !== 'undefined') return true;
+        }
+        return false;
+      };
+
       if (!nextData || typeof nextData === 'string') {
         return { ...prevData };
       } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
-        return [...prevData, ...data[i].filter(d => typeof d[join[i]] !== 'undefined')];
+        return [...prevData, ...data[i].filter(basicMergeFilter)];
       } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
-        return [...prevData, ...data[i].features.filter(d => typeof d[join[i]] !== 'undefined')];
+        return [...prevData, ...data[i].features.filter(basicMergeFilter)];
       } else if (prevData.features && Array.isArray(prevData.features)) {
         return {
           ...prevData,
@@ -236,43 +254,80 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const prevData = PrevData;
       const nextData = NextData.features || NextData;
       let datum;
+      let joinProp;
       for (let d = 0; d < nextData.length; d += 1) {
         datum = nextData[d].properties || nextData[d];
-        if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
+        if (Array.isArray(join[i])) {
+          for (let j = 0; j < join[i].length; j += 1) {
+            joinProp = typeof datum[join[i][j]] !== 'undefined' ? join[i][j] : null;
+            if (joinProp) break;
+          }
+        } else {
+          joinProp = join[i];
+        }
+
+        if (relation.key[i] === 'one' && datum[joinProp] && prevData[datum[joinProp]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
-          prevData[datum[join[i]]] = {
-            ...prevData[datum[join[i]]],
+          prevData[datum[joinProp]] = {
+            ...prevData[datum[joinProp]],
             ...datum,
           };
-        } else if (relation.key[i] === 'one' && datum[join[i]]) {
+        } else if (relation.key[i] === 'one' && datum[joinProp]) {
           // Add unique "one"s to mergedData
-          prevData[datum[join[i]]] = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
-        } else if (datum[join[i]] && prevData[datum[join[i]]]) {
+          prevData[datum[joinProp]] = { ...datum };
+          prevData[datum[joinProp]][(relation['many-prop'] || 'many')] = [];
+        } else if (datum[joinProp] && prevData[datum[joinProp]]) {
           // Add non-unique "many" to corresponding "one"
           datum = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
+          prevData[datum[joinProp]][(relation['many-prop'] || 'many')].push(datum);
         }
       }
       return { ...prevData };
     }
 
+    // Helper func for joining "ones" to "manys"
     function oneToManyMerge(i, PrevData, NextData) {
       let prevData = PrevData;
       const nextData = NextData.features || NextData;
       const j = relation.key.indexOf('many'); // first instance of 'many'
       let datum;
+      let pJoinProp;
+      let nJoinProp;
 
-      const prevDataMap = pd => (pd[join[j]] === datum[join[i]] ? { ...pd, ...datum } : pd);
+      // todo - refactor oneToManyMerge for efficiency and flexibility
+      // 1) loop through nextData once and build {map}
+      // 2) map() through prevData once and reference {map}
+      // 3) reorder everything up front to make sure that all manys exist before mapping ones
+
+      const prevDataMap = (pd) => {
+        if (Array.isArray(join[j])) {
+          for (let k = 0; k < join[j].length; k += 1) {
+            pJoinProp = typeof pd[join[j][k]] !== 'undefined' ? join[j][k] : null;
+            if (pJoinProp) break;
+          }
+        } else {
+          pJoinProp = join[j];
+        }
+        return (pd[pJoinProp] === datum[nJoinProp] ? { ...pd, ...datum } : pd);
+      };
       // loop through all next data
       for (let d = 0; d < nextData.length; d += 1) {
         datum = nextData[d].properties || nextData[d];
+        if (Array.isArray(join[i])) {
+          for (let k = 0; k < join[i].length; k += 1) {
+            nJoinProp = typeof datum[join[i][k]] !== 'undefined' ? join[i][k] : null;
+            if (nJoinProp) break;
+          }
+        } else {
+          nJoinProp = join[i];
+        }
+
 
         // if nextData is another many, add it to the prev data array
-        if (relation.key[i] === 'many' && datum[join[i]] && Array.isArray(prevData)) {
+        if (relation.key[i] === 'many' && datum[nJoinProp] && Array.isArray(prevData)) {
           prevData = [...prevData, ...(nextData.features || nextData)];
         // if nextData is one, map it to existing manys in prevData
-        } else if (relation.key[i] === 'one' && datum[join[i]] && Array.isArray(prevData)) {
+        } else if (relation.key[i] === 'one' && datum[nJoinProp] && Array.isArray(prevData)) {
           prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;
         }
       }
