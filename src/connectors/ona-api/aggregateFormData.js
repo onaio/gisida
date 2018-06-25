@@ -157,10 +157,12 @@ function processFormData(formData, indicatorField, layerObj) {
       let extraPropsSumTotal = [];
       let prevExtraPropsSumTotal = [];
       const { extraProps } = aggregateOptions;
+
+      if (!groupProps[availableGroups[j]]) {
+        groupProps[availableGroups[j]] = {};
+      }
+
       if (isGeoJson) {
-        if (!groupProps[availableGroups[j]]) {
-          groupProps[availableGroups[j]] = {};
-        }
         groupProps[availableGroups[j]].coordinates = [
           groupData[0][latProp], groupData[0][longProp]];
       }
@@ -207,18 +209,19 @@ function processFormData(formData, indicatorField, layerObj) {
           parsedLocName = parsedUID;
 
           if (extraProps && extraProps.length) {
-            extraProps.forEach((e, y) => {
-              if (!Number.isNaN(Number(groupData[x][e]))) {
+            for (let y = 0; y < extraProps.length; y += 1) {
+              const e = extraProps[y];
+              if (numberProps.indexOf(e) !== -1) {
                 extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
               } else {
                 groupProps[availableGroups[j]][e] = groupData[x][e];
               }
-            });
+            }
           }
         }
 
         if (extraProps && extraProps.length) {
-          extraProps.map((p, f) => {
+          numberProps.map((p, f) => {
             extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
             return extraPropsSumTotal;
           });
@@ -233,7 +236,10 @@ function processFormData(formData, indicatorField, layerObj) {
       // calculate the percentage of matching rows using group total
       const percentage = ((matchingRowsCount / groupTotal) * 100).toFixed(0);
       // Final aggregated indicator value for  group
-      const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
+      const indicatorValue = aggregateOptions.type === 'count'
+        ? percentage
+        : (Number.isNaN(sumTotal) && Number(sumTotal.replace(/,/g, '')))
+        || sumTotal;
 
       const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
@@ -256,15 +262,15 @@ function processFormData(formData, indicatorField, layerObj) {
       // Push new aggregated period datum while preserving disaggregated data
       if (extraProps && extraProps.length) {
         const extraPropsObj = {};
-        extraProps.forEach((p, l) => {
-          if (!Number.isNaN(Number(extraPropsSumTotal[l]))
-            && !groupProps[availableGroups[j]]) {
-            extraPropsObj[p] = extraPropsSumTotal[l];
+
+        for (let y = 0; y < extraProps.length; y += 1) {
+          const e = extraProps[y];
+          if (numberProps.indexOf(e) !== -1) {
+            extraPropsObj[e] = extraPropsSumTotal[y];
           } else {
-            extraPropsObj[p] = groupProps[availableGroups[j]][p];
+            extraPropsObj[e] = groupProps[availableGroups[j]][e];
           }
-          return extraPropsObj;
-        });
+        }
 
         const mergedObject = {
           ...extraPropsObj,
