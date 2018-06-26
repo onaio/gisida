@@ -123,10 +123,20 @@ export const mapLoaded = (mapId, isLoaded) => ({
   mapId,
 });
 
+export const reloadLayer = (mapId, layerId) => ({
+  type: types.RELOAD_LAYER,
+  layerId,
+  mapId,
+});
+
 export const reloadLayers = (mapId, reload) => ({
   type: types.RELOAD_LAYERS,
   reload,
   mapId,
+});
+
+export const layerReloaded = (mapId) => ({
+  type: types.LAYER_RELOADED,
 });
 
 export const updateTimeseries = (mapId, timeseries) => ({
@@ -161,6 +171,8 @@ export default {
   mapLoaded,
   addLayer,
   addLayerGroup,
+  reloadLayer,
+  layerReloaded,
   reloadLayers,
   toggleLayer,
   toggleFilter,
