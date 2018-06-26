@@ -1,8 +1,15 @@
 export function processFilters(layerData, filterOptions) {
-  let data = layerData.mergedData || layerData.source.data;
+  const Data = (layerData.mergedData && (Array.isArray(layerData.mergedData)
+      ? [...layerData.mergedData] : { ...layerData.mergedData }))
+    || (layerData.source.data && (Array.isArray(layerData.source.data)
+      ? [...layerData.source.data] : { ...layerData.source.data }));
+  let data = (Data.features && [...Data.features]) || [...Data];
+
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
+  let datum;
+
   if (layerData.aggregate.filter && filterOptions) {
     // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
@@ -11,20 +18,52 @@ export function processFilters(layerData, filterOptions) {
       }
     });
     // apply filters
-    data = data.filter((datum) => {
-      if (acceptedFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
+    data = (data.features||data).filter((d) => {
+      datum = (d.properties||d);
+      if (acceptedFilterValues && acceptedSubFilterValues
+        && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
         // remove rows that should be filtered out, ignore rows with values from second filter field
         return !filters.includes(datum[layerData.aggregate.filter]);
-      } else if (acceptedSubFilterValues && acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
+      } else if (acceptedSubFilterValues
+        && acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
         // remove rows that should be filtered out, ignore rows with values from first filter field
         return !filters.includes(datum[layerData.aggregate['sub-filter']]);
       } else if (!acceptedFilterValues && !acceptedSubFilterValues) {
         return !filters.includes(datum[layerData.aggregate.filter]);
       } return true;
     });
+  } else if (layerData.aggregate.filter) {
+    let f = 0;
+    function filterProcessor(d) {
+      datum = (d.properties||d);
+      if (typeof acceptedFilterValues[f] === 'string') {
+        return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
+      } else {
+        return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
+      }
+    }
+    for (f; f < layerData.aggregate.filter.length; f += 1) {
+      if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
+        data = data.filter(filterProcessor);
+      } else if (acceptedFilterValues[f] === 'quant') {
+        // TODO - ADD SUPPORT FOR QUANT FILTERS!
+      }
+    }
   }
-  return data;
+
+  if (Array.isArray(Data)) {
+    return data;
+  }
+  // handle geojson schema
+  return {
+    ...Data,
+    features: data,
+  };
 }
+
+// export function filterData(layerData) {
+
+// }
 
 export function generateFilterOptions(layerData) {
   let data = layerData.mergedData || layerData.source.data;
@@ -36,6 +75,7 @@ export function generateFilterOptions(layerData) {
   let filter;
   let filterLabel;
   let acceptedFilterValues;
+  let filterType;
   let d;
   let datum;
 
@@ -47,9 +87,15 @@ export function generateFilterOptions(layerData) {
       && layerData.aggregate['filter-label'][f].length
       ? layerData.aggregate['filter-label'][f] : filter;
 
+    // define which type of filter it should be (vector or stops, default to vector)
+    filterType = layerData.aggregate['filter-type'] && layerData.aggregate['filter-type'][f]
+      && layerData.aggregate['filter-type'][f].length
+      ? layerData.aggregate['filter-type'][f] : 'vector';
+    
     // define unique filter and sub-filter values on filterOptions object
     filterOptions[filter] = {
       label: filterLabel,
+      type: filterType,
       filterValues: {},
     };
   }
