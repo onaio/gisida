@@ -6,7 +6,6 @@ import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
 export default function buildFilterState(filterOptions, filters, layerObj, regenStops) {
-
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -61,13 +60,13 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     }
   }
 
-  const fauxLayerObj = regenStops ? { 
+  const fauxLayerObj = regenStops ? {
     ...layerObj,
     source: {
       ...layerObj.source,
       data: Array.isArray(layerObj.source.data)
         ? [...layerObj.source.data]
-        : { ...layerObj.source.data }
+        : { ...layerObj.source.data },
     },
     mergedData: layerObj.mergedData && Array.isArray(layerObj.mergedData)
       ? [...layerObj.mergedData]
@@ -77,7 +76,7 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
       ...aggregate,
     },
   } : null;
-  
+
   if (regenStops) {
     fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
     fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
