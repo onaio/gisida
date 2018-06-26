@@ -116,12 +116,22 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   }
 
   const layerObj = { ...LayerObj };
-  const featureProperties = { ...FeatureProperties };
+  let featureProperties = { ...FeatureProperties };
   const {
     UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
   } = layerObj['detail-view'];
 
   if (!UID) return false;
+  const join = layerObj['detail-view'].join || layerObj.source.join;
+  const layerObjDatum = layerObj.Data && layerObj.Data.find(d => 
+    (d.properties||d)[join[1]] === featureProperties[join[0]]);
+
+  if (layerObjDatum) {
+    featureProperties = {
+      ...featureProperties,
+      ...(layerObjDatum.properties||layerObjDatum),
+    };
+  }
 
   const detailViewModel = {
     UID: featureProperties[UID],
