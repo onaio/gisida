@@ -14,7 +14,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   map.on('mousemove', (e) => {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, primaryLayer } = currentState[mapId];
+    const { layers, timeseries } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
