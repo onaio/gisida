@@ -116,7 +116,8 @@ function getStops(layer) {
         }
       }
     }
-    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke, periodBreaks];
+    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke,
+      periodBreaks];
   }
   return [];
 }
