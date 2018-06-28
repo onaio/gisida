@@ -119,8 +119,6 @@ function processFormData(formData, indicatorField, layerObj) {
       .map(p => p.p);
   }
 
-  // let
-
   const replacePeriod = function (period, weekYear) {
     return (d) => {
       const newd = { ...d };
@@ -217,8 +215,7 @@ function processFormData(formData, indicatorField, layerObj) {
             for (let y = 0; y < extraProps.length; y += 1) {
               const e = extraProps[y];
               if (numberProps.indexOf(e) !== -1) {
-                const int = parseInt(groupData[x][e] || 0, 10);
-                extraPropsSumTotal[e] += int;
+                extraPropsSumTotal[e] += parseInt(groupData[x][e] || 0, 10);
               } else {
                 groupProps[availableGroups[j]][e] = groupData[x][e];
               }
