@@ -36,6 +36,7 @@
     "jsx-loader": "^0.13.2",
     "moment": "^2.22.1",
     "mustache": "^2.3.0",
+    "neo-async": "^2.5.1",
     "papaparse": "^4.3.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",

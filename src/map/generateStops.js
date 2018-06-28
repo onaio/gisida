@@ -77,6 +77,7 @@ function getStops(layer) {
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = layer.limit ? rangeData : sortedData;
   const osmIDs = layer.limit ? rangeID : osmID;
+  const breakStops = [];
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
@@ -86,6 +87,7 @@ function getStops(layer) {
         const stopValue = OSMIDsExist ? osmIDs[k] : data[k];
         colorsStops.push([stopValue, getColor(layer.colors, i)]);
         radiusStops.push([stopValue, (Number(radius[i]))]);
+        breakStops.push(breaks[i]);
         break;
       }
     }
@@ -96,10 +98,12 @@ function getStops(layer) {
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];
+    const periodBreaks = [];
     for (let j = 0; j < uniqPeriods.length; j += 1) {
       periodStops[j] = [];
       periodRadius[j] = [];
       periodStroke[j] = [];
+      periodBreaks[j] = [];
     }
     const periodProp = layer.limit ? rangePeriod : period;
     for (let m = 0; m < periodProp.length; m += 1) {
@@ -108,10 +112,12 @@ function getStops(layer) {
           periodStops[n].push(colorsStops[m]);
           periodRadius[n].push(radiusStops[m]);
           periodStroke[n].push([radiusStops[m][0], 1]);
+          periodBreaks[n].push(breakStops[m]);
         }
       }
     }
-    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke];
+    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke,
+      periodBreaks];
   }
   return [];
 }

@@ -1,14 +1,19 @@
 import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
+import csvToGEOjson from '../../map/csvToGEOjson';
 
-function processFormData(formData, indicatorField, aggregateOptions) {
+function processFormData(formData, indicatorField, layerObj) {
   let data = formData;
+  const aggregateOptions = layerObj.aggregate;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
   const matchingValues = aggregateOptions['matching-values'];
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
+  const longProp = (layerObj['geo-columns'] && layerObj['geo-columns'][0]) || 'Longitude';
+  const latProp = (layerObj['geo-columns'] && layerObj['geo-columns'][1]) || 'Latitude';
+  const isGeoJson = layerObj.source.type === 'geojson';
   const possibleDateFormats = [
     'YYYY-MM-DD',
     'MM/DD/YYYY',
@@ -59,14 +64,14 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       };
     });
   } else if (aggregateOptions['date-parse']) {
-    data = data.map((datum) => {
+    data = (data.features || data).map((datum) => {
       const { split, chunk } = aggregateOptions['date-parse'];
       const datumDate = split
-        ? datum[submissionDateField].split(split)[chunk]
-        : datum[submissionDateField];
+        ? (datum.properties || datum)[submissionDateField].split(split)[chunk]
+        : (datum.properties || datum)[submissionDateField];
 
       return {
-        ...datum,
+        ...(datum.properties || datum),
         'period-date': new Date(datumDate),
       };
     });
@@ -80,9 +85,10 @@ function processFormData(formData, indicatorField, aggregateOptions) {
   let aggregatedData = [];
   let currentPeriodaggregatedData = [];
   let previousPeriodaggregatedData = [];
-
   let availablePeriods = Object.keys(data);
 
+  // Map to store coordinates of each groupBy item if applicable
+  const groupProps = {};
 
   // Sort periods in chronological order
   function comparator(a, b) {
@@ -150,9 +156,30 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       let prevExtraPropsSumTotal = [];
       const { extraProps } = aggregateOptions;
 
+      if (!groupProps[availableGroups[j]]) {
+        groupProps[availableGroups[j]] = {};
+      }
+
+      if (isGeoJson) {
+        groupProps[availableGroups[j]].coordinates = [
+          groupData[0][latProp], groupData[0][longProp]];
+      }
+
+      let numberProps;
+
       if (extraProps && extraProps.length) {
-        prevExtraPropsSumTotal = [...extraProps].fill(0);
-        extraPropsSumTotal = [...extraProps].fill(0);
+        numberProps = groupData.map((g) => {
+          numberProps = extraProps.filter(p => !Number.isNaN(Number(g[p])));
+          return numberProps;
+        });
+        numberProps = [...new Set([].concat(...numberProps))];
+        prevExtraPropsSumTotal = {};
+
+        extraPropsSumTotal = {};
+        numberProps.forEach((prop) => {
+          prevExtraPropsSumTotal[prop] = 0;
+          extraPropsSumTotal[prop] = 0;
+        });
       }
 
       // Get group data from previous period
@@ -164,8 +191,8 @@ function processFormData(formData, indicatorField, aggregateOptions) {
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
         if (extraProps && extraProps.length) {
-          extraProps.forEach((p, x) => {
-            prevExtraPropsSumTotal[x] = previousPeriodGroupData[
+          numberProps.forEach((p) => {
+            prevExtraPropsSumTotal[p] = previousPeriodGroupData[
               previousPeriodGroupData.length - 1][p]
               || 0;
           });
@@ -185,15 +212,20 @@ function processFormData(formData, indicatorField, aggregateOptions) {
           parsedLocName = parsedUID;
 
           if (extraProps && extraProps.length) {
-            extraProps.forEach((e, y) => {
-              extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
-            });
+            for (let y = 0; y < extraProps.length; y += 1) {
+              const e = extraProps[y];
+              if (numberProps.indexOf(e) !== -1) {
+                extraPropsSumTotal[e] += parseInt(groupData[x][e] || 0, 10);
+              } else {
+                groupProps[availableGroups[j]][e] = groupData[x][e];
+              }
+            }
           }
         }
 
         if (extraProps && extraProps.length) {
-          extraProps.map((p, f) => {
-            extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
+          numberProps.map((p) => {
+            extraPropsSumTotal[p] += prevExtraPropsSumTotal[p];
             return extraPropsSumTotal;
           });
         }
@@ -207,7 +239,10 @@ function processFormData(formData, indicatorField, aggregateOptions) {
       // calculate the percentage of matching rows using group total
       const percentage = ((matchingRowsCount / groupTotal) * 100).toFixed(0);
       // Final aggregated indicator value for  group
-      const indicatorValue = aggregateOptions.type === 'count' ? percentage : sumTotal;
+      const indicatorValue = aggregateOptions.type === 'count'
+        ? percentage
+        : (Number.isNaN(sumTotal) && Number(sumTotal.replace(/,/g, '')))
+        || sumTotal;
 
       const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
@@ -221,14 +256,24 @@ function processFormData(formData, indicatorField, aggregateOptions) {
         disaggregatedData: [...groupData],
       };
 
-      // Push new aggregated period datum while preserving disaggregated data
+      if (isGeoJson) {
+        const { coordinates } = groupProps[availableGroups[j]];
+        [currentPeriodaggregatedDataObj[latProp],
+          currentPeriodaggregatedDataObj[longProp]] = coordinates;
+      }
 
+      // Push new aggregated period datum while preserving disaggregated data
       if (extraProps && extraProps.length) {
         const extraPropsObj = {};
-        extraProps.forEach((p, l) => {
-          extraPropsObj[p] = extraPropsSumTotal[l];
-          return extraPropsObj;
-        });
+
+        for (let y = 0; y < extraProps.length; y += 1) {
+          const e = extraProps[y];
+          if (numberProps.indexOf(e) !== -1) {
+            extraPropsObj[e] = extraPropsSumTotal[e];
+          } else {
+            extraPropsObj[e] = groupProps[availableGroups[j]][e];
+          }
+        }
 
         const mergedObject = {
           ...extraPropsObj,
@@ -255,7 +300,7 @@ function processFormData(formData, indicatorField, aggregateOptions) {
 
   // filter out groups whose total value are below the required minimum total value
   aggregatedData = aggregatedData.filter(datum => datum.total >= minTotal);
-
+  if (isGeoJson) aggregatedData = csvToGEOjson(layerObj, aggregatedData);
   return aggregatedData;
 }
 
@@ -294,6 +339,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
-  aggregatedData = processFormData(data, layer.property, layer.aggregate);
+  aggregatedData = processFormData(data, layer.property, layer);
   return aggregatedData;
 }
