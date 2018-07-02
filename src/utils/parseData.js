@@ -83,8 +83,10 @@ export default function parseData(spec, datum) {
 
   // loop through all datum properties
   for (let p = 0; p < datumProps.length; p += 1) {
-    datumVal = datum[datumProps[p]];
-    propSpec = spec[datumProps[p]];
+    datumCopy = [ ...datum ];
+    specCopy = { ...spec };
+    datumVal = datumCopy[datumProps[p]];
+    propSpec = specCopy[datumProps[p]];
     propVal = propSpec && propSpec.key && propSpec.key[datumVal];
 
     // if property is doesn't require parsing,
@@ -122,7 +124,7 @@ export default function parseData(spec, datum) {
 
     // assign the parsed value into the parsedDatum object
     if (propSpec && !propSpec.type && propSpec['new-prop-name']) {
-      parsedDatum[datumProps[p]] = datum[datumProps[p]];
+      parsedDatum[datumProps[p]] = datumCopy[datumProps[p]];
       parsedDatum[propSpec['new-prop-name']] = parseVal;
     } else {
       parsedDatum[datumProps[p]] = parseVal;
