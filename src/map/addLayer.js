@@ -38,7 +38,7 @@ function buildRadiusAsDistanceExpression(layer) {
 export default function (layer, mapConfig) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
-  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
+  const timefield = (layerObj.aggregate && layerObj.aggregate.timeseries) ? layerObj.aggregate.timeseries.field : '';
   let stops;
   let styleSpec;
 
