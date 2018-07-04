@@ -4,7 +4,7 @@ import groupBy from '../../utils/groupBy';
 import csvToGEOjson from '../../map/csvToGEOjson';
 
 function processFormData(formData, indicatorField, layerObj) {
-  let data = formData;
+  let data = Array.isArray(formData) ? [...formData] : { ...formData };
   const aggregateOptions = layerObj.aggregate;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
