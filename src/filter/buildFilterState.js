@@ -85,6 +85,9 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     } else {
       fauxLayerObj.source.data = processFilters(fauxLayerObj);
     }
+    if (fauxLayerObj.stops) {
+      fauxLayerObj['unfiltered-stops'] = [...fauxLayerObj.stops];
+    }
   }
 
   return {
