@@ -119,8 +119,6 @@ function processFormData(formData, indicatorField, layerObj) {
       .map(p => p.p);
   }
 
-  // let
-
   const replacePeriod = function (period, weekYear) {
     return (d) => {
       const newd = { ...d };
@@ -170,12 +168,18 @@ function processFormData(formData, indicatorField, layerObj) {
       let numberProps;
 
       if (extraProps && extraProps.length) {
-        groupData.map((g) => {
+        numberProps = groupData.map((g) => {
           numberProps = extraProps.filter(p => !Number.isNaN(Number(g[p])));
           return numberProps;
         });
-        prevExtraPropsSumTotal = [...numberProps].fill(0);
-        extraPropsSumTotal = [...numberProps].fill(0);
+        numberProps = [...new Set([].concat(...numberProps))];
+        prevExtraPropsSumTotal = {};
+
+        extraPropsSumTotal = {};
+        numberProps.forEach((prop) => {
+          prevExtraPropsSumTotal[prop] = 0;
+          extraPropsSumTotal[prop] = 0;
+        });
       }
 
       // Get group data from previous period
@@ -187,9 +191,8 @@ function processFormData(formData, indicatorField, layerObj) {
           || 0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
         if (extraProps && extraProps.length) {
-          extraProps.filter(p => !Number.isNaN(Number(previousPeriodGroupData[
-            previousPeriodGroupData.length - 1][p]))).forEach((p, x) => {
-            prevExtraPropsSumTotal[x] = previousPeriodGroupData[
+          numberProps.forEach((p) => {
+            prevExtraPropsSumTotal[p] = previousPeriodGroupData[
               previousPeriodGroupData.length - 1][p]
               || 0;
           });
@@ -212,7 +215,7 @@ function processFormData(formData, indicatorField, layerObj) {
             for (let y = 0; y < extraProps.length; y += 1) {
               const e = extraProps[y];
               if (numberProps.indexOf(e) !== -1) {
-                extraPropsSumTotal[y] += parseInt(groupData[x][e] || 0, 10);
+                extraPropsSumTotal[e] += parseInt(groupData[x][e] || 0, 10);
               } else {
                 groupProps[availableGroups[j]][e] = groupData[x][e];
               }
@@ -221,8 +224,8 @@ function processFormData(formData, indicatorField, layerObj) {
         }
 
         if (extraProps && extraProps.length) {
-          numberProps.map((p, f) => {
-            extraPropsSumTotal[f] += prevExtraPropsSumTotal[f];
+          numberProps.map((p) => {
+            extraPropsSumTotal[p] += prevExtraPropsSumTotal[p];
             return extraPropsSumTotal;
           });
         }
@@ -266,7 +269,7 @@ function processFormData(formData, indicatorField, layerObj) {
         for (let y = 0; y < extraProps.length; y += 1) {
           const e = extraProps[y];
           if (numberProps.indexOf(e) !== -1) {
-            extraPropsObj[e] = extraPropsSumTotal[y];
+            extraPropsObj[e] = extraPropsSumTotal[e];
           } else {
             extraPropsObj[e] = groupProps[availableGroups[j]][e];
           }
