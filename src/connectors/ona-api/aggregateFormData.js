@@ -119,14 +119,14 @@ function processFormData(formData, indicatorField, layerObj) {
       .map(p => p.p);
   }
 
-  const replacePeriod = function (period, weekYear) {
+  function replacePeriod(period, weekYear) {
     return (d) => {
       const newd = { ...d };
       newd.period = period;
       newd.weekYear = weekYear;
       return newd;
     };
-  };
+  }
 
   // loop through available periods
   for (let i = 0; i < availablePeriods.length; i += 1) {

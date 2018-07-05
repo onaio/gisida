@@ -60,6 +60,24 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     }
   }
 
+
+  const originalLayerObj = {
+    ...layerObj,
+    source: {
+      ...layerObj.source,
+      data: Array.isArray(layerObj.source.data)
+        ? [...layerObj.source.data]
+        : { ...layerObj.source.data },
+    },
+    mergedData: layerObj.mergedData && Array.isArray(layerObj.mergedData)
+      ? [...layerObj.mergedData]
+      : { ...layerObj.mergedData },
+    aggregate: {
+      ...layerObj.aggregate,
+      ...aggregate,
+    },
+  };
+
   const fauxLayerObj = regenStops ? {
     ...layerObj,
     source: {
@@ -96,5 +114,6 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     aggregate,
     isFiltered: true,
     fauxLayerObj,
+    originalLayerObj,
   };
 }
