@@ -78,7 +78,7 @@ function getStops(layer) {
   // Split the data into nClusters
   const cluster = (Array.isArray(clusters) && clusters)
     || (clusters ? ckmeans(sortedData, clusters) : null);
-  breaks = limit ? limit : cluster.map(cl => cl[cl.length - 1]);
+  breaks = limit || cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = limit ? rangeData : sortedData;
   const osmIDs = limit ? rangeID : osmID;

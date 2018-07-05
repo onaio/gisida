@@ -135,7 +135,8 @@ export const reloadLayers = (mapId, reload) => ({
   mapId,
 });
 
-export const layerReloaded = (mapId) => ({
+export const layerReloaded = mapId => ({
+  mapId,
   type: types.LAYER_RELOADED,
 });
 
