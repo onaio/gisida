@@ -52,7 +52,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         const tsLayer = timeseries[activeLayerId];
         if (tsLayer) {
           const currPeriod = Object.keys(tsLayer.periodData)[tsLayer.temporalIndex];
-          periodData = tsLayer.periodData[currPeriod].data;
+          // debugger
+          periodData = [...tsLayer.data];
         }
       }
       // Assign layer data

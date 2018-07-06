@@ -5,7 +5,8 @@ import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 // to be used in conjunction with initial layerObj.filterOptions to regenerate filters
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
-export default function buildFilterState(filterOptions, filters, layerObj, regenStops) {
+export default function buildFilterState(filterOptions, filters, layerObj, regenStops,
+  timeSeriesObj) {
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -85,6 +86,12 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
 
   const fauxLayerObj = regenStops ? {
     ...layerObj,
+    // Data: layerObj.Data && Array.isArray(layerObj.Data)
+    //   ? [
+    //     ...layerObj.mergedData
+    //   ] : {
+    //     ...layerObj.Data,
+    //   },
     source: {
       ...layerObj.source,
       data: Array.isArray(layerObj.source.data)
