@@ -60,7 +60,6 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     }
   }
 
-
   const originalLayerObj = {
     ...layerObj,
     source: {
@@ -75,6 +74,12 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     aggregate: {
       ...layerObj.aggregate,
       ...aggregate,
+    },
+    filterOptions: {
+      ...layerObj.filterOptions,
+    },
+    filters: {
+      ...layerObj.filters,
     },
   };
 
