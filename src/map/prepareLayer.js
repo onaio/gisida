@@ -377,10 +377,17 @@ function fetchMultipleSources(mapId, layer, dispatch) {
  * @param {*} dispatch
  * @param {*} filterOptions
  */
-export default function prepareLayer(mapId, layer, dispatch, filterOptions = false, doUpdateTsLayer) {
+export default function prepareLayer(
+  mapId,
+  layer,
+  dispatch,
+  filterOptions = false,
+  doUpdateTsLayer,
+) {
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
+
 
   // // add to active layers?
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
