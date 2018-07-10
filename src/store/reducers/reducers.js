@@ -184,7 +184,8 @@ export function createMapReducer(mapId) {
           const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
           layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
-          const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible);
+          const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
+            && state.layers[l].id !== reloadLayerId);
           return {
             ...state,
             layers: updatedLayers,
@@ -227,6 +228,7 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
+
           return {
             ...state,
             // Update visible property
@@ -324,6 +326,16 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             menuIsOpen: !state.menuIsOpen,
+          };
+        }
+
+        case types.RESET_FILTERED_LAYER: {
+          const { oldLayer } = action;
+          return {
+            ...state,
+            oldLayerObj: {
+              ...oldLayer,
+            },
           };
         }
 
