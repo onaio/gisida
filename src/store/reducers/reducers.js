@@ -228,6 +228,7 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
+
           return {
             ...state,
             // Update visible property
@@ -325,6 +326,16 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             menuIsOpen: !state.menuIsOpen,
+          };
+        }
+
+        case types.RESET_FILTERED_LAYER: {
+          const { oldLayer } = action;
+          return {
+            ...state,
+            oldLayerObj: {
+              ...oldLayer,
+            },
           };
         }
 

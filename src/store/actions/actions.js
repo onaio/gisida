@@ -152,6 +152,12 @@ export const detailView = (mapId, payload) => ({
   payload,
 });
 
+export const resetFilteredLayer = (mapId, oldLayer) => ({
+  type: types.RESET_FILTERED_LAYER,
+  mapId,
+  oldLayer,
+});
+
 export const triggerSpinner = (mapId, isLoaded = false) => ({
   type: types.TRIGGER_SPINNER,
   isLoaded,
@@ -186,6 +192,7 @@ export default {
   getCurrentState,
   updateTimeseries,
   detailView,
+  resetFilteredLayer,
   setLayerFilter,
   filtersUpdated,
   saveFilterState,

@@ -28,6 +28,7 @@ describe('reducers.APP', () => {
           currentRegion: '',
           currentStyle: '',
           detailView: null,
+          oldLayerObj: {},
           filter: {
             filterOptions: {},
             filters: {},
