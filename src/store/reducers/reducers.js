@@ -181,13 +181,16 @@ export function createMapReducer(mapId) {
           };
         case types.ADD_LAYER: {
           const layers = {};
-          layers[action.layer.id] = action.layer;
+          const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
+          layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible);
           return {
             ...state,
             layers: updatedLayers,
             defaultLayers,
+            reloadLayerId,
+            reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
           };
         }
         case types.TOGGLE_LAYER: {
@@ -254,7 +257,19 @@ export function createMapReducer(mapId) {
               && updatedLayers[filterLayerId].visible,
           };
         }
+        case types.RELOAD_LAYER: {
+          return {
+            ...state,
+            reloadLayerId: action.layerId,
+          };
+        }
 
+        case types.LAYER_RELOADED: {
+          return {
+            ...state,
+            reloadLayerId: null,
+          };
+        }
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
             && state.layers[action.primaryLayer].aggregate.filter;
