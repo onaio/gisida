@@ -28,16 +28,20 @@ const getColor = function getColor(c, i) {
 };
 
 function getStops(layer) {
+  const {
+    colors, periods, limit, clusters, radiusRange,
+  } = layer;
+
   const colorsStops = [];
   const radiusStops = [];
-  const radius = layer.radiusRange || defaultRadiusRange;
   let breaks = [];
+  const radius = radiusRange || defaultRadiusRange;
 
   // Sort data based on data value
   const list = layer.data.map((x, i) => ({
     data: x,
     osmIDs: layer.osmIDs[i],
-    periods: layer.periods[i],
+    periods: periods[i],
   }), this);
   list.sort((a, b) => {
     if (a.data < b.data) {
@@ -56,7 +60,7 @@ function getStops(layer) {
   const dataList = layer.osmIDs.map((x, i) => ({
     osmIDs: x,
     data: layer.data[i],
-    periods: layer.periods[i],
+    periods: periods[i],
   }), this);
   dataList.sort((a, b) => {
     if (a.osmIDs < b.osmIDs) {
@@ -72,11 +76,13 @@ function getStops(layer) {
   const rangePeriod = dataList.map(l => l.periods);
 
   // Split the data into nClusters
-  const cluster = layer.clusters ? ckmeans(sortedData, layer.clusters) : null;
-  breaks = layer.limit ? layer.limit : cluster.map(cl => cl[cl.length - 1]);
+  const cluster = (Array.isArray(clusters) && clusters)
+    || (clusters ? ckmeans(sortedData, clusters) : null);
+  breaks = limit || cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
-  const data = layer.limit ? rangeData : sortedData;
-  const osmIDs = layer.limit ? rangeID : osmID;
+  const data = limit ? rangeData : sortedData;
+  const osmIDs = limit ? rangeID : osmID;
+  const breakStops = [];
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
@@ -84,34 +90,39 @@ function getStops(layer) {
       if (data[k] <= breaks[i]) {
         // Check for repeating stop domains
         const stopValue = OSMIDsExist ? osmIDs[k] : data[k];
-        colorsStops.push([stopValue, getColor(layer.colors, i)]);
+        colorsStops.push([stopValue, getColor(colors, i)]);
         radiusStops.push([stopValue, (Number(radius[i]))]);
+        breakStops.push(breaks[i]);
         break;
       }
     }
   }
 
-  if (layer.periods) {
-    const uniqPeriods = [...new Set(layer.periods)];
+  if (periods) {
+    const uniqPeriods = [...new Set(periods)];
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];
+    const periodBreaks = [];
     for (let j = 0; j < uniqPeriods.length; j += 1) {
       periodStops[j] = [];
       periodRadius[j] = [];
       periodStroke[j] = [];
+      periodBreaks[j] = [];
     }
-    const periodProp = layer.limit ? rangePeriod : period;
+    const periodProp = limit ? rangePeriod : period;
     for (let m = 0; m < periodProp.length; m += 1) {
       for (let n = 0; n < uniqPeriods.length; n += 1) {
         if (periodProp[m] === uniqPeriods[n]) {
           periodStops[n].push(colorsStops[m]);
           periodRadius[n].push(radiusStops[m]);
           periodStroke[n].push([radiusStops[m][0], 1]);
+          periodBreaks[n].push(breakStops[m]);
         }
       }
     }
-    return [periodStops, periodRadius, uniqPeriods, breaks, layer.colors, periodStroke];
+    return [periodStops, periodRadius, uniqPeriods, breaks, colors, periodStroke,
+      periodBreaks];
   }
   return [];
 }
@@ -120,8 +131,14 @@ export default function (layer, timefield) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const { clusters, limit } = layer.categories;
-  const colors = getColorBrewerColor(layer.categories.color, clusters) || layer.categories.color;
+  const stops = layer['unfiltered-stops'];
+  const { categories } = layer;
+  const { clusters } = categories;
+  const limit = (stops && stops[3]) || categories.limit;
+
+  const colors = (stops && stops[4])
+    || getColorBrewerColor(layer.categories.color, clusters)
+    || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);

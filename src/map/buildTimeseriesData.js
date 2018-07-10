@@ -6,6 +6,7 @@ export default function buildTimeseriesData(
   timeSeriesLayers,
   timeseries,
   loadedlayers,
+  doUpdateTsLayer,
 ) {
   const layerObj = { ...layer };
   const activeLayers = [];
@@ -34,11 +35,12 @@ export default function buildTimeseriesData(
   let { stops } = Stops;
   let strokeWidthStops;
 
-  const periodHasDataReducer = (sum, d) => sum + Number(d[layerProperty]);
+  const periodHasDataReducer = (sum, d) => sum + Number((d.properties || d)[layerProperty]);
   const periodDataFilter = (p) => {
     // define actual period data
     periodData[p] = {
-      data: layerObj.source.data.filter(d => d[layerObj.aggregate.timeseries.field] === p),
+      data: (layerObj.source.data.features || layerObj.source.data)
+        .filter(d => (d.properties || d)[layerObj.aggregate.timeseries.field] === p),
     };
     // determine if period data has any non-zero values
     periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));
@@ -47,10 +49,9 @@ export default function buildTimeseriesData(
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
 
-    if (activeLayers.includes(layerId) && !timeseries[layerId]) {
+    if ((activeLayers.includes(layerId) && !timeseries[layerId]) || doUpdateTsLayer) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
-
       if (layers[index] && layers[index].visible === true &&
         layerObj.source.data instanceof Object && stops && layerObj.id === Stops.id) {
         // Determine layer stops

@@ -47,6 +47,7 @@ describe('reducers.APP', () => {
           mapId: 'map-1',
           menuIsOpen: true,
           primaryLayer: '',
+          reloadLayerId: null,
           reloadLayers: false,
           showFilterPanel: false,
           showProfile: false,

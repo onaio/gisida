@@ -22,7 +22,7 @@ export default function getData(formID, properties, accessToken, callback) {
     xobj.overrideMimeType(mimeType);
     xobj.open('GET', path, true);
     xobj.setRequestHeader('Authorization', `Token ${accessToken}`);
-    xobj.onreadystatechange = function () {
+    xobj.onreadystatechange = () => {
       if (xobj.readyState === 4 && xobj.status === 200) {
         callback(null, JSON.parse(xobj.responseText));
       }
