@@ -17,6 +17,7 @@ gisida.generateStops = require('./map/generateStops').default;
 gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
+gisida.getData = require('./connectors/ona-api/data').default;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;

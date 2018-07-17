@@ -186,9 +186,25 @@ export function createMapReducer(mapId) {
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
             && state.layers[l].id !== reloadLayerId);
+          let formIds = [];
+          const layerKeys = Object.keys(updatedLayers);
+          for (let x = 0; x < layerKeys.length; x += 1) {
+            const l = updatedLayers[layerKeys[x]];
+            if (l.source && l.source.data && l.source.data.length) {
+              for (let y = 0; y < l.source.data.length; y += 1) {
+                if (Number.isInteger(l.source.data[y])) {
+                  formIds.push(l.source.data[y]);
+                  formIds = [...new Set(formIds)];
+                }
+              }
+            }
+          }
           return {
             ...state,
             layers: updatedLayers,
+            allFormIds: [
+              ...formIds,
+            ],
             defaultLayers,
             reloadLayerId,
             reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
