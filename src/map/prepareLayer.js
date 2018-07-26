@@ -7,6 +7,7 @@ import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import parseData from './../utils/parseData';
+import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
@@ -31,11 +32,12 @@ export function buildLabels(layerObj, tsLayerObj, period) {
     for (let d = 0; d < layerData.length; d += 1) {
       // check for join match between label and datum
       if (labelData[l][join[0]] === layerData[d][join[1]]) {
+        const dataItem = commaFormatting(layerObj, layerData[d], false);
         // stash datum and coordi ates in label, push to labels array
         labels.push({
           ...labelData[l],
-          data: { ...layerData[d] },
-          label: Mustache.render(label, layerData[d]),
+          data: { ...dataItem },
+          label: Mustache.render(label, dataItem),
           coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
         });
         // remove datum from layerData for faster looping

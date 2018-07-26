@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
+import commaFormatting from './../utils/commaFormatting';
 
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   const map = mapboxGLMap;
@@ -32,8 +33,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Remove pop up if no features under mouse pointer
     if (!features || !features.length > 0
-        || !layers[features[0].layer.id]
-        || !layers[features[0].layer.id].popup) {
+      || !layers[features[0].layer.id]
+      || !layers[features[0].layer.id].popup) {
       content = null;
       popup.remove();
       return false;
@@ -63,23 +64,11 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           row = data[r];
           const rowItem = row;
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
-            const found = [];
-            const rxp = /{{([^}]+)}/g;
-            const str = layer.labels ? layer.labels.label : null;
-            for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
-              found.push(c[1]);
-            }
-            // while (curMatch = rxp.exec(str)) {
-            //   found.push(curMatch[1]);
-            // }
-            found.forEach((f) => {
-              rowItem[`${f}`] = rowItem[`${f}`].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            });
             // Add header and body to popup with data from layer
             if (row[layer.popup.header]) {
               content =
                 `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, rowItem)}</center></div>`;
+                `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
             } else {
               content = Mustache.render(layer.popup.body, row);
             }
