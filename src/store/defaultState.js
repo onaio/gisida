@@ -36,6 +36,7 @@ const defaultState = {
     defaultLayers: [],
     showSpinner: false,
     menuIsOpen: true,
+    openCategories: [],
     timeseries: {
       visibility: false,
     },

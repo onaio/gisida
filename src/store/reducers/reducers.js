@@ -303,6 +303,24 @@ export function createMapReducer(mapId) {
           };
         }
 
+        case types.TOGGLE_CATEGORIES: {
+          const { category, index, isRefresh } = action;
+          const openCategories = [
+            ...state.openCategories,
+          ];
+          if (index > -1) {
+            openCategories.splice(index, 1);
+          } else {
+            openCategories.push(category);
+          }
+          return {
+            ...state,
+            openCategories: isRefresh ? [] : [
+              ...openCategories,
+            ],
+          };
+        }
+
         case types.DETAIL_VIEW: {
           if (!action.payload) {
             return {
