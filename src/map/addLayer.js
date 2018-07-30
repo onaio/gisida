@@ -59,7 +59,7 @@ export default function (layer, mapConfig) {
   if (stops) {
     // newStops = { stops, id: layer.id };
     const colorStops = timefield ? stops[0][stops[0].length - 1] : stops[0][0];
-    const radiusStops = stops[1][0];
+    const radiusStops = timefield ? stops[1][stops[1].length - 1] : stops[1][0];
     const stopsData = layer.type === 'circle' ? radiusStops : colorStops;
     const breaks = stops[3];
     const colors = stops[4];
@@ -81,6 +81,7 @@ export default function (layer, mapConfig) {
     layerObj.colors = colors;
     layerObj.Data = Data;
     layerObj.stops = stops;
+    layerObj.colorStops = colorStops;
   }
 
   /*
@@ -96,13 +97,16 @@ export default function (layer, mapConfig) {
       },
       layout: {},
       paint: {
-        'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
-          {
+        'circle-color': (layer.categories.color instanceof Array && !layer.paint)
+          ? {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
-          } :
-          layer.categories.color,
+          } : (layerObj.colorStops && {
+            property: layer.source.join[0],
+            stops: layerObj.colorStops,
+            type: 'categorical',
+          }) || layer.categories.color,
         'circle-opacity': 0.8,
         'circle-stroke-color': '#fff',
         'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)
@@ -165,6 +169,7 @@ export default function (layer, mapConfig) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
+            type: 'categorical',
           };
         }
         styleSpec.source.data = layer.source.data;
