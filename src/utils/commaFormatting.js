@@ -15,7 +15,7 @@ export default function commaFormatting(layerObj, data, popup) {
     if (!Number.isNaN(dataItem[`${f}`])) {
       const val = Number(dataItem[`${f}`]);
       if (Number.isInteger(val)) {
-        dataItem[`${f}`] = dataItem[`${f}`].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        dataItem[`${f}`] = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
     }
   });

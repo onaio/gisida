@@ -61,7 +61,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (data && data.length) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
-          row = data[r];
+          row = {
+            ...data[r],
+          };
+
           const rowItem = row;
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             // Add header and body to popup with data from layer
@@ -70,7 +73,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                 `<div><b>${row[layer.popup.header]}</b></div>` +
                 `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
             } else {
-              content = Mustache.render(layer.popup.body, row);
+              content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
             }
           }
         }
