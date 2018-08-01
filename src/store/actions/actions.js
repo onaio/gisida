@@ -168,6 +168,27 @@ export function returnState(dispatch, getState) {
   return getState();
 }
 
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const loginRequest = credentials => ({
+  type: types.LOGIN_REQUEST,
+  isAuthenticated: false,
+  credentials,
+});
+
+export const loginSuccess = user => ({
+  type: types.LOGIN_SUCCESS,
+  isAuthenticated: true,
+});
+
+export const loginFailure = errorMessage => ({
+  types: types.LOGIN_FAILURE,
+  isAuthenticated: false,
+  errorMessage,
+});
+
 export const getCurrentState = () => returnState;
 
 export default {
