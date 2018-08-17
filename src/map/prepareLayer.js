@@ -7,6 +7,7 @@ import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import parseData from './../utils/parseData';
+import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
@@ -31,11 +32,12 @@ export function buildLabels(layerObj, tsLayerObj, period) {
     for (let d = 0; d < layerData.length; d += 1) {
       // check for join match between label and datum
       if (labelData[l][join[0]] === layerData[d][join[1]]) {
+        const dataItem = commaFormatting(layerObj, layerData[d], false);
         // stash datum and coordi ates in label, push to labels array
         labels.push({
           ...labelData[l],
-          data: { ...layerData[d] },
-          label: Mustache.render(label, layerData[d]),
+          data: { ...dataItem },
+          label: Mustache.render(label, dataItem),
           coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
         });
         // remove datum from layerData for faster looping
@@ -185,7 +187,19 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else q = q.defer(d3.csv, filePath);
   });
 
-  q.awaitAll((error, data) => {
+  q.awaitAll((error, Data) => {
+    // parse all data if layer has data parsing spec
+    const data = !layerObj['data-parse']
+      ? [...Data]
+      : Data.map((D) => {
+        if (Array.isArray(D.features)) {
+          return {
+            ...D,
+            features: parseData(layerObj['data-parse'], D.features),
+          };
+        }
+        return parseData(layerObj['data-parse'], D);
+      });
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
     const isVectorLayer = type === 'vector';
@@ -224,7 +238,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const nextData = NextData.features || NextData;
       let datum;
       for (let d = 0; d < nextData.length; d += 1) {
-        datum = nextData[d];
+        datum = nextData[d].properties || nextData[d];
         if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
           prevData[datum[join[i]]] = {
@@ -237,9 +251,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
         } else if (datum[join[i]] && prevData[datum[join[i]]]) {
           // Add non-unique "many" to corresponding "one"
-          datum = layerObj['data-parse']
-            ? parseData(layerObj['data-parse'], datum)
-            : { ...datum };
+          datum = { ...datum };
           prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
         }
       }
@@ -264,11 +276,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // convert to geojson format if necessary
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
-    } else if (layerObj['data-parse']) {
-      // parse data if necessary
-      mergedData = mergedData.features && layerObj.source.type === 'geojson'
-        ? mergedData.features = parseData(layerObj['data-parse'], mergedData.features)
-        : mergedData = parseData(layerObj['data-parse'], (mergedData.features || mergedData));
     }
 
     layerObj.mergedData = Array.isArray(mergedData)

@@ -217,13 +217,15 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
-
           return {
             ...state,
             // Update visible property
             activeLayerId: updatedLayers[layerId].visible
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
+            lastLayerSelected: !updatedLayers[layerId].visible
+              ? activeLayerIds[activeLayerIds.length - 1]
+              : layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
@@ -234,7 +236,11 @@ export function createMapReducer(mapId) {
               ...state.filter,
               layerId: filterLayerId,
             },
+            detailView: state.detailView
+              && updatedLayers[layerId]
+              && updatedLayers[layerId].visible,
             showFilterPanel: state.showFilterPanel
+              && layerId === filterLayerId
               && filterLayerId !== ''
               && updatedLayers[filterLayerId]
               && updatedLayers[filterLayerId].visible,
@@ -246,6 +252,7 @@ export function createMapReducer(mapId) {
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
+            activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
             filter: {
               ...state.filter,
@@ -286,6 +293,31 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             doApplyFilters: false,
+          };
+        }
+
+        case types.TOGGLE_MENU: {
+          return {
+            ...state,
+            menuIsOpen: !state.menuIsOpen,
+          };
+        }
+
+        case types.TOGGLE_CATEGORIES: {
+          const { category, index, isRefresh } = action;
+          const openCategories = [
+            ...state.openCategories,
+          ];
+          if (index > -1) {
+            openCategories.splice(index, 1);
+          } else {
+            openCategories.push(category);
+          }
+          return {
+            ...state,
+            openCategories: isRefresh ? [] : [
+              ...openCategories,
+            ],
           };
         }
 

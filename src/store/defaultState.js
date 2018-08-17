@@ -35,6 +35,8 @@ const defaultState = {
     layers: {},
     defaultLayers: [],
     showSpinner: false,
+    menuIsOpen: true,
+    openCategories: [],
     timeseries: {
       visibility: false,
     },
@@ -54,6 +56,7 @@ const defaultState = {
     showProfile: false,
     showFilterPanel: false,
     activeLayerId: '',
+    lastLayerSelected: '',
     primaryLayer: '',
   },
   FILTER: {},

@@ -98,6 +98,20 @@ export const requestData = (mapId, layerId) => ({
   mapId,
 });
 
+export const toggleMenu = (mapId, menuIsOpen) => ({
+  type: types.TOGGLE_MENU,
+  menuIsOpen,
+  mapId,
+});
+
+export const toggleCategories = (mapId, category, index, isRefresh) => ({
+  type: types.TOGGLE_CATEGORIES,
+  category,
+  index,
+  isRefresh,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -158,6 +172,7 @@ export default {
   reloadLayers,
   toggleLayer,
   toggleFilter,
+  toggleMenu,
   requestData,
   updatePrimaryLayer,
   receiveData,
@@ -170,4 +185,5 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
+  toggleCategories,
 };

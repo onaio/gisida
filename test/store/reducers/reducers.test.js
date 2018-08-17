@@ -24,6 +24,7 @@ describe('reducers.APP', () => {
       MAP:
         {
           activeLayerId: '',
+          lastLayerSelected: '',
           currentRegion: '',
           currentStyle: '',
           detailView: null,
@@ -44,6 +45,8 @@ describe('reducers.APP', () => {
           defaultLayers: [],
           showSpinner: false,
           mapId: 'map-1',
+          menuIsOpen: true,
+          openCategories: [],
           primaryLayer: '',
           reloadLayers: false,
           showFilterPanel: false,

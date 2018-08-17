@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
+import commaFormatting from './../utils/commaFormatting';
 
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   const map = mapboxGLMap;
@@ -14,7 +15,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   map.on('mousemove', (e) => {
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, visibleLayerId } = currentState[mapId];
+    const { layers, timeseries } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -31,7 +32,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     });
 
     // Remove pop up if no features under mouse pointer
-    if (!features || !features.length > 0) {
+    if (!features || !features.length > 0
+      || !layers[features[0].layer.id]
+      || !layers[features[0].layer.id].popup) {
+      content = null;
       popup.remove();
       return false;
     }
@@ -46,7 +50,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       let periodData = [];
       // Assign period data if layer has time series
       if (layer.aggregate && layer.aggregate.timeseries) {
-        const tsLayer = timeseries[visibleLayerId];
+        const tsLayer = timeseries[activeLayerId];
         if (tsLayer) {
           const currPeriod = Object.keys(tsLayer.periodData)[tsLayer.temporalIndex];
           periodData = tsLayer.periodData[currPeriod].data;
@@ -57,15 +61,19 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (data && data.length) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
-          row = data[r];
+          row = {
+            ...data[r],
+          };
+
+          const rowItem = row;
           if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
             // Add header and body to popup with data from layer
             if (row[layer.popup.header]) {
               content =
                 `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, row)}</center></div>`;
+                `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
             } else {
-              content = Mustache.render(layer.popup.body, row);
+              content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
             }
           }
         }
@@ -82,11 +90,14 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
   // add popups for marker charts
   $(document).on('mousemove', '.marker-chart', (e) => {
+    const mapid = $(e.currentTarget).data('map');
     const lng = $(e.currentTarget).data('lng');
     const lat = $(e.currentTarget).data('lat');
     content = $(e.currentTarget).data('popup');
-    popup.setLngLat([parseFloat(lng), parseFloat(lat)])
-      .setHTML(content)
-      .addTo(map);
+    if (mapid === mapId) {
+      popup.setLngLat([parseFloat(lng), parseFloat(lat)])
+        .setHTML(content)
+        .addTo(map);
+    }
   });
 }
