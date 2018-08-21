@@ -155,7 +155,7 @@ export function createMapReducer(mapId) {
         case types.MAP_RENDERED:
           return {
             ...state,
-            isRendered: true,
+            isRendered: action.isRendered,
           };
         case types.MAP_LOADED:
           return {
