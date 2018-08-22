@@ -1,5 +1,13 @@
 import { createBrowserHistory } from 'history';
 
-const history = createBrowserHistory();
+class History {
+  static history;
+  constructor() {
+    if (!this.history) {
+      this.history = createBrowserHistory();
+    }
+    return this.history;
+  }
+}
 
-export default history;
+export default new History();
