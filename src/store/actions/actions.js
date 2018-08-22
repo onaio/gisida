@@ -1,4 +1,5 @@
 import * as types from '../constants/actionTypes';
+import { ONAoauth } from '../../connectors/ona-api/auth';
 
 export const initApp = config => ({
   type: types.INIT_APP,
@@ -191,6 +192,102 @@ export const loginFailure = errorMessage => ({
 
 export const getCurrentState = () => returnState;
 
+// Auth actions
+
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const requestLogin = (creds) => {
+  return {
+    type: types.LOGIN_REQUEST,
+    isFetching: true,
+    isAuthenticated: false,
+    creds,
+  };
+};
+
+export const receiveLogin = (user) => {
+  return {
+    type: types.LOGIN_SUCCESS,
+    isFetching: false,
+    isAuthenticated: true,
+    user,
+  };
+};
+
+export const loginError = (message) => {
+  return {
+    type: types.LOGIN_FAILURE,
+    isFetching: false,
+    isAuthenticated: false,
+    message,
+  };
+};
+
+export const receiveLogout = () => {
+  return {
+    type: types.LOGOUT_SUCCESS,
+    isFetching: false,
+    isAuthenticated: false,
+  }
+}
+
+export const receiveToken = (token) => {
+  return {
+    type: types.RECEIVE_TOKEN,
+    token,
+  };
+};
+
+export const receiveForms = (forms) => {
+  return {
+    type: types.RECEIVE_FORMS,
+    forms,
+  };
+};
+
+export const fetchFormsError = (message) => {
+  return {
+    type: types.FETCH_FORMS_ERROR,
+    message,
+  };
+};
+
+// todo - Migrate to ONA Connector?
+export const loginUser = (token) => {
+  const reqConfig = {
+    token,
+    endpoint: 'user',
+  };
+
+  return (dispatch) => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin(token));
+    return ONAoauth(reqConfig, token, dispatch);
+  };
+};
+
+export const getUserForms = (token) => {
+  const reqConfig = {
+    token,
+    endpoint: 'forms',
+  };
+
+  return (dispatch)  => {
+    return fetchAPIForms(reqConfig, dispatch);
+  };
+};
+
+export const logoutUser = () => {
+  return (dispatch) => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('state');
+    dispatch(receiveLogout());
+    window.location.reload();
+  };
+};
+
 export default {
   initApp,
   initStyles,
@@ -218,4 +315,5 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
+  loginUser,
 };

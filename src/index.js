@@ -19,6 +19,7 @@ gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
 gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
+gisida.history = require('./helpers/history').default;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
