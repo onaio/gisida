@@ -26,14 +26,12 @@ export const TRIGGER_SPINNER = 'TRIGGER_SPINNER';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 
-// Possible login actions/states
+// Auth action types
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-
-// Possible logout actions/states
-
-export const LOGOUT_REQUEST = 'LOGIN_REQUEST';
-export const LOGOUT_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGOUT_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const RECEIVE_TOKEN = 'RECEIVE_TOKEN';
+export const RECEIVE_FORMS = 'RECEIVE_FORMS';
+export const FETCH_FORMS_ERROR = 'FETCH_FORMS_ERROR';
