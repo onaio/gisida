@@ -14,9 +14,14 @@ gisida.buildFilters = require('./map/buildFilters').default;
 gisida.mergeFilters = require('./map/mergeFilters').default;
 gisida.generateFilterOptions = require('./utils/filters').generateFilterOptions;
 gisida.generateStops = require('./map/generateStops').default;
+
 gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
+gisida.SupAuthZ = require('./utils/supAuthZ').default;
+
+gisida.onaAPI = require('./connectors/ona-api/api').default;
+gisida.onaAuth = require('./connectors/ona-api/auth').default;
 gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
 gisida.parseData = require('./utils/parseData').default;

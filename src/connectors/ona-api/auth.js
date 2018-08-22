@@ -35,14 +35,14 @@ export const ONAoauth = (reqConfig, token, dispatch) => {
       history.replace('/login');
     } else {
       try {
-        localStorage.setItem("access_token", token);
-      } catch(e) {
+        localStorage.setItem('access_token', token);
+      } catch (e) {
         //
       }
       dispatch(receiveLogin(user));
       history.replace('/');
     }
-  }).catch(err => console.log("Error: ", err));
+  }).catch(err => console.log('Error: ', err));
 };
 
 export default {
