@@ -198,61 +198,47 @@ export const getCurrentState = () => returnState;
 // if reponse is 200/OK we dispatch loginSuccess
 // else we dispatch loginError
 
-export const requestLogin = (creds) => {
-  return {
-    type: types.LOGIN_REQUEST,
-    isFetching: true,
-    isAuthenticated: false,
-    creds,
-  };
-};
+export const requestLogin = creds => ({
+  type: types.LOGIN_REQUEST,
+  isFetching: true,
+  isAuthenticated: false,
+  creds,
+});
 
-export const receiveLogin = (user) => {
-  return {
-    type: types.LOGIN_SUCCESS,
-    isFetching: false,
-    isAuthenticated: true,
-    user,
-  };
-};
+export const receiveLogin = user => ({
+  type: types.LOGIN_SUCCESS,
+  isFetching: false,
+  isAuthenticated: true,
+  user,
+});
 
-export const loginError = (message) => {
-  return {
-    type: types.LOGIN_FAILURE,
-    isFetching: false,
-    isAuthenticated: false,
-    message,
-  };
-};
+export const loginError = message => ({
+  type: types.LOGIN_FAILURE,
+  isFetching: false,
+  isAuthenticated: false,
+  message,
+});
 
-export const receiveLogout = () => {
-  return {
-    type: types.LOGOUT_SUCCESS,
-    isFetching: false,
-    isAuthenticated: false,
-  }
-}
+export const receiveLogout = () => ({
+  type: types.LOGOUT_SUCCESS,
+  isFetching: false,
+  isAuthenticated: false,
+});
 
-export const receiveToken = (token) => {
-  return {
-    type: types.RECEIVE_TOKEN,
-    token,
-  };
-};
+export const receiveToken = token => ({
+  type: types.RECEIVE_TOKEN,
+  token,
+});
 
-export const receiveForms = (forms) => {
-  return {
-    type: types.RECEIVE_FORMS,
-    forms,
-  };
-};
+export const receiveForms = forms => ({
+  type: types.RECEIVE_FORMS,
+  forms,
+});
 
-export const fetchFormsError = (message) => {
-  return {
-    type: types.FETCH_FORMS_ERROR,
-    message,
-  };
-};
+export const fetchFormsError = message => ({
+  type: types.FETCH_FORMS_ERROR,
+  message,
+});
 
 // todo - Migrate to ONA Connector?
 export const loginUser = (token) => {
@@ -274,18 +260,14 @@ export const getUserForms = (token) => {
     endpoint: 'forms',
   };
 
-  return (dispatch)  => {
-    return fetchAPIForms(reqConfig, dispatch);
-  };
+  return dispatch => fetchAPIForms(reqConfig, dispatch);
 };
 
-export const logoutUser = () => {
-  return (dispatch) => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('state');
-    dispatch(receiveLogout());
-    window.location.reload();
-  };
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('state');
+  dispatch(receiveLogout());
+  window.location.reload();
 };
 
 export default {

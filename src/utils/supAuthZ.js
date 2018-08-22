@@ -8,7 +8,6 @@ class SupAuthZ {
 
   // Pass in APP as config
   constructor(config) {
-    super();
     this.config = { ...config };
     this.pk = this.config.pk;
   }
