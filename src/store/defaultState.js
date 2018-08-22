@@ -63,7 +63,7 @@ const defaultState = {
   },
   AUTH: {
     isFetching: false,
-    isAuthenticated: localStorage.getItem('access_token') ? true : false,
+    isAuthenticated: !!localStorage.getItem('access_token'),
   },
   FILTER: {},
   LAYERS: {
