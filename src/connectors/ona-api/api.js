@@ -2,6 +2,7 @@
 const apiMap = {
   user: 'https://api.ona.io/api/v1/user',
   forms: 'https://api.ona.io/api/v1/forms',
+  media: 'https://api.ona.io/api/v1/media',
 };
 
 // Generate Headers for API Fetch
@@ -23,6 +24,7 @@ const apiRequest = (config, headers) => {
   if (headers) reqConfig.headers = headers;
 
   let apiPath = apiMap[config.endpoint];
+  if (config.extraPath) apiPath = `${apiPath}?${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;
 
   return new Request(apiPath, reqConfig);
