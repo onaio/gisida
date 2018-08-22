@@ -146,6 +146,73 @@ function LAYERS(state = defaultState.LAYERS, action) {
   }
 }
 
+function AUTH(state = defaultState.AUTH, action = {}) {
+  switch (action.type) {
+    case types.LOGIN_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        user: action.creds,
+      };
+    }
+
+    case types.RECEIVE_TOKEN: {
+      return {
+        ...state,
+        access_token: action.token,
+      };
+    }
+
+    case types.LOGIN_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: true,
+        errorMessage: '',
+        userInfo: action.user,
+      };
+    }
+
+    case types.LOGIN_FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: action.message,
+      };
+    }
+
+    case types.LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        userInfo: null,
+      };
+    }
+
+    case types.RECEIVE_FORMS: {
+      return {
+        ...state,
+        forms: [
+          ...action.forms,
+        ],
+      };
+    }
+
+    case types.FETCH_FORMS_ERROR: {
+      return {
+        ...state,
+        formsError: action.message,
+      };
+    }
+
+    default:
+      return state;
+  }
+}
+
 export function createMapReducer(mapId) {
   const initialState = defaultState.MAP;
   initialState.mapId = mapId;
@@ -441,5 +508,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, AUTH, 'map-1': createMapReducer('map-1'),
 };

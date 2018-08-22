@@ -61,6 +61,10 @@ const defaultState = {
     reloadLayerId: null,
     allFormIds: [],
   },
+  AUTH: {
+    isFetching: false,
+    isAuthenticated: localStorage.getItem('access_token') ? true : false,
+  },
   FILTER: {},
   LAYERS: {
     layers: [],
