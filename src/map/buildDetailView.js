@@ -124,7 +124,7 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   if (!UID) return false;
 
   const detailViewModel = {
-    UID: featureProperties[UID],
+    UID: featureProperties[UID] || featureProperties['Fixed Site Unique ID'],
     title: featureProperties[title.prop], // todo - add mustache support
     subTitle: featureProperties[subTitle.prop], // todo - add mustache support
     basicInfo,
