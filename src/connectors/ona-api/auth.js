@@ -15,14 +15,17 @@ import api from './api';
 // }
 
 // URL Constructor Reference - can be imported and/or encrypted
-export const oauthURL = {
-  apiBase: 'https://api.ona.io',
-  apiPath: '/o/authorize/',
-  client_id: 'CdJqBZYRVrbpnAu4JoYYFXFPQJa3xWi25oDPqnRY',
-  response_type: 'token',
-  redirect_uri: 'http://localhost:8080/callback',
-  state: 'abc',
-  scope: 'read',
+export const oauthURL = (cliendID, callback) => {
+  const authURL = {
+    apiBase: 'https://api.ona.io',
+    apiPath: '/o/authorize/',
+    client_id: cliendID,
+    response_type: 'token',
+    redirect_uri: callback,
+    state: 'abc',
+    scope: 'read',
+  };
+  return authURL;
 };
 
 // Call /user API Endpoint to confirm ONA Oauth2 AuthZ

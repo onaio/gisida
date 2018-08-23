@@ -146,7 +146,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
   }
 }
 
-function AUTH(state = defaultState.AUTH, action = {}) {
+function AUTH(state = defaultState.AUTH, action) {
   switch (action.type) {
     case types.LOGIN_REQUEST: {
       return {
@@ -160,7 +160,7 @@ function AUTH(state = defaultState.AUTH, action = {}) {
     case types.RECEIVE_TOKEN: {
       return {
         ...state,
-        access_token: action.token,
+        token: action.token,
       };
     }
 
@@ -170,7 +170,9 @@ function AUTH(state = defaultState.AUTH, action = {}) {
         isFetching: false,
         isAuthenticated: true,
         errorMessage: '',
-        userInfo: action.user,
+        userInfo: {
+          ...action.user,
+        },
       };
     }
 

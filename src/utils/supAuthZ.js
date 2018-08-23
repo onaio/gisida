@@ -1,5 +1,5 @@
 import { files } from './files';
-import { onaAPI } from './../connectors/ona-api/api';
+import api from './../connectors/ona-api/api';
 
 class SupAuthZ {
   token;
@@ -36,7 +36,7 @@ class SupAuthZ {
     const self = this;
     // make api call to get user
     return new Promise((resolve, reject) =>
-      onaAPI({ token: self.token, endpoint: 'user' }, (res) => {
+      api({ token: self.config.token, endpoint: 'user' }, (res) => {
         self.user = { ...res };
         resolve(res);
       }));
@@ -66,7 +66,7 @@ class SupAuthZ {
   getMediaAuthConfig() {
     const self = this;
     return new Promise((resolve, reject) =>
-      onaAPI({
+      api({
         token: self.token,
         endpoint: 'media',
         extraPath: `/${self.pk}`,

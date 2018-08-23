@@ -26,6 +26,7 @@ gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
 gisida.parseData = require('./utils/parseData').default;
 gisida.history = require('./helpers/history').default;
+gisida.oauthURL = require('./connectors/ona-api/auth').oauthURL;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
