@@ -1,3 +1,4 @@
+if (!global._babelPolyfill) require('babel-polyfill');
 const gisida = {};
 
 gisida.version = require('../package.json').version;
