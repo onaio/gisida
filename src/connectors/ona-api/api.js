@@ -47,6 +47,17 @@ export default (config, callback) => (callback
     res,
   })));
 
+
+export class API {
+  constructor() {
+    this.apiHeaders = apiHeaders;
+    this.apiRequest = apiRequest;
+    this.fetchAPI = fetchAPI;
+    this.fetch = async (config, callback) => this.fetchAPI(config)
+      .then(res => res.json().then(user => ({ user, res })))
+      .then((callback || (({ user, res }) => ({ user, res }))));
+  }
+}
 // Slimed down variation:
 // export default (config) => fetchAPI(config).then(res => res.json());
 

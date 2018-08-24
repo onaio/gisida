@@ -1,5 +1,5 @@
-import { files } from './files';
-import api from './../connectors/ona-api/api';
+import * as files from './files';
+import ONA from './../connectors/ona-api/ona';
 
 class SupAuthZ {
   token;
@@ -8,71 +8,60 @@ class SupAuthZ {
 
   // Pass in APP as config
   constructor(config) {
-    this.config = { ...config };
+    this.config = { ...config }; // APP site-config
     this.pk = this.config.pk;
   }
 
   // Method called from callback to initiate Promise chain - willAuthorize is optional
-  authorizeUser(accessToken, willAuthorize) {
+  async authorizeUser(APP, accessToken, willAuthorize) {
+    this.config = APP;
     this.token = accessToken;
-    return new Promise((resolve) => {
-      this.getUser()
-        .then(this.getAuthConfig)
-        .then((willAuthorize || this.willAuthorize))
-        .then(res => resolve(res));
-    });
+    this.user = await this.getUser();
+    if (!this.config.authConfig) {
+      return true;
+    }
+    // Fetch Auth Config
+    this.authConfig = await this.getAuthConfig(this.config.authConfig);
+
+    // Return results of willAuthorize function
+    return (willAuthorize || this.willAuthorize)();
   }
 
   // default method of checking auth.json for Site, View, and Layer access rights
   willAuthorize() {
     const self = this;
-    // check user ID against AUTH Config and dispatch Actions
-    // if pass, update state of authorization
-    // if fail, throw error
+    return false; // => will always fail auth
   }
 
   // Promise Methods for Fetching local files and API Responses
-  getUser() {
+  async getUser() {
     const self = this;
     // make api call to get user
-    return new Promise((resolve, reject) =>
-      api({ token: self.config.token, endpoint: 'user' }, (res) => {
-        self.user = { ...res };
-        resolve(res);
-      }));
+    const User = await ONA.API.fetch(
+      { token: self.token, endpoint: 'user' },
+      ({ user }) => user,
+    );
+    return User;
   }
-
-  getAuthConfig(pk) {
-    if (typeof pk === 'string') {
-      return this.getLocalAuthConfig(pk);
-    } else if (typeof pk !== 'undefined') {
-      return this.getMediaAuthConfig(pk);
-    }
-    return false;
+  async getAuthConfig(pk) {
+    const config = (typeof pk === 'string')
+      ? await SupAuthZ.getLocalAuthConfig(pk)
+      : await this.getMediaAuthConfig(pk);
+    return config;
   }
-  getLocalAuthConfig(path) {
-    const self = this;
-    return new Promise((resolve, reject) => {
-      const callback = (res) => {
-        self.authConfig = { ...res };
-        resolve(res);
-      };
-      if (path.indexOf('.csv') !== -1) {
-        return files.loadCSV(path, callback);
-      }
-      return files.loadJSON(path, callback);
-    });
+  static async getLocalAuthConfig(path) {
+    const config = (path.indexOf('.csv') !== -1)
+      ? await files.loadCSV(path, res => res)
+      : await files.loadJSON(path, res => res);
+    return config;
   }
-  getMediaAuthConfig() {
-    const self = this;
-    return new Promise((resolve, reject) =>
-      api({
-        token: self.token,
-        endpoint: 'media',
-        extraPath: `/${self.pk}`,
-      }, (res) => {
-        resolve(res);
-      }));
+  async getMediaAuthConfig(pk) {
+    const config = ONA.API.fetch({
+      token: this.token,
+      endpoint: 'media',
+      extraPath: `/${pk}`,
+    }, res => res);
+    return config;
   }
 }
 
