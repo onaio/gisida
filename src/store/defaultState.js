@@ -47,6 +47,7 @@ const defaultState = {
       layerId: '',
       filters: {},
       filterOptions: {},
+      filterOptionsPrev: {},
       isOpen: false,
       isMac: (window.navigator.platform.indexOf('Mac') !== -1),
       isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
@@ -58,6 +59,7 @@ const defaultState = {
     activeLayerId: '',
     lastLayerSelected: '',
     primaryLayer: '',
+    reloadLayerId: null,
   },
   FILTER: {},
   LAYERS: {

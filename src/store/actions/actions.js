@@ -137,6 +137,17 @@ export const reloadLayers = (mapId, reload) => ({
   mapId,
 });
 
+export const layerReloaded = mapId => ({
+  mapId,
+  type: types.LAYER_RELOADED,
+});
+
+export const saveFilterOptions = (mapId, filterOptions) => ({
+  type: types.SAVE_FILTER_OPTIONS,
+  mapId,
+  filterOptions,
+});
+
 export const updateTimeseries = (mapId, timeseries) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
@@ -186,4 +197,6 @@ export default {
   saveFilterState,
   triggerSpinner,
   toggleCategories,
+  layerReloaded,
+  saveFilterOptions,
 };

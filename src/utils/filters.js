@@ -31,7 +31,6 @@ export function generateFilterOptionsPrev(layerData) {
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
-  debugger;
   return [...new Set(filters)];
 }
 
