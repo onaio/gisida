@@ -15,17 +15,23 @@ import api from './api';
 // }
 
 // URL Constructor Reference - can be imported and/or encrypted
-export const oauthURL = (cliendID, callback) => {
-  const authURL = {
-    apiBase: 'https://api.ona.io',
-    apiPath: '/o/authorize/',
-    client_id: cliendID,
-    response_type: 'token',
-    redirect_uri: callback,
-    state: 'abc',
-    scope: 'read',
-  };
-  return authURL;
+export const oauthURL = (clientID, callback) => {
+  // const authURL = {
+  //   apiBase: 'https://api.ona.io',
+  //   apiPath: '/o/authorize/',
+  //   client_id: clientID,
+  //   response_type: 'token',
+  //   redirect_uri: callback,
+  //   state: 'abc',
+  //   scope: 'read',
+  // };
+  const apiBase = 'https://api.ona.io';
+  const apiPath = '/o/authorize/';
+  const responseType = 'token';
+  const state = 'abc';
+  const scope = 'read';
+
+  return `${apiBase}${apiPath}?client_id=${clientID}&response_type=${responseType}&redirect_uri=${callback}&state=${state}&scope=${scope}`;
 };
 
 // Call /user API Endpoint to confirm ONA Oauth2 AuthZ
@@ -45,6 +51,13 @@ export const ONAoauth = (reqConfig, token, dispatch) => api(reqConfig).then(({ u
     history.replace('/');
   }
 }).catch(err => console.log('Error: ', err));
+
+export class Oauth2 {
+  constructor() {
+    this.getOauthURL = oauthURL;
+    this.getUser = ONAoauth;
+  }
+}
 
 export default {
   oauthURL,

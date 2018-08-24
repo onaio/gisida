@@ -21,6 +21,7 @@ gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
 gisida.SupAuthZ = require('./utils/supAuthZ').default;
 
+gisida.ONA = require('./connectors/ona-api/ona').default;
 gisida.onaAPI = require('./connectors/ona-api/api').default;
 gisida.onaAuth = require('./connectors/ona-api/auth').default;
 gisida.getData = require('./connectors/ona-api/data').default;
