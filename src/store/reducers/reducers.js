@@ -316,6 +316,12 @@ export function createMapReducer(mapId) {
             ...state,
             reloadLayers: action.reload,
           };
+        case types.LAYER_RELOADED: {
+          return {
+            ...state,
+            reloadLayerId: null,
+          };
+        }
         case types.CHANGE_STYLE:
           return {
             ...state,
@@ -329,10 +335,10 @@ export function createMapReducer(mapId) {
         case types.ADD_LAYER: {
           const layers = {};
           const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
-          layers[action.layer.id] = { ...action.layer };
+          layers[action.layer.id] = action.layer;
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
-            && state.layers[l].id !== reloadLayerId && !state.layers[l].nondefault);
+          && state.layers[l].id !== reloadLayerId);
           return {
             ...state,
             layers: updatedLayers,
@@ -493,6 +499,18 @@ export function createMapReducer(mapId) {
             ...state,
             layers: updatedLayers,
             doApplyFilters: true,
+          };
+        }
+
+        case types.SAVE_FILTER_OPTIONS: {
+          return {
+            ...state,
+            filter: {
+              ...state.filter,
+              filterOptionsPrev: {
+                ...action.filterOptions,
+              },
+            },
           };
         }
 

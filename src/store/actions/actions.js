@@ -160,7 +160,13 @@ export const layerReloaded = mapId => ({
   type: types.LAYER_RELOADED,
 });
 
-export const updateTimeseries = (mapId, timeseries, layerId) => ({
+export const saveFilterOptions = (mapId, filterOptions) => ({
+  type: types.SAVE_FILTER_OPTIONS,
+  mapId,
+  filterOptions,
+});
+
+export const updateTimeseries = (mapId, timeseries) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
   mapId,
@@ -372,4 +378,5 @@ export default {
   initLoc,
   toggleMapLocation,
   getAuthConfigs,
+  saveFilterOptions,
 };
