@@ -6,7 +6,7 @@ import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
-import { generateFilterOptions, processFilters } from '../utils/filters';
+import { generateFilterOptions, processFilters, generateFilterOptionsPrev } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import parseData from './../utils/parseData';
 import commaFormatting from './../utils/commaFormatting';
@@ -224,7 +224,9 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 
       layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
-        layerObj.filterOptions = generateFilterOptions(layerObj);
+        layerObj.filterOptions = layerObj.aggregate.filterIsPrev
+          ? generateFilterOptionsPrev(layerObj)
+          : generateFilterOptions(layerObj);
       }
 
       if (layerObj.aggregate && layerObj.aggregate.type) {
@@ -577,7 +579,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       : { ...mergedData };
 
     if (layerObj.aggregate && layerObj.aggregate.filter) {
-      layerObj.filterOptions = generateFilterOptions(layerObj);
+      layerObj.filterOptions = layerObj.aggregate.filterIsPrev
+        ? generateFilterOptionsPrev(layerObj)
+        : generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS).filter(d =>

@@ -65,9 +65,14 @@ export function processFilters(layerData, filterOptions, isOr) {
   };
 }
 
-// export function filterData(layerData) {
-
-// }
+export function generateFilterOptionsPrev(layerData) {
+  const data = layerData.mergedData || layerData.source.data;
+  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
+  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
+  const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
+  debugger;
+  return [...new Set(filters)];
+}
 
 export function generateFilterOptions(layerData) {
   let data = layerData.data || layerData.mergedData || layerData.source.data;
