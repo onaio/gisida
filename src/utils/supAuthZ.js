@@ -1,10 +1,29 @@
 import * as files from './files';
 import ONA from './../connectors/ona-api/ona';
 
+// Default Authentications
+export const defaultOauthC = () => !!localStorage.getItem('access_token');
+
+export const defaultSupAuthC = () => {
+  if (defaultOauthC()) {
+    // analyize default AUTH config from the AUTH.json
+    return true;
+  }
+  return false;
+};
+
+export const defaultUnSupAuthC = () => {
+  localStorage.removeItem('access_token');
+};
+
 class SupAuthZ {
   token;
   pk;
   authConfig;
+
+  defaultOauthC = defaultOauthC;
+  defaultSupAuthC = defaultSupAuthC;
+  defaultUnSupAuthC = defaultUnSupAuthC;
 
   // Pass in APP as config
   constructor(config) {
@@ -16,6 +35,7 @@ class SupAuthZ {
   async authorizeUser(APP, accessToken, willAuthorize) {
     this.config = APP;
     this.token = accessToken;
+    localStorage.setItem('access_token', accessToken);
     this.user = await this.getUser();
     if (!this.config.authConfig) {
       return true;
@@ -23,14 +43,18 @@ class SupAuthZ {
     // Fetch Auth Config
     this.authConfig = await this.getAuthConfig(this.config.authConfig);
 
-    // Return results of willAuthorize function
-    return (willAuthorize || this.willAuthorize)();
-  }
+    if (willAuthorize) {
+      return willAuthorize();
+    }
 
-  // default method of checking auth.json for Site, View, and Layer access rights
-  willAuthorize() {
-    const self = this;
-    return false; // => will always fail auth
+    // Return results of willAuthorize function
+    const isAuth = this.defaultSupAuthC();
+    // Remove access_token from localMemory
+    if (!isAuth) {
+      localStorage.removeItem('access_token');
+    }
+
+    return isAuth;
   }
 
   // Promise Methods for Fetching local files and API Responses
