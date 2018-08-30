@@ -17,6 +17,8 @@ export const defaultUnSupAuthZ = () => {
 };
 
 class SupAuthZ {
+  static instance;
+
   token;
   pk;
   authConfig;
@@ -27,8 +29,13 @@ class SupAuthZ {
 
   // Pass in APP as config
   constructor(config) {
+    if (this.instance) {
+      return this.instance;
+    }
     this.config = { ...config }; // APP site-config
     this.pk = this.config.pk;
+
+    this.instance = this;
   }
 
   // Method called from callback to initiate Promise chain - willAuthorize is optional
@@ -89,4 +96,4 @@ class SupAuthZ {
   }
 }
 
-export default SupAuthZ;
+export default new SupAuthZ();
