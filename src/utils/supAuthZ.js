@@ -12,7 +12,7 @@ export const defaultSupAuthC = () => {
   return false;
 };
 
-export const defaultUnSupAuthC = () => {
+export const defaultUnSupAuthZ = () => {
   localStorage.removeItem('access_token');
 };
 
@@ -23,7 +23,7 @@ class SupAuthZ {
 
   defaultOauthC = defaultOauthC;
   defaultSupAuthC = defaultSupAuthC;
-  defaultUnSupAuthC = defaultUnSupAuthC;
+  defaultUnSupAuthZ = defaultUnSupAuthZ;
 
   // Pass in APP as config
   constructor(config) {
