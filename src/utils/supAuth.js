@@ -1,5 +1,5 @@
 import * as files from './files';
-import ONA from './../connectors/ona-api/ona';
+import ONA from '../connectors/ona-api/ona';
 
 // Default Authentications
 export const defaultOauthC = () => !!localStorage.getItem('access_token');
