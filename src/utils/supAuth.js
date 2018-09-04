@@ -109,7 +109,7 @@ class SupAuthZ {
   }
   static async getLocalAuthConfig(path) {
     return (path.indexOf('.csv') !== -1)
-      ? files.loadCSV(path, res => res)
+      ? files.fetchCSV(path).then(res => SupAuthZ.parseCSVauth(res))
       : files.fetchJSON(path);
   }
   async getMediaAuthConfig(pk) {
@@ -118,6 +118,45 @@ class SupAuthZ {
       endpoint: 'media',
       extraPath: `/${pk}`,
     }, res => res);
+  }
+  static parseCSVauth(res) {
+    const authConfig = {
+      SITE: [],
+      VIEWS: {},
+      LAYERS: {},
+    };
+    let user;
+    let prop;
+
+    function forEachUserKeys(Prop) {
+      if (Prop === 'SITE') {
+        authConfig.push(user.username);
+      } else if (Prop.indexOf('VIEWS:') === 0) {
+        [, prop] = Prop.split(':');
+        if (!authConfig.VIEWS[prop]) {
+          authConfig.VIEWS[prop] = [];
+        }
+        authConfig.VIEWS[prop].push(user.username);
+      } else if (Prop.indexOf('LAYERS:') === 0) {
+        [, prop] = Prop.split(':');
+        if (!authConfig.LAYERS[prop]) {
+          authConfig.LAYERS[prop] = [];
+        }
+        authConfig.LAYERS[prop].push(user.username);
+      }
+    }
+
+    // Loop through all auth user rows
+    for (let u = 0; u < res.length; u += 1) {
+      user = res[u];
+
+      // loop through all auth columns
+      Object.keys(user).forEach(forEachUserKeys);
+      if (!authConfig.SITE.length) {
+        authConfig.SITE = 'public';
+      }
+    }
+    return authConfig;
   }
 
   defaultSupViewAuthC = (path) => {

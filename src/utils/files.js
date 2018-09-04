@@ -22,6 +22,16 @@ export async function fetchJSON(path) {
   return fetch(path).then(res => res.json());
 }
 
+export async function fetchCSV(path) {
+  return fetch(path)
+    .then(res => res.text())
+    .then(res => parse(res, {
+      header: true,
+      skipEmptyLines: true,
+    }))
+    .then(res => res.data);
+}
+
 export function loadCSV(path, callback) {
   fetchURL(path, 'text/csv', (response) => {
     callback(parse(response, {
