@@ -4,16 +4,42 @@ import ONA from '../connectors/ona-api/ona';
 // Default Authentications
 export const defaultOauthC = () => !!localStorage.getItem('access_token');
 
-export const defaultSupAuthC = () => {
+export const defaultSupAuthC = (User, AuthConfig) => {
+  let user;
+  let authConfig;
+  // Define user
+  if (!User && !localStorage.getItem('user')) {
+    return false;
+  } else if (!User) {
+    user = JSON.parse(localStorage.getItem('user'));
+  } else {
+    user = { ...User };
+  }
+
+  // Define authConfig
+  if (!AuthConfig && !localStorage.getItem('authConfig')) {
+    return false;
+  } else if (!AuthConfig) {
+    authConfig = JSON.parse(localStorage.getItem('authConfig'));
+  } else {
+    authConfig = { ...AuthConfig };
+  }
+
   if (defaultOauthC()) {
-    // analyize default AUTH config from the AUTH.json
-    return true;
+    if (!authConfig || !authConfig.SITE || (authConfig.SITE && authConfig.SITE === 'public')) {
+      return true;
+    }
+    if (Array.isArray(authConfig.SITE)) {
+      return authConfig.SITE.includes(user.username);
+    }
   }
   return false;
 };
 
 export const defaultUnSupAuthZ = () => {
   localStorage.removeItem('access_token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('authConfig');
 };
 
 class SupAuthZ {
@@ -28,13 +54,10 @@ class SupAuthZ {
   defaultUnSupAuthZ = defaultUnSupAuthZ;
 
   // Pass in APP as config
-  constructor(config) {
+  constructor() {
     if (this.instance) {
       return this.instance;
     }
-    this.config = { ...config }; // APP site-config
-    this.pk = this.config.pk;
-
     this.instance = this;
   }
 
@@ -44,21 +67,26 @@ class SupAuthZ {
     this.token = accessToken;
     localStorage.setItem('access_token', accessToken);
     this.user = await this.getUser();
+    localStorage.setItem('user', JSON.stringify(this.user));
     if (!this.config.authConfig) {
       return true;
     }
+
     // Fetch Auth Config
     this.authConfig = await this.getAuthConfig(this.config.authConfig);
+    if (this.authConfig) {
+      localStorage.setItem('authConfig', JSON.stringify(this.authConfig));
+    }
 
     if (willAuthorize) {
       return willAuthorize();
     }
 
     // Return results of willAuthorize function
-    const isAuth = this.defaultSupAuthC();
+    const isAuth = this.defaultSupAuthC(this.user, this.authConfig);
     // Remove access_token from localMemory
     if (!isAuth) {
-      localStorage.removeItem('access_token');
+      this.defaultUnSupAuthZ();
     }
 
     return isAuth;
@@ -75,24 +103,59 @@ class SupAuthZ {
     return User;
   }
   async getAuthConfig(pk) {
-    const config = (typeof pk === 'string')
-      ? await SupAuthZ.getLocalAuthConfig(pk)
-      : await this.getMediaAuthConfig(pk);
-    return config;
+    return (typeof pk === 'string')
+      ? SupAuthZ.getLocalAuthConfig(pk)
+      : this.getMediaAuthConfig(pk);
   }
   static async getLocalAuthConfig(path) {
-    const config = (path.indexOf('.csv') !== -1)
-      ? await files.loadCSV(path, res => res)
-      : await files.loadJSON(path, res => res);
-    return config;
+    return (path.indexOf('.csv') !== -1)
+      ? files.loadCSV(path, res => res)
+      : files.fetchJSON(path);
   }
   async getMediaAuthConfig(pk) {
-    const config = ONA.API.fetch({
+    return ONA.API.fetch({
       token: this.token,
       endpoint: 'media',
       extraPath: `/${pk}`,
     }, res => res);
-    return config;
+  }
+
+  defaultSupViewAuthC = (path) => {
+    // Define this.user
+    if (!this.user && !localStorage.getItem('user')) {
+      this.defaultUnSupAuthZ();
+      return false;
+    } else if (!this.user) {
+      this.user = JSON.parse(localStorage.getItem('user'));
+    }
+
+    // Define this.authConfig
+    if (!this.authConfig && !localStorage.getItem('authConfig')) {
+      this.defaultUnSupAuthZ();
+      return false;
+    } else if (!this.authConfig) {
+      this.authConfig = JSON.parse(localStorage.getItem('authConfig'));
+    }
+
+    const { user, authConfig } = this;
+    if (!authConfig) return true;
+    const { VIEWS } = authConfig;
+
+    // pass authentication if no path in config or if path is public
+    if (!VIEWS || !VIEWS[path] || VIEWS[path] === 'public') {
+      return true;
+    }
+
+    // Check for user.username in list of authorized users
+    if (Array.isArray(VIEWS[path])) {
+      const isAuth = VIEWS[path].includes(user.username);
+      if (!isAuth) {
+        this.defaultUnSupAuthZ();
+      }
+      return isAuth;
+    }
+    this.defaultUnSupAuthZ();
+    return false;
   }
 }
 

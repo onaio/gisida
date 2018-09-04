@@ -18,6 +18,10 @@ export function loadJSON(path, callback) {
   });
 }
 
+export async function fetchJSON(path) {
+  return fetch(path).then(res => res.json());
+}
+
 export function loadCSV(path, callback) {
   fetchURL(path, 'text/csv', (response) => {
     callback(parse(response, {
