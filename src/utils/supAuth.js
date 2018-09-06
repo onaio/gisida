@@ -76,6 +76,8 @@ class SupAuthZ {
     this.authConfig = await this.getAuthConfig(this.config.authConfig);
     if (this.authConfig) {
       localStorage.setItem('authConfig', JSON.stringify(this.authConfig));
+    } else {
+      return false;
     }
 
     if (willAuthorize) {
@@ -96,10 +98,10 @@ class SupAuthZ {
   async getUser() {
     const self = this;
     // make api call to get user
-    const User = await ONA.API.fetch(
-      { token: self.token, endpoint: 'user' },
-      ({ user }) => user,
-    );
+    const User = await ONA.API.fetch({
+      token: self.token,
+      endpoint: 'user',
+    }, user => user);
     return User;
   }
   async getAuthConfig(pk) {
@@ -109,17 +111,24 @@ class SupAuthZ {
   }
   static async getLocalAuthConfig(path) {
     return (path.indexOf('.csv') !== -1)
-      ? files.fetchCSV(path).then(res => SupAuthZ.parseCSVauth(res))
+      ? files.fetchCSV(path).then(res => this.parseCSVauth(res))
       : files.fetchJSON(path);
   }
   async getMediaAuthConfig(pk) {
     return ONA.API.fetch({
       token: this.token,
-      endpoint: 'media',
-      extraPath: `/${pk}`,
-    }, res => res);
+      endpoint: 'data',
+      extraPath: `${pk}`,
+    }).then(({ user }) => {
+      if (user.detail && user.detail === 'Not found.') {
+        return false;
+      }
+      const auth = this.parseCSVauth(user);
+      return auth;
+    });
   }
-  static parseCSVauth(res) {
+  parseCSVauth(res) {
+    const self = this;
     const authConfig = {
       SITE: [],
       VIEWS: {},
@@ -127,34 +136,39 @@ class SupAuthZ {
     };
     let user;
     let prop;
+    let propName;
+    let u;
 
+    // todo - add comments / notes here!!
     function forEachUserKeys(Prop) {
       if (Prop === 'SITE') {
         authConfig.push(user.username);
-      } else if (Prop.indexOf('VIEWS:') === 0) {
-        [, prop] = Prop.split(':');
-        if (!authConfig.VIEWS[prop]) {
+      } else if (Prop.indexOf('VIEW.') === 0 && res[u][Prop] === 'OK') {
+        [, propName] = Prop.split('.');
+        prop = self.config.views[propName];
+        if (prop && !authConfig.VIEWS[prop]) {
           authConfig.VIEWS[prop] = [];
         }
-        authConfig.VIEWS[prop].push(user.username);
-      } else if (Prop.indexOf('LAYERS:') === 0) {
-        [, prop] = Prop.split(':');
-        if (!authConfig.LAYERS[prop]) {
+        if (prop) authConfig.VIEWS[prop].push(user.username);
+      } else if (Prop.indexOf('LAYER.') === 0 && res[u][Prop] === 'OK') {
+        [, propName] = Prop.split('.');
+        prop = self.config.views[propName];
+        if (prop && !authConfig.LAYERS[prop]) {
           authConfig.LAYERS[prop] = [];
         }
-        authConfig.LAYERS[prop].push(user.username);
+        if (prop) authConfig.LAYERS[prop].push(user.username);
       }
     }
 
     // Loop through all auth user rows
-    for (let u = 0; u < res.length; u += 1) {
+    for (u = 0; u < res.length; u += 1) {
       user = res[u];
 
       // loop through all auth columns
       Object.keys(user).forEach(forEachUserKeys);
-      if (!authConfig.SITE.length) {
-        authConfig.SITE = 'public';
-      }
+    }
+    if (!authConfig.SITE.length) {
+      authConfig.SITE = 'public';
     }
     return authConfig;
   }

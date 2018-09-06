@@ -1,17 +1,16 @@
 // Map of ONA API Endpoints
 const apiMap = {
+  data: 'https://api.ona.io/api/v1/data',
   user: 'https://api.ona.io/api/v1/user',
   forms: 'https://api.ona.io/api/v1/forms',
   media: 'https://api.ona.io/api/v1/media',
+  metadata: 'https://api.ona.io/api/v1/metadata',
 };
 
 // Generate Headers for API Fetch
 const apiHeaders = (config) => {
   const headers = new Headers();
-  // headers.append('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin,mode,Authorization');
-  // headers.append('Access-Control-Allow-Origin', '*')
-  // headers.append('mode', 'no-cors');
-
+  if (config && config.mimeType) headers.append('Content-Type', config.mimeType);
   if (!config || !config.token) return headers;
 
   headers.append('Authorization', `Bearer ${config.token}`);
@@ -24,7 +23,7 @@ const apiRequest = (config, headers) => {
   if (headers) reqConfig.headers = headers;
 
   let apiPath = apiMap[config.endpoint];
-  if (config.extraPath) apiPath = `${apiPath}?${config.extraPath}`;
+  if (config.extraPath) apiPath = `${apiPath}/${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;
 
   return new Request(apiPath, reqConfig);
@@ -39,6 +38,7 @@ const fetchAPI = config => fetch(apiRequest(config, apiHeaders(config)));
 // config.endpoint - (required) API Key to determine API Path
 // config.method   - (optional) Specify HTTP Method (defaults to GET)
 // config.params   - (optional) Additional parameters to be appeneded to API Path
+// config.mimeType - (optional) Specify mimeType for Request Headers
 // callback        - (optional) Function to take JSON response, otherwise res is simply returned
 export default (config, callback) => (callback
   ? fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(callback)
@@ -47,23 +47,24 @@ export default (config, callback) => (callback
     res,
   })));
 
-
 export class API {
   constructor() {
     this.apiHeaders = apiHeaders;
     this.apiRequest = apiRequest;
     this.fetchAPI = fetchAPI;
-    this.fetch = async (config, callback) => this.fetchAPI(config)
-      .then(res => res.json().then(user => ({ user, res })))
-      .then((callback || (({ user, res }) => ({ user, res }))));
+    this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
+      let parse;
+      switch (config.mimeType) {
+        case 'text/csv':
+          parse = 'text';
+          break;
+        case 'image/jpeg':
+          parse = 'blob';
+          break;
+        default:
+          parse = 'json';
+      }
+      return res[parse]().then((callback || (user => ({ res, user }))));
+    });
   }
 }
-// Slimed down variation:
-// export default (config) => fetchAPI(config).then(res => res.json());
-
-// Could work like:
-// import API from './connectors/Ona/API';
-// let user;
-// API({ endpoint: 'user', token: this.state.access_token }).then(res => {
-//   dispatch(...., res);
-// });

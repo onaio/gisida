@@ -22,8 +22,18 @@ export async function fetchJSON(path) {
   return fetch(path).then(res => res.json());
 }
 
-export async function fetchCSV(path) {
-  return fetch(path)
+export async function fetchCSV(path, Init) {
+  const init = (Init && { ...Init }) || {};
+  if (!init.headers) {
+    init.headers = new Headers();
+  }
+  if (!init.headers.has('Content-Type')) {
+    init.headers.append('Content-Type', 'text/csv');
+  }
+  if (!init.headers.has('Access-Control-Allow-Origin')) {
+    init.headers.append('Access-Control-Allow-Origin', '*');
+  }
+  return fetch(path, init)
     .then(res => res.text())
     .then(res => parse(res, {
       header: true,
