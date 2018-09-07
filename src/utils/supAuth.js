@@ -128,48 +128,64 @@ class SupAuthZ {
     });
   }
   parseCSVauth(res) {
-    const self = this;
+    // Define default authConfig
     const authConfig = {
       SITE: [],
       VIEWS: {},
       LAYERS: {},
     };
+
     let user;
+    let Prop;
     let prop;
     let propName;
-    let u;
+    let layerName;
+    let propKeys;
 
-    // todo - add comments / notes here!!
-    function forEachUserKeys(Prop) {
-      if (Prop === 'SITE') {
-        authConfig.push(user.username);
-      } else if (Prop.indexOf('VIEW.') === 0 && res[u][Prop] === 'OK') {
-        [, propName] = Prop.split('.');
-        prop = self.config.views[propName];
-        if (prop && !authConfig.VIEWS[prop]) {
-          authConfig.VIEWS[prop] = [];
+    // Loop through all auth user rows
+    for (let u = 0; u < res.length; u += 1) {
+      user = { ...res[u] };
+
+      propKeys = Object.keys(user);
+
+      // Loop through all Auth properties from form acknowledge question types
+      for (let p = 0; p < propKeys.length; p += 1) {
+        Prop = propKeys[p];
+
+        // Check for Site Wide Auth (exclude SITE question/column for public sites)
+        if (Prop === 'SITE' && user[Prop] === 'OK') {
+          authConfig.push(user.username);
+
+        // Check User Auth Prop for View specific Auth (exclude Public Views)
+        } else if (Prop.indexOf('VIEW.') === 0 && user[Prop] === 'OK') {
+          // Define actual View name
+          [, propName] = Prop.split('.');
+          // Reference site config to match VIEWS to URI Paths
+          prop = this.config['private-views'] && this.config['private-views'][propName];
+          // Check View exists in authConfig, if not add it
+          if (prop && !authConfig.VIEWS[prop]) authConfig.VIEWS[prop] = [];
+          // Add username to list of authorized users
+          if (prop) authConfig.VIEWS[prop].push(user.username);
+
+        // Check User Auth Prop for Layer specific Auth (exclude Public Layers)
+        } else if (Prop.indexOf('LAYER.') === 0 && user[Prop] === 'OK') {
+          // Define actual Layer name
+          [, layerName] = Prop.split('.');
+          // Check Layer exists in authConfig, if not add it
+          if (!authConfig.LAYERS[layerName]) {
+            authConfig.LAYERS[layerName] = [];
+          }
+          // Add username to list of authorized users
+          authConfig.LAYERS[layerName].push(user.username);
         }
-        if (prop) authConfig.VIEWS[prop].push(user.username);
-      } else if (Prop.indexOf('LAYER.') === 0 && res[u][Prop] === 'OK') {
-        [, propName] = Prop.split('.');
-        prop = self.config.views[propName];
-        if (prop && !authConfig.LAYERS[prop]) {
-          authConfig.LAYERS[prop] = [];
-        }
-        if (prop) authConfig.LAYERS[prop].push(user.username);
       }
     }
 
-    // Loop through all auth user rows
-    for (u = 0; u < res.length; u += 1) {
-      user = res[u];
-
-      // loop through all auth columns
-      Object.keys(user).forEach(forEachUserKeys);
-    }
+    // if SITE is empty, assume the site should be public
     if (!authConfig.SITE.length) {
       authConfig.SITE = 'public';
     }
+
     return authConfig;
   }
 
