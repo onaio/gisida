@@ -242,7 +242,7 @@ function processFormData(formData, layerObj) {
       // Final aggregated indicator value for  group
       const indicatorValue = aggregateOptions.type === 'count'
         ? percentage
-        : (Number.isNaN(sumTotal) && Number(sumTotal.replace(/,/g, '')))
+        : (Number.isNaN(sumTotal) && (sumTotal.length && sumTotal.replace(/,/g, '')))
         || sumTotal;
 
       const currentPeriodaggregatedDataObj = {
