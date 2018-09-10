@@ -3,8 +3,9 @@ import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 import csvToGEOjson from '../../map/csvToGEOjson';
 
-function processFormData(formData, indicatorField, layerObj) {
+function processFormData(formData, layerObj) {
   let data = Array.isArray(formData) ? [...formData] : { ...formData };
+  const indicatorField = layerObj.property;
   const aggregateOptions = layerObj.aggregate;
   const minTotal = aggregateOptions.min || 0;
   const groupByField = aggregateOptions['group-by'];
@@ -241,7 +242,7 @@ function processFormData(formData, indicatorField, layerObj) {
       // Final aggregated indicator value for  group
       const indicatorValue = aggregateOptions.type === 'count'
         ? percentage
-        : (Number.isNaN(sumTotal) && Number(sumTotal.replace(/,/g, '')))
+        : (Number.isNaN(sumTotal) && (sumTotal.length && sumTotal.replace(/,/g, '')))
         || sumTotal;
 
       const currentPeriodaggregatedDataObj = {
@@ -339,6 +340,6 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
-  aggregatedData = processFormData(data, layer.property, layer);
+  aggregatedData = processFormData(data, layer);
   return aggregatedData;
 }
