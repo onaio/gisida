@@ -1,3 +1,5 @@
+import { parseCSV } from './../../utils/files';
+
 // Map of ONA API Endpoints
 const apiMap = {
   data: 'https://api.ona.io/api/v1/data',
@@ -53,6 +55,7 @@ export class API {
     this.apiRequest = apiRequest;
     this.fetchAPI = fetchAPI;
     this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
+      // Define response parse method
       let parse;
       switch (config.mimeType) {
         case 'text/csv':
@@ -64,7 +67,14 @@ export class API {
         default:
           parse = 'json';
       }
-      return res[parse]().then((callback || (user => ({ res, user }))));
+
+      // Return parsed Response
+      // todo - Change "user" to "body"
+      return res[parse]().then((parsed) => {
+        // if parsed text is CSV then return Papaparse via parseCSV
+        if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
+        return parsed;
+      }, (callback || (user => ({ res, user }))));
     });
   }
 }

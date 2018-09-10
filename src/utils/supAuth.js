@@ -117,8 +117,9 @@ class SupAuthZ {
   async getMediaAuthConfig(pk) {
     return ONA.API.fetch({
       token: this.token,
-      endpoint: 'data',
-      extraPath: `${pk}`,
+      endpoint: 'metadata',
+      mimeType: 'text/csv',
+      extraPath: `${pk}.csv`,
     }).then(({ user }) => {
       if (user.detail && user.detail === 'Not found.') {
         return false;
