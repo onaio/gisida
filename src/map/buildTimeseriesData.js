@@ -6,6 +6,7 @@ export default function buildTimeseriesData(
   timeSeriesLayers,
   timeseries,
   loadedlayers,
+  doUpdateTSLayer,
 ) {
   const layerObj = { ...layer };
   const activeLayers = [];
@@ -47,7 +48,7 @@ export default function buildTimeseriesData(
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
 
-    if (activeLayers.includes(layerId) && !timeseries[layerId]) {
+    if ((activeLayers.includes(layerId) && !timeseries[layerId]) || doUpdateTSLayer) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
 

@@ -56,7 +56,7 @@ export function buildLabels(layerObj, tsLayerObj, period) {
  * @param {*} layer
  * @param {*} dispatch
  */
-function renderData(mapId, layer, dispatch) {
+function renderData(mapId, layer, dispatch, doUpdateTSLayer) {
   let layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { mapConfig } = currentState.APP;
@@ -75,6 +75,7 @@ function renderData(mapId, layer, dispatch) {
     sliderLayers,
     timeseries,
     layers,
+    doUpdateTSLayer,
   );
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
@@ -301,7 +302,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
  * @param {*} dispatch
  * @param {*} filterOptions
  */
-export default function prepareLayer(mapId, layer, dispatch, filterOptions = false) {
+export default function prepareLayer(
+  mapId,
+  layer,
+  dispatch,
+  filterOptions = false,
+  doUpdateTSLayer,
+) {
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
@@ -313,7 +320,7 @@ export default function prepareLayer(mapId, layer, dispatch, filterOptions = fal
   if (layerObj.source) {
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
-      readData(mapId, layerObj, dispatch);
+      readData(mapId, layerObj, dispatch, doUpdateTSLayer);
     } else
     // grab from multiple sources
     if (layerObj.source.data instanceof Array &&
@@ -328,11 +335,11 @@ export default function prepareLayer(mapId, layer, dispatch, filterOptions = fal
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
-          aggregateFormData(layerObj, currentState.locations, filterOptions) :
+          aggregateFormData(layerObj, currentState.LOCATIONS, filterOptions) :
           processFilters(layerObj, filterOptions);
-      renderData(mapId, layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch, doUpdateTSLayer);
     } else {
-      renderData(mapId, layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch, doUpdateTSLayer);
     }
   } else if (layerObj.layers) {
     const currentState = dispatch(getCurrentState());

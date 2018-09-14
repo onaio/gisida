@@ -1,15 +1,16 @@
 export function processFilters(layerData, filterOptions) {
   let data = layerData.mergedData || layerData.source.data;
-  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
+  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'].map(f => f.trim().toLowerCase());
+  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'].map(f => f.trim().toLowerCase());
   const filters = [];
   if (layerData.aggregate.filter && filterOptions) {
     // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
-        filters.push(opt);
+        filters.push(opt.trim().toLowerCase());
       }
     });
+
     // apply filters
     data = data.filter((datum) => {
       if (acceptedFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {

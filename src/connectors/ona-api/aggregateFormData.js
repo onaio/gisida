@@ -245,6 +245,7 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   data = processFilters(layer, filterOptions);
 
   // Process data
+  
   aggregatedData = processFormData(data, layer.property, layer.aggregate);
   return aggregatedData;
 }
