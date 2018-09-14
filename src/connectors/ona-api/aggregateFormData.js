@@ -335,5 +335,6 @@ export default function aggregateFormData(layerData, locations, filterOptions, i
       return Data.disaggregatedData[0];
     });
   }
+  
   return aggregatedData;
 }

@@ -23,9 +23,10 @@ export function processFilters(layerData, filterOptions, isOr) {
     // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
-        filters.push(opt);
+        filters.push(opt.trim().toLowerCase());
       }
     });
+
     // apply filters
     data = (data.features || data).filter((d) => {
       datum = (d.properties || d);

@@ -652,7 +652,7 @@ export default function prepareLayer(
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
-          aggregateFormData(layerObj, currentState.locations, filterOptions) :
+          aggregateFormData(layerObj, currentState.LOCATIONS, filterOptions) :
           processFilters(layerObj, filterOptions);
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     } else {
