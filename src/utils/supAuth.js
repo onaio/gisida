@@ -121,7 +121,7 @@ class SupAuthZ {
       mimeType: 'text/csv',
       extraPath: `${pk}.csv`,
     }).then(({ user }) => {
-      if (user.detail && user.detail === 'Not found.') {
+      if ((user.length === 0) || (user.detail && user.detail === 'Not found.')) {
         return false;
       }
       const auth = this.parseCSVauth(user);
