@@ -1,4 +1,9 @@
-export default function buildFilters(filters, layerFilters, prevFilters) {
+import deepCopy from './../utils/deepCopy';
+
+export default function buildFilters(Filters, LayerFilters, PrevFilters) {
+  const filters = deepCopy(Filters);
+  const layerFilters = deepCopy(LayerFilters);
+  const prevFilters = deepCopy(PrevFilters);
   const filterMap = {};
   const filterKeys = Object.keys(filters);
   let filterKey;

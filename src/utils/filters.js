@@ -1,4 +1,8 @@
-export function processFilters(layerData, filterOptions) {
+import deepCopy from './deepCopy';
+
+export function processFilters(LayerData, FilterOptions) {
+  const layerData = deepCopy(LayerData);
+  const filterOptions = deepCopy(FilterOptions);
   let data = layerData.mergedData || layerData.source.data;
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
@@ -26,7 +30,8 @@ export function processFilters(layerData, filterOptions) {
   return data;
 }
 
-export function generateFilterOptions(layerData) {
+export function generateFilterOptions(LayerData) {
+  const layerData = deepCopy(LayerData);
   let data = layerData.mergedData || layerData.source.data;
   // if it's geojson data, set use features array
   if (data.type) {
@@ -56,7 +61,7 @@ export function generateFilterOptions(layerData) {
 
   let doPushDatum;
   for (d = 0; d < data.length; d += 1) {
-    datum = data[d].geometry ? data[d].properties : data[d];
+    datum = (data[d].geometry ? data[d].properties : data[d]);
     doPushDatum = true;
 
     // loop through the fiters and see if datum passes filter requirements
@@ -101,7 +106,7 @@ export function generateFilterOptions(layerData) {
     }
   }
 
-  return filterOptions;
+  return deepCopy(filterOptions);
 }
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June',

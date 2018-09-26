@@ -4,6 +4,7 @@ import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
+import deepCopy from '../utils/deepCopy';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import parseData from './../utils/parseData';
@@ -170,13 +171,60 @@ function readData(mapId, layer, dispatch) {
   }
 }
 
+// Helper func for combining arrays of data
+function basicMerge(i, Data, prevData, nextData, join) {
+  if (!nextData || typeof nextData === 'string') {
+    return { ...prevData };
+  } else if (Array.isArray(prevData) && Array.isArray(Data[i])) {
+    return [...prevData, ...Data[i].filter(d => typeof d[join[i]] !== 'undefined')];
+  } else if (Array.isArray(prevData) && Array.isArray(Data[i].features)) {
+    return [...prevData, ...Data[i].features.filter(d => typeof d[join[i]] !== 'undefined')];
+  } else if (prevData.features && Array.isArray(prevData.features)) {
+    return {
+      ...prevData,
+      features: [...prevData.features, ...(Data[i].features || Data[i]).filter(d => typeof d[join[i]] !== 'undefined')],
+    };
+  }
+  return { ...prevData };
+}
+
+// Helper func for joining "manys" to "ones"
+function manyToOneMerge(i, PrevData, NextData, join, relation) {
+  // const prevData = deepCopy(PrevData);
+  // const nextData = deepCopy(NextData.features || NextData);
+  const prevData = PrevData;
+  const nextData = NextData.features || NextData;
+  let datum;
+  for (let d = 0; d < nextData.length; d += 1) {
+    datum = deepCopy(nextData[d].properties || nextData[d]);
+    if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
+      // Merge unique "one" properties from and datum onto prevData[oneId]
+      prevData[datum[join[i]]] = {
+        ...prevData[datum[join[i]]],
+        datum,
+      };
+    } else if (relation.key[i] === 'one' && datum[join[i]]) {
+      // Add unique "one"s to mergedData
+      prevData[datum[join[i]]] = datum;
+      prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
+    } else if (datum[join[i]] && prevData[datum[join[i]]]) {
+      // Add non-unique "many" to corresponding "one"
+      // datum = deepCopy(datum);
+      prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
+    }
+  }
+  datum = null;
+  return prevData;
+}
+
 /**
  * Loads layer data from multiple CSV or GeoJSON files
  * @param {*} layer
  * @param {*} dispatch
  */
 function fetchMultipleSources(mapId, layer, dispatch) {
-  const layerObj = { ...layer };
+  // const layerObj = { ...layer };
+  const layerObj = deepCopy(layer);
   const currentState = dispatch(getCurrentState());
   let q = d3.queue();
 
@@ -215,55 +263,12 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       mergedData.features = mergedData.features.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
     }
 
-    // Helper func for combining arrays of data
-    function basicMerge(i, prevData, nextData) {
-      if (!nextData || typeof nextData === 'string') {
-        return { ...prevData };
-      } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
-        return [...prevData, ...data[i].filter(d => typeof d[join[i]] !== 'undefined')];
-      } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
-        return [...prevData, ...data[i].features.filter(d => typeof d[join[i]] !== 'undefined')];
-      } else if (prevData.features && Array.isArray(prevData.features)) {
-        return {
-          ...prevData,
-          features: [...prevData.features, ...(data[i].features || data[i]).filter(d => typeof d[join[i]] !== 'undefined')],
-        };
-      }
-      return { ...prevData };
-    }
-
-    // Helper func for joining "manys" to "ones"
-    function manyToOneMerge(i, PrevData, NextData) {
-      const prevData = PrevData;
-      const nextData = NextData.features || NextData;
-      let datum;
-      for (let d = 0; d < nextData.length; d += 1) {
-        datum = nextData[d].properties || nextData[d];
-        if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
-          // Merge unique "one" properties from and datum onto prevData[oneId]
-          prevData[datum[join[i]]] = {
-            ...prevData[datum[join[i]]],
-            ...datum,
-          };
-        } else if (relation.key[i] === 'one' && datum[join[i]]) {
-          // Add unique "one"s to mergedData
-          prevData[datum[join[i]]] = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
-        } else if (datum[join[i]] && prevData[datum[join[i]]]) {
-          // Add non-unique "many" to corresponding "one"
-          datum = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
-        }
-      }
-      return { ...prevData };
-    }
-
     // loop through remaining data to basic join with merged data
     for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
       if (!relation || !isManyToOne) {
-        mergedData = basicMerge(i, mergedData, data[i]);
+        mergedData = basicMerge(i, data, mergedData, data[i], join);
       } else if (isManyToOne) {
-        mergedData = manyToOneMerge(i, mergedData, data[i]);
+        mergedData = manyToOneMerge(i, mergedData, data[i], join, relation);
       }
     }
 
@@ -278,14 +283,12 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       mergedData = csvToGEOjson(layerObj, mergedData);
     }
 
-    layerObj.mergedData = Array.isArray(mergedData)
-      ? [...mergedData]
-      : { ...mergedData };
+    layerObj.mergedData = deepCopy(mergedData);
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate.type ?
-      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS) : deepCopy(mergedData);
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });

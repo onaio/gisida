@@ -1,5 +1,6 @@
 import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
+import deepCopy from '../../utils/deepCopy';
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
@@ -271,14 +272,14 @@ export function createMapReducer(mapId) {
         case types.SET_LAYER_FILTERS: {
           const { layerId, layerFilters } = action;
           const layer = state.layers[layerId];
-          const filters = layer.filters ? { ...layer.filters } : {};
+          const filters = layer.filters || {};
           const updatedLayers = {
             ...state.layers,
             [layerId]: {
               ...layer,
               filters: {
                 ...filters,
-                layerFilters,
+                layerFilters: deepCopy(layerFilters),
               },
             },
           };
@@ -365,23 +366,23 @@ export function createMapReducer(mapId) {
           };
         }
         case types.RECEIVE_DATA: {
-          const { layer } = action;
+          const { layer, timeseries } = action;
           const oldLayer = state.layers[layer.id];
           const updatedLayers = {
             ...state.layers,
-            [layer.id]: {
+            [layer.id]: deepCopy({
               ...oldLayer,
               ...layer,
               labels: layer.labels,
               isLoading: false,
               loaded: true,
-            },
+            }),
           };
           return {
             ...state,
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            timeseries: action.timeseries,
+            timeseries,
             visibleLayerId: layer.id,
             showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
           };
