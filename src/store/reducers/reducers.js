@@ -1,5 +1,7 @@
+import cloneDeep from 'lodash.clonedeep';
 import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
+
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
@@ -361,7 +363,7 @@ export function createMapReducer(mapId) {
             ...state,
             // Update isLoading property
             showSpinner: true,
-            layers: updatedLayers,
+            layers: cloneDeep(updatedLayers),
           };
         }
         case types.RECEIVE_DATA: {
@@ -379,7 +381,7 @@ export function createMapReducer(mapId) {
           };
           return {
             ...state,
-            layers: updatedLayers,
+            layers: cloneDeep(updatedLayers),
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,

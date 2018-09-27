@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash.clonedeep';
 import parseMustache from '../utils/parseMustache';
 import { detailView } from '../store/actions/actions';
 
@@ -115,8 +116,8 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     return false;
   }
 
-  const layerObj = { ...LayerObj };
-  const featureProperties = { ...FeatureProperties };
+  const layerObj = cloneDeep({ ...LayerObj });
+  const featureProperties = cloneDeep({ ...FeatureProperties });
   const {
     UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
   } = layerObj['detail-view'];
