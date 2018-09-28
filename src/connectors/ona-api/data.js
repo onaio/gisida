@@ -12,7 +12,10 @@ function formatParams(params) {
 }
 
 export default function getData(formID, properties, accessToken, callback) {
-  const fields = properties && properties.map(p => `"${p}"`).join();
+  const fields = properties && Array.isArray(properties)
+    ? properties.map(p => `"${p}"`).join()
+    : (properties && properties[formID].map(p => `"${p}"`).join()) || null;
+
   const queryParams = fields && { fields: `[${fields}]` };
   const xobj = new XMLHttpRequest();
   const mimeType = 'application/json';
