@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const config = {
   entry: {
@@ -32,8 +33,11 @@ function readEnv(env) {
       config.output.path = path.resolve(env.path);
     }
     if (env.production === 'true') {
+      config.devtool = 'source-map';
       config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }));
-      config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+      config.plugins.push(new UglifyJsPlugin());
+      config.plugins.push(new webpack.HashedModuleIdsPlugin());
+      config.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     } else {
       config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"' }));
     }
