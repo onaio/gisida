@@ -38,8 +38,10 @@ function readEnv(env) {
       config.plugins.push(new UglifyJsPlugin());
       config.plugins.push(new webpack.HashedModuleIdsPlugin());
       config.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
+      process.env.NODE_ENV = 'production';
     } else {
       config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"' }));
+      process.env.NODE_ENV = 'development';
     }
   }
   return config;
