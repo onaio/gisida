@@ -34,12 +34,14 @@ function readEnv(env) {
     }
     if (env.production === 'true') {
       config.devtool = 'source-map';
+      process.env.NODE_ENV = 'production';
       config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }));
       config.plugins.push(new UglifyJsPlugin());
       config.plugins.push(new webpack.HashedModuleIdsPlugin());
       config.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     } else {
       config.plugins.push(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"' }));
+      process.env.NODE_ENV = 'development';
     }
   }
   return config;
