@@ -97,6 +97,9 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
         mbLayer = null;
     }
     timeseriesMap[layer.id].mapBoxLayer = mbLayer;
+    if (timeseriesMap[layer.id].adminFilter) {
+      layerObj.filters.admin = timeseriesMap[layer.id].adminFilter;
+    }
   }
   const newTimeSeries = Object.assign({}, timeseries, timeseriesMap);
 

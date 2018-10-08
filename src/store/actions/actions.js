@@ -148,10 +148,11 @@ export const layerReloaded = mapId => ({
   type: types.LAYER_RELOADED,
 });
 
-export const updateTimeseries = (mapId, timeseries) => ({
+export const updateTimeseries = (mapId, timeseries, layerId) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
   mapId,
+  layerId,
 });
 
 export const detailView = (mapId, payload) => ({

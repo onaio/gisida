@@ -34,6 +34,7 @@ export default function buildTimeseriesData(
   let colors;
   let { stops } = Stops;
   let strokeWidthStops;
+  let adminFilter;
 
   const periodHasDataReducer = (sum, d) => sum + Number((d.properties || d)[layerProperty]);
   const periodDataFilter = (p) => {
@@ -44,6 +45,10 @@ export default function buildTimeseriesData(
     };
     // determine if period data has any non-zero values
     periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));
+    // define admin timeseries filter
+    if (layerObj.aggregate.timeseries.admin) {
+      periodData[p].adminFilter = ['all', ['<', 'startYear', Number(p)], ['>=', 'endYear', Number(p)]];
+    }
   };
 
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
@@ -79,7 +84,7 @@ export default function buildTimeseriesData(
           periodData = {};
           period.forEach(periodDataFilter);
 
-          ({ data } = periodData[period[temporalIndex]]);
+          ({ data, adminFilter } = periodData[period[temporalIndex]]);
         } else {
           ({ data } = layerObj.source);
         }
@@ -101,6 +106,7 @@ export default function buildTimeseriesData(
         strokeWidthStops,
         stops,
         layerProperty,
+        adminFilter,
       };
     }
   }
