@@ -260,6 +260,7 @@ export function createMapReducer(mapId) {
               && filterLayerId !== ''
               && updatedLayers[filterLayerId]
               && updatedLayers[filterLayerId].visible,
+            doApplyFilters: layer && layer.filters && layer.filters.admin,
           };
         }
         case types.RELOAD_LAYER: {
@@ -435,9 +436,11 @@ export function createMapReducer(mapId) {
           };
         }
         case types.UPDATE_TIMESERIES: {
+          const { timeseries, layerId } = action;
           return {
             ...state,
-            timeseries: action.timeseries,
+            timeseries,
+            doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
             reloadLayers: Math.random(),
           };
         }
