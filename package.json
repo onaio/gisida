@@ -1,6 +1,6 @@
 {
   "name": "gisida",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A dashboard builder library for map visualizations",
   "keywords": [
     "data visualization",
@@ -34,6 +34,7 @@
     "highcharts": "^6.0.4",
     "js-cookie": "^2.2.0",
     "jsx-loader": "^0.13.2",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.22.1",
     "mustache": "^2.3.0",
     "neo-async": "^2.5.1",
@@ -41,6 +42,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "simple-statistics": "^5.2.0",
+    "uglifyjs-webpack-plugin": "1.1.5",
     "webpack": "^3.8.1"
   },
   "devDependencies": {
@@ -53,6 +55,7 @@
     "eslint-plugin-react": "^7.5.1",
     "jest": "^22.4.3",
     "mapbox-gl": "^0.44.1",
-    "mock-browser": "^0.92.14"
+    "mock-browser": "^0.92.14",
+    "webpack-cli": "^3.1.0"
   }
 }

@@ -104,6 +104,14 @@ export const toggleMenu = (mapId, menuIsOpen) => ({
   mapId,
 });
 
+export const toggleCategories = (mapId, category, index, isRefresh) => ({
+  type: types.TOGGLE_CATEGORIES,
+  category,
+  index,
+  isRefresh,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -197,4 +205,5 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
+  toggleCategories,
 };
