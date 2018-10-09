@@ -47,7 +47,7 @@ export default function buildTimeseriesData(
     periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));
     // define admin timeseries filter
     if (layerObj.aggregate.timeseries.admin) {
-      periodData[p].adminFilter = ['all', ['<', 'startYear', Number(p)], ['>=', 'endYear', Number(p)]];
+      periodData[p].adminFilter = ['all', ['<=', 'startYear', Number(p)], ['>', 'endYear', Number(p)]];
     }
   };
 

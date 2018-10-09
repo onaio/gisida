@@ -427,8 +427,24 @@ export function createMapReducer(mapId) {
         }
         case types.UPDATE_TIMESERIES: {
           const { timeseries, layerId } = action;
+          const { layers } = state;
+          let nextLayers;
+          if (layers[layerId] && layers[layerId].filters.admin) {
+            nextLayers = {
+              ...layers,
+              [layerId]: {
+                ...layers[layerId],
+                filters: {
+                  ...layers[layerId].filters,
+                  admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
+                },
+              },
+            };
+          }
+
           return {
             ...state,
+            layers: nextLayers || layers,
             timeseries,
             doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
             reloadLayers: Math.random(),
