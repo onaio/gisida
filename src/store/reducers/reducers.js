@@ -259,7 +259,6 @@ export function createMapReducer(mapId) {
               && filterLayerId !== ''
               && updatedLayers[filterLayerId]
               && updatedLayers[filterLayerId].visible,
-            doApplyFilters: layer && layer.filters && layer.filters.admin,
           };
         }
         case types.RELOAD_LAYER: {
@@ -423,6 +422,7 @@ export function createMapReducer(mapId) {
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
             showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
+            doApplyFilters: layer && layer.filters && !!layer.filters.admin,
           };
         }
         case types.UPDATE_TIMESERIES: {
