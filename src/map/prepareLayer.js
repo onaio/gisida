@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
+import cloneDeep from 'lodash.clonedeep';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
@@ -64,6 +65,44 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   let { layers } = currentState[mapId];
 
   // Generate Mapbox StyleSpec
+  if (layerObj.fillGaps) {
+    const data = [];
+    const mapCodes = [...new Set((layerObj.source.data.features
+      || layerObj.source.data).map(d => d[layerObj.source.join[1]]))];
+    const periods = [
+      ...new Set(layerObj.source.data.map(p => p[layerObj.aggregate.timeseries.field])),
+    ];
+    const layerData = layerObj.source.data;
+    let datum;
+    const tsField = layerObj.aggregate.timeseries.field;
+    const periodData = {};
+    for (let d = 0; d < layerData.length; d += 1) {
+      datum = layerObj.source.data[d];
+      if (!periodData[datum[tsField]]) {
+        periodData[datum[tsField]] = {};
+      }
+      periodData[datum[tsField]][datum[layerObj.source.join[1]]] = { ...datum };
+    }
+
+    for (let p = 0; p < periods.length; p += 1) {
+      for (let m = 0; m < mapCodes.length; m += 1) {
+        if (periodData[periods[p]][mapCodes[m]]) {
+          data.push(periodData[periods[p]][mapCodes[m]])
+        } else if (p && periodData[periods[p - 1]][mapCodes[m]]) {
+          data.push({
+            ...periodData[periods[p - 1]][mapCodes[m]],
+            [tsField]: periods[p],
+          });
+          periodData[periods[p]][mapCodes[m]] = {
+            ...periodData[periods[p - 1]][mapCodes[m]],
+            [tsField]: periods[p],
+          };
+        }
+      }
+    }
+    layerObj.source.data = cloneDeep(data);
+    layerObj.mergedData = cloneDeep(data);
+  }
   layerObj = addLayer(layerObj, mapConfig);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
@@ -77,6 +116,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layers,
     doUpdateTsLayer,
   );
+
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
