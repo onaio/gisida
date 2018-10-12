@@ -9,14 +9,20 @@ export default function buildTimeseriesData(
   doUpdateTsLayer,
 ) {
   const layerObj = { ...layer };
-  layerObj.source.data = layerObj.source.data.sort((a, b) => {
-    if (a[layerObj.aggregate.timeseries.field] > b[layerObj.aggregate.timeseries.field]) {
+  const tsField = layerObj.aggregate.timeseries.field;
+  const sortedData = (layerObj.source.data || layerObj.source.data.features).sort((a, b) => {
+    if ((a.properties || a)[tsField] > (b.properties || b)[tsField]) {
       return 1;
-    } else if (b[layerObj.aggregate.timeseries.field] > a[layerObj.aggregate.timeseries.field]) {
+    } else if ((b.properties || b)[tsField] > (a.properties || a)[tsField]) {
       return -1;
     }
     return 0;
   });
+  if (layerObj.source.data && layerObj.source.data.features) {
+    layerObj.source.data.features = sortedData;
+  } else {
+    layerObj.source.data = sortedData;
+  }
   const activeLayers = [];
   const layers = [];
   Object.keys(loadedlayers).forEach((key) => {
@@ -26,7 +32,6 @@ export default function buildTimeseriesData(
     }
   });
   const timeseriesMap = {};
-
   let layerId;
   let index;
   let temporalIndex;
