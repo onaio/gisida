@@ -12,6 +12,14 @@ export default function buildTimeseriesData(
   mapId,
 ) {
   const layerObj = { ...layer };
+  layerObj.source.data = layerObj.source.data.sort((a, b) => {
+    if (a[layerObj.aggregate.timeseries.field] > b[layerObj.aggregate.timeseries.field]) {
+      return 1;
+    } else if (b[layerObj.aggregate.timeseries.field] > a[layerObj.aggregate.timeseries.field]) {
+      return -1;
+    }
+    return 0;
+  });
   const activeLayers = [];
   const layers = [];
   Object.keys(loadedlayers).forEach((key) => {
