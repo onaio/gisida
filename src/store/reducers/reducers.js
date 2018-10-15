@@ -429,7 +429,7 @@ export function createMapReducer(mapId) {
           const { timeseries, layerId } = action;
           const { layers } = state;
           let nextLayers;
-          if (layers[layerId] && layers[layerId].filters.admin) {
+          if (layers[layerId] && layers[layerId].filters && layers[layerId].filters.admin) {
             nextLayers = {
               ...layers,
               [layerId]: {
