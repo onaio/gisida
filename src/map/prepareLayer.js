@@ -87,7 +87,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     for (let p = 0; p < periods.length; p += 1) {
       for (let m = 0; m < mapCodes.length; m += 1) {
         if (periodData[periods[p]][mapCodes[m]]) {
-          data.push(periodData[periods[p]][mapCodes[m]])
+          data.push(periodData[periods[p]][mapCodes[m]]);
         } else if (p && periodData[periods[p - 1]][mapCodes[m]]) {
           data.push({
             ...periodData[periods[p - 1]][mapCodes[m]],
