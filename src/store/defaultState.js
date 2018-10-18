@@ -38,9 +38,7 @@ const defaultState = {
     showSpinner: false,
     menuIsOpen: true,
     openCategories: [],
-    timeseries: {
-      visibility: false,
-    },
+    timeseries: {},
     visibleLayerId: '',
     filter: {
       isFiltered: false,
