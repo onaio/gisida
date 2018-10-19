@@ -37,6 +37,7 @@ const defaultState = {
     oldLayerObj: {},
     showSpinner: false,
     menuIsOpen: true,
+    openCategories: [],
     timeseries: {
       visibility: false,
     },
