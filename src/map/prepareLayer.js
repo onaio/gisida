@@ -373,7 +373,8 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         : generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
-      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS, (layerObj.filterOptions || false))
+      : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });

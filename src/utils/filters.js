@@ -43,7 +43,7 @@ export function processFilters(layerData, filterOptions) {
       } return true;
     });
   } else if (layerData.aggregate.filter) {
-    for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
+    for (f = 0; f < acceptedFilterValues.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
         data = data.filter(filterProcessor);
       } else if (acceptedFilterValues[f] === 'quant') {
