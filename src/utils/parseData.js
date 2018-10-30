@@ -23,6 +23,7 @@ export default function parseData(spec, datum) {
     return parsedData;
   }
 
+  const unparsedDatum = JSON.stringify(datum);
   const datumProps = Object.keys(datum);
   let datumVal; // the value of the actual datum property
   let propSpec; // references the data parse spec object for the specific property
@@ -92,7 +93,7 @@ export default function parseData(spec, datum) {
     // add it to parsedDatum as is
     if (!propSpec || (propSpec.type !== 'multiple' && !propVal)) {
       parseVal = datumVal;
-    } else {
+    } else if (datumVal !== null) {
       // define the value of 'other'
       otherVal = propSpec['other-prop'] && propSpec['other-val']
         ? datum[propSpec['other-val']]
@@ -118,12 +119,19 @@ export default function parseData(spec, datum) {
       } else {
         parseVal = propVal || datumVal;
       }
+    } else {
+      parseVal = null;
     }
 
     // assign the parsed value into the parsedDatum object
-    parsedDatum[datumProps[p]] = parseVal;
+    if (propSpec && !propSpec.type && propSpec['new-prop-name']) {
+      parsedDatum[datumProps[p]] = datum[datumProps[p]];
+      parsedDatum[propSpec['new-prop-name']] = parseVal;
+    } else {
+      parsedDatum[datumProps[p]] = parseVal;
+    }
   }
 
-  parsedDatum.unparsedDatum = { ...datum };
-  return parsedDatum;
+  parsedDatum.unparsedDatum = unparsedDatum;
+  return { ...parsedDatum };
 }

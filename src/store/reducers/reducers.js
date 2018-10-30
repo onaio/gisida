@@ -1,5 +1,7 @@
+import cloneDeep from 'lodash.clonedeep';
 import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
+
 
 function APP(state = defaultState.APP, action) {
   switch (action.type) {
@@ -118,13 +120,21 @@ function LAYERS(state = defaultState.LAYERS, action) {
     }
     case types.ADD_LAYER_GROUP: {
       // parse action.group for urls
-      const group = action.group.map((layer) => {
-        if (layer.indexOf('http') === -1) {
-          return layer;
+      const groupMapper = (layer) => {
+        if (typeof layer === 'string') {
+          if (layer.indexOf('http') === -1) {
+            return layer;
+          }
+          const pathSplit = layer.split('/');
+          return pathSplit[pathSplit.length - 1];
         }
-        const pathSplit = layer.split('/');
-        return pathSplit[pathSplit.length - 1];
-      });
+        const subGroup = {};
+        Object.keys(layer).forEach((key) => {
+          subGroup[key] = layer[key].map(groupMapper);
+        });
+        return subGroup;
+      };
+      const group = action.group.map(groupMapper);
       return {
         ...state,
         groups: {
@@ -180,10 +190,10 @@ export function createMapReducer(mapId) {
         case types.ADD_LAYER: {
           const layers = {};
           const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
-          layers[action.layer.id] = action.layer;
+          layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
-          && state.layers[l].id !== reloadLayerId);
+            && state.layers[l].id !== reloadLayerId);
           return {
             ...state,
             layers: updatedLayers,
@@ -195,7 +205,6 @@ export function createMapReducer(mapId) {
         case types.TOGGLE_LAYER: {
           const { layerId } = action;
           const layer = state.layers[layerId];
-
           const updatedTimeSeries = {
             ...state.timeseries,
             visibility: layer
@@ -227,10 +236,11 @@ export function createMapReducer(mapId) {
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
             filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
+
           return {
             ...state,
             // Update visible property
-            activeLayerId: updatedLayers[layerId].visible
+            activeLayerId: updatedLayers[layerId].visible && layer.type !== 'line'
               ? layerId
               : activeLayerIds[activeLayerIds.length - 1],
             lastLayerSelected: !updatedLayers[layerId].visible
@@ -247,6 +257,7 @@ export function createMapReducer(mapId) {
               layerId: filterLayerId,
             },
             detailView: state.detailView
+              && (state.detailView && state.detailView.layerId === layerId)
               && updatedLayers[layerId]
               && updatedLayers[layerId].visible,
             showFilterPanel: state.showFilterPanel
@@ -256,12 +267,19 @@ export function createMapReducer(mapId) {
               && updatedLayers[filterLayerId].visible,
           };
         }
+        case types.RELOAD_LAYER: {
+          return {
+            ...state,
+            reloadLayerId: action.layerId,
+          };
+        }
 
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
             && state.layers[action.primaryLayer].aggregate.filter;
           return {
             ...state,
+            detailView: null,
             activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
             filter: {
@@ -325,6 +343,16 @@ export function createMapReducer(mapId) {
           };
         }
 
+        case types.RESET_FILTERED_LAYER: {
+          const { oldLayer } = action;
+          return {
+            ...state,
+            oldLayerObj: {
+              ...oldLayer,
+            },
+          };
+        }
+
         case types.TOGGLE_CATEGORIES: {
           const { category, index, isRefresh } = action;
           const openCategories = [
@@ -383,7 +411,7 @@ export function createMapReducer(mapId) {
             ...state,
             // Update isLoading property
             showSpinner: true,
-            layers: updatedLayers,
+            layers: cloneDeep(updatedLayers),
           };
         }
         case types.RECEIVE_DATA: {
@@ -401,7 +429,7 @@ export function createMapReducer(mapId) {
           };
           return {
             ...state,
-            layers: updatedLayers,
+            layers: cloneDeep(updatedLayers),
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,

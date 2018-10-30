@@ -102,7 +102,8 @@ export default function (layer, mapConfig) {
             property: layer.source.join[0],
             stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
             type: 'categorical',
-          } : (layerObj.colorStops && {
+          }
+          : (layerObj.colorStops && {
             property: layer.source.join[0],
             stops: layerObj.colorStops,
             type: 'categorical',
@@ -225,7 +226,7 @@ export default function (layer, mapConfig) {
       const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
 
       styleSpec.paint['fill-color'] = {
-        property: layer.source.join[0],
+        property: layer.categories['vector-prop'] || layer.source.join[0],
         stops: layerStops,
         type: 'categorical',
         default: 'rgba(0,0,0,0)',

@@ -34,6 +34,7 @@ const defaultState = {
     currentRegion: '',
     layers: {},
     defaultLayers: [],
+    oldLayerObj: {},
     showSpinner: false,
     menuIsOpen: true,
     openCategories: [],

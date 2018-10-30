@@ -56,7 +56,7 @@ export function buildLabels(layerObj, tsLayerObj, period) {
  * @param {*} layer
  * @param {*} dispatch
  */
-function renderData(mapId, layer, dispatch, doUpdateTSLayer) {
+function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   let layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { mapConfig } = currentState.APP;
@@ -75,7 +75,7 @@ function renderData(mapId, layer, dispatch, doUpdateTSLayer) {
     sliderLayers,
     timeseries,
     layers,
-    doUpdateTSLayer,
+    doUpdateTsLayer,
   );
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
@@ -136,7 +136,7 @@ function renderData(mapId, layer, dispatch, doUpdateTSLayer) {
  * @param {*} source
  * @param {*} dispatch
  */
-function readData(mapId, layer, dispatch) {
+function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   const layerObj = { ...layer };
   const sourceURL = layer.source.data;
   const fileType = sourceURL.split('.').pop();
@@ -157,7 +157,7 @@ function readData(mapId, layer, dispatch) {
           ? generateFilterOptionsPrev(layerObj)
           : generateFilterOptions(layerObj);
       }
-      renderData(mapId, layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
   if (fileType === 'geojson') {
@@ -170,7 +170,7 @@ function readData(mapId, layer, dispatch) {
       } else {
         layerObj.source.data = data;
       }
-      renderData(mapId, layerObj, dispatch);
+      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
 }
@@ -207,6 +207,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       });
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
+    const isOneToMany = relation && relation.type === 'one-to-many';
     const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
@@ -214,20 +215,38 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
 
     // Filter base data for missing join properties
+    const intialFilter = (d) => {
+      if (!Array.isArray(join[(isVectorLayer ? 1 : 0)])) {
+        return typeof d[join[(isVectorLayer ? 1 : 0)]] !== 'undefined';
+      }
+      for (let j = 0; j < join[(isVectorLayer ? 1 : 0)].length; j += 1) {
+        if (typeof d[join[(isVectorLayer ? 1 : 0)][j]] !== 'undefined') return true;
+      }
+      return false;
+    };
     if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+      mergedData = mergedData.filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
-      mergedData.features = mergedData.features.filter(d => d[join[(isVectorLayer ? 1 : 0)]]);
+      mergedData.features = mergedData.features.filter(intialFilter);
     }
 
     // Helper func for combining arrays of data
     function basicMerge(i, prevData, nextData) {
+      // Helper func to check nextData datum for single or multiple join props
+      const basicMergeFilter = (d) => {
+        if (!Array.isArray(join[i])) return typeof d[join[i]] !== 'undefined';
+        for (let j = 0; j < join[i].length; j += 1) {
+          if (typeof d[join[i][j]] !== 'undefined') return true;
+        }
+        return false;
+      };
+
       if (!nextData || typeof nextData === 'string') {
         return { ...prevData };
       } else if (Array.isArray(prevData) && Array.isArray(data[i])) {
-        return [...prevData, ...data[i].filter(d => typeof d[join[i]] !== 'undefined')];
+        return [...prevData, ...data[i].filter(basicMergeFilter)];
       } else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {
-        return [...prevData, ...data[i].features.filter(d => typeof d[join[i]] !== 'undefined')];
+        return [...prevData, ...data[i].features.filter(basicMergeFilter)];
       } else if (prevData.features && Array.isArray(prevData.features)) {
         return {
           ...prevData,
@@ -242,33 +261,94 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       const prevData = PrevData;
       const nextData = NextData.features || NextData;
       let datum;
+      let joinProp;
       for (let d = 0; d < nextData.length; d += 1) {
         datum = nextData[d].properties || nextData[d];
-        if (relation.key[i] === 'one' && datum[join[i]] && prevData[datum[join[i]]]) {
+        if (Array.isArray(join[i])) {
+          for (let j = 0; j < join[i].length; j += 1) {
+            joinProp = typeof datum[join[i][j]] !== 'undefined' ? join[i][j] : null;
+            if (joinProp) break;
+          }
+        } else {
+          joinProp = join[i];
+        }
+
+        if (relation.key[i] === 'one' && datum[joinProp] && prevData[datum[joinProp]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
-          prevData[datum[join[i]]] = {
-            ...prevData[datum[join[i]]],
+          prevData[datum[joinProp]] = {
+            ...prevData[datum[joinProp]],
             ...datum,
           };
-        } else if (relation.key[i] === 'one' && datum[join[i]]) {
+        } else if (relation.key[i] === 'one' && datum[joinProp]) {
           // Add unique "one"s to mergedData
-          prevData[datum[join[i]]] = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')] = [];
-        } else if (datum[join[i]] && prevData[datum[join[i]]]) {
+          prevData[datum[joinProp]] = { ...datum };
+          prevData[datum[joinProp]][(relation['many-prop'] || 'many')] = [];
+        } else if (datum[joinProp] && prevData[datum[joinProp]]) {
           // Add non-unique "many" to corresponding "one"
           datum = { ...datum };
-          prevData[datum[join[i]]][(relation['many-prop'] || 'many')].push(datum);
+          prevData[datum[joinProp]][(relation['many-prop'] || 'many')].push(datum);
         }
       }
       return { ...prevData };
     }
 
+    // Helper func for joining "ones" to "manys"
+    function oneToManyMerge(i, PrevData, NextData) {
+      let prevData = PrevData;
+      const nextData = NextData.features || NextData;
+      const j = relation.key.indexOf('many'); // first instance of 'many'
+      let datum;
+      let pJoinProp;
+      let nJoinProp;
+
+      // todo - refactor oneToManyMerge for efficiency and flexibility
+      // 1) loop through nextData once and build {map}
+      // 2) map() through prevData once and reference {map}
+      // 3) reorder everything up front to make sure that all manys exist before mapping ones
+
+      const prevDataMap = (pd) => {
+        if (Array.isArray(join[j])) {
+          for (let k = 0; k < join[j].length; k += 1) {
+            pJoinProp = typeof pd[join[j][k]] !== 'undefined' ? join[j][k] : null;
+            if (pJoinProp) break;
+          }
+        } else {
+          pJoinProp = join[j];
+        }
+        return (pd[pJoinProp] === datum[nJoinProp] ? { ...pd, ...datum } : pd);
+      };
+      // loop through all next data
+      for (let d = 0; d < nextData.length; d += 1) {
+        datum = nextData[d].properties || nextData[d];
+        if (Array.isArray(join[i])) {
+          for (let k = 0; k < join[i].length; k += 1) {
+            nJoinProp = typeof datum[join[i][k]] !== 'undefined' ? join[i][k] : null;
+            if (nJoinProp) break;
+          }
+        } else {
+          nJoinProp = join[i];
+        }
+
+
+        // if nextData is another many, add it to the prev data array
+        if (relation.key[i] === 'many' && datum[nJoinProp] && Array.isArray(prevData)) {
+          prevData = [...prevData, ...(nextData.features || nextData)];
+        // if nextData is one, map it to existing manys in prevData
+        } else if (relation.key[i] === 'one' && datum[nJoinProp] && Array.isArray(prevData)) {
+          prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;
+        }
+      }
+      return Array.isArray(prevData) ? [...prevData] : { ...prevData };
+    }
+
     // loop through remaining data to basic join with merged data
     for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
-      if (!relation || !isManyToOne) {
+      if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        mergedData = manyToOneMerge(i, mergedData, data[i]);
+        mergedData = manyToOneMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      } else if (isOneToMany) {
+        mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
       }
     }
 
@@ -286,12 +366,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     layerObj.mergedData = Array.isArray(mergedData)
       ? [...mergedData]
       : { ...mergedData };
+
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = layerObj.aggregate.filterIsPrev
         ? generateFilterOptionsPrev(layerObj)
         : generateFilterOptions(layerObj);
     }
-    layerObj.source.data = layerObj.aggregate.type ?
+    layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
@@ -309,11 +390,12 @@ export default function prepareLayer(
   layer,
   dispatch,
   filterOptions = false,
-  doUpdateTSLayer,
+  doUpdateTsLayer,
 ) {
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
+
 
   // // add to active layers?
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
@@ -322,7 +404,7 @@ export default function prepareLayer(
   if (layerObj.source) {
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
-      readData(mapId, layerObj, dispatch, doUpdateTSLayer);
+      readData(mapId, layerObj, dispatch, doUpdateTsLayer);
     } else
     // grab from multiple sources
     if (layerObj.source.data instanceof Array &&
@@ -339,9 +421,9 @@ export default function prepareLayer(
         layerObj.aggregate.type ?
           aggregateFormData(layerObj, currentState.LOCATIONS, filterOptions) :
           processFilters(layerObj, filterOptions);
-      renderData(mapId, layerObj, dispatch, doUpdateTSLayer);
+      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     } else {
-      renderData(mapId, layerObj, dispatch, doUpdateTSLayer);
+      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     }
   } else if (layerObj.layers) {
     const currentState = dispatch(getCurrentState());

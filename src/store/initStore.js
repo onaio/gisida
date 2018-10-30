@@ -12,8 +12,6 @@ export function loadLayers(mapId, dispatch, layers) {
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
     const mapLayers = (layer) => {
-      const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
-
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
@@ -32,9 +30,17 @@ export function loadLayers(mapId, dispatch, layers) {
           prepareLayer(mapId, layerObj, dispatch);
         }
       }
+      if (typeof layer === 'string') {
+        const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+        // load local or remote layer spec
+        return loadJSON(path, addLayerToStore);
+      }
 
-      // load local or remote layer spec
-      return loadJSON(path, addLayerToStore);
+      Object.keys(layer).forEach((key) => {
+        layer[key].map(mapLayers);
+      });
+
+      return true;
     };
 
     if (Array.isArray(layers)) {

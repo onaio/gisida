@@ -52,8 +52,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (layer.aggregate && layer.aggregate.timeseries) {
         const tsLayer = timeseries[activeLayerId];
         if (tsLayer) {
-          const currPeriod = Object.keys(tsLayer.periodData)[tsLayer.temporalIndex];
-          periodData = tsLayer.periodData[currPeriod].data;
+          // debugger
+          periodData = [...tsLayer.data];
         }
       }
       // Assign layer data
@@ -61,20 +61,33 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (data && data.length) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
-          row = {
-            ...data[r],
-          };
-
+          row = { ...(data[r].properties || data[r]) };
           const rowItem = row;
-          if (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]) {
+          if ((layer.popup.join
+            && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+            || (!layer.popup.join
+            && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
+            const found = [];
+            const rxp = /{{([^}]+)}/g;
+            const str = layer.labels ? layer.labels.label : null;
+            for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
+              found.push(c[1]);
+            }
+            // while (curMatch = rxp.exec(str)) {
+            //   found.push(curMatch[1]);
+            // }
+            found.forEach((f) => {
+              rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            });
             // Add header and body to popup with data from layer
-            if (row[layer.popup.header]) {
+            if (rowItem[layer.popup.header]) {
               content =
                 `<div><b>${row[layer.popup.header]}</b></div>` +
                 `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
             } else {
               content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
             }
+            break;
           }
         }
       } else {

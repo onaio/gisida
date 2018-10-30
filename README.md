@@ -151,7 +151,7 @@ $ git clone git@github.com:onaio/gisida.git
 $ npm develop
 ```
 
-### Prodcution build 
+### Production build 
 
 - Build production distribution
 ```

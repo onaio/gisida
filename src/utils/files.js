@@ -4,7 +4,7 @@ function fetchURL(path, mimeType, callback) {
   const xobj = new XMLHttpRequest();
   xobj.overrideMimeType(mimeType);
   xobj.open('GET', path, true);
-  xobj.onreadystatechange = function () {
+  xobj.onreadystatechange = () => {
     if (xobj.readyState === 4 && xobj.status === 200) {
       callback(xobj.responseText);
     }

@@ -28,6 +28,7 @@ describe('reducers.APP', () => {
           currentRegion: '',
           currentStyle: '',
           detailView: null,
+          oldLayerObj: {},
           filter: {
             filterOptions: {},
             filters: {},
@@ -48,6 +49,7 @@ describe('reducers.APP', () => {
           menuIsOpen: true,
           openCategories: [],
           primaryLayer: '',
+          reloadLayerId: null,
           reloadLayers: false,
           showFilterPanel: false,
           showProfile: false,

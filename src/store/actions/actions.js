@@ -131,6 +131,12 @@ export const mapLoaded = (mapId, isLoaded) => ({
   mapId,
 });
 
+export const reloadLayer = (mapId, layerId) => ({
+  type: types.RELOAD_LAYER,
+  layerId,
+  mapId,
+});
+
 export const reloadLayers = (mapId, reload) => ({
   type: types.RELOAD_LAYERS,
   reload,
@@ -160,6 +166,12 @@ export const detailView = (mapId, payload) => ({
   payload,
 });
 
+export const resetFilteredLayer = (mapId, oldLayer) => ({
+  type: types.RESET_FILTERED_LAYER,
+  mapId,
+  oldLayer,
+});
+
 export const triggerSpinner = (mapId, isLoaded = false) => ({
   type: types.TRIGGER_SPINNER,
   isLoaded,
@@ -180,6 +192,8 @@ export default {
   mapLoaded,
   addLayer,
   addLayerGroup,
+  reloadLayer,
+  layerReloaded,
   reloadLayers,
   toggleLayer,
   toggleFilter,
@@ -192,11 +206,11 @@ export default {
   getCurrentState,
   updateTimeseries,
   detailView,
+  resetFilteredLayer,
   setLayerFilter,
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
   toggleCategories,
-  layerReloaded,
   saveFilterOptions,
 };
