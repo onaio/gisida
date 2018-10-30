@@ -28,7 +28,6 @@ export const TRIGGER_SPINNER = 'TRIGGER_SPINNER';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 export const TOGGLE_CATEGORIES = 'TOGGLE_CATEGORIES';
-<<<<<<< HEAD
 
 // Auth action types
 export const INIT_AUTH = 'INIT_AUTH';
@@ -43,7 +42,5 @@ export const FETCH_FORMS_ERROR = 'FETCH_FORMS_ERROR';
 export const LOCATION_UPDATED = 'LOCATION_UPDATED';
 export const SET_LOCATION = 'SET_LOCATION';
 export const TOGGLE_MAP_LOCATION = 'TOGGLE_MAP_LOCATION';
-=======
 export const LAYER_RELOADED = 'LAYER_RELOADED';
 export const SAVE_FILTER_OPTIONS = 'SAVE_FILTER_OPTIONS';
->>>>>>> Add reducer to trigger prepareLayer for prev filters actions
