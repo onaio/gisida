@@ -123,7 +123,9 @@ function renderData(mapId, layer, dispatch, doUpdateTSLayer) {
       dispatch(receiveData(mapId, layerObj, newTimeSeries));
     });
   } else {
-    layerObj.labels.labels = buildLabels(layerObj);
+    layerObj.labels.labels = layerObj.aggregate.filterIsPrev
+      ? layerObj.labels.labels
+      : buildLabels(layerObj);
     dispatch(receiveData(mapId, layerObj, newTimeSeries));
   }
 }
