@@ -100,7 +100,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   }
   const newTimeSeries = Object.assign({}, timeseries, timeseriesMap);
 
-  // Check if layer has labels and add before dispatch
+  // Check if layer has labels and add before dispatch 
   if (!layerObj.labels) {
     dispatch(receiveData(mapId, layerObj, newTimeSeries));
   } else if (!layerObj.labels.labelData) {
