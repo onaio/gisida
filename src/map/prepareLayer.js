@@ -123,7 +123,17 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
       dispatch(receiveData(mapId, layerObj, newTimeSeries));
     });
   } else {
-    layerObj.labels.labels = buildLabels(layerObj);
+    const newLabels = {};
+    if (doUpdateTsLayer) {
+      newTimeSeries[layerObj.id].period.forEach((p) => {
+        newLabels[p] = buildLabels(layerObj, newTimeSeries[layerObj.id], p);
+      });
+      layerObj.labels.labels = {
+        ...newLabels,
+      };
+    } else {
+      layerObj.labels.labels = buildLabels(layerObj);
+    }
     dispatch(receiveData(mapId, layerObj, newTimeSeries));
   }
 }
