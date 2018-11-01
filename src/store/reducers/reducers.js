@@ -83,6 +83,7 @@ function FILTER(state = defaultState.FILTER, action) {
         [action.layerId]: {
           ...action.filterState,
           doUpdate: true,
+          isClear: action.isClear || false,
         },
       };
     }
@@ -188,6 +189,7 @@ export function createMapReducer(mapId) {
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
             && state.layers[l].id !== reloadLayerId);
+          
           return {
             ...state,
             layers: updatedLayers,

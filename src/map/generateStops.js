@@ -153,8 +153,13 @@ export default function (layer, timefield) {
         osmIDs.push(rows[i].properties[(groupByProp || layer.source.join[1])]);
       }
     } else {
-      periods.push(rows[i][timefield] || null);
-      data.push(Number(rows[i][layer.property]));
+      if (rows[i][timefield]) periods.push(rows[i][timefield] || null);
+      const propVal = rows[i][layer.property];
+      if (Number.isNaN(Number(propVal))) {
+        data.push(Number(propVal.split(',').join('')));
+      } else {
+        data.push(Number(propVal));
+      }
       osmIDs.push(rows[i][(groupByProp || layer.source.join[1])]);
     }
   }
