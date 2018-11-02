@@ -1,4 +1,5 @@
 import getLastIndex from '../utils/getLastIndex';
+import { activeTimeSeries } from '../store/actions/actions';
 
 export default function buildTimeseriesData(
   layer,
@@ -49,7 +50,8 @@ export default function buildTimeseriesData(
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
 
-    if ((activeLayers.includes(layerId) && !timeseries[layerId]) || doUpdateTsLayer) {
+    if ((activeLayers.includes(layerId) && !timeseries[layerId])
+      || (doUpdateTsLayer && (activeLayers.includes(layerId)))) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
       if (layers[index] && layers[index].visible === true &&
