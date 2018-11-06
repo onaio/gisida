@@ -76,8 +76,14 @@ function getStops(layer) {
   const rangePeriod = dataList.map(l => l.periods);
 
   // Split the data into nClusters
+  let ckmeansCluster = null;
+  if (clusters && sortedData.length >= clusters) {
+    ckmeansCluster = ckmeans(sortedData, clusters);
+  } else if (clusters && sortedData.length < clusters) {
+    ckmeansCluster = ckmeans(sortedData, sortedData.length);
+  }
   const cluster = (Array.isArray(clusters) && clusters)
-    || (clusters ? ckmeans(sortedData, clusters) : null);
+    || ckmeansCluster;
   breaks = limit || cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = limit ? rangeData : sortedData;
