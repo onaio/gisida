@@ -63,10 +63,10 @@ function getStops(layer) {
     periods: periods[i],
   }), this);
   dataList.sort((a, b) => {
-    if (a.osmIDs < b.osmIDs) {
+    if (a.data < b.data) {
       return -1;
     }
-    if (a.osmIDs === b.osmIDs) {
+    if (a.data === b.data) {
       return 0;
     }
     return 1;
@@ -76,8 +76,14 @@ function getStops(layer) {
   const rangePeriod = dataList.map(l => l.periods);
 
   // Split the data into nClusters
+  let ckmeansCluster = null;
+  if (clusters && sortedData.length >= clusters) {
+    ckmeansCluster = ckmeans(sortedData, clusters);
+  } else if (clusters && sortedData.length < clusters) {
+    ckmeansCluster = ckmeans(sortedData, sortedData.length);
+  }
   const cluster = (Array.isArray(clusters) && clusters)
-    || (clusters ? ckmeans(sortedData, clusters) : null);
+    || ckmeansCluster;
   breaks = limit || cluster.map(cl => cl[cl.length - 1]);
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = limit ? rangeData : sortedData;
@@ -141,14 +147,22 @@ export default function (layer, timefield) {
     || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
   const isGeoJSON = layer.source.data.features;
+
+  if (isGeoJSON) {
+    rows.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
+  } else {
+    rows.sort((a, b) => a[layer.property] - b[layer.property]);
+  }
+
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
   const radiusRange = layer['radius-range'];
   const groupByProp = layer.aggregate && layer.aggregate['group-by'];
-
   for (let i = 0; i < rows.length; i += 1) {
     if (isGeoJSON) {
       data.push(Number(rows[i].properties[layer.property]));
-      periods.push(rows[i].properties[timefield] || null);
+      if (rows[i].properties[timefield]) {
+        periods.push(rows[i].properties[timefield] || null);
+      }
       if (geoJSONWithOSMKey) {
         osmIDs.push(rows[i].properties[(groupByProp || layer.source.join[1])]);
       }
