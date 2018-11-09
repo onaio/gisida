@@ -5,7 +5,7 @@ import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 // to be used in conjunction with initial layerObj.filterOptions to regenerate filters
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
-export default function buildFilterState(filterOptions, filters, layerObj, regenStops, infoFilters) {
+export default function buildFilterState(filterOptions, filters, layerObj, regenStops) {
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -83,8 +83,7 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     },
   };
 
-
-  const fauxLayerObj = (regenStops || infoFilters) ? {
+  const fauxLayerObj = regenStops ? {
     ...layerObj,
     source: {
       ...layerObj.source,
@@ -99,21 +98,16 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
       ...layerObj.aggregate,
       ...aggregate,
     },
-    filterOptions: {
-      ...layerObj.filterOptions,
-    }
   } : null;
 
-
-  if (regenStops || infoFilters) {
-    fauxLayerObj.mergedData = [...fauxLayerObj.source.data];
-    fauxLayerObj.source.data = infoFilters ? fauxLayerObj.source.data : (fauxLayerObj.mergedData || fauxLayerObj.source.data);
-    fauxLayerObj.filterOptions = infoFilters ? fauxLayerObj.filterOptions : generateFilterOptions(fauxLayerObj);
+  if (regenStops) {
+    fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
+    fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
     if (fauxLayerObj.aggregate.type) {
       fauxLayerObj.source.data = aggregateFormData(fauxLayerObj);
     } else {
       fauxLayerObj.source.data = processFilters(fauxLayerObj);
-  }
+    }
     if (fauxLayerObj.stops) {
       fauxLayerObj['unfiltered-stops'] = [...fauxLayerObj.stops];
     }
