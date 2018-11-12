@@ -189,7 +189,6 @@ export function createMapReducer(mapId) {
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
             && state.layers[l].id !== reloadLayerId);
-          
           return {
             ...state,
             layers: updatedLayers,
