@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
+import commaFormatting from './../utils/commaFormatting';
 
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   const map = mapboxGLMap;
@@ -32,8 +33,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Remove pop up if no features under mouse pointer
     if (!features || !features.length > 0
-        || !layers[features[0].layer.id]
-        || !layers[features[0].layer.id].popup) {
+      || !layers[features[0].layer.id]
+      || !layers[features[0].layer.id].popup) {
       content = null;
       popup.remove();
       return false;
@@ -81,10 +82,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             // Add header and body to popup with data from layer
             if (rowItem[layer.popup.header]) {
               content =
-                `<div><b>${rowItem[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, rowItem)}</center></div>`;
+                `<div><b>${row[layer.popup.header]}</b></div>` +
+                `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
             } else {
-              content = Mustache.render(layer.popup.body, row);
+              content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
             }
             break;
           }
