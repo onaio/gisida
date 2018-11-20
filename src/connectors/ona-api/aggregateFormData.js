@@ -25,7 +25,7 @@ function processFormData(formData, layerObj) {
     moment.CUSTOM_FORMAT,
   ];
 
-  const isCumulative = aggregateOptions.timeseries.type === 'cumulative';
+  const isCumulative = aggregateOptions.timeseries && aggregateOptions.timeseries.type === 'cumulative';
   const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
 
   if (includeRows) {
