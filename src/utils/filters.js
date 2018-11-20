@@ -46,7 +46,10 @@ export function processFilters(layerData, filterOptions) {
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
-        if (acceptedFilterValues.filter(a => Array.isArray(a)).length > 1) {
+        // check if there is more than one array inside accepted-filter-values
+        // to signify cross filtering
+
+        if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1) {
           Data.filter(filterProcessor).map(d => combinedData.push(d));
           data = [...new Set([...combinedData])]; // achieve a distinct union
         } else {
