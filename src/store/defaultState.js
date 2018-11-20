@@ -3,7 +3,7 @@ const defaultState = {
   APP: {
     mapConfig: {
       container: 'map',
-      style: '',
+      style: 'mapbox://styles/ona/cj13lidxb00062rpd2o5vph3q',
       center: [
         0,
         0,
@@ -72,4 +72,4 @@ const defaultState = {
   },
 };
 
-export default defaultState;
+export default (window && window._gisida && window._gisida.defaultState) || defaultState;

@@ -30,6 +30,7 @@ gisida.parseData = require('./utils/parseData').default;
 
 gisida.history = require('./helpers/history').default;
 gisida.oauthURL = require('./connectors/ona-api/auth').oauthURL;
+gisida.defaultState = require('./store/defaultState');
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;

@@ -113,6 +113,7 @@ function LOCATIONS(state = {}, action) {
 function LAYERS(state = defaultState.LAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
+      if (!state.layers) state.layers = [];
       return {
         ...state,
         layers: [...state.layers, ...action.layers],
@@ -120,6 +121,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
     }
     case types.ADD_LAYER_GROUP: {
       // parse action.group for urls
+      if (!action.group || !action.group.map) return state;
       const groupMapper = (layer) => {
         if (typeof layer === 'string') {
           if (layer.indexOf('http') === -1) {
