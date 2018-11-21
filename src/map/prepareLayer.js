@@ -307,7 +307,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     }
 
     // Helper func for joining "manys" to "ones"
-    function manyToOneMerge(i, PrevData, NextData) {
+    function manyToOneMerge(i, PrevData, NextData, customFilter) {
       const prevData = PrevData;
       const nextData = NextData.features || NextData;
       let datum;
@@ -333,10 +333,16 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           // Add unique "one"s to mergedData
           prevData[datum[joinProp]] = { ...datum };
           prevData[datum[joinProp]][(relation['many-prop'] || 'many')] = [];
+          if (customFilter) {
+            prevData[datum[joinProp]].no_of_reports = '0';
+          }
         } else if (datum[joinProp] && prevData[datum[joinProp]]) {
           // Add non-unique "many" to corresponding "one"
           datum = { ...datum };
           prevData[datum[joinProp]][(relation['many-prop'] || 'many')].push(datum);
+          if (customFilter) {
+            prevData[datum[joinProp]].no_of_reports = prevData[datum[joinProp]][(relation['many-prop'] || 'many')].length.toString();
+          }
         }
       }
       return { ...prevData };
@@ -396,7 +402,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        mergedData = manyToOneMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+        const hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+        mergedData = manyToOneMerge(
+          (isVectorLayer ? i + 1 : i),
+          mergedData,
+          data[i],
+          hasCustomFilter,
+        );
       } else if (isOneToMany) {
         mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
       }
