@@ -78,9 +78,9 @@ function getStops(layer, clusterLayer, nextIndex) {
   const rangePeriod = dataList.map(l => l.periods);
 
   let ckmeansCluster = null;
-  if (clusters && sortedData.length >= clusters) {
+  if (clusters && sortedData.length && sortedData.length >= clusters) {
     ckmeansCluster = ckmeans(sortedData, clusters);
-  } else if (clusters && sortedData.length < clusters) {
+  } else if (clusters && sortedData.length && sortedData.length < clusters) {
     ckmeansCluster = ckmeans(sortedData, sortedData.length);
   }
   const cluster = (Array.isArray(clusters) && clusters)
