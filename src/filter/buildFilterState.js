@@ -44,7 +44,8 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
           aggregate['accepted-filter-values'][f].push(optionKeys[o]);
         }
       }
-      if (optionKeys.length === aggregate['accepted-filter-values'][f].length) {
+      if (optionKeys.length === aggregate['accepted-filter-values'][f].length
+      || !aggregate['accepted-filter-values'][f].length) {
         aggregate['accepted-filter-values'][f] = 'all';
       }
     // } else if (dataType === 'quantitative') {
