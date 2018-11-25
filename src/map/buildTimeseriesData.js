@@ -1,5 +1,4 @@
 import getLastIndex from '../utils/getLastIndex';
-import { activeTimeSeries } from '../store/actions/actions';
 
 export default function buildTimeseriesData(
   layer,
