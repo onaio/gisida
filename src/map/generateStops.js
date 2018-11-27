@@ -146,22 +146,35 @@ export default function (layer, timefield) {
     || getColorBrewerColor(layer.categories.color, clusters)
     || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
+  let sortedData;
+  if (layer.aggregate && layer.aggregate.timeseries) {
+    sortedData = rows.sort((a, b) => {
+      if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
+        return 1;
+      } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
+        return -1;
+      }
+      return 0;
+    });
+  } else {
+    sortedData = [...rows];
+  }
   const isGeoJSON = layer.source.data.features;
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
   const radiusRange = layer['radius-range'];
   const groupByProp = layer.aggregate && layer.aggregate['group-by'];
 
-  for (let i = 0; i < rows.length; i += 1) {
+  for (let i = 0; i < sortedData.length; i += 1) {
     if (isGeoJSON) {
-      data.push(Number(rows[i].properties[layer.property]));
-      periods.push(rows[i].properties[timefield] || null);
+      data.push(Number(sortedData[i].properties[layer.property]));
+      periods.push(sortedData[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
-        osmIDs.push(rows[i].properties[(groupByProp || layer.source.join[1])]);
+        osmIDs.push(sortedData[i].properties[(groupByProp || layer.source.join[1])]);
       }
     } else {
-      periods.push(rows[i][timefield] || null);
-      data.push(Number(rows[i][layer.property]));
-      osmIDs.push(rows[i][(groupByProp || layer.source.join[1])]);
+      periods.push(sortedData[i][timefield] || null);
+      data.push(Number(sortedData[i][layer.property]));
+      osmIDs.push(sortedData[i][(groupByProp || layer.source.join[1])]);
     }
   }
 
