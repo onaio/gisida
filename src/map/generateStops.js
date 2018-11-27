@@ -105,7 +105,7 @@ function getStops(layer) {
   }
 
   if (periods) {
-    const uniqPeriods = [...new Set(periods)];
+    const uniqPeriods = [...new Set(periods)].sort();
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];

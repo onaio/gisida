@@ -120,10 +120,8 @@ export default function buildFilterState(
         const { oldLayerObj } = currentState[mapId];
         fauxLayerObj.mergedData = Array.isArray(oldLayerObj.mergedData)
           ? [...oldLayerObj.mergedData] : { ...oldLayerObj.mergedData };
-        fauxLayerObj.source.data = processFilters(fauxLayerObj);
-      } else {
-        fauxLayerObj.source.data = processFilters(fauxLayerObj);
       }
+      fauxLayerObj.source.data = processFilters(fauxLayerObj);
     }
     if (fauxLayerObj.stops) {
       fauxLayerObj['unfiltered-stops'] = [...fauxLayerObj.stops];
