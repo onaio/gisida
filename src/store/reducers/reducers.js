@@ -88,6 +88,11 @@ function FILTER(state = defaultState.FILTER, action) {
       };
     }
     case types.FILTERS_UPDATED: {
+      if (!action.layerId) {
+        return {
+          ...state,
+        };
+      }
       return {
         ...state,
         [action.layerId]: {
@@ -183,7 +188,6 @@ export function createMapReducer(mapId) {
             currentRegion: action.region,
           };
         case types.ADD_LAYER: {
-          
           const layers = {};
           const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
           layers[action.layer.id] = { ...action.layer };
