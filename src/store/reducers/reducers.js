@@ -183,12 +183,14 @@ export function createMapReducer(mapId) {
             currentRegion: action.region,
           };
         case types.ADD_LAYER: {
+          
           const layers = {};
           const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
           layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
             && state.layers[l].id !== reloadLayerId);
+          debugger;
           return {
             ...state,
             layers: updatedLayers,
