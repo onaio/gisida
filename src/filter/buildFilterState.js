@@ -13,6 +13,7 @@ export default function buildFilterState(
   layerObj,
   dispatch,
   regenStops,
+  isOr,
 ) {
   const aggregate = {
     filter: [],
@@ -121,7 +122,7 @@ export default function buildFilterState(
         fauxLayerObj.mergedData = Array.isArray(oldLayerObj.mergedData)
           ? [...oldLayerObj.mergedData] : { ...oldLayerObj.mergedData };
       }
-      fauxLayerObj.source.data = processFilters(fauxLayerObj);
+      fauxLayerObj.source.data = processFilters(fauxLayerObj, null, isOr);
     }
     if (fauxLayerObj.stops) {
       fauxLayerObj['unfiltered-stops'] = [...fauxLayerObj.stops];
