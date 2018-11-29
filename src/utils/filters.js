@@ -46,12 +46,14 @@ export function processFilters(layerData, filterOptions) {
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
-        if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1) {
-          Data.filter(filterProcessor).map(d => combinedData.push(d));
-          data = [...new Set([...combinedData])]; // achieve a distinct union
-        } else {
-          data = data.filter(filterProcessor);
-        }
+        // if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1) {
+        //   debugger;
+        //   Data.filter(filterProcessor).map(d => combinedData.push(d));
+        //   data = [...new Set([...combinedData])]; // achieve a distinct union
+        // } else {
+        //   data = data.filter(filterProcessor);
+        // }
+        data = data.filter(filterProcessor);
       } else if (acceptedFilterValues[f] === 'quant') {
         // TODO - ADD SUPPORT FOR QUANT FILTERS!
       }
@@ -73,7 +75,7 @@ export function processFilters(layerData, filterOptions) {
 // }
 
 export function generateFilterOptions(layerData) {
-  let data = layerData.mergedData || layerData.source.data;
+  let data = layerData.data || layerData.mergedData || layerData.source.data;
   // if it's geojson data, set use features array
   if (data.type) {
     data = data.features;
@@ -86,18 +88,25 @@ export function generateFilterOptions(layerData) {
   let d;
   let datum;
 
+  const layerFilter = (layerData.layerObj
+    && layerData.layerObj.aggregate
+    && layerData.layerObj.aggregate.filter)
+    || layerData.aggregate.filter;
+
   // loop through all filters
-  for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
+  for (let f = 0; f < layerFilter.length; f += 1) {
     // define filter, subFilter, and filter label
-    filter = layerData.aggregate.filter[f];
-    filterLabel = layerData.aggregate['filter-label'] && layerData.aggregate['filter-label'][f]
-      && layerData.aggregate['filter-label'][f].length
-      ? layerData.aggregate['filter-label'][f] : filter;
+    filter = layerFilter[f];
+    filterLabel = ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label']
+      && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][f]
+      && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][f].length
+      ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][f] : filter;
 
     // define which type of filter it should be (vector or stops, default to vector)
-    filterType = layerData.aggregate['filter-type'] && layerData.aggregate['filter-type'][f]
-      && layerData.aggregate['filter-type'][f].length
-      ? layerData.aggregate['filter-type'][f] : 'vector';
+    filterType = ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type']
+      && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][f]
+      && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][f].length
+      ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][f] : 'vector';
 
     // define unique filter and sub-filter values on filterOptions object
     filterOptions[filter] = {
@@ -113,10 +122,11 @@ export function generateFilterOptions(layerData) {
     doPushDatum = true;
 
     // loop through the fiters and see if datum passes filter requirements
-    for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
-      filter = layerData.aggregate.filter[f];
-      acceptedFilterValues = layerData.aggregate['accepted-filter-values']
-        && layerData.aggregate['accepted-filter-values'][f];
+    for (let f = 0; f < layerFilter.length; f += 1) {
+      filter = layerFilter[f];
+      acceptedFilterValues = ((layerData.layerObj && layerData.layerObj.aggregate)
+        || layerData.aggregate)['accepted-filter-values']
+        && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
       if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string') {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
@@ -131,10 +141,11 @@ export function generateFilterOptions(layerData) {
 
     // if datum passes all conditions
     if (doPushDatum) {
-      for (let f = 0; f < layerData.aggregate.filter.length; f += 1) {
-        filter = layerData.aggregate.filter[f];
-        acceptedFilterValues = layerData.aggregate['accepted-filter-values']
-          && layerData.aggregate['accepted-filter-values'][f];
+      for (let f = 0; f < layerFilter.length; f += 1) {
+        filter = layerFilter[f];
+        acceptedFilterValues = ((layerData.layerObj && layerData.layerObj.aggregate)
+          || layerData.aggregate)['accepted-filter-values']
+          && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
         if (!filterOptions[filter].filterValues[datum[filter]]) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
@@ -146,7 +157,7 @@ export function generateFilterOptions(layerData) {
         }
         filterOptions[filter].filterValues[datum[filter]] += 1;
         if ((acceptedFilterValues === 'quant'
-            || (Array.isArray(acceptedFilterValues)
+          || (Array.isArray(acceptedFilterValues)
             && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         }
