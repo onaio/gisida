@@ -1,4 +1,4 @@
-export function processFilters(layerData, filterOptions) {
+export function processFilters(layerData, filterOptions, isOr) {
   const Data = (layerData.mergedData && (Array.isArray(layerData.mergedData)
     ? [...layerData.mergedData] : { ...layerData.mergedData }))
     || (layerData.source.data && (Array.isArray(layerData.source.data)
@@ -45,14 +45,12 @@ export function processFilters(layerData, filterOptions) {
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
-        // if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1) {
-        //   debugger;
-        //   Data.filter(filterProcessor).map(d => combinedData.push(d));
-        //   data = [...new Set([...combinedData])]; // achieve a distinct union
-        // } else {
-        //   data = data.filter(filterProcessor);
-        // }
-        data = data.filter(filterProcessor);
+        if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
+          Data.filter(filterProcessor).map(d => combinedData.push(d));
+          data = [...new Set([...combinedData])]; // achieve a distinct union
+        } else {
+          data = data.filter(filterProcessor);
+        }
       } else if (acceptedFilterValues[f] === 'quant') {
         // TODO - ADD SUPPORT FOR QUANT FILTERS!
       }
