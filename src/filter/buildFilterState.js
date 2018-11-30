@@ -117,10 +117,11 @@ export default function buildFilterState(
       fauxLayerObj.source.data = aggregateFormData(fauxLayerObj);
     } else {
       const currentState = dispatch(getCurrentState());
-      if (JSON.stringify(currentState[mapId].oldLayerObj) !== '{}') {
-        const { oldLayerObj } = currentState[mapId];
-        fauxLayerObj.mergedData = Array.isArray(oldLayerObj.mergedData)
-          ? [...oldLayerObj.mergedData] : { ...oldLayerObj.mergedData };
+      if (JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}'
+        && currentState[mapId].oldLayerObjs[layerObj.id]) {
+        const { oldLayerObjs } = currentState[mapId];
+        fauxLayerObj.mergedData = Array.isArray(oldLayerObjs[layerObj.id].mergedData)
+          ? [...oldLayerObjs[layerObj.id].mergedData] : { ...oldLayerObjs[layerObj.id].mergedData };
       }
       fauxLayerObj.source.data = processFilters(fauxLayerObj, null, isOr);
     }
