@@ -32,8 +32,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     const features = map.queryRenderedFeatures(e.point, {
       layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
     }).filter(f =>
-      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup
-    );
+      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup);
 
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
@@ -77,8 +76,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               // while (curMatch = rxp.exec(str)) {
               //   found.push(curMatch[1]);
               // }
-              found.forEach((f) => {
-                rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              found.forEach((i) => {
+                rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
               });
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
@@ -92,7 +91,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             }
           }
           // } else {
-          //   
+          //
         }
       }
       if (content) break;
@@ -110,7 +109,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       // Remove pop up if no features under mouse pointer
       content = null;
       popup.remove();
+      return false;
     }
+    return true;
   });
 
   // add popups for marker charts
