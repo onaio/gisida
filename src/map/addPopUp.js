@@ -13,9 +13,11 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
   // Add mousemove event to map
   map.on('mousemove', (e) => {
+    content = null;
+    popup.remove();
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries } = currentState[mapId];
+    const { layers, timeseries, activeLayerId } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -29,76 +31,85 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     // Get rendered features from active layers under mouse pointer
     const features = map.queryRenderedFeatures(e.point, {
       layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
-    });
+    }).filter(f =>
+      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup
+    );
 
-    // Remove pop up if no features under mouse pointer
-    if (!features || !features.length > 0
-      || !layers[features[0].layer.id]
-      || !layers[features[0].layer.id].popup) {
-      content = null;
-      popup.remove();
-      return false;
-    }
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
+    // If no features then there no need for a popup
+    if (!features.length) return false;
+
     // Get layer data for feature under mouse pointer
-    const feature = features[0];
-    const activeLayerId = feature.layer.id;
-    const layer = layers[activeLayerId];
-    if (layer.popup && layer.type !== 'chart') {
-      let periodData = [];
-      // Assign period data if layer has time series
-      if (layer.aggregate && layer.aggregate.timeseries) {
-        const tsLayer = timeseries[activeLayerId];
-        if (tsLayer) {
-          // debugger
-          periodData = [...tsLayer.data];
-        }
-      }
-      // Assign layer data
-      const data = (layer.aggregate && layer.aggregate.timeseries) ? periodData : layer.source.data;
-      if (data && data.length) {
-        let row;
-        for (let r = 0; r < data.length; r += 1) {
-          row = { ...(data[r].properties || data[r]) };
-          const rowItem = row;
-          if ((layer.popup.join
-            && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
-            || (!layer.popup.join
-            && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
-            const found = [];
-            const rxp = /{{([^}]+)}/g;
-            const str = layer.labels ? layer.labels.label : null;
-            for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
-              found.push(c[1]);
+    let feature;
+    let layerId;
+    let layer;
+    let data;
+    for (let f = 0; f < features.length; f += 1) {
+      feature = features[f];
+      layerId = feature && feature.layer && feature.layer.id;
+      layer = layerId && layers[layerId];
+
+      if (layer && layer.type !== 'chart') {
+        data = (layer.aggregate && layer.aggregate.timeseries)
+          && timeseries && timeseries[layerId] && timeseries[layerId].data
+          ? [...timeseries[layerId].data]
+          : layer.source && [...layer.source.data];
+
+        if (data && data.length) {
+          let row;
+          for (let r = 0; r < data.length; r += 1) {
+            row = { ...(data[r].properties || data[r]) };
+            const rowItem = row;
+            // if row matches property
+            if ((layer.popup.join
+              && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+              || (!layer.popup.join
+              && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
+              const found = [];
+              const rxp = /{{([^}]+)}/g;
+              const str = layer.labels ? layer.labels.label : null;
+              for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
+                found.push(c[1]);
+              }
+              // while (curMatch = rxp.exec(str)) {
+              //   found.push(curMatch[1]);
+              // }
+              found.forEach((f) => {
+                rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              });
+              // Add header and body to popup with data from layer
+              if (rowItem[layer.popup.header]) {
+                content =
+                  `<div><b>${row[layer.popup.header]}</b></div>` +
+                  `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
+              } else {
+                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
+              }
+              break;
             }
-            // while (curMatch = rxp.exec(str)) {
-            //   found.push(curMatch[1]);
-            // }
-            found.forEach((f) => {
-              rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            });
-            // Add header and body to popup with data from layer
-            if (rowItem[layer.popup.header]) {
-              content =
-                `<div><b>${row[layer.popup.header]}</b></div>` +
-                `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
-            } else {
-              content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
-            }
-            break;
           }
+          // } else {
+          //   
         }
-      } else {
-        content = Mustache.render(layer.popup.body, feature.properties);
       }
-      // Add popup if content exists
-      if (content) {
-        popup.setLngLat(map.unproject(e.point)).setHTML(content).addTo(map);
-      }
+      if (content) break;
     }
-    return true;
+
+    // Todo - we need to be able to render popups from just tileset data as well
+    if (!content) {
+      // content = Mustache.render(layer.popup.body, feature.properties);
+    }
+
+    // Add popup if content exists
+    if (content) {
+      popup.setLngLat(map.unproject(e.point)).setHTML(content).addTo(map);
+    } else {
+      // Remove pop up if no features under mouse pointer
+      content = null;
+      popup.remove();
+    }
   });
 
   // add popups for marker charts
