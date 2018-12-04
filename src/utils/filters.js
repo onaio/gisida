@@ -8,6 +8,7 @@ export function processFilters(layerData, filterOptions, isOr) {
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
+  const combinedData = [];
 
   let datum;
   let f;
@@ -44,16 +45,12 @@ export function processFilters(layerData, filterOptions, isOr) {
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
-<<<<<<< Updated upstream
-        data = data.filter(filterProcessor);
-=======
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
           Data.filter(filterProcessor).map(d => combinedData.push(d));
           data = [...new Set([...combinedData])]; // achieve a distinct union
         } else {
           data = data.filter(filterProcessor);
         }
->>>>>>> Stashed changes
       } else if (acceptedFilterValues[f] === 'quant') {
         // TODO - ADD SUPPORT FOR QUANT FILTERS!
       }
