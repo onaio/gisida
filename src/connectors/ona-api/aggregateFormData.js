@@ -78,7 +78,6 @@ function processFormData(formData, layerObj) {
     });
   }
 
-
   // Group data by period property
   data = groupBy(data, isUsingToday ? 'period' : aggregateOptions['date-by']);
 

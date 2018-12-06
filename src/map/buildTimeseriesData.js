@@ -14,7 +14,7 @@ export default function buildTimeseriesData(
   const layerObj = { ...layer };
   if (layerObj.aggregate && layerObj.aggregate.timeseries) {
     const tsField = layerObj.aggregate.timeseries.field;
-    const sortedData = (layerObj.source.data || layerObj.source.data.features).sort((a, b) => {
+    const sortedData = (layerObj.source.data.features || layerObj.source.data).sort((a, b) => {
       if ((a.properties || a)[tsField] > (b.properties || b)[tsField]) {
         return 1;
       } else if ((b.properties || b)[tsField] > (a.properties || a)[tsField]) {
@@ -75,8 +75,8 @@ export default function buildTimeseriesData(
     layerId = timeSeriesLayers[i];
 
     if (activeLayers.includes(layerId)
-      && (!timeseries[layerId] || doUpdateTsLayer)
-      && layerId === primaryLayer) {
+      && !layerObj.layers
+      && (!timeseries[layerId] || doUpdateTsLayer)) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
       if (layers[index] && layers[index].visible === true &&

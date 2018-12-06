@@ -198,7 +198,13 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
-      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      if (layerObj.parent && layerObj.aggregate && layerObj.aggregate.type) {
+        layerObj.source.data = aggregateFormData(layerObj);
+        layerObj.loaded = true;
+        renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      } else {
+        renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      }
     });
   }
   if (fileType === 'geojson') {
@@ -479,21 +485,24 @@ export default function prepareLayer(
   } else if (layerObj.layers) {
     const currentState = dispatch(getCurrentState());
 
-    layerObj.layers.forEach((sublayer) => {
-      const subLayer = currentState[mapId].layers[sublayer];
 
-      if (layerObj.aggregate) {
-        subLayer.aggregate = layerObj.aggregate;
-      }
+    if (currentState) {
+      layerObj.layers.forEach((sublayer) => {
+        const subLayer = currentState[mapId].layers[sublayer];
 
-      subLayer.id = sublayer;
-      subLayer.parent = layerObj.id;
-      if (typeof subLayer.source.data === 'string') {
-        readData(mapId, subLayer, dispatch);
-      } else {
-        renderData(mapId, subLayer, dispatch);
-      }
-    });
-    renderData(mapId, layerObj, dispatch);
+        if (layerObj.aggregate) {
+          subLayer.aggregate = layerObj.aggregate;
+        }
+
+        subLayer.id = sublayer;
+        subLayer.parent = layerObj.id;
+        if (typeof subLayer.source.data === 'string') {
+          readData(mapId, subLayer, dispatch);
+        } else {
+          renderData(mapId, subLayer, dispatch);
+        }
+      });
+      renderData(mapId, layerObj, dispatch);
+    }
   }
 }

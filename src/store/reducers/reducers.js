@@ -249,7 +249,7 @@ export function createMapReducer(mapId) {
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
-            primaryLayer: updatedLayers[layerId].visible && layer.credit
+            primaryLayer: updatedLayers[layerId].visible && layer.credit && !layer.layers
               ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
             filter: {

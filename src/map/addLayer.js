@@ -87,7 +87,7 @@ export default function (layer, mapConfig) {
   /*
    * CIRCLE ==========================================================
    */
-  if (layer.type === 'circle') {
+  if (layer.type === 'circle' && !layer.layers) {
     styleSpec = {
       id: layer.id,
       visible: layer.visible,
