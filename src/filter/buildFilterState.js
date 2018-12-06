@@ -114,7 +114,7 @@ export default function buildFilterState(
     fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
     fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
     if (fauxLayerObj.aggregate.type) {
-      fauxLayerObj.source.data = aggregateFormData(fauxLayerObj);
+      fauxLayerObj.source.data = aggregateFormData(fauxLayerObj, null, null, isOr);
     } else {
       const currentState = dispatch(getCurrentState());
       if (JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}'
