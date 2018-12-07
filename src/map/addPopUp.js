@@ -28,7 +28,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Get rendered features from active layers under mouse pointer
     const features = map.queryRenderedFeatures(e.point, {
-      layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
+      layers: activeLayers.filter(i => map.getLayer(i) !== undefined
+        && currentState[mapId].primaryLayer === i),
     });
 
     // Remove pop up if no features under mouse pointer
@@ -57,7 +58,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         }
       }
       // Assign layer data
-      const data = (layer.aggregate && layer.aggregate.timeseries) ? periodData : layer.source.data;
+      const data = (layer.aggregate && layer.aggregate.timeseries)
+        ? periodData : (layer.source.data.features || layer.source.data);
       if (data && data.length) {
         let row;
         for (let r = 0; r < data.length; r += 1) {
