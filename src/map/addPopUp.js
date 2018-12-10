@@ -52,10 +52,11 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       layer = layerId && layers[layerId];
 
       if (layer && layer.type !== 'chart') {
+        // define data to loop through looking for join matches
         data = (layer.aggregate && layer.aggregate.timeseries)
           && timeseries && timeseries[layerId] && timeseries[layerId].data
           ? [...timeseries[layerId].data]
-          : layer.source && [...layer.source.data];
+          : (layer.source && (layer.source.data.features || [...layer.source.data]));
 
         if (data && data.length) {
           let row;
