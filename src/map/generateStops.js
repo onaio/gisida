@@ -1,5 +1,6 @@
 import colorbrewer from 'colorbrewer';
 import { ckmeans } from 'simple-statistics';
+import { getCurrentState } from '../store/actions/actions';
 
 const defaultRadiusRange = [
   '3',
@@ -27,11 +28,10 @@ const getColor = function getColor(c, i) {
   return c;
 };
 
-function getStops(layer) {
+function getStops(layer, FILTER, timeseries, id) {
   const {
     colors, periods, limit, clusters, radiusRange,
   } = layer;
-
   const colorsStops = [];
   const radiusStops = [];
   let breaks = [];
@@ -56,7 +56,7 @@ function getStops(layer) {
   const osmID = list.map(items => items.osmIDs);
   const period = list.map(items => items.periods);
 
-  // Sort for limit data based on osmIDs
+  // Sort for limit limit || data based on osmIDs
   const dataList = layer.osmIDs.map((x, i) => ({
     osmIDs: x,
     data: layer.data[i],
@@ -75,7 +75,6 @@ function getStops(layer) {
   const rangeID = dataList.map(l => l.osmIDs);
   const rangePeriod = dataList.map(l => l.periods);
 
-  // Split the data into nClusters
   let ckmeansCluster = null;
   if (clusters && sortedData.length >= clusters) {
     ckmeansCluster = ckmeans(sortedData, clusters);
@@ -84,7 +83,9 @@ function getStops(layer) {
   }
   const cluster = (Array.isArray(clusters) && clusters)
     || ckmeansCluster;
-  breaks = limit || cluster.map(cl => cl[cl.length - 1]);
+
+  breaks = timeseries || FILTER[id].doUpdate ?
+    cluster.map(cl => cl[cl.length - 1]) : limit;
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = limit ? rangeData : sortedData;
   const osmIDs = limit ? rangeID : osmID;
@@ -133,7 +134,11 @@ function getStops(layer) {
   return [];
 }
 
-export default function (layer, timefield) {
+export default function (layer, timefield, dispatch) {
+  const { FILTER } = dispatch(getCurrentState());
+  const { id } = layer;
+  const { timeseries } = layer.aggregate;
+
   const data = [];
   const osmIDs = [];
   const periods = [];
@@ -146,39 +151,57 @@ export default function (layer, timefield) {
     || getColorBrewerColor(layer.categories.color, clusters)
     || layer.categories.color;
   const rows = layer.source.data.features || layer.source.data;
+  const sortedData = [...rows];
+  // if (layer.aggregate && layer.aggregate.timeseries) {
+  //   debugger
+  //   sortedData = rows.sort((a, b) => {
+  //     if (a.date) {
+  //       return Date.parse(a.date) - Date.parse(b.date);
+  //     }
+  //     if (a[0] < b[0]) return -1;
+  //     if (a[0] > b[0]) return 1;
+  //     if (a[1] < b[1]) return -1;
+  //     if (a[1] > b[1]) return 1;
+  //     if (a[2] < b[2]) return -1;
+  //     if (a[2] > b[2]) return 1;
+  //     return 0;
+  //   })
+  // } else {
+  //   sortedData = [...rows];
+  // }
   const isGeoJSON = layer.source.data.features;
 
-  if (isGeoJSON) {
-    rows.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
-  } else {
-    rows.sort((a, b) => a[layer.property] - b[layer.property]);
-  }
+  // if (isGeoJSON && layer.type === 'circle') {
+  //   sortedData.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
+  // } else if (layer.type !== 'fill') {
+  //   sortedData.sort((a, b) => a[layer.property] - b[layer.property]);
+  // }
 
   const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
   const radiusRange = layer['radius-range'];
   const groupByProp = layer.aggregate && layer.aggregate['group-by'];
-  for (let i = 0; i < rows.length; i += 1) {
+  for (let i = 0; i < sortedData.length; i += 1) {
     if (isGeoJSON) {
-      data.push(Number(rows[i].properties[layer.property]));
-      if (rows[i].properties[timefield]) {
-        periods.push(rows[i].properties[timefield] || null);
+      data.push(Number(sortedData[i].properties[layer.property]));
+      if (sortedData[i].properties[timefield]) {
+        periods.push(sortedData[i].properties[timefield] || null);
       }
       if (geoJSONWithOSMKey) {
-        osmIDs.push(rows[i].properties[(groupByProp || layer.source.join[1])]);
+        osmIDs.push(sortedData[i].properties[(groupByProp || layer.source.join[1])]);
       }
     } else {
-      if (rows[i][timefield]) periods.push(rows[i][timefield] || null);
-      const propVal = rows[i][layer.property];
+      if (sortedData[i][timefield]) periods.push(sortedData[i][timefield] || null);
+      const propVal = sortedData[i][layer.property];
       if (Number.isNaN(Number(propVal))) {
         data.push(Number(propVal.split(',').join('')));
       } else {
         data.push(Number(propVal));
       }
-      osmIDs.push(rows[i][(groupByProp || layer.source.join[1])]);
+      osmIDs.push(sortedData[i][(groupByProp || layer.source.join[1])]);
     }
   }
 
   return getStops({
     data, colors, osmIDs, periods, limit, clusters, radiusRange,
-  });
+  }, FILTER, timeseries, id);
 }
