@@ -64,7 +64,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   let { layers } = currentState[mapId];
 
   // Generate Mapbox StyleSpec
-  layerObj = addLayer(layerObj, mapConfig);
+  layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
   const sliderLayers = getSliderLayers(layers);
