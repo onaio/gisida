@@ -115,6 +115,7 @@ export function generateFilterOptions(layerData) {
   }
 
   let doPushDatum;
+  let filterIsMultiSelect = false;
   for (d = 0; d < data.length; d += 1) {
     datum = data[d].geometry ? data[d].properties : data[d];
     doPushDatum = true;
@@ -153,8 +154,11 @@ export function generateFilterOptions(layerData) {
           || layerData.aggregate)['accepted-filter-values']
           && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
+        filterIsMultiSelect = acceptedFilterValues === 'multi' ||
+          (layerData['data-parse'][filter] && layerData['data-parse'][filter].type === 'multiple');
+
         // if filter type is 'multi'
-        if (acceptedFilterValues === 'multi' &&
+        if (filterIsMultiSelect &&
           (!filterOptions[filter].filterValues || !(Object.keys(filterOptions[filter].filterValues).length))) {
           // add categories for filter options based on layer config data parse
           const multiFilterVaules = layerData['data-parse'] &&
@@ -168,7 +172,7 @@ export function generateFilterOptions(layerData) {
         }
 
         // If filter option doesn't exist as a category, add it
-        if (!filterOptions[filter].filterValues[datum[filter]] && acceptedFilterValues !== 'multi') {
+        if (!filterOptions[filter].filterValues[datum[filter]] && !filterIsMultiSelect) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if ((acceptedFilterValues === 'quant' ||
             (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
@@ -177,13 +181,13 @@ export function generateFilterOptions(layerData) {
           }
         }
         
-        if (acceptedFilterValues !== 'multi') filterOptions[filter].filterValues[datum[filter]] += 1;
+        if (!filterIsMultiSelect) filterOptions[filter].filterValues[datum[filter]] += 1;
 
         if ((acceptedFilterValues === 'quant'
           || (Array.isArray(acceptedFilterValues)
             && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
-        } else if (acceptedFilterValues === 'multi' && datum[filter]) {
+        } else if (filterIsMultiSelect && datum[filter]) {
           // handle tallying of select multiple categories
           const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
             layerData['data-parse'][filter].split) || ', ';
