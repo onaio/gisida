@@ -134,18 +134,41 @@ export function generateFilterOptions(layerData) {
       } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
         // check datum[filter] value against quantitative condition
         doPushDatum = false;
+      } else if (acceptedFilterValues === 'multi') {
+        doPushDatum = true; 
+        // always pass this filter if 'multi' because each datum will have
+        // some combination of the catiegories.
+
+        // todo - somehow differentiate a filtered 'multi filter' from normal filters
+        // (both should be arrays of acceptable filter values but should be handled differently)
       }
     }
 
     // if datum passes all conditions
     if (doPushDatum) {
+      // loop through the fiters to add to counts of passing data
       for (let f = 0; f < layerFilter.length; f += 1) {
         filter = layerFilter[f];
         acceptedFilterValues = ((layerData.layerObj && layerData.layerObj.aggregate)
           || layerData.aggregate)['accepted-filter-values']
           && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
-        if (!filterOptions[filter].filterValues[datum[filter]]) {
+        // if filter type is 'multi'
+        if (acceptedFilterValues === 'multi' &&
+          (!filterOptions[filter].filterValues || !(Object.keys(filterOptions[filter].filterValues).length))) {
+          // add categories for filter options based on layer config data parse
+          const multiFilterVaules = layerData['data-parse'] &&
+            layerData['data-parse'][filter] &&
+            layerData['data-parse'][filter].key &&
+            Object.keys(layerData['data-parse'][filter].key).map(k => layerData['data-parse'][filter].key[k]);
+          
+          for (let m = 0; m < multiFilterVaules.length; m += 1) {
+            filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
+          }
+        }
+
+        // If filter option doesn't exist as a category, add it
+        if (!filterOptions[filter].filterValues[datum[filter]] && acceptedFilterValues !== 'multi') {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if ((acceptedFilterValues === 'quant' ||
             (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
@@ -153,11 +176,25 @@ export function generateFilterOptions(layerData) {
             filterOptions[filter].quantitativeValues = [];
           }
         }
-        filterOptions[filter].filterValues[datum[filter]] += 1;
+        
+        if (acceptedFilterValues !== 'multi') filterOptions[filter].filterValues[datum[filter]] += 1;
+
         if ((acceptedFilterValues === 'quant'
           || (Array.isArray(acceptedFilterValues)
             && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
+        } else if (acceptedFilterValues === 'multi' && datum[filter]) {
+          // handle tallying of select multiple categories
+          const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
+            layerData['data-parse'][filter].split) || ', ';
+          const selectMultipleValues = datum[filter].split(splitBy);
+          // loop through all datum[filter] values
+          for (let v = 0; v < selectMultipleValues.length; v += 1) {
+            // if the current value is not '' is specified in the data-pars key
+            if (typeof filterOptions[filter].filterValues[selectMultipleValues[v]] !== 'undefined') {
+              filterOptions[filter].filterValues[selectMultipleValues[v]] += 1;
+            }
+          }
         }
       }
     }
