@@ -114,6 +114,8 @@ export function generateFilterOptions(layerData) {
     };
   }
 
+  const multiFilterVaulesMap = k => layerData['data-parse'][filter].key[k];
+
   let doPushDatum;
   let filterIsMultiSelect = false;
   for (d = 0; d < data.length; d += 1) {
@@ -135,13 +137,6 @@ export function generateFilterOptions(layerData) {
       } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
         // check datum[filter] value against quantitative condition
         doPushDatum = false;
-      } else if (acceptedFilterValues === 'multi') {
-        doPushDatum = true; 
-        // always pass this filter if 'multi' because each datum will have
-        // some combination of the catiegories.
-
-        // todo - somehow differentiate a filtered 'multi filter' from normal filters
-        // (both should be arrays of acceptable filter values but should be handled differently)
       }
     }
 
@@ -158,14 +153,14 @@ export function generateFilterOptions(layerData) {
           (layerData['data-parse'][filter] && layerData['data-parse'][filter].type === 'multiple');
 
         // if filter type is 'multi'
-        if (filterIsMultiSelect &&
-          (!filterOptions[filter].filterValues || !(Object.keys(filterOptions[filter].filterValues).length))) {
+        if (filterIsMultiSelect && (!filterOptions[filter].filterValues ||
+          !(Object.keys(filterOptions[filter].filterValues).length))) {
           // add categories for filter options based on layer config data parse
           const multiFilterVaules = layerData['data-parse'] &&
             layerData['data-parse'][filter] &&
             layerData['data-parse'][filter].key &&
-            Object.keys(layerData['data-parse'][filter].key).map(k => layerData['data-parse'][filter].key[k]);
-          
+            Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap);
+
           for (let m = 0; m < multiFilterVaules.length; m += 1) {
             filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
           }
@@ -180,7 +175,7 @@ export function generateFilterOptions(layerData) {
             filterOptions[filter].quantitativeValues = [];
           }
         }
-        
+
         if (!filterIsMultiSelect) filterOptions[filter].filterValues[datum[filter]] += 1;
 
         if ((acceptedFilterValues === 'quant'
