@@ -136,21 +136,21 @@ function getStops(layer, FILTER, timeseries, id) {
 
 export default function (layer, timefield, dispatch) {
   const { FILTER } = dispatch(getCurrentState());
-  const { id } = layer;
-  const { timeseries } = layer.aggregate;
+  const { id } = layer.id ? layer : layer.layerObj;
+  const { timeseries } = layer.aggregate ? layer.aggregate : layer.layerObj.aggregate;
 
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const stops = layer['unfiltered-stops'];
-  const { categories } = layer;
+  const stops = layer['unfiltered-stops'] || (layer.layerObj && layer.layerObj['unfiltered-stops']);
+  const { categories } = layer.categories ? layer : layer.layerObj;
   const { clusters } = categories;
   const limit = (stops && stops[3]) || categories.limit;
-
+  const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
   const colors = (stops && stops[4])
-    || getColorBrewerColor(layer.categories.color, clusters)
-    || layer.categories.color;
-  const rows = layer.source.data.features || layer.source.data;
+    || getColorBrewerColor(color, clusters)
+    || color;
+  const rows = layer.data || layer.source.data.features || layer.source.data;
   const sortedData = [...rows];
   // if (layer.aggregate && layer.aggregate.timeseries) {
   //   debugger
@@ -169,7 +169,7 @@ export default function (layer, timefield, dispatch) {
   // } else {
   //   sortedData = [...rows];
   // }
-  const isGeoJSON = layer.source.data.features;
+  const isGeoJSON = layer.source && layer.source.data.features;
 
   // if (isGeoJSON && layer.type === 'circle') {
   //   sortedData.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
@@ -177,27 +177,36 @@ export default function (layer, timefield, dispatch) {
   //   sortedData.sort((a, b) => a[layer.property] - b[layer.property]);
   // }
 
-  const geoJSONWithOSMKey = (isGeoJSON && layer.source.join && layer.source.join[1]);
-  const radiusRange = layer['radius-range'];
-  const groupByProp = layer.aggregate && layer.aggregate['group-by'];
+  const geoJSONWithOSMKey = (isGeoJSON &&
+    ((layer.source.join && layer.source.join[1]) ||
+       (layer.layerObj && layer.layerObj.source.join[1])));
+
+  const radiusRange = layer['radius-range'] ||
+  (layer.layerObj && layer.layerObj['unfiltered-stops']);
+
+  const groupByProp = (layer.aggregate && layer.aggregate['group-by']) ||
+    (layer.layerObj.aggregate && layer.layerObj.aggregate['group-by']);
+
   for (let i = 0; i < sortedData.length; i += 1) {
     if (isGeoJSON) {
-      data.push(Number(sortedData[i].properties[layer.property]));
+      data.push(Number(sortedData[i].properties[(layer.property || layer.layerObj.property)]));
       if (sortedData[i].properties[timefield]) {
         periods.push(sortedData[i].properties[timefield] || null);
       }
       if (geoJSONWithOSMKey) {
-        osmIDs.push(sortedData[i].properties[(groupByProp || layer.source.join[1])]);
+        osmIDs.push(sortedData[i].properties[(groupByProp || (layer.source.join[1] ||
+          layer.layerObj.source.join[1]))]);
       }
     } else {
       if (sortedData[i][timefield]) periods.push(sortedData[i][timefield] || null);
-      const propVal = sortedData[i][layer.property];
+      const propVal = sortedData[i][layer.property || layer.layerObj.property];
       if (Number.isNaN(Number(propVal))) {
         data.push(Number(propVal.split(',').join('')));
       } else {
         data.push(Number(propVal));
       }
-      osmIDs.push(sortedData[i][(groupByProp || layer.source.join[1])]);
+      osmIDs.push(sortedData[i][(groupByProp || layer.source.join[1] ||
+         layer.layerObj.source.join[1])]);
     }
   }
 
