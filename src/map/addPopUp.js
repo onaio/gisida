@@ -32,8 +32,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     const features = map.queryRenderedFeatures(e.point, {
       layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
     }).filter(f =>
-      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup
-    );
+      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup);
 
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
@@ -92,7 +91,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             }
           }
           // } else {
-          //   
+          //
         }
       }
       if (content) break;

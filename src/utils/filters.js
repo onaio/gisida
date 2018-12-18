@@ -150,7 +150,7 @@ export function generateFilterOptions(layerData) {
           && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
         filterIsMultiSelect = acceptedFilterValues === 'multi' ||
-          (layerData['data-parse'][filter] && layerData['data-parse'][filter].type === 'multiple');
+          (layerData['data-parse'] && layerData['data-parse'][filter] && layerData['data-parse'][filter].type === 'multiple');
 
         // if filter type is 'multi'
         if (filterIsMultiSelect && (!filterOptions[filter].filterValues ||
