@@ -169,7 +169,8 @@ export default function (layer, timefield, dispatch) {
   // } else {
   //   sortedData = [...rows];
   // }
-  const isGeoJSON = layer.source && layer.source.data.features;
+  const isGeoJSON = (layer.source && layer.source.data.features)
+  || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
   // if (isGeoJSON && layer.type === 'circle') {
   //   sortedData.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
@@ -178,7 +179,8 @@ export default function (layer, timefield, dispatch) {
   // }
 
   const geoJSONWithOSMKey = (isGeoJSON &&
-    ((layer.source.join && layer.source.join[1]) ||
+    ((layer && layer.source && layer.source.join &&
+       layer.source.join[1]) ||
        (layer.layerObj && layer.layerObj.source.join[1])));
 
   const radiusRange = layer['radius-range'] ||
