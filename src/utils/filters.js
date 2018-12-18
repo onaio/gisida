@@ -149,8 +149,21 @@ export function generateFilterOptions(layerData) {
           || layerData.aggregate)['accepted-filter-values']
           && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
-        filterIsMultiSelect = acceptedFilterValues === 'multi' ||
-          (layerData['data-parse'] && layerData['data-parse'][filter] && layerData['data-parse'][filter].type === 'multiple');
+        // If filters aren't filterd and filterType is multi
+        filterIsMultiSelect = acceptedFilterValues === 'multi';
+
+        // If filters are filtered then acceptedFilterValues is an array
+        // todo - decouple filters from data-parse config
+        // (to be able to create select_multi filters from select_single questions and visa versa)
+        if (!filterIsMultiSelect && Array.isArray(acceptedFilterValues)) {
+          // Check data-parse config for filter ONA select type
+          filterIsMultiSelect = layerData['data-parse']
+            && layerData['data-parse'][filter]
+            && layerData['data-parse'][filter].type === 'multiple';
+        }
+
+        // define if the filter is type 'multi' 
+        if (filterOptions[filter] && filterIsMultiSelect) filterOptions[filter].filterType = 'multi';
 
         // if filter type is 'multi'
         if (filterIsMultiSelect && (!filterOptions[filter].filterValues ||
