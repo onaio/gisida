@@ -129,8 +129,13 @@ export default (
 
   if (!UID) return false;
   const join = layerObj['detail-view'].join || layerObj.source.join;
-  const layerObjDatum = ((timeSeriesObj && timeSeriesObj.data)
-    || (layerObj.Data && layerObj.Data)).find(d =>
+  let activeData = null;
+  if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
+    activeData = [...timeSeriesObj.data];
+  } else {
+    activeData = layerObj && layerObj.Data;
+  }
+  const layerObjDatum = activeData && activeData.length && activeData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
