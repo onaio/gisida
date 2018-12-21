@@ -79,7 +79,7 @@ const parseDetailIcon = (spec, datum) => {
   return false;
 };
 
-const buildParsedBasicDetailItem = (detail, properties) => {
+export const buildParsedBasicDetailItem = (detail, properties) => {
   let icon;
   let iconColor;
   let alt;
