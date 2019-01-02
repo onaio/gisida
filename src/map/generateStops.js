@@ -176,8 +176,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
       });
       sortedData = sortedDataDate.sort(comparator);
     }
-  } else {
     
+  else {
+    sortedData = rows.sort((a, b) => new Date((a.properties || a)[timefield]) - new Date((b.properties || b)[timefield]));
   }
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
