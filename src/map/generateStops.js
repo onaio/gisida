@@ -28,7 +28,7 @@ const getColor = function getColor(c, i) {
   return c;
 };
 
-function getStops(layer, FILTER, timeseries, id, clusterLayer, nextIndex) {
+function getStops(layer, clusterLayer, nextIndex) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
@@ -137,10 +137,6 @@ function getStops(layer, FILTER, timeseries, id, clusterLayer, nextIndex) {
 }
 
 export default function (layer, timefield, dispatch, nextIndex) {
-  const { FILTER } = dispatch(getCurrentState());
-  const { id } = layer.id ? layer : layer.layerObj;
-  // const { timeseries } = layer.aggregate ? layer.aggregate : layer.layerObj.aggregate;
-  const timeseries = undefined;
   const data = [];
   const osmIDs = [];
   const periods = [];
@@ -212,5 +208,5 @@ export default function (layer, timefield, dispatch, nextIndex) {
   }
   return getStops({
     data, colors, osmIDs, periods, limit, clusters, radiusRange,
-  }, FILTER, timeseries, id, layer, nextIndex);
+  }, layer, nextIndex);
 }
