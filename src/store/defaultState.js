@@ -57,6 +57,7 @@ const defaultState = {
     activeLayerId: '',
     lastLayerSelected: '',
     primaryLayer: '',
+    primarySubLayer: '',
     reloadLayerId: null,
   },
   FILTER: {},

@@ -218,10 +218,13 @@ export function createMapReducer(mapId) {
               visible: action.isInit ? layer.visible : !layer.visible,
             },
           };
+
+          let primarySubLayer = null;
           if (layer.layers) {
             layer.layers.forEach((subLayerId) => {
               updatedLayers[subLayerId].visible = !layer.visible;
               updatedLayers[subLayerId].parent = layer.id;
+              primarySubLayer = subLayerId;
             });
           }
 
@@ -239,6 +242,7 @@ export function createMapReducer(mapId) {
 
           return {
             ...state,
+            primarySubLayer,
             // Update visible property
             activeLayerId: updatedLayers[layerId].visible && layer.type !== 'line'
               ? layerId
