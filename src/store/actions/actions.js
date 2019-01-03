@@ -79,11 +79,12 @@ export const filtersUpdated = (mapId, layerId) => ({
   mapId,
 });
 
-export const saveFilterState = (mapId, layerId, filterState) => ({
+export const saveFilterState = (mapId, layerId, filterState, isClear) => ({
   type: types.SAVE_FILTER_STATE,
   layerId,
   filterState,
   mapId,
+  isClear,
 });
 
 export const updatePrimaryLayer = (mapId, primaryLayer) => ({
