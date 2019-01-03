@@ -224,12 +224,14 @@ export function createMapReducer(mapId) {
             layer.layers.forEach((subLayerId) => {
               updatedLayers[subLayerId].visible = !layer.visible;
               updatedLayers[subLayerId].parent = layer.id;
-              primarySubLayer = subLayerId;
+              primarySubLayer = updatedLayers[subLayerId].visible ? subLayerId : null;
             });
           }
 
           const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
             && !updatedLayers[l].parent);
+          const activeSubLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
+            && updatedLayers[l].parent);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
             updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
 
@@ -242,7 +244,7 @@ export function createMapReducer(mapId) {
 
           return {
             ...state,
-            primarySubLayer,
+            primarySubLayer: primarySubLayer || activeSubLayerIds[activeSubLayerIds.length - 1],
             // Update visible property
             activeLayerId: updatedLayers[layerId].visible && layer.type !== 'line'
               ? layerId
