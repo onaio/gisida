@@ -10,8 +10,6 @@ export function processFilters(layerData, filterOptions, isOr) {
   const filters = [];
   const combinedData = [];
 
-  const combinedData = [];
-
   let datum;
   let f;
   function filterProcessor(d) {
