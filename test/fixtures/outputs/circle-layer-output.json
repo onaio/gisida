@@ -6,23 +6,122 @@
       {
         "cfr": "0",
         "dead": "0",
-        "district": "Kurtunwaarey",
-        "district_id": "R1720119",
-        "live": "175"
-      },
-      {
-        "cfr": "0",
-        "dead": "0",
         "district": "Afgooye",
         "district_id": "R1720070",
         "live": "677"
       },
       {
+        "cfr": "0.9",
+        "dead": "10",
+        "district": "Baardheere",
+        "district_id": "R1720072",
+        "live": "1174"
+      },
+      {
+        "cfr": "1.4",
+        "dead": "182",
+        "district": "Berdale",
+        "district_id": "R1720074",
+        "live": "13092"
+      },
+      {
+        "district": "Balcad",
+        "district_id": "R1720076",
+        "live": "718",
+        "dead": "2",
+        "cfr": "0.3"
+      },
+      {
+        "district": "Belet weyne",
+        "district_id": "R1720079",
+        "live": "345",
+        "dead": "2",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Bossaso",
+        "district_id": "R1720083",
+        "live": "646",
+        "dead": "5",
+        "cfr": "0.8"
+      },
+      {
         "cfr": "0",
         "dead": "0",
-        "district": "Eyl",
-        "district_id": "R1720104",
-        "live": "74"
+        "district": "Bulo Burto",
+        "district_id": "R1720085",
+        "live": "10"
+      },
+      {
+        "district": "Burtinle",
+        "district_id": "R1720087",
+        "live": "931",
+        "dead": "6",
+        "cfr": "0.6"
+      },
+      {
+        "cfr": "1.8",
+        "dead": "69",
+        "district": "Buuhoodle",
+        "district_id": "R1720088",
+        "live": "3773"
+      },
+      {
+        "cfr": "2.6",
+        "dead": "24",
+        "district": "Buur Hakaba",
+        "district_id": "R1720089",
+        "live": "908"
+      },
+      {
+        "cfr": "0.6",
+        "dead": "11",
+        "district": "Cabudwaaq",
+        "district_id": "R1720090",
+        "live": "1828"
+      },
+      {
+        "district": "Cadaado",
+        "district_id": "R1720091",
+        "live": "846",
+        "dead": "7",
+        "cfr": "0.8"
+      },
+      {
+        "cfr": "1.4",
+        "dead": "16",
+        "district": "Dhahar",
+        "district_id": "R1720095",
+        "live": "1144"
+      },
+    
+      {
+        "district": "Ceel Barde",
+        "district_id": "R1720096",
+        "live": "382",
+        "dead": "8",
+        "cfr": "2.1"
+      },
+      {
+        "cfr": "0",
+        "dead": "0",
+        "district": "Ceel Dheer",
+        "district_id": "R1720098",
+        "live": "85"
+      },
+      {
+        "cfr": "0.3",
+        "dead": "4",
+        "district": "Dhuusamarreeb",
+        "district_id": "R1720100",
+        "live": "1291"
+      },
+      {
+        "cfr": "0.2",
+        "dead": "1",
+        "district": "Diinsoor",
+        "district_id": "R1720101",
+        "live": "425"
       },
       {
         "cfr": "0",
@@ -34,23 +133,37 @@
       {
         "cfr": "0",
         "dead": "0",
-        "district": "Ceel Dheer",
-        "district_id": "R1720098",
-        "live": "85"
+        "district": "Eyl",
+        "district_id": "R1720104",
+        "live": "74"
       },
       {
-        "cfr": "0",
-        "dead": "0",
-        "district": "Bulo Burto",
-        "district_id": "R1720085",
-        "live": "10"
+        "cfr": "1.1",
+        "dead": "6",
+        "district": "Galdogob",
+        "district_id": "R1720106",
+        "live": "543"
       },
       {
-        "cfr": "0",
-        "dead": "0",
-        "district": "Bo'ame",
-        "district_id": "R1720120",
-        "live": "725"
+        "district": "Xarfo",
+        "district_id": "R1720107",
+        "live": "1689",
+        "dead": "10",
+        "cfr": "0.6"
+      },
+      {
+        "district": "Garbahaarey",
+        "district_id": "R1720108",
+        "live": "1706",
+        "dead": "14",
+        "cfr": "0.8"
+      },
+      {
+        "cfr": "1.6",
+        "dead": "24",
+        "district": "Garoowe",
+        "district_id": "R1720109",
+        "live": "1475"
       },
       {
         "cfr": "0",
@@ -74,127 +187,11 @@
         "live": "469"
       },
       {
-        "cfr": "0.2",
-        "dead": "1",
-        "district": "Diinsoor",
-        "district_id": "R1720101",
-        "live": "425"
-      },
-      {
-        "district": "Balcad",
-        "district_id": "R1720076",
-        "live": "718",
-        "dead": "2",
-        "cfr": "0.3"
-      },
-      {
-        "district": "Belet weyne",
-        "district_id": "R1720079",
-        "live": "345",
-        "dead": "2",
-        "cfr": "0.6"
-      },
-      {
-        "cfr": "0.3",
-        "dead": "4",
-        "district": "Dhuusamarreeb",
-        "district_id": "R1720100",
-        "live": "1291"
-      },
-    
-      {
-        "district": "Bossaso",
-        "district_id": "R1720083",
-        "live": "646",
-        "dead": "5",
-        "cfr": "0.8"
-      },
-      {
-        "cfr": "0.5",
-        "dead": "5",
-        "district": "Qardho",
-        "district_id": "R1720129",
-        "live": "1111"
-      },
-      {
-        "cfr": "1.1",
-        "dead": "6",
-        "district": "Galdogob",
-        "district_id": "R1720106",
-        "live": "543"
-      },
-    
-      {
-        "district": "Burtinle",
-        "district_id": "R1720087",
-        "live": "931",
-        "dead": "6",
-        "cfr": "0.6"
-      },
-      {
-        "cfr": "1.4",
-        "dead": "7",
-        "district": "Qandala",
-        "district_id": "R1720127",
-        "live": "488"
-      },
-      {
-        "cfr": "1",
-        "dead": "7",
-        "district": "Taleex",
-        "district_id": "R1720135",
-        "live": "692"
-      },
-      {
-        "district": "Cadaado",
-        "district_id": "R1720091",
-        "live": "846",
-        "dead": "7",
-        "cfr": "0.8"
-      },
-      {
-        "district": "Ceel Barde",
-        "district_id": "R1720096",
-        "live": "382",
-        "dead": "8",
-        "cfr": "2.1"
-      },
-      {
-        "cfr": "0.9",
-        "dead": "10",
-        "district": "Baardheere",
-        "district_id": "R1720072",
-        "live": "1174"
-      },
-    
-      {
-        "district": "Xarfo",
-        "district_id": "R1720107",
-        "live": "1689",
-        "dead": "10",
-        "cfr": "0.6"
-      },
-      {
-        "cfr": "0.6",
-        "dead": "11",
-        "district": "Cabudwaaq",
-        "district_id": "R1720090",
-        "live": "1828"
-      },
-      {
-        "cfr": "1.4",
-        "dead": "13",
-        "district": "Qoryooley",
-        "district_id": "R1720130",
-        "live": "926"
-      },
-    
-      {
-        "district": "Garbahaarey",
-        "district_id": "R1720108",
-        "live": "1706",
-        "dead": "14",
-        "cfr": "0.8"
+        "district": "Jowhar",
+        "district_id": "R1720117",
+        "live": "1732",
+        "dead": "21",
+        "cfr": "1.2"
       },
       {
         "cfr": "0.5",
@@ -204,54 +201,20 @@
         "live": "2974"
       },
       {
-        "cfr": "1.4",
-        "dead": "16",
-        "district": "Dhahar",
-        "district_id": "R1720095",
-        "live": "1144"
+        "cfr": "0",
+        "dead": "0",
+        "district": "Kurtunwaarey",
+        "district_id": "R1720119",
+        "live": "175"
       },
       {
-        "cfr": "7.2",
-        "dead": "17",
-        "district": "Tayeeglow",
-        "district_id": "R1720136",
-        "live": "236"
+        "cfr": "0",
+        "dead": "0",
+        "district": "Bo'ame",
+        "district_id": "R1720120",
+        "live": "725"
       },
-      {
-        "cfr": "1.9",
-        "dead": "18",
-        "district": "Xudur",
-        "district_id": "R1720141",
-        "live": "953"
-      },
-      {
-        "cfr": "1.1",
-        "dead": "18",
-        "district": "Wanla Weyn",
-        "district_id": "R1720138",
-        "live": "1590"
-      },
-      {
-        "district": "Jowhar",
-        "district_id": "R1720117",
-        "live": "1732",
-        "dead": "21",
-        "cfr": "1.2"
-      },
-      {
-        "cfr": "2.6",
-        "dead": "24",
-        "district": "Buur Hakaba",
-        "district_id": "R1720089",
-        "live": "908"
-      },
-      {
-        "cfr": "1.6",
-        "dead": "24",
-        "district": "Garoowe",
-        "district_id": "R1720109",
-        "live": "1475"
-      },
+    
       {
         "district": "Luuq",
         "district_id": "R1720123",
@@ -268,11 +231,47 @@
       },
       {
         "cfr": "1.8",
-        "dead": "69",
-        "district": "Buuhoodle",
-        "district_id": "R1720088",
-        "live": "3773"
+        "dead": "121",
+        "district": "Banadir",
+        "district_id": "R1720125",
+        "live": "6700"
       },
+      {
+       "cfr": "1.4",
+       "dead": "7",
+       "district": "Qandala",
+       "district_id": "R1720127",
+       "live": "488"
+      },
+      {
+        "cfr": "0.5",
+        "dead": "5",
+        "district": "Qardho",
+        "district_id": "R1720129",
+        "live": "1111"
+      },
+      {
+        "cfr": "1.4",
+        "dead": "13",
+        "district": "Qoryooley",
+        "district_id": "R1720130",
+        "live": "926"
+      },
+      {
+        "cfr": "1",
+        "dead": "7",
+        "district": "Taleex",
+        "district_id": "R1720135",
+        "live": "692"
+      },
+      {
+        "cfr": "7.2",
+        "dead": "17",
+        "district": "Tayeeglow",
+        "district_id": "R1720136",
+        "live": "236"
+      },
+    
       {
         "district": "Waajid",
         "district_id": "R1720137",
@@ -281,19 +280,19 @@
         "cfr": "4.9"
       },
       {
-        "cfr": "1.8",
-        "dead": "121",
-        "district": "Banadir",
-        "district_id": "R1720125",
-        "live": "6700"
-
+        "cfr": "1.1",
+        "dead": "18",
+        "district": "Wanla Weyn",
+        "district_id": "R1720138",
+        "live": "1590"
       },
       {
-        "cfr": "1.4",
-        "dead": "182",
-        "district": "Berdale",
-        "district_id": "R1720074",
-        "live": "13092"
+        "cfr": "1.9",
+        "dead": "18",
+        "district": "Xudur",
+        "district_id": "R1720141",
+        "live": "953"
+
 
       }
     ],
@@ -337,6 +336,173 @@
   "visible": false,
   "credit": "Somalia Health Cluster",
   "category": "Health Cluster",
+  "colorStops": [
+    [
+      "R1720119",
+      "#D80000"
+   ],
+   [
+      "R1720070",
+      "#D80000"
+   ],
+   [
+      "R1720104",
+      "#D80000"
+   ],
+   [
+      "R1720102",
+      "#D80000"
+   ],
+   [
+      "R1720098",
+      "#D80000"
+   ],
+   [
+      "R1720085",
+      "#D80000"
+   ],
+   [
+      "R1720120",
+      "#D80000"
+   ],
+   [
+      "R1720112",
+      "#D80000"
+   ],
+   [
+      "R1720113",
+      "#D80000"
+   ],
+   [
+      "R1720115",
+      "#D80000"
+   ],
+   [
+      "R1720101",
+      "#D80000"
+   ],
+   [
+      "R1720076",
+      "#D80000"
+   ],
+   [
+      "R1720079",
+      "#D80000"
+   ],
+   [
+      "R1720100",
+      "#D80000"
+   ],
+   [
+      "R1720083",
+      "#D80000"
+   ],
+   [
+      "R1720129",
+      "#D80000"
+   ],
+   [
+      "R1720106",
+      "#D80000"
+   ],
+   [
+      "R1720087",
+      "#D80000"
+   ],
+   [
+      "R1720127",
+      "#D80000"
+   ],
+   [
+      "R1720135",
+      "#D80000"
+   ],
+   [
+      "R1720091",
+      "#D80000"
+   ],
+   [
+     "R1720096",
+     "#D80000"
+   ],
+   [
+      "R1720072",
+      "#D80000"
+   ],
+   [
+      "R1720107",
+      "#D80000"
+   ],
+   [
+      "R1720090",
+      "#D80000"
+   ],
+   [
+      "R1720130",
+      "#D80000"
+   ],
+   [
+      "R1720108",
+      "#D80000"
+   ],
+   [
+      "R1720118",
+      "#D80000"
+   ],
+   [
+      "R1720095",
+      "#D80000"
+   ],
+   [
+      "R1720136",
+      "#D80000"
+   ],
+   [
+      "R1720141",
+      "#D80000"
+   ],
+   [
+      "R1720138",
+      "#D80000"
+   ],
+   [
+      "R1720117",
+      "#D80000"
+   ],
+   [
+      "R1720089",
+      "#D80000"
+   ],
+   [
+      "R1720109",
+      "#D80000"
+   ],
+   [
+      "R1720123",
+      "#D80000"
+   ],
+   [
+      "R1720124",
+      "#D80000"
+   ],
+   [
+      "R1720088",
+      "#D80000"
+   ],
+    [
+      "R1720137",
+      "#D80000"
+    ],
+    [
+      "R1720125",
+      "#D80000"
+    ],
+     [
+       "R1720074",
+       "#D80000"
+     ]
+   ],
+
   "id": "awd-deaths",
   "loaded": false,
   "mergedData": [
@@ -646,23 +812,122 @@
     {
       "cfr": "0",
       "dead": "0",
-      "district": "Kurtunwaarey",
-      "district_id": "R1720119",
-      "live": "175"
-    },
-    {
-      "cfr": "0",
-      "dead": "0",
       "district": "Afgooye",
       "district_id": "R1720070",
       "live": "677"
     },
     {
+      "cfr": "0.9",
+      "dead": "10",
+      "district": "Baardheere",
+      "district_id": "R1720072",
+      "live": "1174"
+    },
+    {
+      "cfr": "1.4",
+      "dead": "182",
+      "district": "Berdale",
+      "district_id": "R1720074",
+      "live": "13092"
+    },
+    {
+      "district": "Balcad",
+      "district_id": "R1720076",
+      "live": "718",
+      "dead": "2",
+      "cfr": "0.3"
+    },
+    {
+      "district": "Belet weyne",
+      "district_id": "R1720079",
+      "live": "345",
+      "dead": "2",
+      "cfr": "0.6"
+    },
+    {
+      "district": "Bossaso",
+      "district_id": "R1720083",
+      "live": "646",
+      "dead": "5",
+      "cfr": "0.8"
+    },
+    {
       "cfr": "0",
       "dead": "0",
-      "district": "Eyl",
-      "district_id": "R1720104",
-      "live": "74"
+      "district": "Bulo Burto",
+      "district_id": "R1720085",
+      "live": "10"
+    },
+    {
+      "district": "Burtinle",
+      "district_id": "R1720087",
+      "live": "931",
+      "dead": "6",
+      "cfr": "0.6"
+    },
+    {
+      "cfr": "1.8",
+      "dead": "69",
+      "district": "Buuhoodle",
+      "district_id": "R1720088",
+      "live": "3773"
+    },
+    {
+      "cfr": "2.6",
+      "dead": "24",
+      "district": "Buur Hakaba",
+      "district_id": "R1720089",
+      "live": "908"
+    },
+    {
+      "cfr": "0.6",
+      "dead": "11",
+      "district": "Cabudwaaq",
+      "district_id": "R1720090",
+      "live": "1828"
+    },
+  
+    {
+      "district": "Cadaado",
+      "district_id": "R1720091",
+      "live": "846",
+      "dead": "7",
+      "cfr": "0.8"
+    },
+    {
+      "cfr": "1.4",
+      "dead": "16",
+      "district": "Dhahar",
+      "district_id": "R1720095",
+      "live": "1144"
+    },
+    {
+      "district": "Ceel Barde",
+      "district_id": "R1720096",
+      "live": "382",
+      "dead": "8",
+      "cfr": "2.1"
+    },
+    {
+      "cfr": "0",
+      "dead": "0",
+      "district": "Ceel Dheer",
+      "district_id": "R1720098",
+      "live": "85"
+    },
+    {
+      "cfr": "0.3",
+      "dead": "4",
+      "district": "Dhuusamarreeb",
+      "district_id": "R1720100",
+      "live": "1291"
+    },
+    {
+      "cfr": "0.2",
+      "dead": "1",
+      "district": "Diinsoor",
+      "district_id": "R1720101",
+      "live": "425"
     },
     {
       "cfr": "0",
@@ -674,23 +939,38 @@
     {
       "cfr": "0",
       "dead": "0",
-      "district": "Ceel Dheer",
-      "district_id": "R1720098",
-      "live": "85"
+      "district": "Eyl",
+      "district_id": "R1720104",
+      "live": "74"
     },
     {
-      "cfr": "0",
-      "dead": "0",
-      "district": "Bulo Burto",
-      "district_id": "R1720085",
-      "live": "10"
+      "cfr": "1.1",
+      "dead": "6",
+      "district": "Galdogob",
+      "district_id": "R1720106",
+      "live": "543"
+    },
+  
+    {
+      "district": "Xarfo",
+      "district_id": "R1720107",
+      "live": "1689",
+      "dead": "10",
+      "cfr": "0.6"
     },
     {
-      "cfr": "0",
-      "dead": "0",
-      "district": "Bo'ame",
-      "district_id": "R1720120",
-      "live": "725"
+      "district": "Garbahaarey",
+      "district_id": "R1720108",
+      "live": "1706",
+      "dead": "14",
+      "cfr": "0.8"
+    },
+    {
+      "cfr": "1.6",
+      "dead": "24",
+      "district": "Garoowe",
+      "district_id": "R1720109",
+      "live": "1475"
     },
     {
       "cfr": "0",
@@ -714,126 +994,11 @@
       "live": "469"
     },
     {
-      "cfr": "0.2",
-      "dead": "1",
-      "district": "Diinsoor",
-      "district_id": "R1720101",
-      "live": "425"
-    },
-  
-    {
-      "district": "Balcad",
-      "district_id": "R1720076",
-      "live": "718",
-      "dead": "2",
-      "cfr": "0.3"
-    },
-    {
-      "district": "Belet weyne",
-      "district_id": "R1720079",
-      "live": "345",
-      "dead": "2",
-      "cfr": "0.6"
-    },
-    {
-      "cfr": "0.3",
-      "dead": "4",
-      "district": "Dhuusamarreeb",
-      "district_id": "R1720100",
-      "live": "1291"
-    },
-  
-    {
-      "district": "Bossaso",
-      "district_id": "R1720083",
-      "live": "646",
-      "dead": "5",
-      "cfr": "0.8"
-    },
-    {
-      "cfr": "0.5",
-      "dead": "5",
-      "district": "Qardho",
-      "district_id": "R1720129",
-      "live": "1111"
-    },
-    {
-      "cfr": "1.1",
-      "dead": "6",
-      "district": "Galdogob",
-      "district_id": "R1720106",
-      "live": "543"
-    },
-  
-    {
-      "district": "Burtinle",
-      "district_id": "R1720087",
-      "live": "931",
-      "dead": "6",
-      "cfr": "0.6"
-    },
-    {
-      "cfr": "1.4",
-      "dead": "7",
-      "district": "Qandala",
-      "district_id": "R1720127",
-      "live": "488"
-    },
-    {
-      "cfr": "1",
-      "dead": "7",
-      "district": "Taleex",
-      "district_id": "R1720135",
-      "live": "692"
-    },
-    {
-      "district": "Cadaado",
-      "district_id": "R1720091",
-      "live": "846",
-      "dead": "7",
-      "cfr": "0.8"
-    },
-    {
-      "district": "Ceel Barde",
-      "district_id": "R1720096",
-      "live": "382",
-      "dead": "8",
-      "cfr": "2.1"
-    },
-    {
-      "cfr": "0.9",
-      "dead": "10",
-      "district": "Baardheere",
-      "district_id": "R1720072",
-      "live": "1174"
-    },
-    {
-      "district": "Xarfo",
-      "district_id": "R1720107",
-      "live": "1689",
-      "dead": "10",
-      "cfr": "0.6"
-    },
-    {
-      "cfr": "0.6",
-      "dead": "11",
-      "district": "Cabudwaaq",
-      "district_id": "R1720090",
-      "live": "1828"
-    },
-    {
-      "cfr": "1.4",
-      "dead": "13",
-      "district": "Qoryooley",
-      "district_id": "R1720130",
-      "live": "926"
-    },
-    {
-      "district": "Garbahaarey",
-      "district_id": "R1720108",
-      "live": "1706",
-      "dead": "14",
-      "cfr": "0.8"
+      "district": "Jowhar",
+      "district_id": "R1720117",
+      "live": "1732",
+      "dead": "21",
+      "cfr": "1.2"
     },
     {
       "cfr": "0.5",
@@ -843,55 +1008,18 @@
       "live": "2974"
     },
     {
-      "cfr": "1.4",
-      "dead": "16",
-      "district": "Dhahar",
-      "district_id": "R1720095",
-      "live": "1144"
+      "cfr": "0",
+      "dead": "0",
+      "district": "Kurtunwaarey",
+      "district_id": "R1720119",
+      "live": "175"
     },
     {
-      "cfr": "7.2",
-      "dead": "17",
-      "district": "Tayeeglow",
-      "district_id": "R1720136",
-      "live": "236"
-    },
-    {
-      "cfr": "1.9",
-      "dead": "18",
-      "district": "Xudur",
-      "district_id": "R1720141",
-      "live": "953"
-    },
-    {
-      "cfr": "1.1",
-      "dead": "18",
-      "district": "Wanla Weyn",
-      "district_id": "R1720138",
-      "live": "1590"
-    },
-  
-    {
-      "district": "Jowhar",
-      "district_id": "R1720117",
-      "live": "1732",
-      "dead": "21",
-      "cfr": "1.2"
-    },
-    {
-      "cfr": "2.6",
-      "dead": "24",
-      "district": "Buur Hakaba",
-      "district_id": "R1720089",
-      "live": "908"
-
-    },
-    {
-      "cfr": "1.6",
-      "dead": "24",
-      "district": "Garoowe",
-      "district_id": "R1720109",
-      "live": "1475"
+      "cfr": "0",
+      "dead": "0",
+      "district": "Bo'ame",
+      "district_id": "R1720120",
+      "live": "725"
     },
     {
       "district": "Luuq",
@@ -909,11 +1037,47 @@
     },
     {
       "cfr": "1.8",
-      "dead": "69",
-      "district": "Buuhoodle",
-      "district_id": "R1720088",
-      "live": "3773"
+      "dead": "121",
+      "district": "Banadir",
+      "district_id": "R1720125",
+      "live": "6700"
     },
+    {
+      "cfr": "1.4",
+      "dead": "7",
+      "district": "Qandala",
+      "district_id": "R1720127",
+      "live": "488"
+    },
+    {
+      "cfr": "0.5",
+      "dead": "5",
+      "district": "Qardho",
+      "district_id": "R1720129",
+      "live": "1111"
+    },
+    {
+      "cfr": "1.4",
+      "dead": "13",
+      "district": "Qoryooley",
+      "district_id": "R1720130",
+      "live": "926"
+    },
+    {
+      "cfr": "1",
+      "dead": "7",
+      "district": "Taleex",
+      "district_id": "R1720135",
+      "live": "692"
+    },
+    {
+      "cfr": "7.2",
+      "dead": "17",
+      "district": "Tayeeglow",
+      "district_id": "R1720136",
+      "live": "236"
+    },
+  
     {
       "district": "Waajid",
       "district_id": "R1720137",
@@ -922,39 +1086,752 @@
       "cfr": "4.9"
     },
     {
-      "cfr": "1.8",
-      "dead": "121",
-      "district": "Banadir",
-      "district_id": "R1720125",
-      "live": "6700"
+      "cfr": "1.1",
+      "dead": "18",
+      "district": "Wanla Weyn",
+      "district_id": "R1720138",
+      "live": "1590"
     },
     {
-      "cfr": "1.4",
-      "dead": "182",
-      "district": "Berdale",
-      "district_id": "R1720074",
-      "live": "13092"
-
+      "cfr": "1.9",
+      "dead": "18",
+      "district": "Xudur",
+      "district_id": "R1720141",
+      "live": "953"
     }
   ],
-  "stops": [
-    [],
-    [],
-    [],
-    [
-     2,
-     11,
-     21,
-     31,
-     69,
-     121,
-     182
-    ],
-  
-    "#D80000",
-    [],
-    []
-  ],
+  "stops":  [
+              [
+                [
+        [
+          "R1720119",
+          "#D80000"
+        ],
+        [
+          "R1720070",
+          "#D80000"
+        ],
+        [
+          "R1720104",
+          "#D80000"
+        ],
+        [
+          "R1720102",
+          "#D80000"
+        ],
+        [
+          "R1720098",
+          "#D80000"
+        ],
+        [
+          "R1720085",
+          "#D80000"
+        ],
+        [
+          "R1720120",
+          "#D80000"
+        ],
+        [
+          "R1720112",
+          "#D80000"
+        ],
+        [
+          "R1720113",
+          "#D80000"
+        ],
+        [
+          "R1720115",
+          "#D80000"
+        ],
+        [
+          "R1720101",
+          "#D80000"
+        ],
+        [
+          "R1720076",
+          "#D80000"
+        ],
+              [
+               "R1720079",
+               "#D80000"
+             ],
+              [
+               "R1720100",
+               "#D80000"
+             ],
+              [
+               "R1720083",
+               "#D80000"
+             ],
+              [
+               "R1720129",
+               "#D80000"
+             ],
+              [
+               "R1720106",
+               "#D80000"
+             ],
+              [
+               "R1720087",
+               "#D80000"
+             ],
+              [
+               "R1720127",
+               "#D80000"
+             ],
+              [
+               "R1720135",
+               "#D80000"
+             ],
+              [
+               "R1720091",
+               "#D80000"
+             ],
+              [
+               "R1720096",
+               "#D80000"
+             ],
+              [
+               "R1720072",
+               "#D80000"
+             ],
+              [
+               "R1720107",
+               "#D80000"
+             ],
+              [
+               "R1720090",
+               "#D80000"
+             ],
+              [
+               "R1720130",
+               "#D80000"
+             ],
+              [
+               "R1720108",
+               "#D80000"
+             ],
+              [
+               "R1720118",
+               "#D80000"
+             ],
+              [
+               "R1720095",
+               "#D80000"
+             ],
+              [
+               "R1720136",
+               "#D80000"
+             ],
+              [
+               "R1720141",
+               "#D80000"
+             ],
+              [
+               "R1720138",
+               "#D80000"
+             ],
+              [
+               "R1720117",
+               "#D80000"
+             ],
+              [
+               "R1720089",
+               "#D80000"
+             ],
+              [
+               "R1720109",
+               "#D80000"
+             ],
+              [
+               "R1720123",
+               "#D80000"
+             ],
+              [
+               "R1720124",
+               "#D80000"
+             ],
+              [
+               "R1720088",
+               "#D80000"
+             ],
+              [
+               "R1720137",
+               "#D80000"
+             ],
+              [
+               "R1720125",
+               "#D80000"
+             ],
+              [
+               "R1720074",
+               "#D80000"
+             ]
+           ]
+         ],
+          [
+            [
+              [
+               "R1720119",
+               3
+             ],
+              [
+               "R1720070",
+               3
+             ],
+              [
+               "R1720104",
+               3
+             ],
+              [
+               "R1720102",
+               3
+             ],
+              [
+               "R1720098",
+               3
+             ],
+              [
+               "R1720085",
+               3
+             ],
+              [
+               "R1720120",
+               3
+             ],
+              [
+               "R1720112",
+               3
+             ],
+              [
+               "R1720113",
+               3
+             ],
+              [
+               "R1720115",
+               3
+             ],
+              [
+               "R1720101",
+               3
+             ],
+              [
+               "R1720076",
+               3
+             ],
+              [
+               "R1720079",
+               3
+             ],
+              [
+               "R1720100",
+               6
+             ],
+              [
+               "R1720083",
+               6
+             ],
+              [
+               "R1720129",
+               6
+             ],
+              [
+               "R1720106",
+               6
+             ],
+              [
+               "R1720087",
+               6
+             ],
+              [
+               "R1720127",
+               6
+             ],
+              [
+               "R1720135",
+               6
+             ],
+              [
+               "R1720091",
+               6
+             ],
+              [
+               "R1720096",
+               6
+             ],
+              [
+               "R1720072",
+               6
+             ],
+              [
+               "R1720107",
+               6
+             ],
+              [
+               "R1720090",
+               6
+             ],
+              [
+               "R1720130",
+               9
+             ],
+              [
+               "R1720108",
+               9
+             ],
+              [
+               "R1720118",
+               9
+             ],
+              [
+               "R1720095",
+               9
+             ],
+              [
+               "R1720136",
+               9
+             ],
+              [
+               "R1720141",
+               9
+             ],
+              [
+               "R1720138",
+               9
+             ],
+              [
+               "R1720117",
+               9
+             ],
+              [
+               "R1720089",
+               12
+             ],
+              [
+               "R1720109",
+               12
+             ],
+              [
+               "R1720123",
+               12
+             ],
+              [
+               "R1720124",
+               12
+             ],
+              [
+               "R1720088",
+               15
+             ],
+              [
+               "R1720137",
+               18
+             ],
+              [
+               "R1720125",
+               18
+             ],
+              [
+               "R1720074",
+               21
+             ]
+           ]
+         ],
+          [
+           null
+         ],
+          [
+            2,
+            11,
+            21,
+            31,
+            69,
+            121,
+            182
+          ],
+          "#D80000",
+          [
+            [
+              [
+               "R1720119",
+               1
+              ],
+              [
+               "R1720070",
+               1
+             ],
+              [
+               "R1720104",
+               1
+             ],
+              [
+               "R1720102",
+               1
+             ],
+              [
+               "R1720098",
+               1
+             ],
+              [
+               "R1720085",
+               1
+             ],
+              [
+               "R1720120",
+               1
+             ],
+              [
+               "R1720112",
+               1
+             ],
+              [
+               "R1720113",
+               1
+             ],
+              [
+               "R1720115",
+               1
+
+             ],
+              [
+               "R1720101",
+               1
+             ],
+              [
+               "R1720076",
+               1
+             ],
+              [
+               "R1720079",
+               1
+             ],
+              [
+               "R1720100",
+               1
+             ],
+              [
+               "R1720083",
+               1
+             ],
+              [
+               "R1720129",
+               1
+             ],
+              [
+               "R1720106",
+               1
+             ],
+              [
+               "R1720087",
+               1
+             ],
+              [
+               "R1720127",
+               1
+             ],
+              [
+               "R1720135",
+               1
+             ],
+              [
+               "R1720091",
+               1
+             ],
+              [
+               "R1720096",
+               1
+             ],
+              [
+               "R1720072",
+               1
+             ],
+              [
+               "R1720107",
+               1
+             ],
+              [
+               "R1720090",
+               1
+             ],
+              [
+               "R1720130",
+               1
+             ],
+              [
+               "R1720108",
+               1
+             ],
+              [
+               "R1720118",
+               1
+             ],
+              [
+               "R1720095",
+               1
+             ],
+              [
+               "R1720136",
+               1
+             ],
+              [
+               "R1720141",
+               1
+             ],
+              [
+               "R1720138",
+               1
+             ],
+              [
+               "R1720117",
+               1
+             ],
+              [
+               "R1720089",
+               1
+             ],
+              [
+               "R1720109",
+               1
+             ],
+              [
+               "R1720123",
+               1
+             ],
+              [
+               "R1720124",
+               1
+             ],
+              [
+               "R1720088",
+               1
+             ],
+              [
+               "R1720137",
+               1
+             ],
+              [
+               "R1720125",
+               1
+             ],
+              [
+               "R1720074",
+               1
+             ]
+           ]
+         ],
+          [
+            [
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             2,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             11,
+             21,
+             21,
+             21,
+             21,
+             21,
+             21,
+             21,
+             21,
+             31,
+             31,
+             31,
+             31,
+             69,
+             121,
+             121,
+             182
+           ]
+         ]
+       ],
+       "stopsData":  [
+          [
+           "R1720119",
+           3
+         ],
+          [
+           "R1720070",
+           3
+         ],
+          [
+           "R1720104",
+           3
+         ],
+          [
+           "R1720102",
+           3
+         ],
+          [
+           "R1720098",
+           3
+         ],
+          [
+           "R1720085",
+           3
+         ],
+          [
+           "R1720120",
+           3
+         ],
+          [
+           "R1720112",
+           3
+         ],
+          [
+           "R1720113",
+           3
+         ],
+          [
+           "R1720115",
+           3
+         ],
+          [
+           "R1720101",
+           3
+         ],
+          [
+           "R1720076",
+           3
+         ],
+          [
+           "R1720079",
+           3
+         ],
+          [
+           "R1720100",
+           6
+         ],
+          [
+           "R1720083",
+           6
+         ],
+          [
+           "R1720129",
+           6
+         ],
+          [
+           "R1720106",
+           6
+         ],
+          [
+           "R1720087",
+           6
+         ],
+          [
+           "R1720127",
+           6
+         ],
+          [
+           "R1720135",
+           6
+         ],
+          [
+           "R1720091",
+           6
+         ],
+          [
+           "R1720096",
+           6
+         ],
+          [
+           "R1720072",
+           6
+         ],
+          [
+           "R1720107",
+           6
+         ],
+          [
+           "R1720090",
+           6
+         ],
+          [
+           "R1720130",
+           9
+         ],
+          [
+           "R1720108",
+           9
+         ],
+          [
+           "R1720118",
+           9
+         ],
+          [
+           "R1720095",
+           9
+         ],
+          [
+           "R1720136",
+           9
+         ],
+          [
+           "R1720141",
+           9
+         ],
+          [
+           "R1720138",
+           9
+         ],
+          [
+           "R1720117",
+           9
+         ],
+          [
+           "R1720089",
+           12
+         ],
+          [
+           "R1720109",
+           12
+         ],
+          [
+           "R1720123",
+           12
+         ],
+          [
+           "R1720124",
+           12
+         ],
+          [
+           "R1720088",
+           15
+         ],
+          [
+           "R1720137",
+           18
+         ],
+          [
+           "R1720125",
+           18
+         ],
+          [
+           "R1720074",
+           21
+         ]
+       ],
+
   "styleSpec": {
     "id": "awd-deaths",
     "visible": false,
@@ -965,13 +1842,350 @@
     },
     "layout": {},
     "paint": {
-      "circle-color": "#D80000",
+      "circle-color": {
+                 "property": "osm_id",
+                 "stops":  [
+                    [
+                     "R1720119",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720070",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720104",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720102",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720098",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720085",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720120",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720112",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720113",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720115",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720101",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720076",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720079",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720100",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720083",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720129",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720106",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720087",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720127",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720135",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720091",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720096",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720072",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720107",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720090",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720130",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720108",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720118",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720095",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720136",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720141",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720138",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720117",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720089",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720109",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720123",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720124",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720088",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720137",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720125",
+                     "#D80000"
+                   ],
+                    [
+                     "R1720074",
+                     "#D80000"
+                   ]
+                 ],
+                 "type": "categorical"
+               },
+    
       "circle-opacity": 0.8,
       "circle-stroke-color": "#fff",
       "circle-stroke-width": 1,
       "circle-stroke-opacity": 1,
       "circle-radius": {
         "property": "osm_id",
+        "stops":  [
+                    [
+                       "R1720119",
+                       3
+                    ],
+                    [
+                       "R1720070",
+                       3
+                    ],
+                    [
+                       "R1720104",
+                       3
+                    ],
+                    [
+                       "R1720102",
+                       3
+                    ],
+                    [
+                       "R1720098",
+                       3
+                    ],
+                    [
+                       "R1720085",
+                       3
+                    ],
+                    [
+                       "R1720120",
+                       3
+                    ],
+                    [
+                       "R1720112",
+                       3
+                    ],
+                    [
+                       "R1720113",
+                       3
+                    ],
+                    [
+                       "R1720115",
+                       3
+                    ],
+                    [
+                       "R1720101",
+                       3
+                    ],
+                    [
+                       "R1720076",
+                       3
+                    ],
+                    [
+                       "R1720079",
+                       3
+                    ],
+                    [
+                       "R1720100",
+                       6
+                    ],
+                    [
+                       "R1720083",
+                       6
+                    ],
+                    [
+                       "R1720129",
+                       6
+                    ],
+                    [
+                       "R1720106",
+                       6
+                    ],
+                    [
+                       "R1720087",
+                       6
+                    ],
+                    [
+                       "R1720127",
+                       6
+                    ],
+                    [
+                       "R1720135",
+                       6
+                    ],
+                    [
+                       "R1720091",
+                       6
+                    ],
+                    [
+                       "R1720096",
+                       6
+                    ],
+                    [
+                       "R1720072",
+                       6
+                    ],
+                    [
+                       "R1720107",
+                       6
+                    ],
+                    [
+                       "R1720090",
+                       6
+                    ],
+                    [
+                       "R1720130",
+                       9
+                    ],
+                    [
+                       "R1720108",
+                       9
+                    ],
+                    [
+                       "R1720118",
+                       9
+                    ],
+                    [
+                       "R1720095",
+                       9
+                    ],
+                    [
+                       "R1720136",
+                       9
+                    ],
+                    [
+                       "R1720141",
+                       9
+                    ],
+                    [
+                       "R1720138",
+                       9
+                    ],
+                    [
+                       "R1720117",
+                       9
+                    ],
+                    [
+                       "R1720089",
+                       12
+                    ],
+                    [
+                      "R1720109",
+                       12
+                    ],
+                    [
+                       "R1720123",
+                       12
+                    ],
+                    [
+                       "R1720124",
+                       12
+                    ],
+                    [
+                       "R1720088",
+                       15
+                    ],
+                    [
+                       "R1720137",
+                       18
+                    ],
+                    [
+                       "R1720125",
+                       18
+                    ],
+                    [
+                       "R1720074",
+                       21
+                    ]
+                  ],
+      
         "type": "categorical",
         "default": 0
       }
