@@ -1,5 +1,6 @@
 import colorbrewer from 'colorbrewer';
 import { ckmeans } from 'simple-statistics';
+import { comparator } from '../utils/files';
 
 const defaultRadiusRange = [
   '3',
@@ -107,7 +108,10 @@ function getStops(layer, clusterLayer, nextIndex) {
   }
 
   if (periods) {
-    const uniqPeriods = [...new Set(periods)].sort();
+    const uniqPeriods = clusterLayer
+      && clusterLayer.aggregate
+      && clusterLayer.aggregate['date-parse'] ?
+      [...new Set(periods)] : [...new Set(periods)].sort();
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];
@@ -148,23 +152,23 @@ export default function (layer, timefield, dispatch, nextIndex) {
     || getColorBrewerColor(color, clusters)
     || color;
   const rows = layer.data || layer.source.data.features || layer.source.data;
-  const sortedData = [...rows];
-  // if (layer.aggregate && layer.aggregate.timeseries) {
-  //   sortedData = rows.sort((a, b) => {
-  //     if (a.date) {
-  //       return Date.parse(a.date) - Date.parse(b.date);
-  //     }
-  //     if (a[0] < b[0]) return -1;
-  //     if (a[0] > b[0]) return 1;
-  //     if (a[1] < b[1]) return -1;
-  //     if (a[1] > b[1]) return 1;
-  //     if (a[2] < b[2]) return -1;
-  //     if (a[2] > b[2]) return 1;
-  //     return 0;
-  //   })
-  // } else {
-  //   sortedData = [...rows];
-  // }
+  let sortedData = [...rows];
+  let sortedDataDate;
+  if (layer.aggregate && layer.aggregate.timeseries) {
+    if (layer['data-parse'] && layer.aggregate['date-parse']) {
+      const { split, chunk } = layer.aggregate['date-parse'];
+      sortedDataDate = rows.map((d) => {
+        const dataCopy = d;
+        return {
+          ...dataCopy,
+          date: new Date(d.period.split(split)[chunk]),
+        };
+      });
+      sortedData = sortedDataDate.sort(comparator);
+    }
+  } else {
+    sortedData = [...rows];
+  }
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
@@ -201,8 +205,11 @@ export default function (layer, timefield, dispatch, nextIndex) {
       } else {
         data.push(Number(propVal));
       }
-      osmIDs.push(sortedData[i][(groupByProp || layer.source.join[1] ||
-         layer.layerObj.source.join[1])]);
+      osmIDs.push(sortedData[i][(groupByProp || (layer && layer.source &&
+         layer.source.join[1]) ||
+         (layer && layer.layerObj && layer.layerObj.source &&
+          layer.layerObj.source.join &&
+          layer.layerObj.source.join[1]))]);
     }
   }
   return getStops({
