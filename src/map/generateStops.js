@@ -1,6 +1,5 @@
 import colorbrewer from 'colorbrewer';
 import { ckmeans } from 'simple-statistics';
-import { getCurrentState } from '../store/actions/actions';
 
 const defaultRadiusRange = [
   '3',
