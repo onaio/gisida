@@ -35,7 +35,7 @@ function buildRadiusAsDistanceExpression(layer) {
   ];
 }
 
-export default function (layer, mapConfig) {
+export default function (layer, mapConfig, dispatch) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
@@ -53,7 +53,7 @@ export default function (layer, mapConfig) {
   }
 
   if (layer.property) {
-    stops = generateStops(layer, timefield);
+    stops = generateStops(layer, timefield, dispatch);
   }
 
   if (stops) {
@@ -124,7 +124,7 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
 
     if (layer.source.minzoom) {
@@ -202,7 +202,7 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
     if (layer.source.minzoom) {
       styleSpec.minzoom = layer.source.minzoom;

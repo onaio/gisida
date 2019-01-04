@@ -83,6 +83,7 @@ function FILTER(state = defaultState.FILTER, action) {
         [action.layerId]: {
           ...action.filterState,
           doUpdate: true,
+          isClear: action.isClear || false,
         },
       };
     }
@@ -333,10 +334,19 @@ export function createMapReducer(mapId) {
 
         case types.RESET_FILTERED_LAYER: {
           const { oldLayer } = action;
+          const oldLayerObjs = {
+            ...state.oldLayerObjs,
+          };
+          if (!oldLayerObjs[oldLayer.id]) {
+            oldLayerObjs[oldLayer.id] = {};
+          }
+          oldLayerObjs[oldLayer.id] = {
+            ...oldLayer,
+          };
           return {
             ...state,
-            oldLayerObj: {
-              ...oldLayer,
+            oldLayerObjs: {
+              ...oldLayerObjs,
             },
           };
         }

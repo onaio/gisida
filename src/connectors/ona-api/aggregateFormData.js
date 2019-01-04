@@ -3,7 +3,7 @@ import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 import csvToGEOjson from '../../map/csvToGEOjson';
 
-function processFormData(formData, layerObj) {
+export function processFormData(formData, layerObj) {
   let data = Array.isArray(formData) ? [...formData] : { ...formData };
   const indicatorField = layerObj.property;
   const aggregateOptions = layerObj.aggregate;
@@ -326,7 +326,7 @@ function assignLocationIDs(data, locations) {
   return dataWithLocationID;
 }
 
-export default function aggregateFormData(layerData, locations, filterOptions) {
+export default function aggregateFormData(layerData, locations, filterOptions, isOr) {
   const layer = layerData;
   let data = layerData.mergedData;
   let aggregatedData = [];
@@ -337,7 +337,7 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   }
 
   // Process filters with filterOptions
-  data = processFilters(layer, filterOptions);
+  data = processFilters(layer, filterOptions, isOr);
 
   // Process data
   aggregatedData = processFormData(data, layer);

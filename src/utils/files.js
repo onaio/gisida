@@ -30,3 +30,16 @@ export function loadCSV(path, callback) {
 export function isNumber(value) {
   return !Number.isNaN(parseFloat(value));
 }
+
+export function comparator(a, b) {
+  if (a.date) {
+    return Date.parse(a.date) - Date.parse(b.date);
+  }
+  if (a[0] < b[0]) return -1;
+  if (a[0] > b[0]) return 1;
+  if (a[1] < b[1]) return -1;
+  if (a[1] > b[1]) return 1;
+  if (a[2] < b[2]) return -1;
+  if (a[2] > b[2]) return 1;
+  return 0;
+}
