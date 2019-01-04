@@ -1,6 +1,7 @@
 import colorbrewer from 'colorbrewer';
 import { ckmeans } from 'simple-statistics';
 import { comparator } from '../utils/files';
+import { getCurrentState } from '../store/actions/actions';
 
 const defaultRadiusRange = [
   '3',
@@ -28,7 +29,7 @@ const getColor = function getColor(c, i) {
   return c;
 };
 
-function getStops(layer, clusterLayer, nextIndex) {
+function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
@@ -87,7 +88,16 @@ function getStops(layer, clusterLayer, nextIndex) {
   const cluster = (Array.isArray(clusters) && clusters)
     || ckmeansCluster;
 
-  breaks = (cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit;
+  const currentState = dispatch(getCurrentState());
+  if (currentState && currentState.FILTER &&
+    currentState.FILTER[clusterLayer.id] &&
+    currentState.FILTER[clusterLayer.id].doUpdate) {
+    breaks = limit || (cluster && cluster.length &&
+      cluster.map(cl => cl[cl.length - 1]));
+  } else {
+    breaks = (cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit;
+  }
+
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
   const data = limit ? rangeData : sortedData;
   const osmIDs = limit ? rangeID : osmID;
@@ -167,7 +177,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
       sortedData = sortedDataDate.sort(comparator);
     }
   } else {
-    sortedData = [...rows];
+    
   }
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
@@ -214,5 +224,5 @@ export default function (layer, timefield, dispatch, nextIndex) {
   }
   return getStops({
     data, colors, osmIDs, periods, limit, clusters, radiusRange,
-  }, layer, nextIndex);
+  }, layer, nextIndex, dispatch);
 }
