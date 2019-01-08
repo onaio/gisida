@@ -180,11 +180,6 @@ export function returnState(dispatch, getState) {
 
 export const getCurrentState = () => returnState;
 
-export const locationUpdated = (mapId) => ({
-  type: types.LOCATION_UPDATED,
-  mapId,
-});
-
 export default {
   initApp,
   initStyles,
