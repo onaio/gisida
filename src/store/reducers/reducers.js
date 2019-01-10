@@ -150,6 +150,12 @@ function LAYERS(state = defaultState.LAYERS, action) {
 
 function AUTH(state = defaultState.AUTH, action) {
   switch (action.type) {
+    case types.INIT_AUTH: {
+      return {
+        ...state,
+        ...action.config,
+      };
+    }
     case types.LOGIN_REQUEST: {
       return {
         ...state,

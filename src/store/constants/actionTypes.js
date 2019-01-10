@@ -28,6 +28,7 @@ export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 export const TOGGLE_CATEGORIES = 'TOGGLE_CATEGORIES';
 
 // Auth action types
+export const INIT_AUTH = 'INIT_AUTH';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';

@@ -206,6 +206,11 @@ export const getCurrentState = () => returnState;
 // if reponse is 200/OK we dispatch loginSuccess
 // else we dispatch loginError
 
+export const initAuth = config => ({
+  type: types.INIT_AUTH,
+  config,
+});
+
 export const requestLogin = (creds) => {
   return {
     type: types.LOGIN_REQUEST,
@@ -325,4 +330,5 @@ export default {
   receiveToken,
   receiveLogin,
   toggleCategories,
+  initAuth,
 };
