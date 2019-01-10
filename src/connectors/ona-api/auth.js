@@ -15,7 +15,7 @@ import api from './api';
 // }
 
 // URL Constructor Reference - can be imported and/or encrypted
-export const oauthURL = (clientID, callback) => {
+export const oauthURL = (clientID, callback, baseURL) => {
   // const authURL = {
   //   apiBase: 'https://api.ona.io',
   //   apiPath: '/o/authorize/',
@@ -25,8 +25,8 @@ export const oauthURL = (clientID, callback) => {
   //   state: 'abc',
   //   scope: 'read',
   // };
-  const apiBase = 'https://api.ona.io';
-  const apiPath = '/o/authorize/';
+  const apiBase = baseURL || 'https://api.ona.io/';
+  const apiPath = 'o/authorize/';
   const responseType = 'token';
   const state = 'abc';
   const scope = 'read';

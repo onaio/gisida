@@ -2,11 +2,11 @@ import { parseCSV } from './../../utils/files';
 
 // Map of ONA API Endpoints
 const apiMap = {
-  data: 'https://api.ona.io/api/v1/data',
-  user: 'https://api.ona.io/api/v1/user',
-  forms: 'https://api.ona.io/api/v1/forms',
-  media: 'https://api.ona.io/api/v1/media',
-  metadata: 'https://api.ona.io/api/v1/metadata',
+  data: 'api/v1/data',
+  user: 'api/v1/user',
+  forms: 'api/v1/forms',
+  media: 'api/v1/media',
+  metadata: 'api/v1/metadata',
 };
 
 // Generate Headers for API Fetch
@@ -21,10 +21,11 @@ const apiHeaders = (config) => {
 
 // Generate Request for API Fetch
 const apiRequest = (config, headers) => {
+  const base = config.base || 'https://api.ona.io/';
   const reqConfig = { method: config.method || 'GET' };
   if (headers) reqConfig.headers = headers;
 
-  let apiPath = apiMap[config.endpoint];
+  let apiPath = `${base}${apiMap[config.endpoint]}`;
   if (config.extraPath) apiPath = `${apiPath}/${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;
 

@@ -62,8 +62,9 @@ class SupAuthZ {
   }
 
   // Method called from callback to initiate Promise chain - willAuthorize is optional
-  async authorizeUser(APP, accessToken, willAuthorize) {
+  async authorizeUser(APP, AUTH, accessToken, willAuthorize) {
     this.config = APP;
+    this.auth = AUTH;
     this.token = accessToken;
     localStorage.setItem('access_token', accessToken);
     this.user = await this.getUser();
@@ -101,6 +102,7 @@ class SupAuthZ {
     const User = await ONA.API.fetch({
       token: self.token,
       endpoint: 'user',
+      base: self.auth && self.auth.apiBase,
     }, user => user);
     return User;
   }
@@ -115,11 +117,13 @@ class SupAuthZ {
       : files.fetchJSON(path);
   }
   async getMediaAuthConfig(pk) {
+    const self = this;
     return ONA.API.fetch({
       token: this.token,
       endpoint: 'metadata',
       mimeType: 'text/csv',
       extraPath: `${pk}.csv`,
+      base: self.auth && self.auth.apiBase,
     }).then(({ user }) => {
       if ((user.length === 0) || (user.detail && user.detail === 'Not found.')) {
         return false;
