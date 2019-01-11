@@ -171,7 +171,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
         const dataCopy = d;
         return {
           ...dataCopy,
-          date: new Date(d.period.split(split)[chunk]),
+          date: new Date((dataCopy.properties || dataCopy).period.split(split)[chunk]),
         };
       });
       sortedData = sortedDataDate.sort(comparator);
