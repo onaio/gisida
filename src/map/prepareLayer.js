@@ -103,7 +103,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layerObj.source.data = cloneDeep(data);
     layerObj.mergedData = cloneDeep(data);
   }
-  layerObj = addLayer(layerObj, mapConfig);
+  layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
   const sliderLayers = getSliderLayers(layers);
@@ -164,11 +164,20 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
             buildLabels(layerObj, newTimeSeries[layerObj.id], period);
         });
       }
-
       dispatch(receiveData(mapId, layerObj, newTimeSeries));
     });
   } else {
-    layerObj.labels.labels = buildLabels(layerObj);
+    const newLabels = {};
+    if (doUpdateTsLayer) {
+      newTimeSeries[layerObj.id].period.forEach((p) => {
+        newLabels[p] = buildLabels(layerObj, newTimeSeries[layerObj.id], p);
+      });
+      layerObj.labels.labels = {
+        ...newLabels,
+      };
+    } else {
+      layerObj.labels.labels = buildLabels(layerObj);
+    }
     dispatch(receiveData(mapId, layerObj, newTimeSeries));
   }
 }

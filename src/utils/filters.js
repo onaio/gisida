@@ -8,7 +8,6 @@ export function processFilters(layerData, filterOptions, isOr) {
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
-
   const combinedData = [];
 
   let datum;

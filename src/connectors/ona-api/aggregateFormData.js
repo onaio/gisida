@@ -2,8 +2,9 @@ import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 import csvToGEOjson from '../../map/csvToGEOjson';
+import { comparator } from '../../utils/files';
 
-function processFormData(formData, layerObj) {
+export function processFormData(formData, layerObj) {
   let data = Array.isArray(formData) ? [...formData] : { ...formData };
   const indicatorField = layerObj.property;
   const aggregateOptions = layerObj.aggregate;
@@ -90,20 +91,6 @@ function processFormData(formData, layerObj) {
 
   // Map to store coordinates of each groupBy item if applicable
   const groupProps = {};
-
-  // Sort periods in chronological order
-  function comparator(a, b) {
-    if (a.date) {
-      return Date.parse(a.date) - Date.parse(b.date);
-    }
-    if (a[0] < b[0]) return -1;
-    if (a[0] > b[0]) return 1;
-    if (a[1] < b[1]) return -1;
-    if (a[1] > b[1]) return 1;
-    if (a[2] < b[2]) return -1;
-    if (a[2] > b[2]) return 1;
-    return 0;
-  }
 
   if (isUsingToday) {
     availablePeriods = availablePeriods
@@ -326,7 +313,7 @@ function assignLocationIDs(data, locations) {
   return dataWithLocationID;
 }
 
-export default function aggregateFormData(layerData, locations, filterOptions) {
+export default function aggregateFormData(layerData, locations, filterOptions, isOr) {
   const layer = layerData;
   let data = layerData.mergedData;
   let aggregatedData = [];
@@ -337,7 +324,7 @@ export default function aggregateFormData(layerData, locations, filterOptions) {
   }
 
   // Process filters with filterOptions
-  data = processFilters(layer, filterOptions);
+  data = processFilters(layer, filterOptions, isOr);
 
   // Process data
   aggregatedData = processFormData(data, layer);
