@@ -233,12 +233,13 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 function fetchMultipleSources(mapId, layer, dispatch) {
   const layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
+  const { APP } = currentState;
   let q = d3.queue();
 
   const filePaths = layerObj.source.data;
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
-      q = q.defer(getData, filePath, layerObj.properties, currentState.APP.apiAccessToken);
+      q = q.defer(getData, filePath, layerObj.properties, APP);
     } else q = q.defer(d3.csv, filePath);
   });
 
