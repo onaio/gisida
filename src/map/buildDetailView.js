@@ -104,8 +104,10 @@ const buildParsedBasicDetailItem = (detail, properties) => {
     alt = parseDetailAlt(detail.alt, properties);
   }
 
+  // 4) if extraInfo is true use alt text to prefix basic info value
+  const { valuePrefix } = detail;
   return {
-    value, icon, iconColor, alt,
+    value, icon, iconColor, alt, valuePrefix,
   };
 };
 
