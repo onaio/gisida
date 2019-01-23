@@ -207,9 +207,6 @@ export function createMapReducer(mapId) {
           const layer = state.layers[layerId];
           const updatedTimeSeries = {
             ...state.timeseries,
-            visibility: layer
-              && layer.aggregate
-              && layer.aggregate.timeseries ? !layer.visible : false,
           };
           const updatedLayers = {
             ...state.layers,
@@ -255,6 +252,8 @@ export function createMapReducer(mapId) {
             layers: updatedLayers,
             reloadLayers: Math.random(),
             showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
+            visibleLayerId: updatedLayers[layerId].visible && layer.credit
+              ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             primaryLayer: updatedLayers[layerId].visible && layer.credit
               ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,

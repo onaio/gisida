@@ -33,7 +33,8 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
-  const clusters = clusterLayer && clusterLayer.stops && nextIndex ?
+  const clusters = clusterLayer && clusterLayer.stops && nextIndex
+   && clusterLayer.stops[nextIndex] ?
     [...new Set(clusterLayer.stops[nextIndex]
       .map(d => d[1]))].length : layer.clusters;
   const colorsStops = [];
