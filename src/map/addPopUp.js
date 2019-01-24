@@ -17,7 +17,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     popup.remove();
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, activeLayerId } = currentState[mapId];
+    const { layers, timeseries } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -60,12 +60,15 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           let row;
           for (let r = 0; r < data.length; r += 1) {
             row = { ...(data[r].properties || data[r]) };
-            const rowItem = row;
+            const rowItem = {
+              ...row,
+              ...feature.properties,
+            };
             // if row matches property
             if ((layer.popup.join
-              && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+              && (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]))
               || (!layer.popup.join
-              && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
+              && (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
               const found = [];
               const rxp = /{{([^}]+)}/g;
               const str = layer.labels ? layer.labels.label : null;
