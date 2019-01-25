@@ -16,6 +16,36 @@ function APP(state = defaultState.APP, action) {
   }
 }
 
+function LOC(state = defaultState.LOC, action) {
+  switch (action.type) {
+    case types.INIT_LOC:
+      return {
+        ...state,
+        locations: { ...action.config },
+        location: {
+          ...Object.keys(action.config).map(d => action.config[d]).filter(d => d.default === true)
+        },
+        doUpdateMap: state.doUpdateMap,
+        default: Object.keys(action.config).find(d => action.config[d].default === true),
+        active: Object.keys(action.config).find(d => action.config[d].default === true),
+      };
+    case types.SET_LOCATION: {
+      const { loc, mapId } = action;
+      const { active, locations } = state;
+      return {
+        ...state,
+        doUpdateMap: mapId,
+        active: typeof locations[loc] !== 'undefined' ? loc : active,
+        location: typeof locations[loc] !== 'undefined'
+          ? { ...locations[loc] }
+          : { ...state.location },
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
     case types.INIT_STYLES: {
@@ -484,5 +514,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

@@ -14,6 +14,13 @@ const defaultState = {
     appName: 'React Gisida',
     loaded: false,
   },
+  LOC: {
+    default: null,
+    active: null,
+    doUpdateMap: false,
+    location: null,
+    locations: null,
+  },
   STYLES: [
     {
       label: 'Satelitte',

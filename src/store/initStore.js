@@ -66,6 +66,7 @@ export function loadLayers(mapId, dispatch, layers) {
 // Add config to redux store
 function addConfigToStore(store, config) {
   store.dispatch(actions.initApp(config.APP));
+  store.dispatch(actions.initLoc(config.LOC));
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
