@@ -61,7 +61,7 @@ const parseDetailAlt = (spec, datum) => {
 const parseDetailIcon = (spec, datum) => {
   // 1) if icon is a simple string, return it
   if (typeof spec === 'string') {
-    return spec;
+    return `glyphicon glyphicon-${spec}`;
   }
 
   // 2) if icon is an options object, parse and return
