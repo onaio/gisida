@@ -255,8 +255,26 @@ export function createMapReducer(mapId) {
             });
           }
 
-          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
-            && !updatedLayers[l].parent);
+          const activeLayerIds = [
+            ...state.activeLayerIds,
+          ];
+
+          const activeLayerObj = updatedLayers[layerId];
+
+          const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
+          const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
+
+          if (!updatedLayers[layerId].parent) {
+            if (addLayerToList) {
+              activeLayerIds.push(layerId);
+            } else if (removeLayerFromList) {
+              const index = activeLayerIds.indexOf(layerId);
+              if (index > -1) {
+                activeLayerIds.splice(index, 1);
+              }
+            }
+          }
+
           const activeSubLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
             && updatedLayers[l].parent);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
@@ -287,6 +305,7 @@ export function createMapReducer(mapId) {
             primaryLayer: updatedLayers[layerId].visible && layer.credit
               ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
+            activeLayerIds,
             filter: {
               ...state.filter,
               layerId: filterLayerId,

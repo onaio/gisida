@@ -61,6 +61,7 @@ const defaultState = {
     detailView: null,
     showProfile: false,
     showFilterPanel: false,
+    activeLayerIds: [],
     activeLayerId: '',
     lastLayerSelected: '',
     primaryLayer: '',
