@@ -65,7 +65,7 @@ const parseDetailIconClassName = (spec) => {
     || false;
 
   return `${spec.classPrefix || ''}${iconClassName}${spec.classSuffix || ''}`;
-}
+};
 
 const parseDetailIcon = (spec, datum) => {
   // 1) if icon is a simple string, return it
@@ -78,7 +78,7 @@ const parseDetailIcon = (spec, datum) => {
     // Generate full icon className, checking glpyh, FA, and className spec props
     return parseDetailIconClassName(spec);
   }
-  
+
   // 3) if icon is an options object and prop, categorically parse and return
   if (spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
     return {
