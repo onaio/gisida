@@ -89,7 +89,7 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const cluster = (Array.isArray(clusters) && clusters)
     || ckmeansCluster;
 
-  const currentState = dispatch(getCurrentState());
+  const currentState = dispatch && dispatch(getCurrentState());
   if (currentState && currentState.FILTER &&
     currentState.FILTER[clusterLayer.id] &&
     currentState.FILTER[clusterLayer.id].doUpdate) {
