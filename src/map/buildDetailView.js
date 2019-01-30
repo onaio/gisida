@@ -108,7 +108,7 @@ const buildValueAffix = (affix, props) => {
   }
   return affixStr;
 };
-const buildParsedBasicDetailItem = (detail, properties) => {
+export const buildParsedBasicDetailItem = (detail, properties) => {
   let icon;
   let iconColor;
   let alt;
