@@ -196,6 +196,11 @@ export const setLocation = (mapId, loc) => ({
   mapId,
 });
 
+export const toggleMapLocation = loc => ({
+  type: types.SET_LOCATION,
+  loc,
+});
+
 export default {
   initApp,
   initStyles,
@@ -227,4 +232,5 @@ export default {
   locationUpdated,
   setLocation,
   initLoc,
+  toggleMapLocation,
 };

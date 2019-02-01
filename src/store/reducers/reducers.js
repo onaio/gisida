@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
+import actions from '../actions/actions';
 
 
 function APP(state = defaultState.APP, action) {
@@ -24,6 +25,7 @@ function LOC(state = defaultState.LOC, action) {
         locations: { ...action.config },
         location: {
           ...Object.keys(action.config).map(d => action.config[d]).filter(d => d.default === true),
+          doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
         default: Object.keys(action.config).find(d => action.config[d].default === true),
@@ -37,8 +39,18 @@ function LOC(state = defaultState.LOC, action) {
         doUpdateMap: mapId,
         active: typeof locations[loc] !== 'undefined' ? loc : active,
         location: typeof locations[loc] !== 'undefined'
-          ? { ...locations[loc] }
-          : { ...state.location },
+          ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+          : { ...state.location, doUpdateLOC: false },
+      };
+    }
+    case types.TOGGLE_MAP_LOCATION: {
+      const { loc } = actions;
+      const { locations } = state;
+      return {
+        ...state,
+        location: typeof locations[loc] !== 'undefined' ?
+          { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC } :
+          { ...state.location, doUpdateLOC: false },
       };
     }
     default:
