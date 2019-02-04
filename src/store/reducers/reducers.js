@@ -24,7 +24,7 @@ function LOC(state = defaultState.LOC, action) {
         ...state,
         locations: { ...action.config },
         location: {
-          ...Object.keys(action.config).map(d => action.config[d]).filter(d => d.default === true),
+          ...Object.keys(action.config).map(d => action.config[d]).find(d => d.default === true),
           doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
