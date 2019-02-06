@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
+import actions from '../actions/actions';
 
 
 function APP(state = defaultState.APP, action) {
@@ -11,6 +12,47 @@ function APP(state = defaultState.APP, action) {
         ...action.config,
         loaded: true,
       };
+    default:
+      return state;
+  }
+}
+
+function LOC(state = defaultState.LOC, action) {
+  switch (action.type) {
+    case types.INIT_LOC:
+      return {
+        ...state,
+        locations: { ...action.config },
+        location: {
+          ...Object.keys(action.config).map(d => action.config[d]).find(d => d.default === true),
+          doUpdateLOC: false,
+        },
+        doUpdateMap: state.doUpdateMap,
+        default: Object.keys(action.config).find(d => action.config[d].default === true),
+        active: Object.keys(action.config).find(d => action.config[d].default === true),
+      };
+    case types.SET_LOCATION: {
+      const { loc, mapId } = action;
+      const { active, locations } = state;
+      return {
+        ...state,
+        doUpdateMap: mapId,
+        active: typeof locations[loc] !== 'undefined' ? loc : active,
+        location: typeof locations[loc] !== 'undefined'
+          ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+          : { ...state.location, doUpdateLOC: false },
+      };
+    }
+    case types.TOGGLE_MAP_LOCATION: {
+      const { loc } = actions;
+      const { locations } = state;
+      return {
+        ...state,
+        location: typeof locations[loc] !== 'undefined' ?
+          { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC } :
+          { ...state.location, doUpdateLOC: false },
+      };
+    }
     default:
       return state;
   }
@@ -225,8 +267,26 @@ export function createMapReducer(mapId) {
             });
           }
 
-          const activeLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
-            && !updatedLayers[l].parent);
+          const activeLayerIds = [
+            ...state.activeLayerIds,
+          ];
+
+          const activeLayerObj = updatedLayers[layerId];
+
+          const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
+          const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
+
+          if (!updatedLayers[layerId].parent) {
+            if (addLayerToList) {
+              activeLayerIds.push(layerId);
+            } else if (removeLayerFromList) {
+              const index = activeLayerIds.indexOf(layerId);
+              if (index > -1) {
+                activeLayerIds.splice(index, 1);
+              }
+            }
+          }
+
           const activeSubLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
             && updatedLayers[l].parent);
           const activeFilterLayerIds = activeLayerIds.filter(l =>
@@ -257,6 +317,7 @@ export function createMapReducer(mapId) {
             primaryLayer: updatedLayers[layerId].visible && layer.credit
               ? layer.id : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
+            activeLayerIds,
             filter: {
               ...state.filter,
               layerId: filterLayerId,
@@ -484,5 +545,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

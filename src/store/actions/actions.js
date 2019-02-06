@@ -5,6 +5,11 @@ export const initApp = config => ({
   config,
 });
 
+export const initLoc = config => ({
+  type: types.INIT_LOC,
+  config,
+});
+
 export const initStyles = (styles, mapConfig) => ({
   type: types.INIT_STYLES,
   styles,
@@ -180,9 +185,20 @@ export function returnState(dispatch, getState) {
 
 export const getCurrentState = () => returnState;
 
-export const locationUpdated = (mapId) => ({
+export const locationUpdated = mapId => ({
   type: types.LOCATION_UPDATED,
   mapId,
+});
+
+export const setLocation = (mapId, loc) => ({
+  type: types.SET_LOCATION,
+  loc,
+  mapId,
+});
+
+export const toggleMapLocation = loc => ({
+  type: types.SET_LOCATION,
+  loc,
 });
 
 export default {
@@ -214,4 +230,7 @@ export default {
   triggerSpinner,
   toggleCategories,
   locationUpdated,
+  setLocation,
+  initLoc,
+  toggleMapLocation,
 };
