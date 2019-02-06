@@ -22,6 +22,7 @@ gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
 gisida.processFormData = require('./connectors/ona-api/aggregateFormData').processFormData;
 gisida.parseData = require('./utils/parseData').default;
+gisida.lngLat = require('./utils/lngLat').default;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
