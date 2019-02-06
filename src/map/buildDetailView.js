@@ -58,16 +58,31 @@ const parseDetailAlt = (spec, datum) => {
   return false;
 };
 
+const parseDetailIconClassName = (spec) => {
+  const iconClassName = (spec.glyph && `glyphicon glyphicon-${spec.glyph}`)
+    || (spec.FA && `fas fa-${spec.FA}`)
+    || spec.className
+    || false;
+
+  return `${spec.classPrefix || ''}${iconClassName}${spec.classSuffix || ''}`;
+};
+
 const parseDetailIcon = (spec, datum) => {
   // 1) if icon is a simple string, return it
   if (typeof spec === 'string') {
-    return spec;
+    return `glyphicon glyphicon-${spec}`;
   }
 
-  // 2) if icon is an options object, parse and return
+  // 2) if icon is an options object, but no prop then parse className
+  if (typeof spec === 'object' && !spec.prop) {
+    // Generate full icon className, checking glpyh, FA, and className spec props
+    return parseDetailIconClassName(spec);
+  }
+
+  // 3) if icon is an options object and prop, categorically parse and return
   if (spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
     return {
-      icon: spec[datum[spec.prop]].glyph,
+      icon: parseDetailIconClassName(spec),
       color: spec[datum[spec.prop]].color || false,
       alt: spec[datum[spec.prop]].alt
         ? parseDetailAlt(spec[datum[spec.prop]].alt, datum)
@@ -75,14 +90,30 @@ const parseDetailIcon = (spec, datum) => {
     };
   }
 
-  // 3) if all else fails, return false
+  // 4) if all else fails, return false
   return false;
 };
 
-const buildParsedBasicDetailItem = (detail, properties) => {
+const buildValueAffix = (affix, props) => {
+  let affixStr;
+  if (!affix) {
+    return null;
+  }
+  if (typeof affix !== 'string') {
+    // if obj with prop field or mustache string, pass it into parseDetailview
+    // else get string as defined in detail view spec
+    affixStr = parseDetailValue(affix, props);
+  } else {
+    affixStr = affix;
+  }
+  return affixStr;
+};
+export const buildParsedBasicDetailItem = (detail, properties) => {
   let icon;
   let iconColor;
   let alt;
+  let valPrefix;
+  let valSuffix;
 
   // 1) Parse list item innerHTML (text) from prop(s)
   const value = parseDetailValue(detail.value, properties);
@@ -104,8 +135,15 @@ const buildParsedBasicDetailItem = (detail, properties) => {
     alt = parseDetailAlt(detail.alt, properties);
   }
 
+  // 4) parse affixes (suffix and prefix) into HTML strings if defined in detail view spec
+  const { useAltAsPrefix } = detail;
+  if (detail.value.prefix || detail.value.suffix) {
+    const { suffix, prefix } = detail.value;
+    valPrefix = buildValueAffix(prefix, properties);
+    valSuffix = buildValueAffix(suffix, properties);
+  }
   return {
-    value, icon, iconColor, alt,
+    value, icon, iconColor, alt, prefix: valPrefix, suffix: valSuffix, useAltAsPrefix,
   };
 };
 

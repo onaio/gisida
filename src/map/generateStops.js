@@ -33,7 +33,8 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
-  const clusters = clusterLayer && clusterLayer.stops && nextIndex ?
+  const clusters = clusterLayer && clusterLayer.stops && nextIndex
+   && clusterLayer.stops[nextIndex] ?
     [...new Set(clusterLayer.stops[nextIndex]
       .map(d => d[1]))].length : layer.clusters;
   const colorsStops = [];
@@ -88,7 +89,7 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const cluster = (Array.isArray(clusters) && clusters)
     || ckmeansCluster;
 
-  const currentState = dispatch(getCurrentState());
+  const currentState = dispatch && dispatch(getCurrentState());
   if (currentState && currentState.FILTER &&
     currentState.FILTER[clusterLayer.id] &&
     currentState.FILTER[clusterLayer.id].doUpdate) {
@@ -171,13 +172,26 @@ export default function (layer, timefield, dispatch, nextIndex) {
         const dataCopy = d;
         return {
           ...dataCopy,
-          date: new Date((dataCopy.properties || dataCopy).period.split(split)[chunk]),
+          date: new Date((dataCopy.properties ||
+           dataCopy).period.split(split)[chunk]),
         };
       });
       sortedData = sortedDataDate.sort(comparator);
+    } else if (layer.aggregate && !layer.aggregate['date-parse']) {
+      sortedData = rows.sort((a, b) => {
+        if (!Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
+          return new Date((a.properties ||
+             a)[timefield]) - new Date((b.properties || b)[timefield]);
+        } else if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
+          return 1;
+        } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
+          return -1;
+        }
+        return 0;
+      });
     }
   } else {
-    
+    sortedData = [...rows];
   }
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);

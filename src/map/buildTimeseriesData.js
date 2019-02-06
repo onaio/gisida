@@ -1,5 +1,4 @@
 import getLastIndex from '../utils/getLastIndex';
-import { getCurrentState } from '../store/actions/actions';
 
 export default function buildTimeseriesData(
   layer,
@@ -8,8 +7,6 @@ export default function buildTimeseriesData(
   timeseries,
   loadedlayers,
   doUpdateTsLayer,
-  dispatch,
-  mapId,
 ) {
   const layerObj = { ...layer };
   // if (layerObj.aggregate && layerObj.aggregate.timeseries) {
@@ -36,8 +33,6 @@ export default function buildTimeseriesData(
       layers.push(loadedlayers[key]);
     }
   });
-  const currentState = dispatch(getCurrentState());
-  const { primaryLayer } = currentState[mapId];
   const timeseriesMap = {};
   let layerId;
   let index;
@@ -73,10 +68,8 @@ export default function buildTimeseriesData(
 
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
-
-    if (activeLayers.includes(layerId)
-      && (!timeseries[layerId] || doUpdateTsLayer)
-      && layerId === primaryLayer) {
+    if (layerObj.id === layerId && !layerObj.layers && activeLayers.includes(layerId)
+      && (!timeseries[layerId] || doUpdateTsLayer)) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
       if (layers[index] && layers[index].visible === true &&
