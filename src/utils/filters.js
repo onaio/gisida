@@ -46,13 +46,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
-          if (Array.isArray(Data)) {
-            Data.filter(filterProcessor).map(d => combinedData.push(d));
-          } else {
-            Object.keys(Data).map(d => Data[d])
-              .filter(e => filterProcessor(e)).map(c => combinedData.push(c));
-            data = [...new Set([...combinedData])]; // achieve a distinct union
-          }
+          (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
           data = data.filter(filterProcessor);
         }
