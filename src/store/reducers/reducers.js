@@ -196,6 +196,81 @@ function LAYERS(state = defaultState.LAYERS, action) {
   }
 }
 
+function AUTH(state = defaultState.AUTH, action) {
+  switch (action.type) {
+    case types.INIT_AUTH: {
+      return {
+        ...state,
+        ...action.config,
+      };
+    }
+    case types.LOGIN_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        user: action.creds,
+      };
+    }
+
+    case types.RECEIVE_TOKEN: {
+      return {
+        ...state,
+        token: action.token,
+      };
+    }
+
+    case types.LOGIN_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: true,
+        errorMessage: '',
+        userInfo: {
+          ...action.user,
+        },
+      };
+    }
+
+    case types.LOGIN_FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: action.message,
+      };
+    }
+
+    case types.LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        userInfo: null,
+      };
+    }
+
+    case types.RECEIVE_FORMS: {
+      return {
+        ...state,
+        forms: [
+          ...action.forms,
+        ],
+      };
+    }
+
+    case types.FETCH_FORMS_ERROR: {
+      return {
+        ...state,
+        formsError: action.message,
+      };
+    }
+
+    default:
+      return state;
+  }
+}
+
 export function createMapReducer(mapId) {
   const initialState = defaultState.MAP;
   initialState.mapId = mapId;
@@ -205,7 +280,7 @@ export function createMapReducer(mapId) {
         case types.MAP_RENDERED:
           return {
             ...state,
-            isRendered: true,
+            isRendered: action.isRendered,
           };
         case types.MAP_LOADED:
           return {
@@ -545,5 +620,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'), AUTH,
 };

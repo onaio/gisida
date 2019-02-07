@@ -68,6 +68,10 @@ const defaultState = {
     primarySubLayer: '',
     reloadLayerId: null,
   },
+  AUTH: {
+    isFetching: false,
+    isAuthenticated: !!localStorage.getItem('access_token'),
+  },
   FILTER: {},
   LAYERS: {
     layers: [],

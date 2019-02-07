@@ -1,4 +1,5 @@
 import * as types from '../constants/actionTypes';
+import { ONAoauth } from '../../connectors/ona-api/auth';
 
 export const initApp = config => ({
   type: types.INIT_APP,
@@ -183,6 +184,27 @@ export function returnState(dispatch, getState) {
   return getState();
 }
 
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const loginRequest = credentials => ({
+  type: types.LOGIN_REQUEST,
+  isAuthenticated: false,
+  credentials,
+});
+
+export const loginSuccess = user => ({
+  type: types.LOGIN_SUCCESS,
+  isAuthenticated: true,
+});
+
+export const loginFailure = errorMessage => ({
+  types: types.LOGIN_FAILURE,
+  isAuthenticated: false,
+  errorMessage,
+});
+
 export const getCurrentState = () => returnState;
 
 export const locationUpdated = mapId => ({
@@ -200,6 +222,105 @@ export const toggleMapLocation = loc => ({
   type: types.SET_LOCATION,
   loc,
 });
+
+// Auth actions
+
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const initAuth = config => ({
+  type: types.INIT_AUTH,
+  config,
+});
+
+export const requestLogin = (creds) => {
+  return {
+    type: types.LOGIN_REQUEST,
+    isFetching: true,
+    isAuthenticated: false,
+    creds,
+  };
+};
+
+export const receiveLogin = (user) => {
+  return {
+    type: types.LOGIN_SUCCESS,
+    isFetching: false,
+    isAuthenticated: true,
+    user,
+  };
+};
+
+export const loginError = (message) => {
+  return {
+    type: types.LOGIN_FAILURE,
+    isFetching: false,
+    isAuthenticated: false,
+    message,
+  };
+};
+
+export const receiveLogout = () => {
+  return {
+    type: types.LOGOUT_SUCCESS,
+    isFetching: false,
+    isAuthenticated: false,
+  }
+}
+
+export const receiveToken = (token) => {
+  return {
+    type: types.RECEIVE_TOKEN,
+    token,
+  };
+};
+
+export const receiveForms = (forms) => {
+  return {
+    type: types.RECEIVE_FORMS,
+    forms,
+  };
+};
+
+export const fetchFormsError = (message) => {
+  return {
+    type: types.FETCH_FORMS_ERROR,
+    message,
+  };
+};
+
+// todo - Migrate to ONA Connector?
+export const loginUser = (token) => {
+  const reqConfig = {
+    token,
+    endpoint: 'user',
+  };
+
+  return (dispatch) => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin(token));
+    return ONAoauth(reqConfig, token, dispatch);
+  };
+};
+
+export const getUserForms = (token) => {
+  const reqConfig = {
+    token,
+    endpoint: 'forms',
+  };
+
+  return dispatch => fetchAPIForms(reqConfig, dispatch);
+};
+
+export const logoutUser = () => {
+  return (dispatch) => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('state');
+    dispatch(receiveLogout());
+    window.location.reload();
+  };
+};
 
 export default {
   initApp,
@@ -228,9 +349,13 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
+  loginUser,
+  receiveToken,
+  receiveLogin,
   toggleCategories,
   locationUpdated,
   setLocation,
   initLoc,
   toggleMapLocation,
+  initAuth,
 };

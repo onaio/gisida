@@ -65,6 +65,7 @@ export function loadLayers(mapId, dispatch, layers) {
 
 // Add config to redux store
 function addConfigToStore(store, config) {
+  if (config.AUTH) store.dispatch(actions.initAuth(config.AUTH));
   store.dispatch(actions.initApp(config.APP));
   if (config.LOC) {
     store.dispatch(actions.initLoc(config.LOC));
@@ -98,7 +99,11 @@ export default function initStore(customReducers = {}) {
   // Get combined reducer from registry
   const reducer = combine(reducerRegistry.getReducers());
   // Create initial store
-  const store = createStore(reducer, applyMiddleware(thunk));
+  const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    applyMiddleware(thunk),
+  );
 
   // Replace the store's reducer whenever a new reducer is registered.
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));

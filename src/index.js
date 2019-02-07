@@ -1,3 +1,4 @@
+if (!global._babelPolyfill) require('babel-polyfill');
 const gisida = {};
 
 gisida.version = require('../package.json').version;
@@ -15,14 +16,24 @@ gisida.mergeFilters = require('./map/mergeFilters').default;
 gisida.generateFilterOptions = require('./utils/filters').generateFilterOptions;
 gisida.processFilters = require('./utils/filters').processFilters;
 gisida.generateStops = require('./map/generateStops').default;
+
 gisida.formatNum = require('./utils/formatNum').default;
 gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
+gisida.SupAuth = require('./utils/supAuth').default;
+
+gisida.ONA = require('./connectors/ona-api/ona').default;
+gisida.onaAPI = require('./connectors/ona-api/api').default;
+gisida.onaAuth = require('./connectors/ona-api/auth').default;
 gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
 gisida.processFormData = require('./connectors/ona-api/aggregateFormData').processFormData;
 gisida.parseData = require('./utils/parseData').default;
 gisida.lngLat = require('./utils/lngLat').default;
+gisida.parseData = require('./utils/parseData').default;
+
+gisida.history = require('./helpers/history').default;
+gisida.oauthURL = require('./connectors/ona-api/auth').oauthURL;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
