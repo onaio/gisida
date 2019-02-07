@@ -240,7 +240,19 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
       q = q.defer(getData, filePath, layerObj.properties, APP);
-    } else q = q.defer(d3.csv, filePath);
+    } else if (typeof filePath === 'object' && filePath !== null && filePath.type === 'superset') {
+      // add in SUPERSET.API promise to q.defer
+      switch (filePath.type) {
+        case 'superset': 
+          // defer SUPERSET.API promise to q
+          break;
+        case 'onadata': 
+          // defer `getData` to q
+          break;
+        default:
+          break;
+      }
+    } else if (typeof filePath === 'string') q = q.defer(d3.csv, filePath);
   });
 
   q.awaitAll((error, Data) => {
@@ -466,6 +478,21 @@ export default function prepareLayer(
     // if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {
       readData(mapId, layerObj, dispatch, doUpdateTsLayer);
+    } else
+    // if unprocessed source config object, handle it
+    if (typeof layerObj.source.data === 'object' && layerObj.source.data !== null) {
+       // add in SUPERSET.API promise to q.defer
+       switch (filePath.type) {
+        case 'superset': 
+          // request data from SUPERSET.API, call renderData()
+          break;
+        case 'onadata': 
+          // request data from ONA.API, call renderData()
+          break;
+        default:
+          // throw an error?
+          break;
+      }
     } else
     // grab from multiple sources
     if (layerObj.source.data instanceof Array &&
