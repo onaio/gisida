@@ -34,4 +34,6 @@ gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsed
 gisida.buildFilterState = require('./filter/buildFilterState').default;
 gisida.clearFilterState = require('./filter/clearFilterState').default;
 
+gisida.SUPERSET = require('./connectors/superset/index').default;
+
 module.exports = gisida;
