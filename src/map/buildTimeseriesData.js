@@ -1,5 +1,4 @@
 import getLastIndex from '../utils/getLastIndex';
-import { getCurrentState } from '../store/actions/actions';
 
 export default function buildTimeseriesData(
   layer,
@@ -8,26 +7,24 @@ export default function buildTimeseriesData(
   timeseries,
   loadedlayers,
   doUpdateTsLayer,
-  dispatch,
-  mapId,
 ) {
   const layerObj = { ...layer };
-  if (layerObj.aggregate && layerObj.aggregate.timeseries) {
-    const tsField = layerObj.aggregate.timeseries.field;
-    const sortedData = (layerObj.source.data || layerObj.source.data.features).sort((a, b) => {
-      if ((a.properties || a)[tsField] > (b.properties || b)[tsField]) {
-        return 1;
-      } else if ((b.properties || b)[tsField] > (a.properties || a)[tsField]) {
-        return -1;
-      }
-      return 0;
-    });
-    if (layerObj.source.data && layerObj.source.data.features) {
-      layerObj.source.data.features = sortedData;
-    } else {
-      layerObj.source.data = sortedData;
-    }
-  }
+  // if (layerObj.aggregate && layerObj.aggregate.timeseries) {
+  //   const tsField = layerObj.aggregate.timeseries.field;
+  //   const sortedData = (layerObj.source.data || layerObj.source.data.features).sort((a, b) => {
+  //     if ((a.properties || a)[tsField] > (b.properties || b)[tsField]) {
+  //       return 1;
+  //     } else if ((b.properties || b)[tsField] > (a.properties || a)[tsField]) {
+  //       return -1;
+  //     }
+  //     return 0;
+  //   });
+  //   if (layerObj.source.data && layerObj.source.data.features) {
+  //     layerObj.source.data.features = sortedData;
+  //   } else {
+  //     layerObj.source.data = sortedData;
+  //   }
+  // }
   const activeLayers = [];
   const layers = [];
   Object.keys(loadedlayers).forEach((key) => {
@@ -36,8 +33,6 @@ export default function buildTimeseriesData(
       layers.push(loadedlayers[key]);
     }
   });
-  const currentState = dispatch(getCurrentState());
-  const { primaryLayer } = currentState[mapId];
   const timeseriesMap = {};
   let layerId;
   let index;
@@ -73,10 +68,8 @@ export default function buildTimeseriesData(
 
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
-
-    if (activeLayers.includes(layerId)
-      && (!timeseries[layerId] || doUpdateTsLayer)
-      && layerId === primaryLayer) {
+    if (layerObj.id === layerId && !layerObj.layers && activeLayers.includes(layerId)
+      && (!timeseries[layerId] || doUpdateTsLayer)) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
       if (layers[index] && layers[index].visible === true &&

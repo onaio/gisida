@@ -17,7 +17,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     popup.remove();
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, activeLayerId } = currentState[mapId];
+    const { layers, timeseries } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -32,8 +32,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     const features = map.queryRenderedFeatures(e.point, {
       layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
     }).filter(f =>
-      f.layer && f.layer.id === activeLayerId && layers[f.layer.id] && layers[f.layer.id].popup);
-
+      f.layer && layers[f.layer.id] && !layers[f.layer.id].layers && layers[f.layer.id].popup);
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
@@ -61,12 +60,15 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           let row;
           for (let r = 0; r < data.length; r += 1) {
             row = { ...(data[r].properties || data[r]) };
-            const rowItem = row;
+            const rowItem = {
+              ...row,
+              ...feature.properties,
+            };
             // if row matches property
             if ((layer.popup.join
-              && row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])
+              && (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]))
               || (!layer.popup.join
-              && row[layer.source.join[1]] === feature.properties[layer.source.join[0]])) {
+              && (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
               const found = [];
               const rxp = /{{([^}]+)}/g;
               const str = layer.labels ? layer.labels.label : null;
@@ -76,8 +78,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               // while (curMatch = rxp.exec(str)) {
               //   found.push(curMatch[1]);
               // }
-              found.forEach((f) => {
-                rowItem[`${f}`] = rowItem[`${f}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              found.forEach((i) => {
+                rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
               });
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
@@ -109,7 +111,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       // Remove pop up if no features under mouse pointer
       content = null;
       popup.remove();
+      return false;
     }
+    return true;
   });
 
   // add popups for marker charts

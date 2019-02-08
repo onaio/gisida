@@ -8,13 +8,12 @@ export function processFilters(layerData, filterOptions, isOr) {
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
-
   const combinedData = [];
-
   let datum;
   let f;
   function filterProcessor(d) {
     datum = (d.properties || d);
+
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
     }
@@ -47,8 +46,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
-          Data.filter(filterProcessor).map(d => combinedData.push(d));
-          data = [...new Set([...combinedData])]; // achieve a distinct union
+          (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
           data = data.filter(filterProcessor);
         }
