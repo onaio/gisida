@@ -4,6 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
+import superset from '../connectors/superset';
 import { loadJSON, loadCSV } from '../utils/files';
 import { generateFilterOptions, processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
@@ -191,7 +192,11 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
 function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   const layerObj = { ...layer };
   const sourceURL = layer.source.data;
-  const fileType = sourceURL.split('.').pop();
+  const fileType = typeof layer.source.data === 'string'
+    ? sourceURL.split('.').pop()
+    : (typeof sourceURL === 'object'
+      && sourceURL !== null 
+      && sourceURL.type);
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
       let parsedData;
@@ -223,6 +228,22 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
+  if (fileType === 'superset') {
+    const config = {
+      endpoint: 'slice',
+      extraPath: sourceURL['slice-id'],
+      base: 'https://canopy.lotfa.org/', // todo - reference APP.AUTH.apiBase
+    }
+    if (localStorage.getItem('access_token')) {
+      config.token = localStorage.getItem('access_token');
+    }
+    superset.API.fetch(config, // fetch with config
+      (res) => superset.processData(res)) // pass in callback func to process response
+      .then(data => {
+        layerObj.source.data = data; // assign processed data to layerObj
+        return renderData(mapId, layerObj, dispatch, doUpdateTsLayer); // call renderData
+      });
+  }
 }
 
 /**
@@ -243,8 +264,12 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else if (typeof filePath === 'object' && filePath !== null && filePath.type === 'superset') {
       // add in SUPERSET.API promise to q.defer
       switch (filePath.type) {
-        case 'superset': 
-          // defer SUPERSET.API promise to q
+        case 'superset':
+          const config = {
+            endpoint: 'slice',
+            extraPath: filePath['slice-id'],
+          };
+          q.defer(superset.API.deferedFetch, config, superset.processData);
           break;
         case 'onadata': 
           // defer `getData` to q
@@ -482,9 +507,9 @@ export default function prepareLayer(
     // if unprocessed source config object, handle it
     if (typeof layerObj.source.data === 'object' && layerObj.source.data !== null) {
        // add in SUPERSET.API promise to q.defer
-       switch (filePath.type) {
+       switch (layerObj.source.data.type) {
         case 'superset': 
-          // request data from SUPERSET.API, call renderData()
+          readData(mapId, layerObj, dispatch, doUpdateTsLayer);
           break;
         case 'onadata': 
           // request data from ONA.API, call renderData()
