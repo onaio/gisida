@@ -131,8 +131,9 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
       icon = icon.icon;
     }
     if (!icon) return false;
+  } else {
+    icon = null;
   }
-  icon = null;
   // 3) Parse text for databallon
   if (!alt && detail.alt) {
     alt = parseDetailAlt(detail.alt, properties);
