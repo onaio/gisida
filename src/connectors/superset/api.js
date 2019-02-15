@@ -1,7 +1,6 @@
 // export const publicMethod = () => true;
 // const privateMethod = () => true;
 
-
 const apiMap = {
   slice: 'superset/slice_json'
 }
@@ -57,12 +56,21 @@ export class API {
         if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
         return parsed;
       }, (callback || (user => ({ res, user }))));
-
-
-      this.deferedFetch = (config, apiCallback, qCallback) => {
-        return self.fetch(config, apiCallback).then(data => qCallback(null, data));
-      };
-        
+    }).catch((err) => {
+      // todo - replace stub data request with real error handler
+      return fetch('/data/_slice.json')
+        .then(res => res.json())
+        .then((slice) => slice.data.records);
     });
+    this.deferedFetch = (config, apiCallback, qCallback) => {
+      return self.fetch(config, apiCallback)
+        .then(data => qCallback(null, data))
+        .catch(err => {
+          // todo - replace stub data request with real error handler
+          return fetch('/data/_slice.json')
+            .then((res) => res.json()) 
+            .then((slice) => qCallback(null, slice.data.records));
+        });
+    };
   }
 };
