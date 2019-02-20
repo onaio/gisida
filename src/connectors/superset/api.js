@@ -8,6 +8,7 @@ const apiMap = {
 // Generate Headers for API Fetch
 const apiHeaders = (config) => {
   const headers = new Headers();
+  headers.append('Access-Control-Allow-Origin', '*');
   if (config && config.mimeType) headers.append('Content-Type', config.mimeType);
   if (!config || !config.token) return headers;
 
@@ -17,7 +18,7 @@ const apiHeaders = (config) => {
 
 // Generate Request for API Fetch
 const apiRequest = (config, headers) => {
-  const base = config.base || 'https://api.ona.io/';
+  const base = config.base || 'http://localhost:8088/';
   const reqConfig = { method: config.method || 'GET' };
   if (headers) reqConfig.headers = headers;
   let apiPath = `${base}${apiMap[config.endpoint]}`;
