@@ -167,7 +167,9 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
 
   if (!UID) return false;
   const join = layerObj['detail-view'].join || layerObj.source.join;
-  const layerObjDatum = layerObj.Data && layerObj.Data.find(d =>
+  const layerObjData = (layerObj && layerObj.Data) || (layerObj &&
+    layerObj.mergedData && layerObj.mergedData.features);
+  const layerObjDatum = layerObjData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
