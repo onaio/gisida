@@ -8,11 +8,16 @@ const apiMap = {
 // Generate Headers for API Fetch
 const apiHeaders = (config) => {
   const headers = new Headers();
-  headers.append('Access-Control-Allow-Origin', '*');
-  if (config && config.mimeType) headers.append('Content-Type', config.mimeType);
-  if (!config || !config.token) return headers;
+  // headers.append('Access-Control-Allow-Origin', '*');
+  if (!config) return headers;
+  if (config.mimeType) headers.append('Content-Type', config.mimeType);
 
-  headers.append('Authorization', `Bearer ${config.token}`);
+  if (config.token) {
+    headers.append('Authorization', `Bearer ${config.token}`);
+  } else if (config.supersetToken) {
+    headers.append('Custom-Api-Token', config.supersetToken);
+  }
+
   return headers;
 };
 
@@ -37,6 +42,9 @@ export class API {
     // this.publicMethod = publicMethod;
     // privateMethod.bind(this);
     this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
+
+      
+
       // Define response parse method
       let parse;
       switch (config.mimeType) {
@@ -57,11 +65,11 @@ export class API {
         if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
         return parsed;
       }, (callback || (user => ({ res, user }))));
-    }).catch((err) => {
+    // }).catch((err) => {
       // todo - replace stub data request with real error handler
-      return fetch('/data/_slice.json')
-        .then(res => res.json())
-        .then((slice) => slice.data.records);
+      // return fetch('/data/_slice.json')
+      //   .then(res => res.json())
+      //   .then((slice) => slice.data.records);
     });
     this.deferedFetch = (config, apiCallback, qCallback) => {
       return self.fetch(config, apiCallback)

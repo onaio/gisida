@@ -235,7 +235,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       // base: 'https://canopy.lotfa.org/', // todo - reference APP.AUTH.apiBase
     }
     if (localStorage.getItem('access_token')) {
-      config.token = localStorage.getItem('access_token');
+      config.supersetToken = localStorage.getItem('access_token');
     }
     superset.API.fetch(config, // fetch with config
       (res) => superset.processData(res)) // pass in callback func to process response
