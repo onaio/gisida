@@ -9,10 +9,25 @@ export default function sortLayers(map, layers, nextLayerId) {
         4. symbol (other symbol layers that aren't primary layers)
         5. circle primarylayer
         6. cirle (other circle layers that aren't primary layers)
-        7 line and fill layers primary
-        8. line and fill (other line and fill layers that aren't primary layers)
+        7  line  primary
+        8. line  (other line layers that aren't primary layers)
+        9. fill layers
   */
   if (Object.keys(layers).length) {
+    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line'
+      && !d['detail-view']);
+    if (lines.length) {
+      Object.keys(lines).forEach((key) => {
+        if (lines[key].id !== nextLayerId) {
+          if (map.getLayer(lines[key].id)) {
+            map.moveLayer(lines[key].id);
+          }
+        }
+      });
+      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
+        map.moveLayer(nextLayerId);
+      }
+    }
     const circles = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'circle'
       && !d['detail-view']);
     if (circles.length) {
