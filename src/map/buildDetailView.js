@@ -80,7 +80,8 @@ const parseDetailIcon = (spec, datum) => {
   }
 
   // 3) if icon is an options object and prop, categorically parse and return
-  if (spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
+
+  if (spec && spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
     return {
       icon: parseDetailIconClassName(spec),
       color: spec[datum[spec.prop]].color || false,
@@ -120,16 +121,19 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
   if (!value) return false;
 
   // 2) Parse glyphicon from icon (options); Note: this doesn't work with multiple props
-  icon = parseDetailIcon(detail.icon, properties);
-  if (icon instanceof Object) {
-    // eslint-disable-next-line prefer-destructuring
-    alt = icon.alt;
-    iconColor = icon.color;
-    // eslint-disable-next-line prefer-destructuring
-    icon = icon.icon;
+  if (detail.icon) {
+    icon = parseDetailIcon(detail.icon, properties);
+    if (icon instanceof Object) {
+      // eslint-disable-next-line prefer-destructuring
+      alt = icon.alt;
+      iconColor = icon.color;
+      // eslint-disable-next-line prefer-destructuring
+      icon = icon.icon;
+    }
+    if (!icon) return false;
+  } else {
+    icon = null;
   }
-  if (!icon) return false;
-
   // 3) Parse text for databallon
   if (!alt && detail.alt) {
     alt = parseDetailAlt(detail.alt, properties);
@@ -137,11 +141,13 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
 
   // 4) parse affixes (suffix and prefix) into HTML strings if defined in detail view spec
   const { useAltAsPrefix } = detail;
+
   if (detail.value.prefix || detail.value.suffix) {
     const { suffix, prefix } = detail.value;
     valPrefix = buildValueAffix(prefix, properties);
     valSuffix = buildValueAffix(suffix, properties);
   }
+
   return {
     value, icon, iconColor, alt, prefix: valPrefix, suffix: valSuffix, useAltAsPrefix,
   };
@@ -171,7 +177,8 @@ export default (
   if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
     activeData = [...timeSeriesObj.data];
   } else {
-    activeData = layerObj && layerObj.Data;
+    activeData = (layerObj && layerObj.Data) || (layerObj &&
+      layerObj.mergedData && layerObj.mergedData.features);
   }
   const layerObjDatum = activeData && activeData.length && activeData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
