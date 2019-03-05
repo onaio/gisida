@@ -194,6 +194,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   } else {
     sortedData = [...rows];
   }
+  sortedData = sortedData.filter(d => d.period !== '');
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
