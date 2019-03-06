@@ -42085,9 +42085,21 @@ var processData = function processData(res) {
 
 };
 
+var authZ = function authZ(config, callback) {
+  var headers = new Headers();
+  headers.append('Custom-Api-Token', config.token);
+
+  return fetch((config.base || 'http://localhost:8088/') + 'oauth-authorized/onadata', {
+    headers: headers, // comment to remove Custom-Api-Token header
+    method: 'GET',
+    credentials: 'include' }).
+  then(function (res) {return callback(res);});
+};
+
 var SUPERSET = {
   API: new _api.API(),
-  processData: processData };exports.default =
+  processData: processData,
+  authZ: authZ };exports.default =
 
 
 SUPERSET;
@@ -72702,17 +72714,6 @@ function API() {var _this = this;_classCallCheck(this, API);
   var self = this;
   // this.publicMethod = publicMethod;
   // privateMethod.bind(this);
-
-  // this.fetch = async (config, callback) => {
-
-  //   return fetchAPI(config)
-  //     .then((res) => {
-
-  //     })
-  //     .catch((err) => {
-
-  //     })
-  // }
   this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config, callback) {return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).then(function (res) {
 
 
