@@ -24,7 +24,7 @@ const apiRequest = (config, headers) => {
   const base = config.base || 'http://localhost:8088/';
   const reqConfig = { method: config.method || 'GET' };
   if (headers) reqConfig.headers = headers;
-  if (config.supersetToken) reqConfig.credentials = 'include';
+  reqConfig.credentials = 'include';
   let apiPath = `${base}${apiMap[config.endpoint]}`;
   if (config.extraPath) apiPath = `${apiPath}/${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;

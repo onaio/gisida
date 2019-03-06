@@ -234,13 +234,11 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       extraPath: sourceURL['slice-id'],
       base: 'http://localhost:8088/', // todo - reference APP.AUTH.apiBase
     }
-    if (localStorage.getItem('access_token')) {
-      config.supersetToken = localStorage.getItem('access_token');
-    }
+    
     superset.API.fetch(config, // fetch with config
-      (res) => superset.processData(res)) // pass in callback func to process response
+      (res) => res) // pass in callback func to process response
       .then(data => {
-        layerObj.source.data = data; // assign processed data to layerObj
+        layerObj.source.data = superset.processData(data); // assign processed data to layerObj
         return renderData(mapId, layerObj, dispatch, doUpdateTsLayer); // call renderData
       });
   }
