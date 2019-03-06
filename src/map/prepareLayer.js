@@ -232,7 +232,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     const config = {
       endpoint: 'slice',
       extraPath: sourceURL['slice-id'],
-      // base: 'https://canopy.lotfa.org/', // todo - reference APP.AUTH.apiBase
+      base: 'http://localhost:8088/', // todo - reference APP.AUTH.apiBase
     }
     if (localStorage.getItem('access_token')) {
       config.supersetToken = localStorage.getItem('access_token');

@@ -14,8 +14,6 @@ const apiHeaders = (config) => {
 
   if (config.token) {
     headers.append('Authorization', `Bearer ${config.token}`);
-  } else if (config.supersetToken) {
-    headers.append('Custom-Api-Token', config.supersetToken);
   }
 
   return headers;
@@ -26,6 +24,7 @@ const apiRequest = (config, headers) => {
   const base = config.base || 'http://localhost:8088/';
   const reqConfig = { method: config.method || 'GET' };
   if (headers) reqConfig.headers = headers;
+  if (config.supersetToken) reqConfig.credentials = 'include';
   let apiPath = `${base}${apiMap[config.endpoint]}`;
   if (config.extraPath) apiPath = `${apiPath}/${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;
