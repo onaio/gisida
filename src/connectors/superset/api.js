@@ -5,41 +5,54 @@ const apiMap = {
   slice: 'superset/slice_json'
 }
 
-// Generate Headers for API Fetch
+// Generate Headers for Fetch API
 const apiHeaders = (config) => {
   const headers = new Headers();
-  // headers.append('Access-Control-Allow-Origin', '*');
+
   if (!config) return headers;
   if (config.mimeType) headers.append('Content-Type', config.mimeType);
-
-  if (config.token) {
-    headers.append('Authorization', `Bearer ${config.token}`);
-  }
 
   return headers;
 };
 
-// Generate Request for API Fetch
+// Generate Request for Fetch API
 const apiRequest = (config, headers) => {
   const base = config.base || 'http://localhost:8088/';
-  const reqConfig = { method: config.method || 'GET' };
+  let apiPath = `${base}${(apiMap[config.endpoint] || '')}`;
+
+  const reqConfig = { 
+    method: config.method || 'GET',
+    credentials: config.credentials || 'include'
+  };
+
   if (headers) reqConfig.headers = headers;
-  reqConfig.credentials = 'include';
-  let apiPath = `${base}${apiMap[config.endpoint]}`;
   if (config.extraPath) apiPath = `${apiPath}/${config.extraPath}`;
   if (config.params) apiPath = `${apiPath}?${config.params}`;
 
   return new Request(apiPath, reqConfig);
 };
 
-// Generate API Fetch Promise
+// Generate Fetch API Promise
 const fetchAPI = config => fetch(apiRequest(config, apiHeaders(config)));
 
+// API Module for FE Superset Connector
 export class API {
   constructor() {
     const self = this;
     // this.publicMethod = publicMethod;
     // privateMethod.bind(this);
+
+
+    // Resolve Fetch API Promise, convert to JSON, handle with callback/resolve as JSON
+    // config          - (required) Object containing options / credentials
+    // config.token    - (required) Access_Token provided by ONA Authorization
+    // config.endpoint - (required) API Key to determine API Path
+    // config.method   - (optional) Specify HTTP Method (defaults to GET)
+    // config.params   - (optional) Additional parameters to be appeneded to API Path
+    // config.mimeType - (optional) Specify mimeType for Request Headers
+    // config.base     - (optional) Base URL for API Requests, must include trailing '/'
+    // config.credentials(optional) Custom override for Fetch API 'credentials' setting
+    // callback        - (optional) Function to take JSON response, otherwise res is simply returned
     this.fetch = async (config, callback) => fetchAPI(config)
       .catch(err => callback(err))
       .then((res) => {
@@ -67,6 +80,7 @@ export class API {
         .then(user => (callback && callback(user)) || ({ res, user }))
       });
 
+    // version of this.fetch specifically for d3.queue fetching
     this.deferedFetch = (config, apiCallback, qCallback) => {
       return self.fetch(config, apiCallback)
         .then(data => qCallback(null, data))

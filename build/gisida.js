@@ -42073,6 +42073,7 @@ getData;var protocol = 'https';var host = 'api.ona.io';var endpoint = 'api/v1/da
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });var _api = __webpack_require__(1378);function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}}
 
+// utility function to return a copy of the data from a parsed slice_json response 
 var processData = function processData(res) {
   return res &&
   res.data &&
@@ -42082,17 +42083,26 @@ var processData = function processData(res) {
 
 };
 
+// Authorization Request
+// config.token - (Required) ONA oAuth2 Access Token as a string
+// config.base  - (Optional) Overrides Auth URI Basepath, requires trailing '/'
+// callback     - (Required) Callback function to receive Fetch API res / err object 
 var authZ = function authZ(config, callback) {
   var headers = new Headers();
   headers.append('Custom-Api-Token', config.token);
 
   return fetch((config.base || 'http://localhost:8088/') + 'oauth-authorized/onadata', {
-    headers: headers, // comment to remove Custom-Api-Token header
+    headers: headers,
     method: 'GET',
     credentials: 'include' }).
-  then(function (res) {return callback(res);}).catch(function (err) {return callback(err);});
+
+  then(function (res) {return callback(res);}).
+  catch(function (err) {return callback(err);});
 };
 
+// De-Authorization Request
+// config.base  - (Optional) Overrides DeAuth URI Basepath, requires trailing '/'
+// callback     - (Required) Callback function to receive Fetch API res / err object
 var deAuthZ = function deAuthZ(config, callback) {return (
     fetch((config && config.base || 'http://localhost:8088/') + 'logout/', {
       method: 'GET',
@@ -42101,7 +42111,7 @@ var deAuthZ = function deAuthZ(config, callback) {return (
     then(function (res) {return callback(res);}).
     catch(function (err) {return callback(err);}));};
 
-
+// FE Superset Connector Module
 var SUPERSET = {
   API: new _api.API(),
   processData: processData,
@@ -72685,41 +72695,54 @@ var apiMap = {
   slice: 'superset/slice_json'
 
 
-  // Generate Headers for API Fetch
+  // Generate Headers for Fetch API
 };var apiHeaders = function apiHeaders(config) {
   var headers = new Headers();
-  // headers.append('Access-Control-Allow-Origin', '*');
+
   if (!config) return headers;
   if (config.mimeType) headers.append('Content-Type', config.mimeType);
-
-  if (config.token) {
-    headers.append('Authorization', 'Bearer ' + config.token);
-  }
 
   return headers;
 };
 
-// Generate Request for API Fetch
+// Generate Request for Fetch API
 var apiRequest = function apiRequest(config, headers) {
   var base = config.base || 'http://localhost:8088/';
-  var reqConfig = { method: config.method || 'GET' };
+  var apiPath = '' + base + (apiMap[config.endpoint] || '');
+
+  var reqConfig = {
+    method: config.method || 'GET',
+    credentials: config.credentials || 'include' };
+
+
   if (headers) reqConfig.headers = headers;
-  reqConfig.credentials = 'include';
-  var apiPath = '' + base + apiMap[config.endpoint];
   if (config.extraPath) apiPath = apiPath + '/' + config.extraPath;
   if (config.params) apiPath = apiPath + '?' + config.params;
 
   return new Request(apiPath, reqConfig);
 };
 
-// Generate API Fetch Promise
-var fetchAPI = function fetchAPI(config) {return fetch(apiRequest(config, apiHeaders(config)));};var
+// Generate Fetch API Promise
+var fetchAPI = function fetchAPI(config) {return fetch(apiRequest(config, apiHeaders(config)));};
 
-API = exports.API =
+// API Module for FE Superset Connector
+var API = exports.API =
 function API() {var _this = this;_classCallCheck(this, API);
   var self = this;
   // this.publicMethod = publicMethod;
   // privateMethod.bind(this);
+
+
+  // Resolve Fetch API Promise, convert to JSON, handle with callback/resolve as JSON
+  // config          - (required) Object containing options / credentials
+  // config.token    - (required) Access_Token provided by ONA Authorization
+  // config.endpoint - (required) API Key to determine API Path
+  // config.method   - (optional) Specify HTTP Method (defaults to GET)
+  // config.params   - (optional) Additional parameters to be appeneded to API Path
+  // config.mimeType - (optional) Specify mimeType for Request Headers
+  // config.base     - (optional) Base URL for API Requests, must include trailing '/'
+  // config.credentials(optional) Custom override for Fetch API 'credentials' setting
+  // callback        - (optional) Function to take JSON response, otherwise res is simply returned
   this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config, callback) {return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).
               catch(function (err) {return callback(err);}).
               then(function (res) {
@@ -72747,6 +72770,7 @@ function API() {var _this = this;_classCallCheck(this, API);
                 then(function (user) {return callback && callback(user) || { res: res, user: user };});
               }));case 1:case 'end':return _context.stop();}}}, _callee, _this);}));return function (_x, _x2) {return _ref.apply(this, arguments);};}();
 
+  // version of this.fetch specifically for d3.queue fetching
   this.deferedFetch = function (config, apiCallback, qCallback) {
     return self.fetch(config, apiCallback).
     then(function (data) {return qCallback(null, data);}).
