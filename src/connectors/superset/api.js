@@ -53,7 +53,7 @@ export class API {
     // config.base     - (optional) Base URL for API Requests, must include trailing '/'
     // config.credentials(optional) Custom override for Fetch API 'credentials' setting
     // callback        - (optional) Function to take JSON response, otherwise res is simply returned
-    this.fetch = async (config, callback) => fetchAPI(config)
+    this.fetch = async (config, callback = (res) => res) => fetchAPI(config)
       .catch(err => callback(err))
       .then((res) => {
         // Define response parse method
@@ -84,12 +84,7 @@ export class API {
     this.deferedFetch = (config, apiCallback, qCallback) => {
       return self.fetch(config, apiCallback)
         .then(data => qCallback(null, data))
-        .catch(err => {
-          // todo - replace stub data request with real error handler
-          return fetch('/data/_slice.json')
-            .then((res) => res.json()) 
-            .then((slice) => qCallback(null, slice.data.records));
-        });
+        .catch(err => qCallback(err, null));
     };
   }
 };

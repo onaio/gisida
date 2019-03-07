@@ -259,13 +259,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   filePaths.forEach((filePath) => {
     if (Number.isInteger(filePath)) {
       q = q.defer(getData, filePath, layerObj.properties, APP);
-    } else if (typeof filePath === 'object' && filePath !== null && filePath.type === 'superset') {
+    } else if (typeof filePath === 'object' && filePath !== null && filePath.type) {
       // add in SUPERSET.API promise to q.defer
       switch (filePath.type) {
         case 'superset':
           const config = {
             endpoint: 'slice',
             extraPath: filePath['slice-id'],
+            base: APP.supersetBase,
           };
           q.defer(superset.API.deferedFetch, config, superset.processData);
           break;
@@ -503,7 +504,9 @@ export default function prepareLayer(
       readData(mapId, layerObj, dispatch, doUpdateTsLayer);
     } else
     // if unprocessed source config object, handle it
-    if (typeof layerObj.source.data === 'object' && layerObj.source.data !== null) {
+    if (!Array.isArray(layerObj.source.data)
+      && typeof layerObj.source.data === 'object'
+      && layerObj.source.data !== null) {
        // add in SUPERSET.API promise to q.defer
        switch (layerObj.source.data.type) {
         case 'superset': 
