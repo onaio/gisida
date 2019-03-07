@@ -103,6 +103,16 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layerObj.source.data = cloneDeep(data);
     layerObj.mergedData = cloneDeep(data);
   }
+
+  if (layerObj && layerObj.mergedData && layerObj.mergedData.find(d => d.Phase)) {
+    layerObj.mergedData = layerObj.mergedData.filter(d => d.Phase !== '');
+    layerObj.mergedData = layerObj.mergedData.filter(d => d.period !== '');
+  }
+
+  if (layerObj.source.data && layerObj.source.data.find(d => d.Phase)) {
+    layerObj.source.data = layerObj.source.data.filter(d => d.Phase !== '');
+    layerObj.source.data = layerObj.source.data.filter(d => d.period !== '');
+  }
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
@@ -118,7 +128,14 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId,
   );
-
+  
+  // if (timeseriesMap && timeseriesMap[layerObj.id] &&
+  //    timeseriesMap[layerObj.id].data &&
+  //     Array.isArray(timeseriesMap[layerObj.id].data) &&
+  //     timeseriesMap[layerObj.id].data.find(d => d.Phase)) {
+  //   timeseriesMap[layerObj.id] = timeseriesMap[layerObj.id].data.filter(d => d.Phase !== '');
+  // }
+  
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this

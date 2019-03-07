@@ -33,10 +33,14 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
-  const clusters = clusterLayer && clusterLayer.stops && nextIndex
-   && clusterLayer.stops[nextIndex] ?
+  const clusters = (clusterLayer && clusterLayer.stops && nextIndex
+   && clusterLayer.stops[nextIndex] &&
+    ![...new Set(clusterLayer.stops[nextIndex].map(d => d[1]))].includes(undefined)) ?
     [...new Set(clusterLayer.stops[nextIndex]
-      .map(d => d[1]))].length : layer.clusters;
+      .map(d => d[1]))].length :
+    layer.clusters || (clusterLayer && clusterLayer.layerObj &&
+         clusterLayer.layerObj.colors && clusterLayer.layerObj.colors.length) ||
+          clusterLayer.categories.color.length;
   const colorsStops = [];
   const radiusStops = [];
   let breaks = [];
@@ -119,10 +123,7 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   }
 
   if (periods) {
-    const uniqPeriods = clusterLayer
-      && clusterLayer.aggregate
-      && clusterLayer.aggregate['date-parse'] ?
-      [...new Set(periods)] : [...new Set(periods)].sort();
+    const uniqPeriods = [...new Set(periods)];
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];
@@ -154,23 +155,28 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const stops = layer['unfiltered-stops'] || (layer.layerObj && layer.layerObj['unfiltered-stops']);
+  const stops = layer['unfiltered-stops'] ||
+   (layer.layerObj && layer.layerObj['unfiltered-stops']) ||
+    (layer && layer.layerObj && layer.layerObj.stops && layer.layerObj.stops);
   const { categories } = layer.categories ? layer : layer.layerObj;
   const { clusters } = categories;
-  const limit = (stops && stops[3]) || categories.limit;
+  const limit = Array.isArray((stops && stops[3])) ? stops[3] : categories.limit;
   const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
   const colors = (stops && stops[4])
     || getColorBrewerColor(color, clusters)
     || color;
   const rawData = layer.data || layer.source.data.features || layer.source.data;
-  const rows = rawData.filter(d => (d.properties || d)[layer.property] !== undefined);
+  const rows = rawData.filter(d => (d.properties || d)[layer.property ||
+     layer.layerProperty] !== undefined);
   let sortedData = [...rows];
+
   let sortedDataDate;
   if (layer.aggregate && layer.aggregate.timeseries) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
       const { split, chunk } = layer.aggregate['date-parse'];
       sortedDataDate = rows.map((d) => {
         const dataCopy = d;
+
         return {
           ...dataCopy,
           date: new Date((dataCopy.properties ||
