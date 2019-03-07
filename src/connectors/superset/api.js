@@ -40,36 +40,33 @@ export class API {
     const self = this;
     // this.publicMethod = publicMethod;
     // privateMethod.bind(this);
-    this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
+    this.fetch = async (config, callback) => fetchAPI(config)
+      .catch(err => callback(err))
+      .then((res) => {
+        // Define response parse method
+        let parse;
+        switch (config.mimeType) {
+          case 'text/csv':
+            parse = 'text';
+            break;
+          case 'image/jpeg':
+            parse = 'blob';
+            break;
+          default:
+            parse = 'json';
+        }
 
-      
+        // Return parsed Response
+        // todo - Change "user" to "body"
+        return res[parse]().then((parsed) => {
+          // if parsed text is CSV then return Papaparse via parseCSV
+          if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
+          return parsed;
+        })
+        .catch(err => (callback && callback(err)) || { res, err })
+        .then(user => (callback && callback(user)) || ({ res, user }))
+      });
 
-      // Define response parse method
-      let parse;
-      switch (config.mimeType) {
-        case 'text/csv':
-          parse = 'text';
-          break;
-        case 'image/jpeg':
-          parse = 'blob';
-          break;
-        default:
-          parse = 'json';
-      }
-
-      // Return parsed Response
-      // todo - Change "user" to "body"
-      return res[parse]().then((parsed) => {
-        // if parsed text is CSV then return Papaparse via parseCSV
-        if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
-        return parsed;
-      }, (callback || (user => ({ res, user }))));
-    // }).catch((err) => {
-      // todo - replace stub data request with real error handler
-      // return fetch('/data/_slice.json')
-      //   .then(res => res.json())
-      //   .then((slice) => slice.data.records);
-    });
     this.deferedFetch = (config, apiCallback, qCallback) => {
       return self.fetch(config, apiCallback)
         .then(data => qCallback(null, data))

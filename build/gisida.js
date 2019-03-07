@@ -72720,10 +72720,9 @@ function API() {var _this = this;_classCallCheck(this, API);
   var self = this;
   // this.publicMethod = publicMethod;
   // privateMethod.bind(this);
-  this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config, callback) {return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).then(function (res) {
-
-
-
+  this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config, callback) {return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).
+              catch(function (err) {return callback(err);}).
+              then(function (res) {
                 // Define response parse method
                 var parse = void 0;
                 switch (config.mimeType) {
@@ -72743,13 +72742,11 @@ function API() {var _this = this;_classCallCheck(this, API);
                   // if parsed text is CSV then return Papaparse via parseCSV
                   if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
                   return parsed;
-                }, callback || function (user) {return { res: res, user: user };});
-                // }).catch((err) => {
-                // todo - replace stub data request with real error handler
-                // return fetch('/data/_slice.json')
-                //   .then(res => res.json())
-                //   .then((slice) => slice.data.records);
+                }).
+                catch(function (err) {return callback && callback(err) || { res: res, err: err };}).
+                then(function (user) {return callback && callback(user) || { res: res, user: user };});
               }));case 1:case 'end':return _context.stop();}}}, _callee, _this);}));return function (_x, _x2) {return _ref.apply(this, arguments);};}();
+
   this.deferedFetch = function (config, apiCallback, qCallback) {
     return self.fetch(config, apiCallback).
     then(function (data) {return qCallback(null, data);}).
