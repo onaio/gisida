@@ -72873,7 +72873,7 @@ function (layer, mapConfig, dispatch) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
+  if (layer.property && layer.stops !== false) {
     stops = (0, _generateStops2.default)(layer, timefield, dispatch);
   }
 
