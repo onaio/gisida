@@ -17,13 +17,23 @@ const authZ = (config, callback) => {
     headers, // comment to remove Custom-Api-Token header
     method: 'GET',
     credentials: 'include',
-  }).then(res => callback(res));
+  }).then(res => callback(res)).catch(err => callback(err));
 }
+
+const deAuthZ = (config, callback) => 
+  fetch(`${config && config.base || 'http://localhost:8088/'}logout/`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+  .then(res => callback(res))
+  .catch(err => callback(err));
+
 
 const SUPERSET = {
   API: new API(),
   processData,
   authZ,
+  deAuthZ,
 };
 
 export default SUPERSET;

@@ -42090,13 +42090,23 @@ var authZ = function authZ(config, callback) {
     headers: headers, // comment to remove Custom-Api-Token header
     method: 'GET',
     credentials: 'include' }).
-  then(function (res) {return callback(res);});
+  then(function (res) {return callback(res);}).catch(function (err) {return callback(err);});
 };
+
+var deAuthZ = function deAuthZ(config, callback) {return (
+    fetch((config && config.base || 'http://localhost:8088/') + 'logout/', {
+      method: 'GET',
+      credentials: 'include' }).
+
+    then(function (res) {return callback(res);}).
+    catch(function (err) {return callback(err);}));};
+
 
 var SUPERSET = {
   API: new _api.API(),
   processData: processData,
-  authZ: authZ };exports.default =
+  authZ: authZ,
+  deAuthZ: deAuthZ };exports.default =
 
 
 SUPERSET;
