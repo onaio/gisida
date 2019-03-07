@@ -295,6 +295,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
     const isOneToMany = relation && relation.type === 'one-to-many';
+    const isOneToOne = relation && relation.type === 'one-to-one';
     const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
@@ -434,6 +435,32 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return Array.isArray(prevData) ? [...prevData] : { ...prevData };
     }
 
+    // Helper function to flatten multiple data sources
+    function oneToOneMerge(i, PrevData, NextData) {
+      let prevData = PrevData;
+      const nextData = NextData.features || NextData;
+      const mergedData = [];
+      let prevDatum;
+      let matchDatum;
+
+      // Loop through all previous datum
+      for (let d = 0; d < prevData.length; d += 1) {
+        prevDatum = prevData[d];
+        matchDatum = nextData.find(datum => datum[join[i]] === prevDatum[join[0]]);
+        // merge datum if a match is found, push datum to mergedData
+        if (matchDatum) {
+          mergedData.push({
+            ...prevDatum,
+            ...matchDatum,
+          });
+        } else {
+          mergedData.push({ ...prevDatum });
+        }
+      }
+
+      return mergedData;
+    }
+  
     // loop through remaining data to basic join with merged data
     for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
       if (!relation) {
@@ -448,8 +475,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         );
       } else if (isOneToMany) {
         mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      } else if (isOneToOne) {
+        mergedData = oneToOneMerge(i, mergedData, data[i]);
       }
     }
+
+    
+    
 
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };

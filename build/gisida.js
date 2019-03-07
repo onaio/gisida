@@ -22946,6 +22946,39 @@ buildLabels = buildLabels;exports.default =
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 prepareLayer;var _d = __webpack_require__(814);var d3 = _interopRequireWildcard(_d);var _mustache = __webpack_require__(252);var _mustache2 = _interopRequireDefault(_mustache);var _lodash = __webpack_require__(300);var _lodash2 = _interopRequireDefault(_lodash);var _csvToGEOjson = __webpack_require__(447);var _csvToGEOjson2 = _interopRequireDefault(_csvToGEOjson);var _aggregateFormData = __webpack_require__(149);var _aggregateFormData2 = _interopRequireDefault(_aggregateFormData);var _data = __webpack_require__(575);var _data2 = _interopRequireDefault(_data);var _superset = __webpack_require__(576);var _superset2 = _interopRequireDefault(_superset);var _files = __webpack_require__(44);var _filters = __webpack_require__(103);var _actions = __webpack_require__(39);var _parseData = __webpack_require__(148);var _parseData2 = _interopRequireDefault(_parseData);var _commaFormatting = __webpack_require__(577);var _commaFormatting2 = _interopRequireDefault(_commaFormatting);var _addLayer = __webpack_require__(1379);var _addLayer2 = _interopRequireDefault(_addLayer);var _getSliderLayers = __webpack_require__(580);var _getSliderLayers2 = _interopRequireDefault(_getSliderLayers);var _buildTimeseriesData = __webpack_require__(1381);var _buildTimeseriesData2 = _interopRequireDefault(_buildTimeseriesData);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;} else {var newObj = {};if (obj != null) {for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];}}newObj.default = obj;return newObj;}}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;} else {return Array.from(arr);}} /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * Builds labels based on label spec and layer data
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * @param {*} layerObj
@@ -22980,10 +23013,10 @@ prepareLayer;var _d = __webpack_require__(814);var d3 = _interopRequireWildcard(
            * Loads layer data from multiple CSV or GeoJSON files
            * @param {*} layer
            * @param {*} dispatch
-           */function fetchMultipleSources(mapId, layer, dispatch) {var layerObj = _extends({}, layer);var currentState = dispatch((0, _actions.getCurrentState)());var APP = currentState.APP;var q = d3.queue();var filePaths = layerObj.source.data;filePaths.forEach(function (filePath) {if (Number.isInteger(filePath)) {q = q.defer(_data2.default, filePath, layerObj.properties, APP);} else if ((typeof filePath === 'undefined' ? 'undefined' : _typeof(filePath)) === 'object' && filePath !== null && filePath.type === 'superset') {// add in SUPERSET.API promise to q.defer
-      switch (filePath.type) {case 'superset':var config = { endpoint: 'slice', extraPath: filePath['slice-id'] };q.defer(_superset2.default.API.deferedFetch, config, _superset2.default.processData);break;case 'onadata': // defer `getData` to q
+           */function fetchMultipleSources(mapId, layer, dispatch) {var layerObj = _extends({}, layer);var currentState = dispatch((0, _actions.getCurrentState)());var APP = currentState.APP;var q = d3.queue();var filePaths = layerObj.source.data;filePaths.forEach(function (filePath) {if (Number.isInteger(filePath)) {q = q.defer(_data2.default, filePath, layerObj.properties, APP);} else if ((typeof filePath === 'undefined' ? 'undefined' : _typeof(filePath)) === 'object' && filePath !== null && filePath.type) {// add in SUPERSET.API promise to q.defer
+      switch (filePath.type) {case 'superset':var config = { endpoint: 'slice', extraPath: filePath['slice-id'], base: APP.supersetBase };q.defer(_superset2.default.API.deferedFetch, config, _superset2.default.processData);break;case 'onadata': // defer `getData` to q
           break;default:break;}} else if (typeof filePath === 'string') q = q.defer(d3.csv, filePath);});q.awaitAll(function (error, Data) {// parse all data if layer has data parsing spec
-    var data = !layerObj['data-parse'] ? [].concat(_toConsumableArray(Data)) : Data.map(function (D) {if (Array.isArray(D.features)) {return _extends({}, D, { features: (0, _parseData2.default)(layerObj['data-parse'], D.features) });}return (0, _parseData2.default)(layerObj['data-parse'], D);});var _layerObj$source = layerObj.source,join = _layerObj$source.join,relation = _layerObj$source.relation,type = _layerObj$source.type;var isManyToOne = relation && relation.type === 'many-to-one';var isOneToMany = relation && relation.type === 'one-to-many';var isVectorLayer = type === 'vector';var mergedData = isManyToOne ? {} : Array.isArray(data[0]) && [].concat(_toConsumableArray(data[0])) || _extends({}, data[0]); // Filter base data for missing join properties
+    var data = !layerObj['data-parse'] ? [].concat(_toConsumableArray(Data)) : Data.map(function (D) {if (Array.isArray(D.features)) {return _extends({}, D, { features: (0, _parseData2.default)(layerObj['data-parse'], D.features) });}return (0, _parseData2.default)(layerObj['data-parse'], D);});var _layerObj$source = layerObj.source,join = _layerObj$source.join,relation = _layerObj$source.relation,type = _layerObj$source.type;var isManyToOne = relation && relation.type === 'many-to-one';var isOneToMany = relation && relation.type === 'one-to-many';var isOneToOne = relation && relation.type === 'one-to-one';var isVectorLayer = type === 'vector';var mergedData = isManyToOne ? {} : Array.isArray(data[0]) && [].concat(_toConsumableArray(data[0])) || _extends({}, data[0]); // Filter base data for missing join properties
     var intialFilter = function intialFilter(d) {if (!Array.isArray(join[isVectorLayer ? 1 : 0])) {return typeof d[join[isVectorLayer ? 1 : 0]] !== 'undefined';}for (var j = 0; j < join[isVectorLayer ? 1 : 0].length; j += 1) {if (typeof d[join[isVectorLayer ? 1 : 0][j]] !== 'undefined') return true;}return false;};if (Array.isArray(mergedData)) {mergedData = mergedData.filter(intialFilter);} else if (Array.isArray(mergedData.features)) {mergedData.features = mergedData.features.filter(intialFilter);} // Helper func for combining arrays of data
     function basicMerge(i, prevData, nextData) {// Helper func to check nextData datum for single or multiple join props
       var basicMergeFilter = function basicMergeFilter(d) {if (!Array.isArray(join[i])) return typeof d[join[i]] !== 'undefined';for (var j = 0; j < join[i].length; j += 1) {if (typeof d[join[i][j]] !== 'undefined') return true;}return false;};if (!nextData || typeof nextData === 'string') {return _extends({}, prevData);} else if (Array.isArray(prevData) && Array.isArray(data[i])) {return [].concat(_toConsumableArray(prevData), _toConsumableArray(data[i].filter(basicMergeFilter)));} else if (Array.isArray(prevData) && Array.isArray(data[i].features)) {return [].concat(_toConsumableArray(prevData), _toConsumableArray(data[i].features.filter(basicMergeFilter)));} else if (prevData.features && Array.isArray(prevData.features)) {return _extends({}, prevData, { features: [].concat(_toConsumableArray(prevData.features), _toConsumableArray((data[i].features || data[i]).filter(function (d) {return typeof d[join[i]] !== 'undefined';}))) });}return _extends({}, prevData);} // Helper func for joining "manys" to "ones"
@@ -22999,8 +23032,11 @@ prepareLayer;var _d = __webpack_require__(814);var d3 = _interopRequireWildcard(
       var prevDataMap = function prevDataMap(pd) {if (Array.isArray(join[j])) {for (var k = 0; k < join[j].length; k += 1) {pJoinProp = typeof pd[join[j][k]] !== 'undefined' ? join[j][k] : null;if (pJoinProp) break;}} else {pJoinProp = join[j];}return pd[pJoinProp] === datum[nJoinProp] ? _extends({}, pd, datum) : pd;}; // loop through all next data
       for (var d = 0; d < nextData.length; d += 1) {datum = nextData[d].properties || nextData[d];if (Array.isArray(join[i])) {for (var k = 0; k < join[i].length; k += 1) {nJoinProp = typeof datum[join[i][k]] !== 'undefined' ? join[i][k] : null;if (nJoinProp) break;}} else {nJoinProp = join[i];} // if nextData is another many, add it to the prev data array
         if (relation.key[i] === 'many' && datum[nJoinProp] && Array.isArray(prevData)) {prevData = [].concat(_toConsumableArray(prevData), _toConsumableArray(nextData.features || nextData)); // if nextData is one, map it to existing manys in prevData
-        } else if (relation.key[i] === 'one' && datum[nJoinProp] && Array.isArray(prevData)) {prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;}}return Array.isArray(prevData) ? [].concat(_toConsumableArray(prevData)) : _extends({}, prevData);} // loop through remaining data to basic join with merged data
-    for (var i = isManyToOne ? 0 : 1; i < data.length; i += 1) {if (!relation) {mergedData = basicMerge(i, mergedData, data[i]);} else if (isManyToOne) {var hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;mergedData = manyToOneMerge(isVectorLayer ? i + 1 : i, mergedData, data[i], hasCustomFilter);} else if (isOneToMany) {mergedData = oneToManyMerge(isVectorLayer ? i + 1 : i, mergedData, data[i]);}}if (isManyToOne) {layerObj.joinedData = _extends({}, mergedData);mergedData = Object.keys(mergedData).map(function (jd) {return _extends({}, layerObj.joinedData[jd]);}); // .filter(jd => jd.reports.length);
+        } else if (relation.key[i] === 'one' && datum[nJoinProp] && Array.isArray(prevData)) {prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;}}return Array.isArray(prevData) ? [].concat(_toConsumableArray(prevData)) : _extends({}, prevData);} // Helper function to flatten multiple data sources
+    function oneToOneMerge(i, PrevData, NextData) {var prevData = PrevData;var nextData = NextData.features || NextData;var mergedData = [];var prevDatum = void 0;var matchDatum = void 0; // Loop through all previous datum
+      for (var d = 0; d < prevData.length; d += 1) {prevDatum = prevData[d];matchDatum = nextData.find(function (datum) {return datum[join[i]] === prevDatum[join[0]];}); // merge datum if a match is found, push datum to mergedData
+        if (matchDatum) {mergedData.push(_extends({}, prevDatum, matchDatum));} else {mergedData.push(_extends({}, prevDatum));}}return mergedData;} // loop through remaining data to basic join with merged data
+    for (var i = isManyToOne ? 0 : 1; i < data.length; i += 1) {if (!relation) {mergedData = basicMerge(i, mergedData, data[i]);} else if (isManyToOne) {var hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;mergedData = manyToOneMerge(isVectorLayer ? i + 1 : i, mergedData, data[i], hasCustomFilter);} else if (isOneToMany) {mergedData = oneToManyMerge(isVectorLayer ? i + 1 : i, mergedData, data[i]);} else if (isOneToOne) {mergedData = oneToOneMerge(i, mergedData, data[i]);}}if (isManyToOne) {layerObj.joinedData = _extends({}, mergedData);mergedData = Object.keys(mergedData).map(function (jd) {return _extends({}, layerObj.joinedData[jd]);}); // .filter(jd => jd.reports.length);
     } // convert to geojson format if necessary
     if (layerObj.source.type === 'geojson' && !mergedData.features) {mergedData = (0, _csvToGEOjson2.default)(layerObj, mergedData);}layerObj.mergedData = Array.isArray(mergedData) ? [].concat(_toConsumableArray(mergedData)) : _extends({}, mergedData);if (layerObj.aggregate && layerObj.aggregate.filter) {layerObj.filterOptions = (0, _filters.generateFilterOptions)(layerObj);}layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ? (0, _aggregateFormData2.default)(layerObj, currentState.LOCATIONS) : mergedData;layerObj.loaded = true;renderData(mapId, layerObj, dispatch);});} /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * Proceses MapSpec layer and adds it to redux state.
@@ -23014,14 +23050,13 @@ prepareLayer;var _d = __webpack_require__(814);var d3 = _interopRequireWildcard(
   // }
   if (layerObj.source) {// if not processed, grab the csv or geojson data
     if (typeof layerObj.source.data === 'string') {readData(mapId, layerObj, dispatch, doUpdateTsLayer);} else // if unprocessed source config object, handle it
-      if (_typeof(layerObj.source.data) === 'object' && layerObj.source.data !== null) {// add in SUPERSET.API promise to q.defer
+      if (!Array.isArray(layerObj.source.data) && _typeof(layerObj.source.data) === 'object' && layerObj.source.data !== null) {// add in SUPERSET.API promise to q.defer
         switch (layerObj.source.data.type) {case 'superset':readData(mapId, layerObj, dispatch, doUpdateTsLayer);break;case 'onadata': // request data from ONA.API, call renderData()
             break;default: // throw an error?
             break;}} else // grab from multiple sources
         if (layerObj.source.data instanceof Array && !(layerObj.source.data[0] instanceof Object) && layerObj.source.data.length >= 1 && !layerObj.loaded) {fetchMultipleSources(mapId, layerObj, dispatch);} else // TODO: remove or refactor
           // only filter option
-          if (filterOptions) {var currentState = dispatch((0, _actions.getCurrentState)());layerObj.source.data = layerObj.aggregate.type ? (0, _aggregateFormData2.default)(layerObj, currentState.locations, filterOptions) : (0, _filters.processFilters)(layerObj, filterOptions);renderData(mapId, layerObj, dispatch, doUpdateTsLayer);} else {renderData(mapId, layerObj, dispatch, doUpdateTsLayer);}} else if (layerObj.layers) {var _currentState = dispatch((0, _actions.getCurrentState)());layerObj.layers.forEach(function (sublayer) {var subLayer = _currentState[mapId].layers[sublayer];if (layerObj.aggregate) {subLayer.aggregate = layerObj.aggregate;}subLayer.id = sublayer;subLayer.parent = layerObj.id;if (typeof subLayer.source.data === 'string') {readData(mapId, subLayer, dispatch);} else {renderData(mapId, subLayer, dispatch);}});renderData(mapId, layerObj, dispatch);}
-}
+          if (filterOptions) {var currentState = dispatch((0, _actions.getCurrentState)());layerObj.source.data = layerObj.aggregate.type ? (0, _aggregateFormData2.default)(layerObj, currentState.locations, filterOptions) : (0, _filters.processFilters)(layerObj, filterOptions);renderData(mapId, layerObj, dispatch, doUpdateTsLayer);} else {renderData(mapId, layerObj, dispatch, doUpdateTsLayer);}} else if (layerObj.layers) {var _currentState = dispatch((0, _actions.getCurrentState)());layerObj.layers.forEach(function (sublayer) {var subLayer = _currentState[mapId].layers[sublayer];if (layerObj.aggregate) {subLayer.aggregate = layerObj.aggregate;}subLayer.id = sublayer;subLayer.parent = layerObj.id;if (typeof subLayer.source.data === 'string') {readData(mapId, subLayer, dispatch);} else {renderData(mapId, subLayer, dispatch);}});renderData(mapId, layerObj, dispatch);}}
 
 /***/ }),
 /* 303 */
@@ -72743,7 +72778,7 @@ function API() {var _this = this;_classCallCheck(this, API);
   // config.base     - (optional) Base URL for API Requests, must include trailing '/'
   // config.credentials(optional) Custom override for Fetch API 'credentials' setting
   // callback        - (optional) Function to take JSON response, otherwise res is simply returned
-  this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config, callback) {return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).
+  this.fetch = function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(config) {var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (res) {return res;};return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:return _context.abrupt('return', fetchAPI(config).
               catch(function (err) {return callback(err);}).
               then(function (res) {
                 // Define response parse method
@@ -72768,18 +72803,13 @@ function API() {var _this = this;_classCallCheck(this, API);
                 }).
                 catch(function (err) {return callback && callback(err) || { res: res, err: err };}).
                 then(function (user) {return callback && callback(user) || { res: res, user: user };});
-              }));case 1:case 'end':return _context.stop();}}}, _callee, _this);}));return function (_x, _x2) {return _ref.apply(this, arguments);};}();
+              }));case 1:case 'end':return _context.stop();}}}, _callee, _this);}));return function (_x) {return _ref.apply(this, arguments);};}();
 
   // version of this.fetch specifically for d3.queue fetching
   this.deferedFetch = function (config, apiCallback, qCallback) {
     return self.fetch(config, apiCallback).
     then(function (data) {return qCallback(null, data);}).
-    catch(function (err) {
-      // todo - replace stub data request with real error handler
-      return fetch('/data/_slice.json').
-      then(function (res) {return res.json();}).
-      then(function (slice) {return qCallback(null, slice.data.records);});
-    });
+    catch(function (err) {return qCallback(err, null);});
   };
 };
 ;
