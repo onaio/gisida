@@ -4,7 +4,7 @@ import * as types from '../constants/actionTypes';
 import actions from '../actions/actions';
 
 
-function APP(state = defaultState.APP, action) {
+export function APP(state = defaultState.APP, action) {
   switch (action.type) {
     case types.INIT_APP:
       return {
@@ -58,7 +58,7 @@ function LOC(state = defaultState.LOC, action) {
   }
 }
 
-function STYLES(state = defaultState.STYLES, action) {
+export function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
     case types.INIT_STYLES: {
       const styles = action.styles.map((s) => {
