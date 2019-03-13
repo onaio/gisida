@@ -24,6 +24,10 @@ gisida.processFormData = require('./connectors/ona-api/aggregateFormData').proce
 gisida.parseData = require('./utils/parseData').default;
 gisida.lngLat = require('./utils/lngLat').default;
 
+gisida.defaultReducers = {};
+gisida.defaultReducers.APP = require('./store/reducers/reducers').APP;
+gisida.defaultReducers.STYLES = require('./store/reducers/reducers').STYLES;
+
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
 gisida.files.loadCSV = require('./utils/files').loadCSV;
