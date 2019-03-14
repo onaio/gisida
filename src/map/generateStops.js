@@ -169,7 +169,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const rows = rawData.filter(d => (d.properties || d)[layer.property ||
      layer.layerProperty] !== undefined);
   let sortedData = [...rows];
-
+  sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
   if (layer.aggregate && layer.aggregate.timeseries) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
@@ -193,14 +193,18 @@ export default function (layer, timefield, dispatch, nextIndex) {
           return 1;
         } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
           return -1;
-        }
+        } 
+        // else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
+        //       return new Date((a.properties ||
+        //          a)[timefield].split('-')[0]) - new Date((b.properties || b)[timefield].split('-')[0]) ;
+        // }
         return 0;
       });
-    }
+    } 
   } else {
     sortedData = [...rows];
   }
-  sortedData = sortedData.filter(d => d.period !== '');
+  
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
