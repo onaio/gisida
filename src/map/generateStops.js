@@ -189,15 +189,15 @@ export default function (layer, timefield, dispatch, nextIndex) {
         if (!Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
           return new Date((a.properties ||
              a)[timefield]) - new Date((b.properties || b)[timefield]);
+        }
+        else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
+              return new Date((a.properties ||
+                 a)[timefield].split('-')[0]) - new Date((b.properties || b)[timefield].split('-')[0]) ;
         } else if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
           return 1;
         } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
           return -1;
         } 
-        // else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
-        //       return new Date((a.properties ||
-        //          a)[timefield].split('-')[0]) - new Date((b.properties || b)[timefield].split('-')[0]) ;
-        // }
         return 0;
       });
     } 
