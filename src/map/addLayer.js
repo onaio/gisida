@@ -274,6 +274,9 @@ export default function (layer, mapConfig, dispatch) {
       styleSpec.source.url = layer.source.url;
       styleSpec['source-layer'] = layer.source.layer;
     }
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
   }
 
   /*
