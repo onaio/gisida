@@ -27,7 +27,6 @@ gisida.lngLat = require('./utils/lngLat').default;
 gisida.defaultReducers = {};
 gisida.defaultReducers.APP = require('./store/reducers/reducers').APP;
 gisida.defaultReducers.STYLES = require('./store/reducers/reducers').STYLES;
-gisida.defaultReducers.createMapReducer = require('./store/reducers/reducers').createMapReducer;
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
