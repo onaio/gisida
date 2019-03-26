@@ -8,7 +8,7 @@
     "maps",
     "mapspec"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Ona Systems Inc.",
   "main": "build/gisida.js",
   "repository": {
