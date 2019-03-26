@@ -12,9 +12,9 @@ function fetchURL(path, mimeType, callback) {
   xobj.send(null);
 }
 
-export function loadJSON(path, callback) {
+export function loadJSON(path, callback, id) {
   fetchURL(path, 'application/json', (response) => {
-    callback(JSON.parse(response));
+    callback(JSON.parse(response), id);
   });
 }
 

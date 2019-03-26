@@ -383,7 +383,6 @@ export function createMapReducer(mapId) {
               },
             },
           };
-          debugger;
           return {
             ...state,
             layers: updatedLayers,
