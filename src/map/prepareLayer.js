@@ -202,11 +202,15 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       } else {
         parsedData = data;
       }
-      layerObj.source.data = parsedData;
-      layerObj.mergedData = parsedData;
+      const activeData = parsedData.features || parsedData;
+      const filteredData = activeData.filter(d => (d.properties || d)[layer.property] !== 'n/a');
+      layerObj.source.data = filteredData;
+      layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
+      layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
+        aggregateFormData(layerObj) : filteredData;
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
