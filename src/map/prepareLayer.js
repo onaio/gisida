@@ -281,7 +281,8 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return false;
     };
     if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(intialFilter);
+      mergedData = mergedData.filter(d =>
+        d[layerObj.property] !== null).filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
       mergedData.features = mergedData.features.filter(intialFilter);
     }
