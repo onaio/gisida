@@ -69,6 +69,9 @@ function addConfigToStore(store, config) {
   if (config.LOC) {
     store.dispatch(actions.initLoc(config.LOC));
   }
+  if (config.SUPERSET_CONFIGS) {
+    store.dispatch(actions.initSuperset(config.SUPERSET_CONFIGS));
+  }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
