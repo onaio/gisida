@@ -523,7 +523,6 @@ export default function prepareLayer(
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
 
-  debugger;
   // // add to active layers?
   // if (layerSpec.popup && layerSpec.type !== 'chart') {
   //   this.activeLayers.push(layerSpec.id);
