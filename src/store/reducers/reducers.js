@@ -158,6 +158,19 @@ function LOCATIONS(state = {}, action) {
   }
 }
 
+function SUPERSET_CONFIGS(state = {}, action) {
+  switch (action.type) {
+    case types.INIT_SUPERSET: {
+      return {
+        ...state,
+        ...action.config,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 function LAYERS(state = defaultState.LAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
@@ -545,5 +558,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, LOC, SUPERSET_CONFIGS, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

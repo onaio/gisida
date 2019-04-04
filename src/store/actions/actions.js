@@ -27,6 +27,11 @@ export const initLocations = locations => ({
   locations,
 });
 
+export const initSuperset = config => ({
+  type: types.INIT_SUPERSET,
+  config,
+});
+
 export const addLayersList = layers => ({
   type: types.ADD_LAYERS_LIST,
   layers,
@@ -205,6 +210,7 @@ export default {
   initApp,
   initStyles,
   initRegions,
+  initSuperset,
   mapRendered,
   mapLoaded,
   addLayer,
