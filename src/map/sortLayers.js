@@ -14,17 +14,17 @@ export default function sortLayers(map, layers, nextLayerId) {
         9. fill layers
   */
   if (Object.keys(layers).length) {
-    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line'
+    const fill = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'fill'
       && !d['detail-view']);
-    if (lines.length) {
-      Object.keys(lines).forEach((key) => {
-        if (lines[key].id !== nextLayerId) {
-          if (map.getLayer(lines[key].id)) {
-            map.moveLayer(lines[key].id);
+    if (fill.length) {
+      Object.keys(fill).forEach((key) => {
+        if (fill[key].id !== nextLayerId) {
+          if (map.getLayer(fill[key].id)) {
+            map.moveLayer(fill[key].id);
           }
         }
       });
-      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (fill.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
         map.moveLayer(nextLayerId);
       }
     }
@@ -53,6 +53,20 @@ export default function sortLayers(map, layers, nextLayerId) {
         }
       });
       if (symbols.find(s => s.id === nextLayerId) && map.getLayer(nextLayerId)) {
+        map.moveLayer(nextLayerId);
+      }
+    }
+    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line'
+      && !d['detail-view']);
+    if (lines.length) {
+      Object.keys(lines).forEach((key) => {
+        if (lines[key].id !== nextLayerId) {
+          if (map.getLayer(lines[key].id)) {
+            map.moveLayer(lines[key].id);
+          }
+        }
+      });
+      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
         map.moveLayer(nextLayerId);
       }
     }
