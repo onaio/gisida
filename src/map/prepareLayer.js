@@ -204,13 +204,22 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       }
       const activeData = parsedData.features || parsedData;
       const filteredData = activeData.filter(d => (d.properties || d)[layer.property] !== 'n/a');
-      layerObj.source.data = filteredData;
+
+      if (Array.isArray(parsedData)) {
+        layerObj.source.data = [...filteredData];
+      } else {
+        parsedData.features = [...filteredData];
+        layerObj.source.data = { ...parsedData };
+      }
+
       layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
-      layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
-        aggregateFormData(layerObj) : filteredData;
+
+      if (layerObj.aggregate && layerObj.aggregate.type) {
+        layerObj.source.data = aggregateFormData(layerObj)
+      }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
