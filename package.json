@@ -22,6 +22,21 @@
     "lint": "eslint src --ext=jsx --ext=js",
     "test": "jest"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "jest": {
     "verbose": true,
     "testURL": "http://localhost/"
