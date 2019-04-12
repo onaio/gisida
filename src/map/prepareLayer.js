@@ -219,7 +219,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       }
 
       if (layerObj.aggregate && layerObj.aggregate.type) {
-        layerObj.source.data = aggregateFormData(layerObj)
+        layerObj.source.data = aggregateFormData(layerObj);
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
@@ -467,8 +467,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
 
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };
-      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] })).filter(d =>
-        d[layerObj.property]);
+      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }))
+      if (layerObj.property) {
+        mergedData.filter(d => d[layerObj.property]);
+      }
       // .filter(jd => jd.reports.length);
     }
 
