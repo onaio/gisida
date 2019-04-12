@@ -243,12 +243,13 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     });
   }
   if (fileType === 'superset') {
+    const currentState = dispatch(getCurrentState());
     const config = {
       endpoint: 'slice',
       extraPath: sourceURL['slice-id'],
-      base: 'http://localhost:8088/', // todo - reference APP.AUTH.apiBase
-    }
-    
+      base: currentState.APP && currentState.APP.supersetBase,
+    };
+
     superset.API.fetch(config, // fetch with config
       (res) => res) // pass in callback func to process response
       .then(data => {
