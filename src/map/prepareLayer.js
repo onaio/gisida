@@ -467,9 +467,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
 
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };
-      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }))
+      mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }));
       if (layerObj.property) {
-        mergedData.filter(d => d[layerObj.property]);
+        mergedData = mergedData.filter(d => d[layerObj.property]);
       }
       // .filter(jd => jd.reports.length);
     }
