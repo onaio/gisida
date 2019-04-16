@@ -501,7 +501,7 @@ export default function prepareLayer(
       if (typeof subLayer.source.data === 'string') {
         readData(mapId, subLayer, dispatch);
       } else if (Array.isArray(subLayer.source.data)) {
-        fetchMultipleSources(mapId, subLayer, dispatch)
+        fetchMultipleSources(mapId, subLayer, dispatch);
       } else {
         renderData(mapId, subLayer, dispatch);
       }
