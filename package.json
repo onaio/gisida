@@ -8,7 +8,7 @@
     "maps",
     "mapspec"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Ona Systems Inc.",
   "main": "build/gisida.js",
   "repository": {
@@ -21,6 +21,21 @@
     "fix": "eslint src --ext=jsx --ext=js --fix",
     "lint": "eslint src --ext=jsx --ext=js",
     "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "jest": {
     "verbose": true,
@@ -57,9 +72,12 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
+    "husky": "^1.3.1",
     "jest": "^22.4.3",
+    "lint-staged": "^8.1.5",
     "mapbox-gl": "^0.44.1",
     "mock-browser": "^0.92.14",
+    "prettier": "^1.16.4",
     "webpack-cli": "^3.1.0"
   }
 }
