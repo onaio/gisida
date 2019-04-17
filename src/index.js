@@ -40,4 +40,8 @@ gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsed
 gisida.buildFilterState = require('./filter/buildFilterState').default;
 gisida.clearFilterState = require('./filter/clearFilterState').default;
 
+gisida.ducks = {};
+gisida.ducks.APP = require('./store/ducks/APP');
+gisida.ducks.MAP = require('./store/ducks/MAP');
+
 module.exports = gisida;
