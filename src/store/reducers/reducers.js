@@ -4,7 +4,7 @@ import * as types from '../constants/actionTypes';
 import actions from '../actions/actions';
 
 
-function APP(state = defaultState.APP, action) {
+export function APP(state = defaultState.APP, action) {
   switch (action.type) {
     case types.INIT_APP:
       return {
@@ -58,7 +58,7 @@ function LOC(state = defaultState.LOC, action) {
   }
 }
 
-function STYLES(state = defaultState.STYLES, action) {
+export function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
     case types.INIT_STYLES: {
       const styles = action.styles.map((s) => {
@@ -152,6 +152,19 @@ function LOCATIONS(state = {}, action) {
   switch (action.type) {
     case types.INIT_LOCATIONS: {
       return { ...state, ...action.locations };
+    }
+    default:
+      return state;
+  }
+}
+
+function SUPERSET_CONFIGS(state = {}, action) {
+  switch (action.type) {
+    case types.INIT_SUPERSET: {
+      return {
+        ...state,
+        ...action.config,
+      };
     }
     default:
       return state;
@@ -275,7 +288,6 @@ export function createMapReducer(mapId) {
 
           const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
           const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
-
           if (!updatedLayers[layerId].parent) {
             if (addLayerToList) {
               activeLayerIds.push(layerId);
@@ -349,11 +361,21 @@ export function createMapReducer(mapId) {
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
             && state.layers[action.primaryLayer].aggregate.filter;
+          const activeIds = [
+            ...state.activeLayerIds,
+          ];
+          if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
+            if (activeIds.includes(action.primaryLayer)) {
+              activeIds.splice(activeIds.indexOf(action.primaryLayer), 1);
+              activeIds.splice(activeIds.length, 1, action.primaryLayer)
+            }
+          }
           return {
             ...state,
             detailView: null,
             activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
+            activeLayerIds: activeIds,
             filter: {
               ...state.filter,
               layerId: primaryLayerHasFilter ? action.primaryLayer : false,
@@ -545,5 +567,5 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, LOC, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP, LOC, SUPERSET_CONFIGS, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

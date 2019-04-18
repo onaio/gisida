@@ -210,10 +210,23 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       } else {
         parsedData = data;
       }
-      layerObj.source.data = parsedData;
-      layerObj.mergedData = parsedData;
+      const activeData = parsedData.features || parsedData;
+      const filteredData = activeData.filter(d => (d.properties || d)[layer.property] !== 'n/a');
+
+      if (Array.isArray(parsedData)) {
+        layerObj.source.data = [...filteredData];
+      } else {
+        parsedData.features = [...filteredData];
+        layerObj.source.data = { ...parsedData };
+      }
+
+      layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
+      }
+
+      if (layerObj.aggregate && layerObj.aggregate.type) {
+        layerObj.source.data = aggregateFormData(layerObj);
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
@@ -267,6 +280,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
     const isOneToMany = relation && relation.type === 'one-to-many';
+    const isOneToOne = relation && relation.type === 'one-to-one';
     const isVectorLayer = type === 'vector';
 
     let mergedData = isManyToOne
@@ -285,9 +299,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     };
    
     if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(intialFilter);
+      mergedData = mergedData.filter(d =>
+
+        d[layerObj.property] !== null).filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
-      mergedData.features = mergedData.features.filter(intialFilter);
+
+      mergedData.features = mergedData.features.filter(d =>
+
+        d[layerObj.property] !== undefined).filter(intialFilter);
     }
 
     // Helper func for combining arrays of data
@@ -407,26 +426,59 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return Array.isArray(prevData) ? [...prevData] : { ...prevData };
     }
 
+    // Helper function to flatten multiple data sources
+    function oneToOneMerge(i, PrevData, NextData) {
+      let prevData = PrevData;
+      const nextData = NextData.features || NextData;
+      const mergedData = [];
+      let prevDatum;
+      let matchDatum;
+
+      // Loop through all previous datum
+      for (let d = 0; d < prevData.length; d += 1) {
+        prevDatum = prevData[d];
+        matchDatum = nextData.find(datum => datum[join[i]] === prevDatum[join[0]]);
+        // merge datum if a match is found, push datum to mergedData
+        if (matchDatum) {
+          mergedData.push({
+            ...prevDatum,
+            ...matchDatum,
+          });
+        } else {
+          mergedData.push({ ...prevDatum });
+        }
+      }
+      return mergedData;
+    }
+
+
     // loop through remaining data to basic join with merged data
     for (let i = (isManyToOne ? 0 : 1); i < data.length; i += 1) {
       if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
         const hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+
         mergedData = manyToOneMerge(
           (isVectorLayer ? i + 1 : i),
           mergedData,
           data[i],
           hasCustomFilter,
         );
+
       } else if (isOneToMany) {
         mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
+      } else if (isOneToOne) {
+        mergedData = oneToOneMerge(i, mergedData, data[i]);
       }
     }
 
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };
       mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }));
+      if (layerObj.property) {
+        mergedData = mergedData.filter(d => d[layerObj.property]);
+      }
       // .filter(jd => jd.reports.length);
     }
 
@@ -443,7 +495,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
-      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS).filter(d =>
+        d[layerObj.property]) : mergedData;
+
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });
@@ -462,6 +516,7 @@ export default function prepareLayer(
   filterOptions = false,
   doUpdateTsLayer,
 ) {
+
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
@@ -509,6 +564,8 @@ export default function prepareLayer(
       subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
         readData(mapId, subLayer, dispatch);
+      } else if (Array.isArray(subLayer.source.data)) {
+        fetchMultipleSources(mapId, subLayer, dispatch)
       } else {
         renderData(mapId, subLayer, dispatch);
       }

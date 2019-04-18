@@ -159,15 +159,14 @@ export default function (layer, timefield, dispatch, nextIndex) {
    (layer.layerObj && layer.layerObj['unfiltered-stops']) ||
     (layer && layer.layerObj && layer.layerObj.stops && layer.layerObj.stops);
   const { categories } = layer.categories ? layer : layer.layerObj;
-  const { clusters } = categories;
-  const limit = Array.isArray((stops && stops[3])) ? stops[3] : categories.limit;
+  const clusters = categories && categories.clusters;
+  const limit = (stops && stops[3]) || categories.limit;
   const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
   const colors = (stops && stops[4])
     || getColorBrewerColor(color, clusters)
     || color;
   const rawData = layer.data || layer.source.data.features || layer.source.data;
-  const rows = rawData.filter(d => (d.properties || d)[layer.property ||
-     layer.layerProperty] !== undefined);
+  const rows = rawData.filter(d => ((d.properties || d)[layer.property] !== 'n/a'));
   let sortedData = [...rows];
   sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
