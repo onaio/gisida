@@ -165,7 +165,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const colors = (stops && stops[4])
     || getColorBrewerColor(color, clusters)
     || color;
-  const rawData = layer.data || layer.source.data.features || layer.source.data;
+  const rawData = layer.data || layer.source.data.features || layer.source.data || layer.mergedData;
   const rows = rawData.filter(d => ((d.properties || d)[layer.property] !== 'n/a'));
   let sortedData = [...rows];
   sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');

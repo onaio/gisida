@@ -13,11 +13,10 @@ export function processFilters(layerData, filterOptions, isOr) {
   let f;
   function filterProcessor(d) {
     datum = (d.properties || d);
-
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
     }
-    return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
+    return acceptedFilterValues[f].toString().includes(datum[layerData.aggregate.filter[f]]);
   }
 
   if (layerData.aggregate.filter && filterOptions) {
@@ -44,7 +43,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     });
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
-      if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
+      if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant' && acceptedFilterValues[f] !== 'multi') {
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
           (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
@@ -195,8 +194,7 @@ export function generateFilterOptions(layerData) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {
           // handle tallying of select multiple categories
-          const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
-            layerData['data-parse'][filter].split) || ', ';
+          const splitBy = ', ';
           const selectMultipleValues = datum[filter].split(splitBy);
           // loop through all datum[filter] values
           for (let v = 0; v < selectMultipleValues.length; v += 1) {
