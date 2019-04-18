@@ -45,6 +45,6 @@ export {
   updateTimeseries,
   triggerSpinner
 } from '../actions/actions';
-
+export const reducerName = 'map-1';
 import reducers from '../reducers/reducers';
 export default reducers['map-1'];
