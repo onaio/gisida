@@ -69,13 +69,16 @@ function addConfigToStore(store, config) {
   if (config.LOC) {
     store.dispatch(actions.initLoc(config.LOC));
   }
+  if (config.SUPERSET_CONFIGS) {
+    store.dispatch(actions.initSuperset(config.SUPERSET_CONFIGS));
+  }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(customReducers = {}) {
+export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
@@ -104,6 +107,6 @@ export default function initStore(customReducers = {}) {
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
-  loadJSON('config/site-config.json', config => addConfigToStore(store, config));
+  loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
   return store;
 }

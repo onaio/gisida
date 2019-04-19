@@ -162,7 +162,11 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   const layerObj = { ...LayerObj };
   let featureProperties = { ...FeatureProperties };
   const {
-    UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
+    UID,
+    title,
+    'sub-title': subTitle,
+    'basic-info': basicInfo,
+    'image-url': imageURL,
   } = layerObj['detail-view'];
 
   if (!UID) return false;
@@ -183,6 +187,7 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     UID: featureProperties[UID] || featureProperties['Fixed Site Unique ID'],
     title: featureProperties[title.prop], // todo - add mustache support
     subTitle: featureProperties[subTitle.prop], // todo - add mustache support
+    'image-url': featureProperties[imageURL],
     basicInfo,
     parsedBasicInfo: [],
   };

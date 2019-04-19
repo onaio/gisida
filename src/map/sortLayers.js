@@ -14,22 +14,20 @@ export default function sortLayers(map, layers, nextLayerId) {
         9. fill layers
   */
   if (Object.keys(layers).length) {
-    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line'
-      && !d['detail-view']);
-    if (lines.length) {
-      Object.keys(lines).forEach((key) => {
-        if (lines[key].id !== nextLayerId) {
-          if (map.getLayer(lines[key].id)) {
-            map.moveLayer(lines[key].id);
+    const fill = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'fill');
+    if (fill.length) {
+      Object.keys(fill).forEach((key) => {
+        if (fill[key].id !== nextLayerId) {
+          if (map.getLayer(fill[key].id)) {
+            map.moveLayer(fill[key].id);
           }
         }
       });
-      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (fill.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
         map.moveLayer(nextLayerId);
       }
     }
-    const circles = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'circle'
-      && !d['detail-view']);
+    const circles = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'circle');
     if (circles.length) {
       Object.keys(circles).forEach((key) => {
         if (circles[key].id !== nextLayerId) {
@@ -42,9 +40,7 @@ export default function sortLayers(map, layers, nextLayerId) {
         map.moveLayer(nextLayerId);
       }
     }
-    const symbols = Object.keys(layers).map(d =>
-      layers[d]).filter(d =>
-      d.type === 'symbol' && !d['detail-view']);
+    const symbols = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'symbol');
 
     if (symbols.length) {
       Object.keys(symbols).forEach((key) => {
@@ -53,6 +49,19 @@ export default function sortLayers(map, layers, nextLayerId) {
         }
       });
       if (symbols.find(s => s.id === nextLayerId) && map.getLayer(nextLayerId)) {
+        map.moveLayer(nextLayerId);
+      }
+    }
+    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line');
+    if (lines.length) {
+      Object.keys(lines).forEach((key) => {
+        if (lines[key].id !== nextLayerId) {
+          if (map.getLayer(lines[key].id)) {
+            map.moveLayer(lines[key].id);
+          }
+        }
+      });
+      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
         map.moveLayer(nextLayerId);
       }
     }
@@ -66,6 +75,20 @@ export default function sortLayers(map, layers, nextLayerId) {
         }
       });
       if (detailViewActive.find(d => d.id === nextLayerId) && map.getLayer(nextLayerId)) {
+        map.moveLayer(nextLayerId);
+      }
+    }
+
+    const isLabelActive = Object.keys(layers).map(d =>
+      layers[d]).filter(d => d.isLabel);
+
+    if (isLabelActive.length) {
+      Object.keys(isLabelActive).forEach((key) => {
+        if (map.getLayer(isLabelActive[key].id)) {
+          map.moveLayer(isLabelActive[key].id);
+        }
+      });
+      if (isLabelActive.find(d => d.id === nextLayerId) && map.getLayer(nextLayerId)) {
         map.moveLayer(nextLayerId);
       }
     }

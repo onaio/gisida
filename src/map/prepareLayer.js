@@ -103,6 +103,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layerObj.source.data = cloneDeep(data);
     layerObj.mergedData = cloneDeep(data);
   }
+
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
@@ -202,10 +203,23 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       } else {
         parsedData = data;
       }
-      layerObj.source.data = parsedData;
-      layerObj.mergedData = parsedData;
+      const activeData = parsedData.features || parsedData;
+      const filteredData = activeData.filter(d => (d.properties || d)[layer.property] !== 'n/a');
+
+      if (Array.isArray(parsedData)) {
+        layerObj.source.data = [...filteredData];
+      } else {
+        parsedData.features = [...filteredData];
+        layerObj.source.data = { ...parsedData };
+      }
+
+      layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
+      }
+
+      if (layerObj.aggregate && layerObj.aggregate.type) {
+        layerObj.source.data = aggregateFormData(layerObj);
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
@@ -277,9 +291,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return false;
     };
     if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(intialFilter);
+      mergedData = mergedData.filter(d =>
+
+        d[layerObj.property] !== null).filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
-      mergedData.features = mergedData.features.filter(intialFilter);
+
+      mergedData.features = mergedData.features.filter(d =>
+
+        d[layerObj.property] !== undefined).filter(intialFilter);
     }
 
     // Helper func for combining arrays of data
@@ -421,7 +440,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           mergedData.push({ ...prevDatum });
         }
       }
-
       return mergedData;
     }
 
@@ -432,12 +450,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
         const hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+
         mergedData = manyToOneMerge(
           (isVectorLayer ? i + 1 : i),
           mergedData,
           data[i],
           hasCustomFilter,
         );
+
       } else if (isOneToMany) {
         mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
       } else if (isOneToOne) {
@@ -448,6 +468,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     if (isManyToOne) {
       layerObj.joinedData = { ...mergedData };
       mergedData = Object.keys(mergedData).map(jd => ({ ...layerObj.joinedData[jd] }));
+      if (layerObj.property) {
+        mergedData = mergedData.filter(d => d[layerObj.property]);
+      }
       // .filter(jd => jd.reports.length);
     }
 
@@ -464,7 +487,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
     layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
-      aggregateFormData(layerObj, currentState.LOCATIONS) : mergedData;
+      aggregateFormData(layerObj, currentState.LOCATIONS).filter(d =>
+        d[layerObj.property]) : mergedData;
+
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });
@@ -483,6 +508,7 @@ export default function prepareLayer(
   filterOptions = false,
   doUpdateTsLayer,
 ) {
+
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
