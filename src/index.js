@@ -42,5 +42,6 @@ gisida.clearFilterState = require('./filter/clearFilterState').default;
 gisida.ducks = {};
 gisida.ducks.APP = require('./store/ducks/APP');
 gisida.ducks.MAP = require('./store/ducks/MAP');
+gisida.ducks.STYLES = require('./store/ducks/STYLES');
 
 module.exports = gisida;
