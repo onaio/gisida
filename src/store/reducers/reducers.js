@@ -218,12 +218,12 @@ export function createMapReducer(mapId) {
         case types.MAP_RENDERED:
           return {
             ...state,
-            isRendered: true,
+            isRendered: action.isRendered,
           };
         case types.MAP_LOADED:
           return {
             ...state,
-            isLoaded: true,
+            isLoaded: action.isLoaded,
             reloadLayers: true,
             currentRegion: Math.random(),
           };
@@ -252,6 +252,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             layers: updatedLayers,
+            activeLayerId: action.layer.id,
             defaultLayers,
             reloadLayerId,
             reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
@@ -391,7 +392,7 @@ export function createMapReducer(mapId) {
           };
         }
         case types.SET_LAYER_FILTERS: {
-          const { layerId, layerFilters } = action;
+          const { layerId, layerFilters, name } = action;
           const layer = state.layers[layerId];
           const filters = layer.filters ? { ...layer.filters } : {};
           const updatedLayers = {
@@ -400,7 +401,7 @@ export function createMapReducer(mapId) {
               ...layer,
               filters: {
                 ...filters,
-                layerFilters,
+                [name || 'layerFilters']: layerFilters,
               },
             },
           };
