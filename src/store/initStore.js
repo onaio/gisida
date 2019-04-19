@@ -78,7 +78,7 @@ function addConfigToStore(store, config) {
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(customReducers = {}) {
+export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
@@ -107,6 +107,6 @@ export default function initStore(customReducers = {}) {
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
-  loadJSON('config/site-config.json', config => addConfigToStore(store, config));
+  loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
   return store;
 }

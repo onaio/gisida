@@ -218,12 +218,12 @@ export function createMapReducer(mapId) {
         case types.MAP_RENDERED:
           return {
             ...state,
-            isRendered: true,
+            isRendered: action.isRendered,
           };
         case types.MAP_LOADED:
           return {
             ...state,
-            isLoaded: true,
+            isLoaded: action.isLoaded,
             reloadLayers: true,
             currentRegion: Math.random(),
           };
@@ -252,6 +252,7 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             layers: updatedLayers,
+            activeLayerId: action.layer.id,
             defaultLayers,
             reloadLayerId,
             reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
@@ -288,7 +289,6 @@ export function createMapReducer(mapId) {
 
           const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
           const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
-
           if (!updatedLayers[layerId].parent) {
             if (addLayerToList) {
               activeLayerIds.push(layerId);
@@ -362,11 +362,21 @@ export function createMapReducer(mapId) {
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
             && state.layers[action.primaryLayer].aggregate.filter;
+          const activeIds = [
+            ...state.activeLayerIds,
+          ];
+          if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
+            if (activeIds.includes(action.primaryLayer)) {
+              activeIds.splice(activeIds.indexOf(action.primaryLayer), 1);
+              activeIds.splice(activeIds.length, 1, action.primaryLayer)
+            }
+          }
           return {
             ...state,
             detailView: null,
             activeLayerId: action.primaryLayer,
             primaryLayer: action.primaryLayer,
+            activeLayerIds: activeIds,
             filter: {
               ...state.filter,
               layerId: primaryLayerHasFilter ? action.primaryLayer : false,
@@ -382,7 +392,7 @@ export function createMapReducer(mapId) {
           };
         }
         case types.SET_LAYER_FILTERS: {
-          const { layerId, layerFilters } = action;
+          const { layerId, layerFilters, name } = action;
           const layer = state.layers[layerId];
           const filters = layer.filters ? { ...layer.filters } : {};
           const updatedLayers = {
@@ -391,7 +401,7 @@ export function createMapReducer(mapId) {
               ...layer,
               filters: {
                 ...filters,
-                layerFilters,
+                [name || 'layerFilters']: layerFilters,
               },
             },
           };
