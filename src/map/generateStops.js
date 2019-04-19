@@ -119,10 +119,7 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   }
 
   if (periods) {
-    const uniqPeriods = clusterLayer
-      && clusterLayer.aggregate
-      && clusterLayer.aggregate['date-parse'] ?
-      [...new Set(periods)] : [...new Set(periods)].sort();
+    const uniqPeriods = [...new Set(periods)];
     const periodStops = [];
     const periodRadius = [];
     const periodStroke = [];
