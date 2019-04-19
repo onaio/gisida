@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import cloneDeep from 'lodash.clonedeep';
+import superset from '@onaio/superset-connector';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
@@ -244,6 +245,21 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
+  if (fileType === 'superset') {
+    const currentState = dispatch(getCurrentState());
+    const config = {
+      endpoint: 'slice',
+      extraPath: sourceURL['slice-id'],
+      base: currentState.APP && currentState.APP.supersetBase,
+    };
+
+    superset.api.fetch(config, // fetch with config
+      (res) => res) // pass in callback func to process response
+      .then(data => {
+        layerObj.source.data = superset.processData(data); // assign processed data to layerObj
+        return renderData(mapId, layerObj, dispatch, doUpdateTsLayer); // call renderData
+      });
+  }
 }
 
 /**
@@ -264,17 +280,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else if (typeof filePath === 'object' && filePath !== null && filePath.type) {
       // add in SUPERSET.API promise to q.defer
       switch (filePath.type) {
-        // case 'superset':
-        //   const config = {
-        //     endpoint: 'slice',
-        //     extraPath: filePath['slice-id'],
-        //     base: APP.supersetBase,
-        //   };
-        //   q.defer(superset.API.deferedFetch, config, superset.processData);
-        //   break;
-        // case 'onadata': 
-        //   // defer `getData` to q
-        //   break;
+        case 'superset':
+          const config = {
+            endpoint: 'slice',
+            extraPath: filePath['slice-id'],
+            base: APP.supersetBase,
+          };
+          q.defer(superset.api.deferedFetch, config, superset.processData);
+          break;
         case 'csv':
           q.defer(d3.csv, filePath.url);
           break;
