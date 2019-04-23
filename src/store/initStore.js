@@ -31,7 +31,9 @@ export function loadLayers(mapId, dispatch, layers) {
         }
       }
       if (typeof layer === 'string') {
-        const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+        const path = (layer.indexOf('http') !== -1 || layer.indexOf('/') === 0)
+          ? layer 
+          :`config/layers/${layer}.json`;
         // load local or remote layer spec
         return loadJSON(path, addLayerToStore);
       }
