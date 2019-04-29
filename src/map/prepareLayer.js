@@ -249,6 +249,12 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       } else {
         layerObj.source.data = data;
       }
+      if (layerObj.aggregate && layerObj.aggregate.type) {
+        layerObj.source.data = aggregateFormData(layerObj);
+      }
+      if (layerObj.aggregate && layerObj.aggregate.filter) {
+        layerObj.filterOptions = generateFilterOptions(layerObj);
+      }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
   }
@@ -264,6 +270,12 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       (res) => res) // pass in callback func to process response
       .then(data => {
         layerObj.source.data = superset.processData(data); // assign processed data to layerObj
+        if (layerObj.aggregate && layerObj.aggregate.type) {
+          layerObj.source.data = aggregateFormData(layerObj);
+        }
+        if (layerObj.aggregate && layerObj.aggregate.filter) {
+          layerObj.filterOptions = generateFilterOptions(layerObj);
+        }
         return renderData(mapId, layerObj, dispatch, doUpdateTsLayer); // call renderData
       });
   }
