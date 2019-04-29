@@ -54,7 +54,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         data = (layer.aggregate && layer.aggregate.timeseries)
           && timeseries && timeseries[layerId] && timeseries[layerId].data
           ? [...timeseries[layerId].data]
-          : (layer.source && layer.source.data && (layer.source.data.features || [...layer.source.data]));
+          : (layer.source && layer.source.data &&
+            (layer.source.data.features || [...layer.source.data]));
 
         if (data && data.length) {
           let row;
@@ -94,13 +95,17 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           }
         } else {
           // if no data, use feature.properties to populate popup
+          // eslint-disable-next-line no-lonely-if
           if (feature.properties[layer.popup.header]) {
             content = `<div><b>${feature.properties[layer.popup.header]}</b></div>`;
             if (layer.popup.body) {
-              content = content + `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, feature.properties, true))}</center></div>`;
+              content += `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, feature.properties, true))}</center></div>`;
             }
           } else {
-            content = Mustache.render(layer.popup.body, commaFormatting(layer, feature.properties, true));
+            content = Mustache.render(
+              layer.popup.body,
+              commaFormatting(layer, feature.properties, true),
+            );
           }
         }
       }

@@ -159,7 +159,7 @@ export function generateFilterOptions(layerData) {
             && layerData['data-parse'][filter].type === 'multiple';
         }
 
-        // define if the filter is type 'multi' 
+        // define if the filter is type 'multi'
         if (filterOptions[filter] && filterIsMultiSelect) filterOptions[filter].filterType = 'multi';
 
         // if filter type is 'multi'

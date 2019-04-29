@@ -131,5 +131,6 @@ export default function parseData(spec, datum) {
       parsedDatum[datumProps[p]] = parseVal;
     }
   }
+  parsedDatum.unparsedDatum = unparsedDatum;
   return { ...parsedDatum };
 }
