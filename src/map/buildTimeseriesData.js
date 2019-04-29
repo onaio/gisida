@@ -9,22 +9,6 @@ export default function buildTimeseriesData(
   doUpdateTsLayer,
 ) {
   const layerObj = { ...layer };
-  // if (layerObj.aggregate && layerObj.aggregate.timeseries) {
-  //   const tsField = layerObj.aggregate.timeseries.field;
-  //   const sortedData = (layerObj.source.data || layerObj.source.data.features).sort((a, b) => {
-  //     if ((a.properties || a)[tsField] > (b.properties || b)[tsField]) {
-  //       return 1;
-  //     } else if ((b.properties || b)[tsField] > (a.properties || a)[tsField]) {
-  //       return -1;
-  //     }
-  //     return 0;
-  //   });
-  //   if (layerObj.source.data && layerObj.source.data.features) {
-  //     layerObj.source.data.features = sortedData;
-  //   } else {
-  //     layerObj.source.data = sortedData;
-  //   }
-  // }
   const activeLayers = [];
   const layers = [];
   Object.keys(loadedlayers).forEach((key) => {
@@ -50,7 +34,6 @@ export default function buildTimeseriesData(
   let { stops } = Stops;
   let strokeWidthStops;
   let adminFilter;
-
   const periodHasDataReducer = (sum, d) => sum + Number((d.properties || d)[layerProperty]);
   const periodDataFilter = (p) => {
     // define actual period data

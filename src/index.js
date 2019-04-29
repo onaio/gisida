@@ -20,6 +20,7 @@ gisida.hexToRgbA = require('./utils/hexToRgbA').default;
 gisida.parseMustache = require('./utils/parseMustache').default;
 gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
+gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsedBasicDetailItem;
 gisida.processFormData = require('./connectors/ona-api/aggregateFormData').processFormData;
 gisida.parseData = require('./utils/parseData').default;
 gisida.lngLat = require('./utils/lngLat').default;

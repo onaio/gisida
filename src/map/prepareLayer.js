@@ -120,7 +120,14 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId,
   );
-
+  
+  // if (timeseriesMap && timeseriesMap[layerObj.id] &&
+  //    timeseriesMap[layerObj.id].data &&
+  //     Array.isArray(timeseriesMap[layerObj.id].data) &&
+  //     timeseriesMap[layerObj.id].data.find(d => d.Phase)) {
+  //   timeseriesMap[layerObj.id] = timeseriesMap[layerObj.id].data.filter(d => d.Phase !== '');
+  // }
+  
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
@@ -334,6 +341,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       }
       return false;
     };
+   
     if (Array.isArray(mergedData)) {
       mergedData = mergedData.filter(d =>
 

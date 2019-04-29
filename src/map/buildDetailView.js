@@ -153,7 +153,13 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
   };
 };
 
-export default (mapId, LayerObj, FeatureProperties, dispatch) => {
+export default (
+  mapId,
+  LayerObj,
+  FeatureProperties,
+  dispatch,
+  timeSeriesObj,
+) => {
   if (!LayerObj && !FeatureProperties) {
     dispatch(detailView(mapId, null));
     return false;
@@ -171,9 +177,14 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
 
   if (!UID) return false;
   const join = layerObj['detail-view'].join || layerObj.source.join;
-  const layerObjData = (layerObj && layerObj.Data) || (layerObj &&
-    layerObj.mergedData && layerObj.mergedData.features);
-  const layerObjDatum = layerObjData.find(d =>
+  let activeData = null;
+  if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
+    activeData = [...timeSeriesObj.data];
+  } else {
+    activeData = (layerObj && layerObj.Data) || (layerObj &&
+      layerObj.mergedData && layerObj.mergedData.features);
+  }
+  const layerObjDatum = activeData && activeData.length && activeData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
