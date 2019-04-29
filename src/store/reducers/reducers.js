@@ -368,7 +368,7 @@ export function createMapReducer(mapId) {
           if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
             if (activeIds.includes(action.primaryLayer)) {
               activeIds.splice(activeIds.indexOf(action.primaryLayer), 1);
-              activeIds.splice(activeIds.length, 1, action.primaryLayer)
+              activeIds.splice(activeIds.length, 1, action.primaryLayer);
             }
           }
           return {

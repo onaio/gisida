@@ -120,14 +120,14 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId,
   );
-  
+
   // if (timeseriesMap && timeseriesMap[layerObj.id] &&
   //    timeseriesMap[layerObj.id].data &&
   //     Array.isArray(timeseriesMap[layerObj.id].data) &&
   //     timeseriesMap[layerObj.id].data.find(d => d.Phase)) {
   //   timeseriesMap[layerObj.id] = timeseriesMap[layerObj.id].data.filter(d => d.Phase !== '');
   // }
-  
+
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
@@ -201,9 +201,9 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   const layerObj = { ...layer };
   const sourceURL = layer.source.data;
   const fileType = typeof layer.source.data === 'string'
-  ? sourceURL.split('.').pop()
-  : (typeof sourceURL === 'object'
-    && sourceURL !== null 
+    ? sourceURL.split('.').pop()
+    : (typeof sourceURL === 'object'
+    && sourceURL !== null
     && sourceURL.type);
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, (data) => {
@@ -266,9 +266,11 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       base: currentState.APP && currentState.APP.supersetBase,
     };
 
-    superset.api.fetch(config, // fetch with config
-      (res) => res) // pass in callback func to process response
-      .then(data => {
+    superset.api.fetch(
+      config, // fetch with config
+      res => res,
+    ) // pass in callback func to process response
+      .then((data) => {
         layerObj.source.data = superset.processData(data); // assign processed data to layerObj
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(layerObj);
@@ -299,7 +301,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     } else if (typeof filePath === 'object' && filePath !== null && filePath.type) {
       // add in SUPERSET.API promise to q.defer
       switch (filePath.type) {
-        case 'superset':
+        case 'superset': {
           const config = {
             endpoint: 'slice',
             extraPath: filePath['slice-id'],
@@ -307,15 +309,19 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           };
           q.defer(superset.api.deferedFetch, config, superset.processData);
           break;
-        case 'csv':
+        }
+        case 'csv': {
           q.defer(d3.csv, filePath.url);
           break;
+        }
         case 'json':
-        case 'geojson':
+        case 'geojson': {
           q.defer(d3.json, filePath.url);
           break;
-        default:
+        }
+        default: {
           break;
+        }
       }
     } else if (typeof filePath === 'string') q = q.defer(d3.csv, filePath);
   });
@@ -353,13 +359,12 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       }
       return false;
     };
-   
+
     if (Array.isArray(mergedData)) {
       mergedData = mergedData.filter(d =>
 
         d[layerObj.property] !== null).filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
-
       mergedData.features = mergedData.features.filter(d =>
 
         d[layerObj.property] !== undefined).filter(intialFilter);
@@ -484,27 +489,27 @@ function fetchMultipleSources(mapId, layer, dispatch) {
 
     // Helper function to flatten multiple data sources
     function oneToOneMerge(i, PrevData, NextData) {
-      let prevData = PrevData;
+      const prevData = PrevData;
       const nextData = NextData.features || NextData;
-      const mergedData = [];
+      const mergeData = [];
       let prevDatum;
       let matchDatum;
-
+      const findMatch = datum => datum[join[i]] === prevDatum[join[0]];
       // Loop through all previous datum
       for (let d = 0; d < prevData.length; d += 1) {
         prevDatum = prevData[d];
-        matchDatum = nextData.find(datum => datum[join[i]] === prevDatum[join[0]]);
-        // merge datum if a match is found, push datum to mergedData
+        matchDatum = nextData.find(findMatch);
+        // merge datum if a match is found, push datum to mergeData
         if (matchDatum) {
-          mergedData.push({
+          mergeData.push({
             ...prevDatum,
             ...matchDatum,
           });
         } else {
-          mergedData.push({ ...prevDatum });
+          mergeData.push({ ...prevDatum });
         }
       }
-      return mergedData;
+      return mergeData;
     }
 
 
@@ -521,7 +526,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
           data[i],
           hasCustomFilter,
         );
-
       } else if (isOneToMany) {
         mergedData = oneToManyMerge((isVectorLayer ? i + 1 : i), mergedData, data[i]);
       } else if (isOneToOne) {
@@ -572,7 +576,6 @@ export default function prepareLayer(
   filterOptions = false,
   doUpdateTsLayer,
 ) {
-
   const layerObj = { ...layer };
   // Sets state to loading;
   dispatch(requestData(mapId, layerObj.id));
@@ -597,15 +600,15 @@ export default function prepareLayer(
     if (!Array.isArray(layerObj.source.data)
       && typeof layerObj.source.data === 'object'
       && layerObj.source.data !== null) {
-       // add in SUPERSET.API promise to q.defer
-       switch (layerObj.source.data.type) {
+      // add in SUPERSET.API promise to q.defer
+      switch (layerObj.source.data.type) {
         case 'superset':
         case 'csv':
         case 'json':
         case 'geojson':
           readData(mapId, layerObj, dispatch, doUpdateTsLayer);
           break;
-        case 'onadata': 
+        case 'onadata':
           // request data from ONA.API, call renderData()
           break;
         default:
@@ -640,7 +643,7 @@ export default function prepareLayer(
       if (typeof subLayer.source.data === 'string') {
         readData(mapId, subLayer, dispatch);
       } else if (Array.isArray(subLayer.source.data)) {
-        fetchMultipleSources(mapId, subLayer, dispatch)
+        fetchMultipleSources(mapId, subLayer, dispatch);
       } else {
         renderData(mapId, subLayer, dispatch);
       }
