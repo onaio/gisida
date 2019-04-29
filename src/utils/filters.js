@@ -194,7 +194,8 @@ export function generateFilterOptions(layerData) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {
           // handle tallying of select multiple categories
-          const splitBy = ', ';
+          const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
+            layerData['data-parse'][filter].split) || ', ';
           const selectMultipleValues = datum[filter].split(splitBy);
           // loop through all datum[filter] values
           for (let v = 0; v < selectMultipleValues.length; v += 1) {
