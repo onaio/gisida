@@ -114,13 +114,15 @@ export function generateFilterOptions(layerData) {
   const multiFilterVaulesMap = k => layerData['data-parse'][filter].key[k];
   const multiFilterVaulesGen = (lo, f) => {
     const uniqueVals = [];
+    const splitBy = (lo['data-parse'] && lo['data-parse'][f] &&
+      lo['data-parse'][f].split) || ', ';
     if (!lo || !lo.source || !lo.source.data) return uniqueVals;
     const _data = [...(lo.source.data.features || lo.source.data)];
     let vals;
     for (let i = 0; i < _data.length; i += 1) {
       if (_data[i] && _data[i][f]) {
         vals = typeof _data[i][f] === 'string'
-          ? _data[i][f].split(',') : [..._data[i][f]];
+          ? _data[i][f].split(splitBy) : [..._data[i][f]];
         for (let v = 0; v < vals.length; v +=1) {
           if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
         }
