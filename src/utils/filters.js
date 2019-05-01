@@ -112,6 +112,22 @@ export function generateFilterOptions(layerData) {
   }
 
   const multiFilterVaulesMap = k => layerData['data-parse'][filter].key[k];
+  const multiFilterVaulesGen = (lo, f) => {
+    const uniqueVals = [];
+    if (!lo || !lo.source || !lo.source.data) return uniqueVals;
+    const _data = [...(lo.source.data.features || lo.source.data)];
+    let vals;
+    for (let i = 0; i < _data.length; i += 1) {
+      if (_data[i] && _data[i][f]) {
+        vals = typeof _data[i][f] === 'string'
+          ? _data[i][f].split(',') : [..._data[i][f]];
+        for (let v = 0; v < vals.length; v +=1) {
+          if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
+        }
+      }
+    }
+    return uniqueVals;
+  };
 
   let doPushDatum;
   let filterIsMultiSelect = false;
@@ -166,10 +182,11 @@ export function generateFilterOptions(layerData) {
         if (filterIsMultiSelect && (!filterOptions[filter].filterValues ||
           !(Object.keys(filterOptions[filter].filterValues).length))) {
           // add categories for filter options based on layer config data parse
-          const multiFilterVaules = layerData['data-parse'] &&
+          const multiFilterVaules = (layerData['data-parse'] &&
             layerData['data-parse'][filter] &&
             layerData['data-parse'][filter].key &&
-            Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap);
+            Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap)) ||
+            multiFilterVaulesGen(layerData, filter);
 
           for (let m = 0; m < multiFilterVaules.length; m += 1) {
             filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
@@ -196,7 +213,8 @@ export function generateFilterOptions(layerData) {
           // handle tallying of select multiple categories
           const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
             layerData['data-parse'][filter].split) || ', ';
-          const selectMultipleValues = datum[filter].split(splitBy);
+          const selectMultipleValues = typeof datum[filter] === 'string'
+            ? datum[filter].split(splitBy) : [...datum[filter]];
           // loop through all datum[filter] values
           for (let v = 0; v < selectMultipleValues.length; v += 1) {
             // if the current value is not '' is specified in the data-pars key
