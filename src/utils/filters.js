@@ -16,7 +16,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
     }
-    return acceptedFilterValues[f].toString().includes(datum[layerData.aggregate.filter[f]]);
+    return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
   }
 
   if (layerData.aggregate.filter && filterOptions) {
@@ -117,13 +117,15 @@ export function generateFilterOptions(layerData) {
     const splitBy = (lo['data-parse'] && lo['data-parse'][f] &&
       lo['data-parse'][f].split) || ', ';
     if (!lo || !lo.source || !lo.source.data) return uniqueVals;
-    const _data = [...(lo.source.data.features || lo.source.data)];
+    const Data = [...(lo.source.data.features || lo.source.data)];
     let vals;
-    for (let i = 0; i < _data.length; i += 1) {
-      if (_data[i] && _data[i][f]) {
-        vals = typeof _data[i][f] === 'string'
-          ? _data[i][f].split(splitBy) : [..._data[i][f]];
-        for (let v = 0; v < vals.length; v +=1) {
+    let activeData;
+    for (let i = 0; i < Data.length; i += 1) {
+      activeData = Data[i].properties || Data[i];
+      if (activeData && activeData[f]) {
+        vals = typeof activeData[f] === 'string'
+          ? activeData[f].split(splitBy) : [...activeData[f]];
+        for (let v = 0; v < vals.length; v += 1) {
           if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
         }
       }
