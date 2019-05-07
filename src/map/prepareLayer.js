@@ -193,9 +193,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
 
 /**
  * Loads layer data from CSV or GeoJSON source
- * @param {*} layer
- * @param {*} source
- * @param {*} dispatch
  */
 function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   const layerObj = { ...layer };
@@ -257,6 +254,23 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
+  }
+  if (fileType === 'stringified-geojson') {
+    if (layerObj['data-parse']) {
+      layerObj.source.data = {
+        ...(JSON.parse(sourceURL.data)),
+        features: parseData(layerObj['data-parse'], (JSON.parse(sourceURL.data)).features),
+      };
+    } else {
+      layerObj.source.data = JSON.parse(sourceURL.data);
+    }
+    if (layerObj.aggregate && layerObj.aggregate.type) {
+      layerObj.source.data = aggregateFormData(layerObj);
+    }
+    if (layerObj.aggregate && layerObj.aggregate.filter) {
+      layerObj.filterOptions = generateFilterOptions(layerObj);
+    }
+    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
   }
   if (fileType === 'superset') {
     const currentState = dispatch(getCurrentState());
@@ -606,6 +620,7 @@ export default function prepareLayer(
         case 'csv':
         case 'json':
         case 'geojson':
+        case 'stringified-geojson':
           readData(mapId, layerObj, dispatch, doUpdateTsLayer);
           break;
         case 'onadata':
