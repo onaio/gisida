@@ -25,6 +25,7 @@ describe('reducers.APP', () => {
         {
           activeLayerId: '',
           lastLayerSelected: '',
+          activeLayerObjs: [],
           currentRegion: '',
           currentStyle: '',
           detailView: null,

@@ -153,7 +153,13 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
   };
 };
 
-export default (mapId, LayerObj, FeatureProperties, dispatch) => {
+export default (
+  mapId,
+  LayerObj,
+  FeatureProperties,
+  dispatch,
+  timeSeriesObj,
+) => {
   if (!LayerObj && !FeatureProperties) {
     dispatch(detailView(mapId, null));
     return false;
@@ -162,14 +168,23 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   const layerObj = { ...LayerObj };
   let featureProperties = { ...FeatureProperties };
   const {
-    UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
+    UID,
+    title,
+    'sub-title': subTitle,
+    'basic-info': basicInfo,
+    'image-url': imageURL,
   } = layerObj['detail-view'];
 
   if (!UID) return false;
   const join = layerObj['detail-view'].join || layerObj.source.join;
-  const layerObjData = (layerObj && layerObj.Data) || (layerObj &&
-    layerObj.mergedData && layerObj.mergedData.features);
-  const layerObjDatum = layerObjData.find(d =>
+  let activeData = null;
+  if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
+    activeData = [...timeSeriesObj.data];
+  } else {
+    activeData = (layerObj && layerObj.Data) || (layerObj &&
+      layerObj.mergedData && layerObj.mergedData.features);
+  }
+  const layerObjDatum = activeData && activeData.length && activeData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
@@ -183,6 +198,7 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     UID: featureProperties[UID] || featureProperties['Fixed Site Unique ID'],
     title: featureProperties[title.prop], // todo - add mustache support
     subTitle: featureProperties[subTitle.prop], // todo - add mustache support
+    'image-url': featureProperties[imageURL],
     basicInfo,
     parsedBasicInfo: [],
   };

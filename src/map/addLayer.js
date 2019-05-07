@@ -52,7 +52,7 @@ export default function (layer, mapConfig, dispatch) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
+  if (layer.property && layer.stops !== false) {
     stops = generateStops(layer, timefield, dispatch);
   }
 
@@ -171,7 +171,9 @@ export default function (layer, mapConfig, dispatch) {
           };
         }
         const data = layer.source.data.features || layer.source.data;
-        const filteredData = data.filter(d => (d.properties || d)[layer.property] !== undefined);
+        const filteredData = layer.property
+          ? data.filter(d => (d.properties || d)[layer.property] !== undefined)
+          : [...data];
         const dataCopy = layer.source.data.features ? {
           type: 'FeatureCollection',
           features: [...filteredData],

@@ -2,6 +2,7 @@ export const INIT_APP = 'INIT_APP';
 export const INIT_STYLES = 'INIT_STYLES';
 export const INIT_REGIONS = 'INIT_REGIONS';
 export const INIT_LOC = 'INIT_LOC';
+export const INIT_SUPERSET = 'INIT_SUPERSET';
 export const ADD_LAYER = 'ADD_LAYER';
 export const CHANGE_REGION = 'CHANGE_REGION';
 export const CHANGE_STYLE = 'CHANGE_STYLE';

@@ -13,11 +13,10 @@ export function processFilters(layerData, filterOptions, isOr) {
   let f;
   function filterProcessor(d) {
     datum = (d.properties || d);
-
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
     }
-    return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
+    return acceptedFilterValues[f].toString().includes(datum[layerData.aggregate.filter[f]]);
   }
 
   if (layerData.aggregate.filter && filterOptions) {
@@ -44,7 +43,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     });
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
-      if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant') {
+      if (acceptedFilterValues[f] !== 'all' && acceptedFilterValues[f] !== 'quant' && acceptedFilterValues[f] !== 'multi') {
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
           (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
@@ -112,7 +111,10 @@ export function generateFilterOptions(layerData) {
     };
   }
 
+  const multiFilterVaulesMap = k => layerData['data-parse'][filter].key[k];
+
   let doPushDatum;
+  let filterIsMultiSelect = false;
   for (d = 0; d < data.length; d += 1) {
     datum = data[d].geometry ? data[d].properties : data[d];
     doPushDatum = true;
@@ -137,13 +139,45 @@ export function generateFilterOptions(layerData) {
 
     // if datum passes all conditions
     if (doPushDatum) {
+      // loop through the fiters to add to counts of passing data
       for (let f = 0; f < layerFilter.length; f += 1) {
         filter = layerFilter[f];
         acceptedFilterValues = ((layerData.layerObj && layerData.layerObj.aggregate)
           || layerData.aggregate)['accepted-filter-values']
           && ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['accepted-filter-values'][f];
 
-        if (!filterOptions[filter].filterValues[datum[filter]]) {
+        // If filters aren't filterd and filterType is multi
+        filterIsMultiSelect = acceptedFilterValues === 'multi';
+
+        // If filters are filtered then acceptedFilterValues is an array
+        // todo - decouple filters from data-parse config
+        // (to be able to create select_multi filters from select_single questions and visa versa)
+        if (!filterIsMultiSelect && Array.isArray(acceptedFilterValues)) {
+          // Check data-parse config for filter ONA select type
+          filterIsMultiSelect = layerData['data-parse']
+            && layerData['data-parse'][filter]
+            && layerData['data-parse'][filter].type === 'multiple';
+        }
+
+        // define if the filter is type 'multi'
+        if (filterOptions[filter] && filterIsMultiSelect) filterOptions[filter].filterType = 'multi';
+
+        // if filter type is 'multi'
+        if (filterIsMultiSelect && (!filterOptions[filter].filterValues ||
+          !(Object.keys(filterOptions[filter].filterValues).length))) {
+          // add categories for filter options based on layer config data parse
+          const multiFilterVaules = layerData['data-parse'] &&
+            layerData['data-parse'][filter] &&
+            layerData['data-parse'][filter].key &&
+            Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap);
+
+          for (let m = 0; m < multiFilterVaules.length; m += 1) {
+            filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
+          }
+        }
+
+        // If filter option doesn't exist as a category, add it
+        if (!filterOptions[filter].filterValues[datum[filter]] && !filterIsMultiSelect) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if ((acceptedFilterValues === 'quant' ||
             (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
@@ -151,11 +185,25 @@ export function generateFilterOptions(layerData) {
             filterOptions[filter].quantitativeValues = [];
           }
         }
-        filterOptions[filter].filterValues[datum[filter]] += 1;
+
+        if (!filterIsMultiSelect) filterOptions[filter].filterValues[datum[filter]] += 1;
+
         if ((acceptedFilterValues === 'quant'
           || (Array.isArray(acceptedFilterValues)
             && !Number.isNaN(Number(acceptedFilterValues[0]))))) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
+        } else if (filterIsMultiSelect && datum[filter]) {
+          // handle tallying of select multiple categories
+          const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
+            layerData['data-parse'][filter].split) || ', ';
+          const selectMultipleValues = datum[filter].split(splitBy);
+          // loop through all datum[filter] values
+          for (let v = 0; v < selectMultipleValues.length; v += 1) {
+            // if the current value is not '' is specified in the data-pars key
+            if (typeof filterOptions[filter].filterValues[selectMultipleValues[v]] !== 'undefined') {
+              filterOptions[filter].filterValues[selectMultipleValues[v]] += 1;
+            }
+          }
         }
       }
     }

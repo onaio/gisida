@@ -33,10 +33,14 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
-  const clusters = clusterLayer && clusterLayer.stops && nextIndex
-   && clusterLayer.stops[nextIndex] ?
+  const clusters = (clusterLayer && clusterLayer.stops && nextIndex
+   && clusterLayer.stops[nextIndex] &&
+    ![...new Set(clusterLayer.stops[nextIndex].map(d => d[1]))].includes(undefined)) ?
     [...new Set(clusterLayer.stops[nextIndex]
-      .map(d => d[1]))].length : layer.clusters;
+      .map(d => d[1]))].length :
+    layer.clusters || (clusterLayer && clusterLayer.layerObj &&
+         clusterLayer.layerObj.colors && clusterLayer.layerObj.colors.length) ||
+          clusterLayer.categories.color.length;
   const colorsStops = [];
   const radiusStops = [];
   let breaks = [];
@@ -151,23 +155,27 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const stops = layer['unfiltered-stops'] || (layer.layerObj && layer.layerObj['unfiltered-stops']);
+  const stops = layer['unfiltered-stops'] ||
+   (layer.layerObj && layer.layerObj['unfiltered-stops']) ||
+    (layer && layer.layerObj && layer.layerObj.stops && layer.layerObj.stops);
   const { categories } = layer.categories ? layer : layer.layerObj;
-  const { clusters } = categories;
+  const clusters = categories && categories.clusters;
   const limit = (stops && stops[3]) || categories.limit;
   const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
   const colors = (stops && stops[4])
     || getColorBrewerColor(color, clusters)
     || color;
-  const rawData = layer.data || layer.source.data.features || layer.source.data;
-  const rows = rawData.filter(d => (d.properties || d)[layer.property] !== undefined);
+  const rawData = layer.data || layer.source.data.features || layer.source.data || layer.mergedData;
+  const rows = rawData.filter(d => ((d.properties || d)[layer.property] !== 'n/a'));
   let sortedData = [...rows];
+  sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
   if (layer.aggregate && layer.aggregate.timeseries) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
       const { split, chunk } = layer.aggregate['date-parse'];
       sortedDataDate = rows.map((d) => {
         const dataCopy = d;
+
         return {
           ...dataCopy,
           date: new Date((dataCopy.properties ||
@@ -180,6 +188,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
         if (!Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
           return new Date((a.properties ||
              a)[timefield]) - new Date((b.properties || b)[timefield]);
+        } else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
+          return new Date((a.properties ||
+                 a)[timefield].split('-')[0]) - new Date((b.properties || b)[timefield].split('-')[0]);
         } else if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
           return 1;
         } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
@@ -191,6 +202,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   } else {
     sortedData = [...rows];
   }
+
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
