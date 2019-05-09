@@ -42,9 +42,7 @@ export function loadLayers(mapId, dispatch, layers) {
       // use existing layer spec object
       else if (layer instanceof Object && layer.type) {
         layer.loaded = false;
-        dispatch(actions.addLayer(mapId, layer));
         if (layer.visible && !layer.loaded) {
-          // dispatch(actions.toggleLayer(mapId, layer.id, true));
           prepareLayer(mapId, layer, dispatch);
         }
         return true;
