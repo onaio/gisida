@@ -210,10 +210,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     const isOneToMany = relation && relation.type === 'one-to-many';
     const isVectorLayer = type === 'vector';
 
-    let mergedData = isManyToOne
-      ? {}
-      : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
-
+    let mergedData = isManyToOne ?
+      {} :
+      layerObj['merge-locations'] ?
+      [].concat(...data) :
+      (Array.isArray(data[0]) && [...data[0]]) || {
+        ...data[0]
+      };
     // Filter base data for missing join properties
     const intialFilter = (d) => {
       if (!Array.isArray(join[(isVectorLayer ? 1 : 0)])) {
@@ -224,7 +227,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       }
       return false;
     };
-    if (Array.isArray(mergedData)) {
+    if (Array.isArray(mergedData) && !layerObj['merge-locations']) {
       mergedData = mergedData.filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
       mergedData.features = mergedData.features.filter(intialFilter);
