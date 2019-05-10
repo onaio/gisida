@@ -372,10 +372,13 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     const isOneToOne = relation && relation.type === 'one-to-one';
     const isVectorLayer = type === 'vector';
 
-    let mergedData = isManyToOne
-      ? {}
-      : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
-
+    let mergedData = isManyToOne ?
+      {} :
+      layerObj['merge-locations'] ?
+      [].concat(...data) :
+      (Array.isArray(data[0]) && [...data[0]]) || {
+        ...data[0]
+      };
     // Filter base data for missing join properties
     const intialFilter = (d) => {
       if (!Array.isArray(join[(isVectorLayer ? 1 : 0)])) {
