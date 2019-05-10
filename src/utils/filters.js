@@ -5,8 +5,8 @@ export function processFilters(layerData, filterOptions) {
       ? [...layerData.source.data] : { ...layerData.source.data }));
   let data = (Data.features && [...Data.features]) || [...Data];
 
-  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
+  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'].map(f => f.trim().toLowerCase());
+  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'].map(f => f.trim().toLowerCase());
   const filters = [];
 
   let datum;
@@ -27,20 +27,23 @@ export function processFilters(layerData, filterOptions) {
       }
     });
 
+    let filterVal;
+    let subFilterVal;
+
     // apply filters
     data = (data.features || data).filter((d) => {
       datum = (d.properties || d);
-      if (acceptedFilterValues && acceptedSubFilterValues
-        && !acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
+      filterVal = datum[layerData.aggregate.filter] && datum[layerData.aggregate.filter].trim().toLowerCase();
+      subFilterVal = datum[layerData.aggregate['sub-filter']] && datum[layerData.aggregate['sub-filter']].trim().toLowerCase();
+      if (!acceptedFilterValues && !acceptedSubFilterValues && !filters.includes(filterVal) && !filters.includes(subFilterVal)) {
         // remove rows that should be filtered out, ignore rows with values from second filter field
-        return !filters.includes(datum[layerData.aggregate.filter]);
-      } else if (acceptedSubFilterValues
-        && acceptedSubFilterValues.includes(datum[layerData.aggregate['sub-filter']])) {
+        return true;
+      } else if (acceptedSubFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(subFilterVal) && acceptedFilterValues.includes(filterVal) && !filters.includes(subFilterVal)) {
         // remove rows that should be filtered out, ignore rows with values from first filter field
-        return !filters.includes(datum[layerData.aggregate['sub-filter']]);
-      } else if (!acceptedFilterValues && !acceptedSubFilterValues) {
-        return !filters.includes(datum[layerData.aggregate.filter]);
-      } return true;
+        return true;
+      } else if (acceptedFilterValues && acceptedSubFilterValues.includes(subFilterVal) && !filters.includes(filterVal)) {
+        return true;
+      } return false;
     });
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < acceptedFilterValues.length; f += 1) {
