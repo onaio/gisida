@@ -1,3 +1,5 @@
+import reducers from '../reducers/reducers';
+
 export {
   MAP_RENDERED,
   MAP_LOADED,
@@ -43,8 +45,7 @@ export {
   requestData,
   receiveData,
   updateTimeseries,
-  triggerSpinner
+  triggerSpinner,
 } from '../actions/actions';
 export const reducerName = 'map-1';
-import reducers from '../reducers/reducers';
 export default reducers['map-1'];

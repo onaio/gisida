@@ -11,7 +11,8 @@ export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
-    const mapLayers = (layer) => {
+    const mapLayers = (Layer) => {
+      const layer = { ...Layer };
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
@@ -34,13 +35,12 @@ export function loadLayers(mapId, dispatch, layers) {
       // load json layer spec files
       if (typeof layer === 'string') {
         const path = (layer.indexOf('http') !== -1 || layer.indexOf('/') === 0)
-          ? layer 
-          :`config/layers/${layer}.json`;
+          ? layer
+          : `config/layers/${layer}.json`;
         // load local or remote layer spec
         return loadJSON(path, addLayerToStore);
-      }
+      } else if (layer instanceof Object && layer.type) {
       // use existing layer spec object
-      else if (layer instanceof Object && layer.type) {
         layer.loaded = false;
         if (layer.visible && !layer.loaded) {
           prepareLayer(mapId, layer, dispatch);
