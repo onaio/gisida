@@ -5,6 +5,11 @@ export const initApp = config => ({
   config,
 });
 
+export const initLoc = config => ({
+  type: types.INIT_LOC,
+  config,
+});
+
 export const initStyles = (styles, mapConfig) => ({
   type: types.INIT_STYLES,
   styles,
@@ -20,6 +25,11 @@ export const initRegions = (regions, mapConfig) => ({
 export const initLocations = locations => ({
   type: types.INIT_LOCATIONS,
   locations,
+});
+
+export const initSuperset = config => ({
+  type: types.INIT_SUPERSET,
+  config,
 });
 
 export const addLayersList = layers => ({
@@ -79,11 +89,12 @@ export const filtersUpdated = (mapId, layerId) => ({
   mapId,
 });
 
-export const saveFilterState = (mapId, layerId, filterState) => ({
+export const saveFilterState = (mapId, layerId, filterState, isClear) => ({
   type: types.SAVE_FILTER_STATE,
   layerId,
   filterState,
   mapId,
+  isClear,
 });
 
 export const updatePrimaryLayer = (mapId, primaryLayer) => ({
@@ -154,10 +165,11 @@ export const saveFilterOptions = (mapId, filterOptions) => ({
   filterOptions,
 });
 
-export const updateTimeseries = (mapId, timeseries) => ({
+export const updateTimeseries = (mapId, timeseries, layerId) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
   mapId,
+  layerId,
 });
 
 export const detailView = (mapId, payload) => ({
@@ -184,10 +196,27 @@ export function returnState(dispatch, getState) {
 
 export const getCurrentState = () => returnState;
 
+export const locationUpdated = mapId => ({
+  type: types.LOCATION_UPDATED,
+  mapId,
+});
+
+export const setLocation = (mapId, loc) => ({
+  type: types.SET_LOCATION,
+  loc,
+  mapId,
+});
+
+export const toggleMapLocation = loc => ({
+  type: types.SET_LOCATION,
+  loc,
+});
+
 export default {
   initApp,
   initStyles,
   initRegions,
+  initSuperset,
   mapRendered,
   mapLoaded,
   addLayer,
@@ -213,4 +242,8 @@ export default {
   triggerSpinner,
   toggleCategories,
   saveFilterOptions,
+  locationUpdated,
+  setLocation,
+  initLoc,
+  toggleMapLocation,
 };

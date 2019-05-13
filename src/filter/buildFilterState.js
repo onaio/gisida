@@ -1,11 +1,20 @@
 import { generateFilterOptions, processFilters } from '../utils/filters';
+import { getCurrentState } from '../store/actions/actions';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 
 // A function for creating filterOptions based on filters {...} from component state
 // to be used in conjunction with initial layerObj.filterOptions to regenerate filters
 // when re-rendering Filter component UI. Custom / Quant filters can then update this
 // to effectively extend into / update the fillter state.
-export default function buildFilterState(filterOptions, filters, layerObj, regenStops) {
+export default function buildFilterState(
+  mapId,
+  filterOptions,
+  filters,
+  layerObj,
+  dispatch,
+  regenStops,
+  isOr,
+) {
   const aggregate = {
     filter: [],
     'accepted-filter-values': [],
@@ -44,7 +53,8 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
           aggregate['accepted-filter-values'][f].push(optionKeys[o]);
         }
       }
-      if (optionKeys.length === aggregate['accepted-filter-values'][f].length) {
+      if (optionKeys.length === aggregate['accepted-filter-values'][f].length
+      || !aggregate['accepted-filter-values'][f].length) {
         aggregate['accepted-filter-values'][f] = 'all';
       }
     // } else if (dataType === 'quantitative') {
@@ -104,9 +114,16 @@ export default function buildFilterState(filterOptions, filters, layerObj, regen
     fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
     fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
     if (fauxLayerObj.aggregate.type) {
-      fauxLayerObj.source.data = aggregateFormData(fauxLayerObj);
+      fauxLayerObj.source.data = aggregateFormData(fauxLayerObj, null, null, isOr);
     } else {
-      fauxLayerObj.source.data = processFilters(fauxLayerObj);
+      const currentState = dispatch(getCurrentState());
+      if (JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}'
+        && currentState[mapId].oldLayerObjs[layerObj.id]) {
+        const { oldLayerObjs } = currentState[mapId];
+        fauxLayerObj.mergedData = Array.isArray(oldLayerObjs[layerObj.id].mergedData)
+          ? [...oldLayerObjs[layerObj.id].mergedData] : { ...oldLayerObjs[layerObj.id].mergedData };
+      }
+      fauxLayerObj.source.data = processFilters(fauxLayerObj, null, isOr);
     }
     if (fauxLayerObj.stops) {
       fauxLayerObj['unfiltered-stops'] = [...fauxLayerObj.stops];

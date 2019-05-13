@@ -1,6 +1,6 @@
 {
   "name": "gisida",
-  "version": "1.1.0",
+  "version": "1.2.2",
   "description": "A dashboard builder library for map visualizations",
   "keywords": [
     "data visualization",
@@ -27,8 +27,11 @@
     "testURL": "http://localhost/"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.3",
+    "@onaio/superset-connector": "^0.0.7",
     "babel-core": "v6.25.0",
     "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -38,6 +41,7 @@
     "js-cookie": "^2.2.0",
     "jsx-loader": "^0.13.2",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.omit": "^4.5.0",
     "moment": "^2.22.1",
     "mustache": "^2.3.0",
     "neo-async": "^2.5.1",

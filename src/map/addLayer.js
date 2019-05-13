@@ -35,7 +35,7 @@ function buildRadiusAsDistanceExpression(layer) {
   ];
 }
 
-export default function (layer, mapConfig) {
+export default function (layer, mapConfig, dispatch) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
   const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
@@ -52,8 +52,8 @@ export default function (layer, mapConfig) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
-    stops = generateStops(layer, timefield);
+  if (layer.property && layer.stops !== false) {
+    stops = generateStops(layer, timefield, dispatch);
   }
 
   if (stops) {
@@ -64,16 +64,13 @@ export default function (layer, mapConfig) {
     const breaks = stops[3];
     const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
-    const { features } = layer.source.data;
+    const layerData = layer.source.data.features || layer.source.data;
+    const activeData = layerData.map(d => d.properties || d);
     let Data;
     if (timefield) {
-      Data = features ?
-        features.filter(({ properties }) => properties[timefield] === currPeriod) :
-        layer.source.data.filter(data => data[timefield] === currPeriod);
+      Data = activeData.filter(d => d[timefield] === currPeriod);
     } else {
-      Data = features ?
-        layer.source.data.features.map(({ properties }) => properties) :
-        layer.source.data;
+      Data = activeData.filter(d => d[layer.property] !== undefined);
     }
 
     layerObj.stopsData = stopsData;
@@ -124,7 +121,7 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
 
     if (layer.source.minzoom) {
@@ -173,7 +170,16 @@ export default function (layer, mapConfig) {
             type: 'categorical',
           };
         }
-        styleSpec.source.data = layer.source.data;
+        const data = layer.source.data.features || layer.source.data;
+        const filteredData = layer.property
+          ? data.filter(d => (d.properties || d)[layer.property] !== undefined)
+          : [...data];
+        const dataCopy = layer.source.data.features ? {
+          type: 'FeatureCollection',
+          features: [...filteredData],
+        } : [...filteredData];
+
+        styleSpec.source.data = dataCopy;
       }
     }
     // add filter
@@ -202,7 +208,7 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
     if (layer.source.minzoom) {
       styleSpec.minzoom = layer.source.minzoom;
@@ -269,6 +275,11 @@ export default function (layer, mapConfig) {
     } else {
       styleSpec.source.url = layer.source.url;
       styleSpec['source-layer'] = layer.source.layer;
+    }
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
     }
   }
 

@@ -9,7 +9,7 @@ jobs:
       - run: 
           name: Install dependencies
           command: yarn install
-      - run: 
+      - run:
           name: Run eslint
           command: npm run lint
       - run: 
