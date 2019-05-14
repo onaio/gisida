@@ -5,8 +5,19 @@ export function processFilters(layerData, filterOptions, isOr) {
       ? [...layerData.source.data] : { ...layerData.source.data }));
   let data = (Data.features && [...Data.features]) || [...Data];
 
-  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'].map(f => f.trim().toLowerCase());
-  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'].map(f => f.trim().toLowerCase());
+  function parseFilterVals(f) {
+    if (f.length) {
+      return f.trim().toLowerCase();
+    }
+    return f;
+  }
+
+  const acceptedFilterValues = layerData.aggregate.filterIsPrev ?
+    layerData.aggregate['accepted-filter-values'].map(parseFilterVals) :
+    layerData.aggregate['accepted-filter-values'];
+  const acceptedSubFilterValues = layerData.aggregate.filterIsPrev ?
+    layerData.aggregate['accepted-sub-filter-values'].map(parseFilterVals) :
+    layerData.aggregate['accepted-sub-filter-values'];
   const filters = [];
   const combinedData = [];
   let datum;
@@ -33,17 +44,27 @@ export function processFilters(layerData, filterOptions, isOr) {
     // apply filters
     data = (data.features || data).filter((d) => {
       datum = (d.properties || d);
-      filterVal = datum[layerData.aggregate.filter] && datum[layerData.aggregate.filter].trim().toLowerCase();
+      filterVal = datum[layerData.aggregate.filter] &&
+        datum[layerData.aggregate.filter].trim().toLowerCase();
       subFilterVal = datum[layerData.aggregate['sub-filter']] && datum[layerData.aggregate['sub-filter']].trim().toLowerCase();
-      if (!acceptedFilterValues && !acceptedSubFilterValues && !filters.includes(filterVal) && !filters.includes(subFilterVal)) {
+      if (!acceptedFilterValues &&
+        !acceptedSubFilterValues &&
+        !filters.includes(filterVal) &&
+        !filters.includes(subFilterVal)) {
         // remove rows that should be filtered out, ignore rows with values from second filter field
         return true;
-      } else if (acceptedSubFilterValues && acceptedSubFilterValues && !acceptedSubFilterValues.includes(subFilterVal) && acceptedFilterValues.includes(filterVal) && !filters.includes(subFilterVal)) {
+      } else if (acceptedSubFilterValues &&
+        acceptedSubFilterValues &&
+        !acceptedSubFilterValues.includes(subFilterVal) &&
+        acceptedFilterValues.includes(filterVal) && !filters.includes(subFilterVal)) {
         // remove rows that should be filtered out, ignore rows with values from first filter field
         return true;
-      } else if (acceptedFilterValues && acceptedSubFilterValues.includes(subFilterVal) && !filters.includes(filterVal)) {
+      } else if (acceptedFilterValues &&
+        acceptedSubFilterValues.includes(subFilterVal) &&
+        !filters.includes(filterVal)) {
         return true;
-      } return false;
+      }
+      return false;
     });
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
