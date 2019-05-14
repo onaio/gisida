@@ -100,7 +100,10 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
     breaks = limit || (cluster && cluster.length &&
       cluster.map(cl => cl[cl.length - 1]));
   } else {
-    breaks = (cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit;
+    breaks = ((clusterLayer.categories && clusterLayer.categories.useLimit) ||
+        (clusterLayer.categories && clusterLayer.categories.label)) ?
+      limit :
+      ((cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit);
   }
 
   const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
@@ -166,9 +169,10 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const limit = categories && categories.label ?
     categories.limit : ((stops && stops[3]) || categories.limit);
   const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
-  const colors = (stops && stops[4])
-    || getColorBrewerColor(color, clusters)
-    || color;
+  const colors = ((categories && categories.useLimit) || categories.label) ?
+    categories.color : ((stops && stops[4]) ||
+      getColorBrewerColor(color, clusters) ||
+      color);
   const rawData = layer.data || layer.source.data.features || layer.source.data || layer.mergedData;
   const rows = rawData.filter(d => ((d.properties || d)[layer.property] !== 'n/a'));
   let sortedData = [...rows];
