@@ -150,6 +150,8 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     timeseriesMap[layer.id].mapBoxLayer = mbLayer;
     if (timeseriesMap[layer.id].adminFilter) {
       layerObj.filters.admin = timeseriesMap[layer.id].adminFilter;
+    } else if (timeseriesMap[layer.id].tsFilter) {
+      layerObj.filters.tsFilter = timeseriesMap[layer.id].tsFilter;
     }
   }
   const newTimeSeries = Object.assign({}, timeseries, timeseriesMap);

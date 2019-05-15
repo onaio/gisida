@@ -538,14 +538,17 @@ export function createMapReducer(mapId) {
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
             showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
-            doApplyFilters: layer && layer.filters && !!layer.filters.admin,
+            doApplyFilters: (layer && layer.filters) || !!layer.filters.admin,
           };
         }
         case types.UPDATE_TIMESERIES: {
           const { timeseries, layerId } = action;
           const { layers } = state;
           let nextLayers;
-          if (layers[layerId] && layers[layerId].filters && layers[layerId].filters.admin) {
+          if (layers[layerId] &&
+            layers[layerId].filters &&
+            (layers[layerId].filters.admin ||
+              layers[layerId].filters.tsFilter)) {
             nextLayers = {
               ...layers,
               [layerId]: {
@@ -553,6 +556,7 @@ export function createMapReducer(mapId) {
                 filters: {
                   ...layers[layerId].filters,
                   admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
+                  tsFilter: timeseries[layerId].tsFilter && [...timeseries[layerId].tsFilter],
                 },
               },
             };
@@ -562,7 +566,9 @@ export function createMapReducer(mapId) {
             ...state,
             layers: nextLayers || layers,
             timeseries,
-            doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
+            doApplyFilters: timeseries[layerId]
+            && (!!timeseries[layerId].adminFilter
+              || !!timeseries[layerId].tsFilter),
             reloadLayers: Math.random(),
           };
         }
