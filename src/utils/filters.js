@@ -232,10 +232,10 @@ export function generateFilterOptions(layerData) {
           }
         }
 
-        debugger;
-
         // If filter ooption doesn't exist as a category, add it
-        if (filterOptions[filter] && !filterOptions[filter].filterValues[datum[filter]] && !filterIsMultiSelect) {
+        if (filterOptions[filter] &&
+          !filterOptions[filter].filterValues[datum[filter]] &&
+          !filterIsMultiSelect) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if ((acceptedFilterValues === 'quant' ||
             (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
