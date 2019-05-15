@@ -25,6 +25,7 @@ export default function buildTimeseriesData(
   let layerProperty;
   let periodData;
   let charts;
+  let datum;
 
   let period;
   let colorStops;
@@ -34,6 +35,7 @@ export default function buildTimeseriesData(
   let { stops } = Stops;
   let strokeWidthStops;
   let adminFilter;
+  let tsFilter;
   const periodHasDataReducer = (sum, d) => sum + Number((d.properties || d)[layerProperty]);
   const periodDataFilter = (p) => {
     // define actual period data
@@ -63,33 +65,52 @@ export default function buildTimeseriesData(
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
       if (layers[index] && layers[index].visible === true &&
-        layerObj.source.data instanceof Object && stops && layerObj.id === Stops.id) {
+        layerObj.source.data instanceof Object) {
         // Determine layer stops
-        if (layerObj.type === 'chart') {
-          ({ 2: period } = stops);
-          colorStops = layerObj.source.data;
-        } else {
-          const paintStops = stops;
-          const [first, second, third, fourth, fifth, sixth] = paintStops;
-          // referenced from http://www.deadcoderising.com/2017-03-28-es6-destructuring-an-elegant-way-of-extracting-data-from-arrays-and-objects-in-javascript/
-          colorStops = first;
-          radiusStops = second;
-          period = third;
-          breaks = fourth;
-          colors = fifth;
-          strokeWidthStops = sixth;
-          stops = layerObj.type === 'circle' ? radiusStops : colorStops;
+        if (stops && layerObj.id === Stops.id) {
+          if (layerObj.type === 'chart') {
+            ({ 2: period } = stops);
+            colorStops = layerObj.source.data;
+          } else {
+            const paintStops = stops;
+            const [first, second, third, fourth, fifth, sixth] = paintStops;
+            // referenced from http://www.deadcoderising.com/2017-03-28-es6-destructuring-an-elegant-way-of-extracting-data-from-arrays-and-objects-in-javascript/
+            colorStops = first;
+            radiusStops = second;
+            period = third;
+            breaks = fourth;
+            colors = fifth;
+            strokeWidthStops = sixth;
+            stops = layerObj.type === 'circle' ? radiusStops : colorStops;
+          }
+        } else if (layerObj.aggregate && layerObj.aggregate.timeseries) {
+          // if no stops, get periods from data
+          period = [];
+          data = layerObj.source.data.features || layerObj.source.data;
+          for (let d = 0; d < data.length; d += 1) {
+            datum = (data[d].properties
+              && data[d].properties[layerObj.aggregate.timeseries.field])
+              || data[d][layerObj.aggregate.timeseries.field];
+
+            if (period.indexOf(datum) === -1) {
+              period.push(datum);
+            }
+          }
+        }
+
+        if (!period.length) {
+          continue;
         }
 
         temporalIndex = period.length - 1;
 
         if (layerObj.aggregate && layerObj.aggregate.timeseries) {
           // define period data for each period
-          layerProperty = layerObj.property;
+          layerProperty = layerObj.property || (layerObj.source.join && layerObj.source.join[0]);
           periodData = {};
           period.forEach(periodDataFilter);
 
-          ({ data, adminFilter } = periodData[period[temporalIndex]]);
+          ({ data, adminFilter, tsFilter } = periodData[period[temporalIndex]]);
         } else {
           ({ data } = layerObj.source);
         }
@@ -113,6 +134,7 @@ export default function buildTimeseriesData(
         stops,
         layerProperty,
         adminFilter,
+        tsFilter,
       };
     }
   }

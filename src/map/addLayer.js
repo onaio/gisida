@@ -307,7 +307,7 @@ export default function (layer, mapConfig, dispatch) {
     };
 
     // add filter
-    if (layer.filter && styleSpec.filters) {
+    if (layer.filter) {
       styleSpec.filters.base = layer.filter;
     }
 
