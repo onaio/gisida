@@ -99,11 +99,10 @@ export function generateFilterOptionsPrev(layerData) {
 }
 
 export function generateFilterOptions(layerData) {
-  let data = layerData.data || layerData.mergedData || layerData.source.data;
-  // if it's geojson data, set use features array
-  if (data.type) {
-    data = data.features;
-  }
+  const data = layerData.data ||
+    layerData.mergedData ||
+    (layerData.source && layerData.source.data);
+
   const filterOptions = {};
   let filter;
   let filterLabel;
@@ -168,8 +167,8 @@ export function generateFilterOptions(layerData) {
 
   let doPushDatum;
   let filterIsMultiSelect = false;
-  for (d = 0; d < data.length; d += 1) {
-    datum = data[d].geometry ? data[d].properties : data[d];
+  for (d = 0; d < (data.features || data).length; d += 1) {
+    datum = data[d].properties || data[d];
     doPushDatum = true;
 
     // loop through the fiters and see if datum passes filter requirements
@@ -233,8 +232,10 @@ export function generateFilterOptions(layerData) {
           }
         }
 
-        // If filter option doesn't exist as a category, add it
-        if (!filterOptions[filter].filterValues[datum[filter]] && !filterIsMultiSelect) {
+        debugger;
+
+        // If filter ooption doesn't exist as a category, add it
+        if (filterOptions[filter] && !filterOptions[filter].filterValues[datum[filter]] && !filterIsMultiSelect) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if ((acceptedFilterValues === 'quant' ||
             (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0]))))
