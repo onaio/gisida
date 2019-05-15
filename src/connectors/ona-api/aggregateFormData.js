@@ -174,9 +174,10 @@ export function processFormData(formData, layerObj) {
       const previousPeriodGroupData =
         aggregatedData.filter(d => d[groupByField] === availableGroups[j]);
       if (isCumulative && previousPeriodGroupData.length) {
-        prevRowsCount = Number(previousPeriodGroupData[previousPeriodGroupData.length - 1]['value-count']) ||
+        const prevGroupedDataVal = previousPeriodGroupData[previousPeriodGroupData.length - 1];
+        prevRowsCount = Number(prevGroupedDataVal['value-count']) ||
           0;
-        prevSumTotal = Number(previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]) ||
+        prevSumTotal = Number(prevGroupedDataVal[indicatorField]) ||
           0;
         prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
         if (extraProps && extraProps.length) {

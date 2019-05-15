@@ -101,11 +101,7 @@ export default function initStore(customReducers = {}, siteConfigUrl = 'config/s
   // Get combined reducer from registry
   const reducer = combine(reducerRegistry.getReducers());
   // Create initial store
-  const store = createStore(
-    reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    applyMiddleware(thunk)
-  );
+  const store = createStore(reducer, applyMiddleware(thunk));
 
   // Replace the store's reducer whenever a new reducer is registered.
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));

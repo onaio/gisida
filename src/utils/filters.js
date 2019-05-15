@@ -91,7 +91,6 @@ export function processFilters(layerData, filterOptions, isOr) {
 }
 
 export function generateFilterOptionsPrev(layerData) {
-  const data = layerData.mergedData || layerData.source.data;
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
   const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
@@ -143,8 +142,9 @@ export function generateFilterOptions(layerData) {
 
   let doPushDatum;
   let filterIsMultiSelect = false;
-  for (d = 0; d < (data.features || data).length; d += 1) {
-    datum = data[d].properties || data[d];
+  const activeData = data.features || data;
+  for (d = 0; d < activeData.length; d += 1) {
+    datum = activeData[d].properties || activeData[d];
     doPushDatum = true;
 
     // loop through the fiters and see if datum passes filter requirements
