@@ -124,6 +124,7 @@ export default function buildTimeseriesData(
         colorStops,
         radiusStops,
         period,
+        allPeriods: period,
         breaks,
         strokeWidthStops,
         stops,
