@@ -330,5 +330,12 @@ export default function aggregateFormData(layerData, locations, filterOptions, i
 
   // Process data
   aggregatedData = processFormData(data, layer);
+  if (layerData.aggregate && layerData.aggregate.customAggregation) {
+    aggregatedData = aggregatedData.map((d) => {
+      const Data = d;
+      Data.disaggregatedData[0].period = Data.disaggregatedData[0][layerData.aggregate['date-by']];
+      return Data.disaggregatedData[0];
+    });
+  }
   return aggregatedData;
 }
