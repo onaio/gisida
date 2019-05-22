@@ -35,6 +35,22 @@ export function processFormData(formData, layerObj) {
     });
   }
 
+  function matchingRowsGenerator(data, indicator, filterVals) {
+    const dataCopy = [...data];
+    let datum;
+    const matches = [];
+    for (let d = 0; d < dataCopy.length; d += 1) {
+      datum = dataCopy[d];
+      for (let f = 0; f < filterVals.length; f += 1) {
+        if (datum[indicator].includes(filterVals[f])) {
+          matches.push(datum);
+          break;
+        }
+      }
+    }
+    return matches;
+  }
+
   // Add week number to data
   if (isUsingToday) {
     data = data.map((datum) => {
@@ -192,8 +208,7 @@ export function processFormData(formData, layerObj) {
       // Handle actual aggregation
       if (aggregateOptions.type === 'count') {
         // Count rows that match the values list for the indicator field
-        matchingRows = groupData.filter(datum =>
-          matchingValues.includes(datum[indicatorField]));
+        matchingRows = matchingRowsGenerator(groupData, indicatorField, matchingValues)
       } else if (aggregateOptions.type === 'sum') {
         // reduce sumTotal for current groupData
         for (let x = 0; x < groupData.length; x += 1) {
