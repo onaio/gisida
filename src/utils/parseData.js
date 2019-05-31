@@ -111,7 +111,7 @@ export default function parseData(spec, datum) {
         // loop through each value, checking for matches in propSpec.key and propSpec['other-prop']
         parseVal = splitPropVal.map(parseSelectMultipleString).filter(sp => typeof sp !== 'undefined');
 
-        if (propSpec.join) parseVal = parseVal.join(propSpec.join);
+        if (propSpec.join) parseVal = parseVal.join(propSpec.join).replace(/,,/g, ',');
 
       // if select-one value matches the 'other-prop', use otherVal
       } else if (otherVal && datumVal === propSpec['other-prop']) {
@@ -131,7 +131,6 @@ export default function parseData(spec, datum) {
       parsedDatum[datumProps[p]] = parseVal;
     }
   }
-
   parsedDatum.unparsedDatum = unparsedDatum;
   return { ...parsedDatum };
 }

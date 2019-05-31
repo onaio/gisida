@@ -11,7 +11,8 @@ export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
-    const mapLayers = (layer) => {
+    const mapLayers = (Layer) => {
+      const layer = { ...Layer };
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
@@ -30,10 +31,21 @@ export function loadLayers(mapId, dispatch, layers) {
           prepareLayer(mapId, layerObj, dispatch);
         }
       }
+
+      // load json layer spec files
       if (typeof layer === 'string') {
-        const path = layer.indexOf('http') !== -1 ? layer : `config/layers/${layer}.json`;
+        const path = (layer.indexOf('http') !== -1 || layer.indexOf('/') === 0)
+          ? layer
+          : `config/layers/${layer}.json`;
         // load local or remote layer spec
         return loadJSON(path, addLayerToStore);
+      } else if (layer instanceof Object && layer.type) {
+      // use existing layer spec object
+        layer.loaded = false;
+        if (layer.visible && !layer.loaded) {
+          prepareLayer(mapId, layer, dispatch);
+        }
+        return true;
       }
 
       Object.keys(layer).forEach((key) => {
@@ -66,13 +78,19 @@ export function loadLayers(mapId, dispatch, layers) {
 // Add config to redux store
 function addConfigToStore(store, config) {
   store.dispatch(actions.initApp(config.APP));
+  if (config.LOC) {
+    store.dispatch(actions.initLoc(config.LOC));
+  }
+  if (config.SUPERSET_CONFIGS) {
+    store.dispatch(actions.initSuperset(config.SUPERSET_CONFIGS));
+  }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(customReducers = {}) {
+export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
@@ -101,6 +119,6 @@ export default function initStore(customReducers = {}) {
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
-  loadJSON('config/site-config.json', config => addConfigToStore(store, config));
+  loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
   return store;
 }

@@ -14,6 +14,13 @@ const defaultState = {
     appName: 'React Gisida',
     loaded: false,
   },
+  LOC: {
+    default: null,
+    active: null,
+    doUpdateMap: false,
+    location: null,
+    locations: null,
+  },
   STYLES: [
     {
       label: 'Satelitte',
@@ -38,9 +45,7 @@ const defaultState = {
     showSpinner: false,
     menuIsOpen: true,
     openCategories: [],
-    timeseries: {
-      visibility: false,
-    },
+    timeseries: {},
     visibleLayerId: '',
     filter: {
       isFiltered: false,
@@ -56,9 +61,12 @@ const defaultState = {
     detailView: null,
     showProfile: false,
     showFilterPanel: false,
+    activeLayerIds: [],
+    activeLayerObjs: [],
     activeLayerId: '',
     lastLayerSelected: '',
     primaryLayer: '',
+    primarySubLayer: '',
     reloadLayerId: null,
   },
   FILTER: {},

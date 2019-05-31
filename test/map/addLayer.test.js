@@ -11,6 +11,7 @@ import lineLayerOutput from '../fixtures/outputs/line-layer-output.json';
 
 describe('addLayer', () => {
   test('should return correct layer object fill layer', () => {
+    // todo - break these layerObj tests into smaller chuncks (source.data, stops, etc)
     expect(addLayer(fillLayer, mapConfig)).toEqual(fillLayerOutput);
   });
 

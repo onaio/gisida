@@ -2,6 +2,7 @@ import moment from 'moment';
 import { processFilters } from '../../utils/filters';
 import groupBy from '../../utils/groupBy';
 import csvToGEOjson from '../../map/csvToGEOjson';
+import { comparator } from '../../utils/files';
 
 export function processFormData(formData, layerObj) {
   let data = Array.isArray(formData) ? [...formData] : { ...formData };
@@ -90,20 +91,6 @@ export function processFormData(formData, layerObj) {
 
   // Map to store coordinates of each groupBy item if applicable
   const groupProps = {};
-
-  // Sort periods in chronological order
-  function comparator(a, b) {
-    if (a.date) {
-      return Date.parse(a.date) - Date.parse(b.date);
-    }
-    if (a[0] < b[0]) return -1;
-    if (a[0] > b[0]) return 1;
-    if (a[1] < b[1]) return -1;
-    if (a[1] > b[1]) return 1;
-    if (a[2] < b[2]) return -1;
-    if (a[2] > b[2]) return 1;
-    return 0;
-  }
 
   if (isUsingToday) {
     availablePeriods = availablePeriods
@@ -341,5 +328,12 @@ export default function aggregateFormData(layerData, locations, filterOptions, i
 
   // Process data
   aggregatedData = processFormData(data, layer);
+  if (layerData.aggregate && layerData.aggregate.customAggregation) {
+    aggregatedData = aggregatedData.map((d) => {
+      const Data = d;
+      Data.disaggregatedData[0].period = Data.disaggregatedData[0][layerData.aggregate['date-by']];
+      return Data.disaggregatedData[0];
+    });
+  }
   return aggregatedData;
 }

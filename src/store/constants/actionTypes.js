@@ -1,6 +1,8 @@
 export const INIT_APP = 'INIT_APP';
 export const INIT_STYLES = 'INIT_STYLES';
 export const INIT_REGIONS = 'INIT_REGIONS';
+export const INIT_LOC = 'INIT_LOC';
+export const INIT_SUPERSET = 'INIT_SUPERSET';
 export const ADD_LAYER = 'ADD_LAYER';
 export const CHANGE_REGION = 'CHANGE_REGION';
 export const CHANGE_STYLE = 'CHANGE_STYLE';
@@ -26,3 +28,6 @@ export const TRIGGER_SPINNER = 'TRIGGER_SPINNER';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 export const TOGGLE_CATEGORIES = 'TOGGLE_CATEGORIES';
+export const LOCATION_UPDATED = 'LOCATION_UPDATED';
+export const SET_LOCATION = 'SET_LOCATION';
+export const TOGGLE_MAP_LOCATION = 'TOGGLE_MAP_LOCATION';

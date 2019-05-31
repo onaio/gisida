@@ -25,6 +25,7 @@ describe('reducers.APP', () => {
         {
           activeLayerId: '',
           lastLayerSelected: '',
+          activeLayerObjs: [],
           currentRegion: '',
           currentStyle: '',
           detailView: null,
@@ -49,11 +50,13 @@ describe('reducers.APP', () => {
           oldLayerObjs: {},
           openCategories: [],
           primaryLayer: '',
+          primarySubLayer: '',
           reloadLayerId: null,
           reloadLayers: false,
           showFilterPanel: false,
+          activeLayerIds: [],
           showProfile: false,
-          timeseries: { visibility: false },
+          timeseries: {},
           visibleLayerId: '',
         },
       REGIONS: [],
@@ -65,7 +68,7 @@ describe('reducers.APP', () => {
         {
           label: 'Satelitte Streets',
           url: 'mapbox://styles/mapbox/satellite-streets-v9',
-        }
+        },
       ],
       FILTER: {},
       accessToken: false,
@@ -80,6 +83,13 @@ describe('reducers.APP', () => {
       LAYERS: {
         layers: [],
         groups: {},
+      },
+      LOC: {
+        active: null,
+        default: null,
+        doUpdateMap: false,
+        location: null,
+        locations: null,
       },
     };
     expect(reducers.APP(defaultState, action)).toEqual(state);

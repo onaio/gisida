@@ -52,7 +52,7 @@ export default function (layer, mapConfig, dispatch) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
+  if (layer.property && layer.stops !== false) {
     stops = generateStops(layer, timefield, dispatch);
   }
 
@@ -64,16 +64,13 @@ export default function (layer, mapConfig, dispatch) {
     const breaks = stops[3];
     const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
-    const { features } = layer.source.data;
+    const layerData = layer.source.data.features || layer.source.data;
+    const activeData = layerData.map(d => d.properties || d);
     let Data;
     if (timefield) {
-      Data = features ?
-        features.filter(({ properties }) => properties[timefield] === currPeriod) :
-        layer.source.data.filter(data => data[timefield] === currPeriod);
+      Data = activeData.filter(d => d[timefield] === currPeriod);
     } else {
-      Data = features ?
-        layer.source.data.features.map(({ properties }) => properties) :
-        layer.source.data;
+      Data = activeData.filter(d => d[layer.property] !== undefined);
     }
 
     layerObj.stopsData = stopsData;
@@ -173,7 +170,16 @@ export default function (layer, mapConfig, dispatch) {
             type: 'categorical',
           };
         }
-        styleSpec.source.data = layer.source.data;
+        const data = layer.source.data.features || layer.source.data;
+        const filteredData = layer.property
+          ? data.filter(d => (d.properties || d)[layer.property] !== undefined)
+          : [...data];
+        const dataCopy = layer.source.data.features ? {
+          type: 'FeatureCollection',
+          features: [...filteredData],
+        } : [...filteredData];
+
+        styleSpec.source.data = dataCopy;
       }
     }
     // add filter
@@ -270,6 +276,11 @@ export default function (layer, mapConfig, dispatch) {
       styleSpec.source.url = layer.source.url;
       styleSpec['source-layer'] = layer.source.layer;
     }
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
   }
 
   /*
@@ -301,9 +312,11 @@ export default function (layer, mapConfig, dispatch) {
     }
 
     if (layer.source.type === 'geojson') {
-      if (layer.source.data.features
-        && layer.source.data.features[0]
-        && layer.source.data.features[0].geometry) {
+      if ((layer.source.data &&
+          layer.source.data.type === 'Point') ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)) {
         styleSpec.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
         styleSpec.source.data = {
