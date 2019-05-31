@@ -28,13 +28,19 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{json,css,md}": [
-      "prettier --write",
-      "git add"
+    "linters": {
+      "*.{js,jsx}": [
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{json,css,md}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "build/gisida.js",
+      "build/gisida.js.map"
     ]
   },
   "jest": {
