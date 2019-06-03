@@ -17,7 +17,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     popup.remove();
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries } = currentState[mapId];
+    const {
+      layers,
+      timeseries,
+    } = currentState[mapId];
 
     // Generate list of active layers
     const activeLayers = [];
@@ -51,44 +54,47 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
       if (layer && layer.type !== 'chart') {
         // define data to loop through looking for join matches
-        data = (layer.aggregate && layer.aggregate.timeseries)
-          && timeseries && timeseries[layerId] && timeseries[layerId].data
-          ? [...timeseries[layerId].data]
-          : (layer.source && layer.source.data &&
+        data = (layer.aggregate && layer.aggregate.timeseries) &&
+          timeseries && timeseries[layerId] && timeseries[layerId].data ?
+          [...timeseries[layerId].data] :
+          (layer.source && layer.source.data &&
             (layer.source.data.features || [...layer.source.data]));
 
         if (data && data.length) {
           let row;
           for (let r = 0; r < data.length; r += 1) {
-            row = { ...(data[r].properties || data[r]) };
+            row = {
+              ...(data[r].properties || data[r]),
+            };
             const rowItem = {
               ...row,
               ...feature.properties,
             };
             // if row matches property
-            if ((layer.popup.join
-              && (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]))
-              || (!layer.popup.join
-              && (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
-              const found = [];
-              const rxp = /{{([^}]+)}/g;
-              const str = layer.labels ? layer.labels.label : null;
-              for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
-                found.push(c[1]);
+            if ((layer.popup.join &&
+                (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])) ||
+              (!layer.popup.join &&
+                (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
+              const datum = {
+                ...rowItem,
+              };
+              if (layer.popup && layer.popup.hideNulls) {
+                Object.keys(datum).forEach((k) => {
+                  if (Number.isNaN(Number(datum[k])) &&
+                    (datum[k].toLowerCase() === 'n/a' ||
+                      datum[k] === '')) {
+                    delete datum[k];
+                  }
+                });
               }
-              // while (curMatch = rxp.exec(str)) {
-              //   found.push(curMatch[1]);
-              // }
-              found.forEach((i) => {
-                rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-              });
+              const formattedData = commaFormatting(layer, datum, true);
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
                 content =
-                  `<div><b>${row[layer.popup.header]}</b></div>` +
-                  `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
+                  `<div><b>${rowItem[layer.popup.header]}</b></div>` +
+                  `<div><center>${Mustache.render(layer.popup.body, formattedData)}</center></div>`;
               } else {
-                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
+                content = Mustache.render(layer.popup.body, formattedData);
               }
               break;
             }
@@ -96,15 +102,16 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         } else {
           // if no data, use feature.properties to populate popup
           // eslint-disable-next-line no-lonely-if
+          const formattedData = commaFormatting(layer, feature.properties, true);
           if (feature.properties[layer.popup.header]) {
             content = `<div><b>${feature.properties[layer.popup.header]}</b></div>`;
             if (layer.popup.body) {
-              content += `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, feature.properties, true))}</center></div>`;
+              content += `<div><center>${Mustache.render(layer.popup.body, formattedData)}</center></div>`;
             }
           } else {
             content = Mustache.render(
               layer.popup.body,
-              commaFormatting(layer, feature.properties, true),
+              formattedData,
             );
           }
         }

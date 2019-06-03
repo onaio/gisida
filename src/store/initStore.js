@@ -12,7 +12,7 @@ export function loadLayers(mapId, dispatch, layers) {
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
     const mapLayers = (Layer) => {
-      const layer = { ...Layer };
+      const layer = typeof Layer === 'string' ? Layer : { ...Layer };
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
         const layerObj = responseObj;
