@@ -308,7 +308,7 @@ export default function (layer, mapConfig, dispatch) {
 
     // add filter
     if (layer.filter) {
-      styleSpec.filters.base = layer.filter;
+      styleSpec.filter = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
