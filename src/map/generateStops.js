@@ -111,15 +111,18 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const osmIDs = limit ? rangeID : osmID;
   const breakStops = [];
 
+  const activeBreaks = clusterLayer.categories && clusterLayer.categories.label ?
+    limit : breaks;
+
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
-    for (let i = 0; i < breaks.length; i += 1) {
-      if (data[k] <= breaks[i]) {
+    for (let i = 0; i < activeBreaks.length; i += 1) {
+      if (data[k] <= activeBreaks[i]) {
         // Check for repeating stop domains
         const stopValue = OSMIDsExist ? osmIDs[k] : data[k];
         colorsStops.push([stopValue, getColor(colors, i)]);
         radiusStops.push([stopValue, (Number(radius[i]))]);
-        breakStops.push(breaks[i]);
+        breakStops.push(activeBreaks[i]);
         break;
       }
     }
@@ -163,11 +166,10 @@ export default function (layer, timefield, dispatch, nextIndex) {
     (layer && layer.layerObj && layer.layerObj.stops && layer.layerObj.stops);
   const { categories } = layer.categories ? layer : layer.layerObj;
   const clusters = categories && categories.clusters;
-  const limit = ((categories && categories.useLimit) || categories.label) ?
-    categories.limit :
-    ((stops && stops[3]) || categories.limit);
+  const limit = categories && categories.label ?
+    categories.limit : ((stops && stops[3]) || categories.limit);
   const color = layer.categories ? layer.categories.color : layer.layerObj.categories.color;
-  const colors = ((categories && categories.useLimit) || categories.label) ?
+  const colors = (categories && categories.label) ?
     categories.color : ((stops && stops[4]) ||
       getColorBrewerColor(color, clusters) ||
       color);

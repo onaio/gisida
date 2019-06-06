@@ -116,6 +116,7 @@ export default function buildTimeseriesData(
         layerId,
         index,
         layerObj,
+        categories: { ...(layerObj && layerObj.categories) },
         temporalIndex,
         data,
         charts,

@@ -312,9 +312,11 @@ export default function (layer, mapConfig, dispatch) {
     }
 
     if (layer.source.type === 'geojson') {
-      if (layer.source.data.features
-        && layer.source.data.features[0]
-        && layer.source.data.features[0].geometry) {
+      if ((layer.source.data &&
+          layer.source.data.type === 'Point') ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)) {
         styleSpec.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
         styleSpec.source.data = {

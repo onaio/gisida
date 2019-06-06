@@ -195,9 +195,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
 
 /**
  * Loads layer data from CSV or GeoJSON source
- * @param {*} layer
- * @param {*} source
- * @param {*} dispatch
  */
 function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   const layerObj = { ...layer };
@@ -261,6 +258,23 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
+  }
+  if (fileType === 'stringified-geojson') {
+    if (layerObj['data-parse']) {
+      layerObj.source.data = {
+        ...(JSON.parse(sourceURL.data)),
+        features: parseData(layerObj['data-parse'], (JSON.parse(sourceURL.data)).features),
+      };
+    } else {
+      layerObj.source.data = JSON.parse(sourceURL.data);
+    }
+    if (layerObj.aggregate && layerObj.aggregate.type) {
+      layerObj.source.data = aggregateFormData(layerObj);
+    }
+    if (layerObj.aggregate && layerObj.aggregate.filter) {
+      layerObj.filterOptions = generateFilterOptions(layerObj);
+    }
+    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
   }
   if (fileType === 'superset') {
     const currentState = dispatch(getCurrentState());
@@ -615,6 +629,7 @@ export default function prepareLayer(
         case 'csv':
         case 'json':
         case 'geojson':
+        case 'stringified-geojson':
           readData(mapId, layerObj, dispatch, doUpdateTsLayer);
           break;
         case 'onadata':
@@ -650,13 +665,24 @@ export default function prepareLayer(
       subLayer.id = sublayer;
       subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
-        readData(mapId, subLayer, dispatch);
+        readData(mapId, subLayer, dispatch, doUpdateTsLayer);
       } else if (Array.isArray(subLayer.source.data)) {
         fetchMultipleSources(mapId, subLayer, dispatch);
       } else {
-        renderData(mapId, subLayer, dispatch);
+        if (!Array.isArray(subLayer.source.data) &&
+          typeof subLayer.source.data === 'object' &&
+          subLayer.source.data !== null) {
+          switch (subLayer.source.data.type) {
+            case 'superset':
+              readData(mapId, subLayer, dispatch, doUpdateTsLayer);
+              break;
+            default:
+              break;
+          }
+        }
+        renderData(mapId, subLayer, dispatch, doUpdateTsLayer);
       }
     });
-    renderData(mapId, layerObj, dispatch);
+    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
   }
 }
