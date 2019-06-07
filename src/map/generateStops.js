@@ -100,8 +100,9 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
     breaks = limit || (cluster && cluster.length &&
       cluster.map(cl => cl[cl.length - 1]));
   } else {
-    breaks = ((clusterLayer.categories && clusterLayer.categories.useLimit) ||
-        (clusterLayer.categories && clusterLayer.categories.label)) ?
+    breaks = (clusterLayer.categories &&
+        clusterLayer.categories.label &&
+        clusterLayer.type !== 'chart') ?
       limit :
       ((cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit);
   }
@@ -111,7 +112,9 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const osmIDs = limit ? rangeID : osmID;
   const breakStops = [];
 
-  const activeBreaks = clusterLayer.categories && clusterLayer.categories.label ?
+  const activeBreaks = (clusterLayer.categories &&
+      clusterLayer.categories.label &&
+      clusterLayer.type !== 'chart') ?
     limit : breaks;
 
   // Assign colors and radius to osmId or data value
