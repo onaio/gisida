@@ -115,9 +115,13 @@ export function generateFilterOptions(layerData) {
   const multiFilterVaulesGen = (lo, f) => {
     const uniqueVals = [];
     const splitBy = (lo['data-parse'] && lo['data-parse'][f] &&
-      lo['data-parse'][f].split) || ', ';
-    if (!lo || !lo.source || !lo.source.data) return uniqueVals;
-    const Data = [...(lo.source.data.features || lo.source.data)];
+      lo['data-parse'][f].split) || (lo.layerObj &&
+      lo.layerObj['data-parse'] &&
+      lo.layerObj['data-parse'][f] &&
+      lo.layerObj['data-parse'][f].split) || ', ';
+    const sourceData = lo.data || lo.mergedData || (lo.source.data.features || lo.source.data);
+    if (!sourceData.length) return uniqueVals;
+    const Data = [...sourceData];
     let vals;
     let activeData;
     for (let i = 0; i < Data.length; i += 1) {
@@ -174,9 +178,12 @@ export function generateFilterOptions(layerData) {
         // (to be able to create select_multi filters from select_single questions and visa versa)
         if (!filterIsMultiSelect && Array.isArray(acceptedFilterValues)) {
           // Check data-parse config for filter ONA select type
-          filterIsMultiSelect = layerData['data-parse']
+          filterIsMultiSelect = (layerData['data-parse']
             && layerData['data-parse'][filter]
-            && layerData['data-parse'][filter].type === 'multiple';
+            && layerData['data-parse'][filter].type === 'multiple')
+            || (layerData.layerObj && layerData.layerObj['data-parse']
+            && layerData.layerObj['data-parse'][filter]
+            && layerData.layerObj['data-parse'][filter].type === 'multiple');
         }
 
         // define if the filter is type 'multi'
@@ -216,7 +223,11 @@ export function generateFilterOptions(layerData) {
         } else if (filterIsMultiSelect && datum[filter]) {
           // handle tallying of select multiple categories
           const splitBy = (layerData['data-parse'] && layerData['data-parse'][filter] &&
-            layerData['data-parse'][filter].split) || ', ';
+              layerData['data-parse'][filter].split) ||
+            (layerData.layerObj &&
+              layerData.layerObj['data-parse'] &&
+              layerData.layerObj['data-parse'][filter] &&
+              layerData.layerObj['data-parse'][filter].split) || ', ';
           const selectMultipleValues = typeof datum[filter] === 'string'
             ? datum[filter].split(splitBy) : [...datum[filter]];
           // loop through all datum[filter] values
