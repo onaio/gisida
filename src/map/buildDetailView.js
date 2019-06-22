@@ -185,7 +185,8 @@ export default (
     activeData = [...timeSeriesObj.data];
   } else {
     activeData = layerObj &&
-      (layerObj.Data || (layerObj.source.data.features || layerObj.source.data));
+      (layerObj.Data
+        || ((layerObj.source.data && layerObj.source.data.features) || layerObj.source.data));
   }
   const layerObjDatum = activeData && activeData.length && activeData.find(d =>
     (d.properties || d)[join[1]] === featureProperties[join[0]]);
