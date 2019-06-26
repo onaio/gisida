@@ -656,13 +656,24 @@ export default function prepareLayer(
       subLayer.id = sublayer;
       subLayer.parent = layerObj.id;
       if (typeof subLayer.source.data === 'string') {
-        readData(mapId, subLayer, dispatch);
+        readData(mapId, subLayer, dispatch, doUpdateTsLayer);
       } else if (Array.isArray(subLayer.source.data)) {
         fetchMultipleSources(mapId, subLayer, dispatch);
       } else {
-        renderData(mapId, subLayer, dispatch);
+        if (!Array.isArray(subLayer.source.data) &&
+          typeof subLayer.source.data === 'object' &&
+          subLayer.source.data !== null) {
+          switch (subLayer.source.data.type) {
+            case 'superset':
+              readData(mapId, subLayer, dispatch, doUpdateTsLayer);
+              break;
+            default:
+              break;
+          }
+        }
+        renderData(mapId, subLayer, dispatch, doUpdateTsLayer);
       }
     });
-    renderData(mapId, layerObj, dispatch);
+    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
   }
 }
