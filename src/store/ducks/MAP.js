@@ -1,0 +1,51 @@
+import reducers from '../reducers/reducers';
+
+export {
+  MAP_RENDERED,
+  MAP_LOADED,
+  RELOAD_LAYERS,
+  CHANGE_STYLE,
+  CHANGE_REGION,
+  ADD_LAYER,
+  TOGGLE_LAYER,
+  RELOAD_LAYER,
+  LAYER_RELOADED,
+  UPDATE_PRIMARY_LAYER,
+  TOGGLE_FILTER,
+  SET_LAYER_FILTERS,
+  FILTERS_UPDATED,
+  TOGGLE_MENU,
+  RESET_FILTERED_LAYER,
+  TOGGLE_CATEGORIES,
+  DETAIL_VIEW,
+  REQUEST_DATA,
+  RECEIVE_DATA,
+  UPDATE_TIMESERIES,
+  TRIGGER_SPINNER,
+} from '../constants/actionTypes';
+
+export {
+  mapRendered,
+  mapLoaded,
+  reloadLayers,
+  changeStyle,
+  changeRegion,
+  addLayer,
+  toggleLayer,
+  reloadLayer,
+  layerReloaded,
+  updatePrimaryLayer,
+  toggleFilter,
+  setLayerFilter,
+  filtersUpdated,
+  toggleMenu,
+  resetFilteredLayer,
+  toggleCategories,
+  detailView,
+  requestData,
+  receiveData,
+  updateTimeseries,
+  triggerSpinner,
+} from '../actions/actions';
+export const reducerName = 'map-1';
+export default reducers['map-1'];
