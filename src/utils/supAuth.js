@@ -92,7 +92,10 @@ class SupAuthZ {
       this.defaultUnSupAuthZ();
     }
 
-    return isAuth;
+    return {
+      isAuth,
+      authConfig: this.authConfig,
+    };
   }
 
   // Promise Methods for Fetching local files and API Responses

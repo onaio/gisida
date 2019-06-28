@@ -226,6 +226,15 @@ function AUTH(state = defaultState.AUTH, action) {
       };
     }
 
+    case types.GET_AUTH_CONFIGS: {
+      return {
+        ...state,
+        authConfigs: {
+          ...action.config,
+        },
+      };
+    }
+
     case types.RECEIVE_TOKEN: {
       return {
         ...state,

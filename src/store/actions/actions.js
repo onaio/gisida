@@ -265,6 +265,14 @@ export const receiveToken = (token) => {
   };
 };
 
+export const getAuthConfigs = (config) => {
+  return {
+    type: types.GET_AUTH_CONFIGS,
+    config,
+  };
+};
+
+
 export const receiveForms = (forms) => {
   return {
     type: types.RECEIVE_FORMS,
@@ -363,4 +371,5 @@ export default {
   setLocation,
   initLoc,
   toggleMapLocation,
+  getAuthConfigs,
 };

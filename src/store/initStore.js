@@ -91,7 +91,7 @@ function addConfigToStore(store, config) {
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
+export default function initStore(customReducers = {}, loadState, siteConfigUrl = 'config/site-config.json') {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
@@ -113,12 +113,20 @@ export default function initStore(customReducers = {}, siteConfigUrl = 'config/s
   };
   // Get combined reducer from registry
   const reducer = combine(reducerRegistry.getReducers());
+  let store;
+  if (loadState()) {
+    store = createStore(
+      reducer,
+      loadState(),
+      applyMiddleware(thunk),
+    );
+  } else {
+    store = createStore(
+      reducer,
+      applyMiddleware(thunk),
+    );
+  }
   // Create initial store
-  const store = createStore(
-    reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    applyMiddleware(thunk),
-  );
 
   // Replace the store's reducer whenever a new reducer is registered.
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));

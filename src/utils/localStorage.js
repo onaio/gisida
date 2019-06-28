@@ -1,6 +1,6 @@
-export const loadState = (key) => {
+export const loadState = () => {
   try {
-    const serializedState = localStorage.getItem(key);
+    const serializedState = localStorage.getItem('AUTH');
     if (serializedState === null) {
       return undefined;
     }
@@ -10,13 +10,13 @@ export const loadState = (key) => {
   }
 };
 
-export const saveState = (key, state) => {
+export const saveState = (state, isLoggedIn) => {
   try {
     const serializedState = JSON.stringify(state);
-    if (state.isAuthenticated) {
-      localStorage.setItem(key, serializedState);
+    if (isLoggedIn) {
+      localStorage.setItem('AUTH', serializedState);
     } else {
-      localStorage.removeItem(key);
+      localStorage.removeItem('AUTH');
     }
   } catch (e) {
     // console.error(e);
