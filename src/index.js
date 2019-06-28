@@ -55,4 +55,10 @@ gisida.ducks.APP = require('./store/ducks/APP');
 gisida.ducks.MAP = require('./store/ducks/MAP');
 gisida.ducks.STYLES = require('./store/ducks/STYLES');
 
+gisida.localStorage = {};
+
+gisida.localStorage.loadState = require('./utils/localStorage').loadState;
+gisida.localStorage.saveState = require('./utils/localStorage').saveState;
+
+
 module.exports = gisida;
