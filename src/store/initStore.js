@@ -7,7 +7,7 @@ import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
 
 
-export function loadLayers(mapId, dispatch, layers, store) {
+export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
@@ -61,20 +61,8 @@ export function loadLayers(mapId, dispatch, layers, store) {
       // handle all layers
       layers.map(mapLayers);
     } else {
-      let isAuthFetched = false;
-      let auth;
-
-      store.subscribe(() => {
-        const currentState = store.getState();
-        if (!isAuthFetched && currentState.AUTH && currentState.AUTH.isAuthenticated) {
-          auth = Object.assign({}, currentState.AUTH.authConfigs);
-          const groupKeys = Object.keys(layers);
-          isAuthFetched = true;
-        }
-      });
       const groupKeys = Object.keys(layers);
       // loop through all groups of layers
-      console.log("auth??", auth);
       for (let g = 0; g < groupKeys.length; g += 1) {
         // add layers to store array
         dispatch(actions.addLayersList(layers[groupKeys[g]]));
@@ -99,7 +87,7 @@ function addConfigToStore(store, config) {
   }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
-  loadLayers('map-1', store.dispatch, config.LAYERS, store);
+  loadLayers('map-1', store.dispatch, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
