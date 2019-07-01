@@ -284,7 +284,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       base: currentState.APP && currentState.APP.supersetBase,
     };
 
-    superset.api.fetch(
+    superset.api.doFetch(
       config, // fetch with config
       res => res,
     ) // pass in callback func to process response
