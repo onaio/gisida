@@ -302,7 +302,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
           : { ...parsedData };
 
         if (layerObj.aggregate && layerObj.aggregate.type) {
-          layerObj.source.data = aggregateFormData(layerObj);
+          layerObj.source.data = aggregateFormData(layerObj, currentState.LOCATIONS);
         }
         if (layerObj.aggregate && layerObj.aggregate.filter) {
           layerObj.filterOptions = generateFilterOptions(layerObj);
