@@ -199,7 +199,8 @@ export default function (layer, timefield, dispatch, nextIndex) {
         if (!Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
           return new Date((a.properties ||
              a)[timefield]) - new Date((b.properties || b)[timefield]);
-        } else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))) {
+        } else if (Number.isNaN(Date.parse((a.properties || a)[timefield]))
+          && !Number.isNaN(Date.parse((a.properties || a)[timefield].toString().split('-')[0]))) {
           return new Date((a.properties ||
                  a)[timefield].toString().split('-')[0]) - new Date((b.properties || b)[timefield].toString().split('-')[0]);
         } else if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
