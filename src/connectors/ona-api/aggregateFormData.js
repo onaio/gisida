@@ -314,7 +314,7 @@ function assignLocationIDs(data, locations) {
     const row = datum;
     if (!datum.district_id) {
       // add district_id if not defined
-      row.district_id = locations[datum.District];
+      row.district_id = locations[datum.District] || locations[datum.location];
       if (!(datum.district_id)) {
         // Use alternative district field
         row.district_id = locations[datum['survey_intro/District_miss']];
@@ -344,7 +344,8 @@ export default function aggregateFormData(layerData, locations, filterOptions, i
   data = processFilters(layer, filterOptions, isOr);
 
   // Process data
-  aggregatedData = processFormData(data, layer);
+  aggregatedData = (layerData.aggregate && layerData.aggregate.type !== 'none')
+    ? processFormData(data, layer) : data;
   if (layerData.aggregate && layerData.aggregate.customAggregation) {
     aggregatedData = aggregatedData.map((d) => {
       const Data = d;
