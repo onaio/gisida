@@ -159,10 +159,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@onaio/superset-connector@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@onaio/superset-connector/-/superset-connector-0.0.7.tgz#ffe136ec26e0d55b78bfc4ee00b65a4e91767580"
-  integrity sha512-wzUDA4xk5U47BEAT9Q7cQoam1ukTht6tdaacndOJXNl5e6pbEWLeC+G0xseWXH/0MpPJmVo6ia5rCC3jaXW/Aw==
+"@onaio/superset-connector@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@onaio/superset-connector/-/superset-connector-0.0.9.tgz#d0fd811aaec3f39bb01ba9898a8c79c1f4c55610"
+  integrity sha512-EZMFAlIYvx7yvyyezwtpcp6k+Lm106Tk40hpMyBEDm3kF2COhaBxEklSEsoLXbqcfOTnraFbl1qz7O7z0Ny04w==
   dependencies:
     jest-fetch-mock "^2.1.1"
     papaparse "^4.6.3"
