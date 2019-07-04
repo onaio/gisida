@@ -109,14 +109,18 @@ export default function buildFilterState(
       ...aggregate,
     },
   } : null;
-
+  const currentState = dispatch(getCurrentState());
   if (regenStops) {
     fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
     fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
     if (fauxLayerObj.aggregate.type) {
-      fauxLayerObj.source.data = aggregateFormData(fauxLayerObj, null, null, isOr);
+      fauxLayerObj.source.data = aggregateFormData(
+        fauxLayerObj,
+        currentState.LOCATIONS,
+        null,
+        isOr,
+      );
     } else {
-      const currentState = dispatch(getCurrentState());
       if (JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}'
         && currentState[mapId].oldLayerObjs[layerObj.id]) {
         const { oldLayerObjs } = currentState[mapId];
