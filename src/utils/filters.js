@@ -26,6 +26,20 @@ export function processFilters(layerData, filterOptions, isOr) {
     datum = (d.properties || d);
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
+    } else if (layerData['data-parse']
+      && layerData['data-parse'][layerData.aggregate.filter[f]]
+      && layerData['data-parse'][layerData.aggregate.filter[f]].type
+      && layerData['data-parse'][layerData.aggregate.filter[f]].type === 'multiple') {
+      const splitBy = layerData['data-parse'][layerData.aggregate.filter[f]].split || ', ';
+      const vals = datum[layerData.aggregate.filter[f]].split(splitBy);
+      let hasMatches = false;
+      for (let x = 0; x < vals.length; x += 1) {
+        if (acceptedFilterValues[f].includes(vals[x])) {
+          hasMatches = true;
+          break;
+        }
+      }
+      return hasMatches;
     }
     return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
   }
@@ -104,6 +118,7 @@ export function generateFilterOptions(layerData) {
   const data = layerData.data ||
     layerData.mergedData ||
     (layerData.source && layerData.source.data);
+  console.log("data??", data);
 
   const filterOptions = {};
   let filter;
