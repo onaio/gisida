@@ -643,9 +643,7 @@ export default function prepareLayer(
     } else
     // TODO: remove or refactor
     // only filter option
-    if (filterOptions
-      && Object.keys(filterOptions).length !== 0
-      && filterOptions.constructor === Object) {
+    if (filterOptions) {
       const currentState = dispatch(getCurrentState());
       layerObj.source.data =
         layerObj.aggregate.type ?
