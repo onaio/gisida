@@ -44,10 +44,7 @@ export function processFilters(layerData, filterOptions, isOr) {
     return acceptedFilterValues[f].includes(datum[layerData.aggregate.filter[f]]);
   }
 
-  if (layerData.aggregate.filter
-    && filterOptions
-    && Object.keys(filterOptions).length !== 0
-    && filterOptions.constructor === Object) {
+  if (layerData.aggregate.filter && filterOptions) {
     // Get array of disabled filters
     Object.keys(filterOptions).forEach((opt) => {
       if (filterOptions[opt] === false) {
@@ -118,7 +115,6 @@ export function generateFilterOptions(layerData) {
   const data = layerData.data ||
     layerData.mergedData ||
     (layerData.source && layerData.source.data);
-  console.log("data??", data);
 
   const filterOptions = {};
   let filter;

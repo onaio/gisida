@@ -83,7 +83,6 @@ export default function buildFilterState(
       : { ...layerObj.mergedData },
     aggregate: {
       ...layerObj.aggregate,
-      ...aggregate,
     },
     filterOptions: {
       ...layerObj.filterOptions,
