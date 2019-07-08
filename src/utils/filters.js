@@ -31,7 +31,7 @@ export function processFilters(layerData, filterOptions, isOr) {
       && layerData['data-parse'][layerData.aggregate.filter[f]].type
       && layerData['data-parse'][layerData.aggregate.filter[f]].type === 'multiple') {
       const splitBy = layerData['data-parse'][layerData.aggregate.filter[f]].split || ', ';
-      const vals = datum[layerData.aggregate.filter[f]].split(splitBy);
+      const vals = datum[layerData.aggregate.filter[f]].toString().split(splitBy);
       let hasMatches = false;
       for (let x = 0; x < vals.length; x += 1) {
         if (acceptedFilterValues[f].includes(vals[x])) {
@@ -169,7 +169,7 @@ export function generateFilterOptions(layerData) {
       activeData = Data[i].properties || Data[i];
       if (activeData && activeData[f]) {
         vals = typeof activeData[f] === 'string'
-          ? activeData[f].split(splitBy) : [...activeData[f]];
+          ? activeData[f].toString().split(splitBy) : [...activeData[f]];
         for (let v = 0; v < vals.length; v += 1) {
           if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
         }
@@ -273,7 +273,7 @@ export function generateFilterOptions(layerData) {
               layerData.layerObj['data-parse'][filter] &&
               layerData.layerObj['data-parse'][filter].split) || ', ';
           const selectMultipleValues = typeof datum[filter] === 'string'
-            ? datum[filter].split(splitBy) : [...datum[filter]];
+            ? datum[filter].toString().split(splitBy) : [...datum[filter]];
           // loop through all datum[filter] values
           for (let v = 0; v < selectMultipleValues.length; v += 1) {
             // if the current value is not '' is specified in the data-pars key
