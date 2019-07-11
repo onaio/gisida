@@ -1,5 +1,5 @@
 export function processFilters(layerData, filterOptions, isOr) {
-  const Data = (layerData.mergedData && (Array.isArray(layerData.mergedData)
+  const Data = layerData.Data || (layerData.mergedData && (Array.isArray(layerData.mergedData)
     ? [...layerData.mergedData] : { ...layerData.mergedData }))
     || (layerData.source.data && (Array.isArray(layerData.source.data)
       ? [...layerData.source.data] : { ...layerData.source.data }));
