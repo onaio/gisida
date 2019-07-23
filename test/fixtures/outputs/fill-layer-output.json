@@ -1,2609 +1,2627 @@
 {
   "label": "OCHA: Percentage of people (children < 3) and pregnant and lactating women reached with malnutrition prevention services",
   "source": {
-    "type": "vector",
-    "data": [
-        {
-          "monthly_target": "45112",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Galgaduud",
-          "region_id": "R1720056",
-          "value": "0"
-        },
-        {
-          "monthly_target": "115999",
-          "percent_target": "5",
-          "period": "January",
-          "region": "Mudug",
-          "region_id": "R1720063",
-          "value": "5232"
-        },
-        {
-          "monthly_target": "62481",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Hiraan",
-          "region_id": "R1720058",
-          "value": "0"
-        },
-        {
-          "monthly_target": "43550",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Shabelle Dhexe",
-          "region_id": "R1720062",
-          "value": "0"
-        },
-        {
-          "monthly_target": "61008",
-          "percent_target": "14",
-          "period": "January",
-          "region": "Gedo",
-          "region_id": "R1720057",
-          "value": "8555"
-        },
-        {
-          "monthly_target": "46966",
-          "percent_target": "9",
-          "period": "January",
-          "region": "Juba Hoose",
-          "region_id": "R1720059",
-          "value": "4003"
-        },
-        {
-          "monthly_target": "0",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Juba Dhexe",
-          "region_id": "R1720061",
-          "value": "0"
-        },
-        {
-          "monthly_target": "131856",
-          "percent_target": "2",
-          "period": "January",
-          "region": "Banadir",
-          "region_id": "R1720053",
-          "value": "2100"
-        },
-        {
-          "monthly_target": "87616",
-          "percent_target": "20",
-          "period": "January",
-          "region": "Bari",
-          "region_id": "R1720054",
-          "value": "17373"
-        },
-        {
-          "monthly_target": "47122",
-          "percent_target": "5",
-          "period": "January",
-          "region": "Nugaal",
-          "region_id": "R1720064",
-          "value": "2553"
-        },
-        {
-          "monthly_target": "105312",
-          "percent_target": "3",
-          "period": "January",
-          "region": "Sanaag",
-          "region_id": "R1720065",
-          "value": "3605"
-        },
-        {
-          "monthly_target": "98337",
-          "percent_target": "5",
-          "period": "January",
-          "region": "Sool",
-          "region_id": "R1720066",
-          "value": "4831"
-        },
-        {
-          "monthly_target": "80790",
-          "percent_target": "15",
-          "period": "January",
-          "region": "Awdal",
-          "region_id": "R1720051",
-          "value": "12216"
-        },
-        {
-          "monthly_target": "86563",
-          "percent_target": "13",
-          "period": "January",
-          "region": "Togdheer",
-          "region_id": "R1720067",
-          "value": "11380"
-        },
-        {
-          "monthly_target": "149040",
-          "percent_target": "15",
-          "period": "January",
-          "region": "Woqooyi Galbeed",
-          "region_id": "R1720068",
-          "value": "21886"
-        },
-        {
-          "monthly_target": "44067",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Bakool",
-          "region_id": "R1720052",
-          "value": "0"
-        },
-        {
-          "monthly_target": "58872",
-          "percent_target": "6",
-          "period": "January",
-          "region": "Bay",
-          "region_id": "R1720055",
-          "value": "3761"
-        },
-        {
-          "monthly_target": "42202",
-          "percent_target": "0",
-          "period": "January",
-          "region": "Shabelle Hoose",
-          "region_id": "R1720060",
-          "value": "0"
-        },
-        {
-          "monthly_target": "45112",
-          "percent_target": "3",
-          "period": "February",
-          "region": "Galgaduud",
-          "region_id": "R1720056",
-          "value": "1250"
-        },
-        {
-          "monthly_target": "115999",
-          "percent_target": "10",
-          "period": "February",
-          "region": "Mudug",
-          "region_id": "R1720063",
-          "value": "11190"
-        },
-        {
-          "monthly_target": "62481",
-          "percent_target": "9",
-          "period": "February",
-          "region": "Hiraan",
-          "region_id": "R1720058",
-          "value": "5700"
-        },
-        {
-          "monthly_target": "43550",
-          "percent_target": "0",
-          "period": "February",
-          "region": "Shabelle Dhexe",
-          "region_id": "R1720062",
-          "value": "0"
-        },
-        {
-          "monthly_target": "61008",
-          "percent_target": "28",
-          "period": "February",
-          "region": "Gedo",
-          "region_id": "R1720057",
-          "value": "17340"
-        },
-        {
-          "monthly_target": "46966",
-          "percent_target": "9",
-          "period": "February",
-          "region": "Juba Hoose",
-          "region_id": "R1720059",
-          "value": "4003"
-        },
-        {
-          "monthly_target": "0",
-          "percent_target": "0",
-          "period": "February",
-          "region": "Juba Dhexe",
-          "region_id": "R1720061",
-          "value": "0"
-        },
-        {
-          "monthly_target": "131856",
-          "percent_target": "21",
-          "period": "February",
-          "region": "Banadir",
-          "region_id": "R1720053",
-          "value": "27604"
-        },
-        {
-          "monthly_target": "87616",
-          "percent_target": "29",
-          "period": "February",
-          "region": "Bari",
-          "region_id": "R1720054",
-          "value": "25628"
-        },
-        {
-          "monthly_target": "47122",
-          "percent_target": "28",
-          "period": "February",
-          "region": "Nugaal",
-          "region_id": "R1720064",
-          "value": "13322"
-        },
-        {
-          "monthly_target": "105312",
-          "percent_target": "11",
-          "period": "February",
-          "region": "Sanaag",
-          "region_id": "R1720065",
-          "value": "11678"
-        },
-        {
-          "monthly_target": "110296",
-          "percent_target": "11",
-          "period": "February",
-          "region": "Sool",
-          "region_id": "R1720066",
-          "value": "12171"
-        },
-        {
-          "monthly_target": "80790",
-          "percent_target": "15",
-          "period": "February",
-          "region": "Awdal",
-          "region_id": "R1720051",
-          "value": "12216"
-        },
-        {
-          "monthly_target": "86563",
-          "percent_target": "24",
-          "period": "February",
-          "region": "Togdheer",
-          "region_id": "R1720067",
-          "value": "20554"
-        },
-        {
-          "monthly_target": "149040",
-          "percent_target": "15",
-          "period": "February",
-          "region": "Woqooyi Galbeed",
-          "region_id": "R1720068",
-          "value": "21896"
-        },
-        {
-          "monthly_target": "44067",
-          "percent_target": "16",
-          "period": "February",
-          "region": "Bakool",
-          "region_id": "R1720052",
-          "value": "7007"
-        },
-        {
-          "monthly_target": "58872",
-          "percent_target": "13",
-          "period": "February",
-          "region": "Bay",
-          "region_id": "R1720055",
-          "value": "7500"
-        },
-        {
-          "monthly_target": "42202",
-          "percent_target": "0",
-          "period": "February",
-          "region": "Shabelle Hoose",
-          "region_id": "R1720060",
-          "value": "0"
-        },
-        {
-          "monthly_target": "45112",
-          "percent_target": "8",
-          "period": "March",
-          "region": "Galgaduud",
-          "region_id": "R1720056",
-          "value": "3500"
-        },
-        {
-          "monthly_target": "132536",
-          "percent_target": "25",
-          "period": "March",
-          "region": "Mudug",
-          "region_id": "R1720063",
-          "value": "33555"
-        },
-        {
-          "monthly_target": "62481",
-          "percent_target": "18",
-          "period": "March",
-          "region": "Hiraan",
-          "region_id": "R1720058",
-          "value": "11025"
-        },
-        {
-          "monthly_target": "43550",
-          "percent_target": "10",
-          "period": "March",
-          "region": "Shabelle Dhexe",
-          "region_id": "R1720062",
-          "value": "4305"
-        },
-        {
-          "monthly_target": "61008",
-          "percent_target": "37",
-          "period": "March",
-          "region": "Gedo",
-          "region_id": "R1720057",
-          "value": "22664"
-        },
-        {
-          "monthly_target": "46966",
-          "percent_target": "45",
-          "period": "March",
-          "region": "Juba Hoose",
-          "region_id": "R1720059",
-          "value": "20940"
-        },
-        {
-          "monthly_target": "0",
-          "percent_target": "0",
-          "period": "March",
-          "region": "Juba Dhexe",
-          "region_id": "R1720061",
-          "value": "0"
-        },
-        {
-          "monthly_target": "131856",
-          "percent_target": "22",
-          "period": "March",
-          "region": "Banadir",
-          "region_id": "R1720053",
-          "value": "28598"
-        },
-        {
-          "monthly_target": "87616",
-          "percent_target": "47",
-          "period": "March",
-          "region": "Bari",
-          "region_id": "R1720054",
-          "value": "40771"
-        },
-        {
-          "monthly_target": "47122",
-          "percent_target": "36",
-          "period": "March",
-          "region": "Nugaal",
-          "region_id": "R1720064",
-          "value": "17097"
-        },
-        {
-          "monthly_target": "115278",
-          "percent_target": "22",
-          "period": "March",
-          "region": "Sanaag",
-          "region_id": "R1720065",
-          "value": "25720"
-        },
-        {
-          "monthly_target": "76394",
-          "percent_target": "34",
-          "period": "March",
-          "region": "Sool",
-          "region_id": "R1720066",
-          "value": "25628"
-        },
-        {
-          "monthly_target": "80790",
-          "percent_target": "19",
-          "period": "March",
-          "region": "Awdal",
-          "region_id": "R1720051",
-          "value": "15364"
-        },
-        {
-          "monthly_target": "86563",
-          "percent_target": "28",
-          "period": "March",
-          "region": "Togdheer",
-          "region_id": "R1720067",
-          "value": "24121"
-        },
-        {
-          "monthly_target": "149040",
-          "percent_target": "16",
-          "period": "March",
-          "region": "Woqooyi Galbeed",
-          "region_id": "R1720068",
-          "value": "23755"
-        },
-        {
-          "monthly_target": "44067",
-          "percent_target": "18",
-          "period": "March",
-          "region": "Bakool",
-          "region_id": "R1720052",
-          "value": "8095"
-        },
-        {
-          "monthly_target": "58872",
-          "percent_target": "15",
-          "period": "March",
-          "region": "Bay",
-          "region_id": "R1720055",
-          "value": "9000"
-        },
-        {
-          "monthly_target": "42202",
-          "percent_target": "8",
-          "period": "March",
-          "region": "Shabelle Hoose",
-          "region_id": "R1720060",
-          "value": "3526"
-        },
-        {
-          "monthly_target": "68332",
-          "percent_target": "20",
-          "period": "April",
-          "region": "Galgaduud",
-          "region_id": "R1720056",
-          "value": "13500"
-        },
-        {
-          "monthly_target": "86143",
-          "percent_target": "42",
-          "period": "April",
-          "region": "Mudug",
-          "region_id": "R1720063",
-          "value": "35877"
-        },
-        {
-          "monthly_target": "62481",
-          "percent_target": "19",
-          "period": "April",
-          "region": "Hiraan",
-          "region_id": "R1720058",
-          "value": "11912"
-        },
-        {
-          "monthly_target": "144265",
-          "percent_target": "10",
-          "period": "April",
-          "region": "Shabelle Dhexe",
-          "region_id": "R1720062",
-          "value": "14374"
-        },
-        {
-          "monthly_target": "61008",
-          "percent_target": "42",
-          "period": "April",
-          "region": "Gedo",
-          "region_id": "R1720057",
-          "value": "25748"
-        },
-        {
-          "monthly_target": "58716",
-          "percent_target": "42",
-          "period": "April",
-          "region": "Juba Hoose",
-          "region_id": "R1720059",
-          "value": "24936"
-        },
-        {
-          "monthly_target": "43550",
-          "percent_target": "0",
-          "period": "April",
-          "region": "Juba Dhexe",
-          "region_id": "R1720061",
-          "value": "0"
-        },
-        {
-          "monthly_target": "156771",
-          "percent_target": "37",
-          "period": "April",
-          "region": "Banadir",
-          "region_id": "R1720053",
-          "value": "58650"
-        },
-        {
-          "monthly_target": "87616",
-          "percent_target": "44",
-          "period": "April",
-          "region": "Bari",
-          "region_id": "R1720054",
-          "value": "38955"
-        },
-        {
-          "monthly_target": "47123",
-          "percent_target": "41",
-          "period": "April",
-          "region": "Nugaal",
-          "region_id": "R1720064",
-          "value": "19133"
-        },
-        {
-          "monthly_target": "59322",
-          "percent_target": "50",
-          "period": "April",
-          "region": "Sanaag",
-          "region_id": "R1720065",
-          "value": "29470"
-        },
-        {
-          "monthly_target": "37452",
-          "percent_target": "69",
-          "period": "April",
-          "region": "Sool",
-          "region_id": "R1720066",
-          "value": "25966"
-        },
-        {
-          "monthly_target": "80790",
-          "percent_target": "23",
-          "period": "April",
-          "region": "Awdal",
-          "region_id": "R1720051",
-          "value": "18385"
-        },
-        {
-          "monthly_target": "86563",
-          "percent_target": "18",
-          "period": "April",
-          "region": "Togdheer",
-          "region_id": "R1720067",
-          "value": "15337"
-        },
-        {
-          "monthly_target": "149040",
-          "percent_target": "15",
-          "period": "April",
-          "region": "Woqooyi Galbeed",
-          "region_id": "R1720068",
-          "value": "22930"
-        },
-        {
-          "monthly_target": "44067",
-          "percent_target": "29",
-          "period": "April",
-          "region": "Bakool",
-          "region_id": "R1720052",
-          "value": "12940"
-        },
-        {
-          "monthly_target": "95061",
-          "percent_target": "12",
-          "period": "April",
-          "region": "Bay",
-          "region_id": "R1720055",
-          "value": "11560"
-        },
-        {
-          "monthly_target": "61923",
-          "percent_target": "30",
-          "period": "April",
-          "region": "Shabelle Hoose",
-          "region_id": "R1720060",
-          "value": "18754"
-        }
+      "type": "vector",
+      "data": [
+          {
+              "region_id": "R1720056",
+              "region": "Galgaduud",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "45112",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720063",
+              "region": "Mudug",
+              "period": "January",
+              "value": "5232",
+              "monthly_target": "115999",
+              "percent_target": "5"
+          },
+          {
+              "region_id": "R1720058",
+              "region": "Hiraan",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "62481",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720062",
+              "region": "Shabelle Dhexe",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "43550",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720057",
+              "region": "Gedo",
+              "period": "January",
+              "value": "8555",
+              "monthly_target": "61008",
+              "percent_target": "14"
+          },
+          {
+              "region_id": "R1720059",
+              "region": "Juba Hoose",
+              "period": "January",
+              "value": "4003",
+              "monthly_target": "46966",
+              "percent_target": "9"
+          },
+          {
+              "region_id": "R1720061",
+              "region": "Juba Dhexe",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "0",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720053",
+              "region": "Banadir",
+              "period": "January",
+              "value": "2100",
+              "monthly_target": "131856",
+              "percent_target": "2"
+          },
+          {
+              "region_id": "R1720054",
+              "region": "Bari",
+              "period": "January",
+              "value": "17373",
+              "monthly_target": "87616",
+              "percent_target": "20"
+          },
+          {
+              "region_id": "R1720064",
+              "region": "Nugaal",
+              "period": "January",
+              "value": "2553",
+              "monthly_target": "47122",
+              "percent_target": "5"
+          },
+          {
+              "region_id": "R1720065",
+              "region": "Sanaag",
+              "period": "January",
+              "value": "3605",
+              "monthly_target": "105312",
+              "percent_target": "3"
+          },
+          {
+              "region_id": "R1720066",
+              "region": "Sool",
+              "period": "January",
+              "value": "4831",
+              "monthly_target": "98337",
+              "percent_target": "5"
+          },
+          {
+              "region_id": "R1720051",
+              "region": "Awdal",
+              "period": "January",
+              "value": "12216",
+              "monthly_target": "80790",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720067",
+              "region": "Togdheer",
+              "period": "January",
+              "value": "11380",
+              "monthly_target": "86563",
+              "percent_target": "13"
+          },
+          {
+              "region_id": "R1720068",
+              "region": "Woqooyi Galbeed",
+              "period": "January",
+              "value": "21886",
+              "monthly_target": "149040",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720052",
+              "region": "Bakool",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "44067",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720055",
+              "region": "Bay",
+              "period": "January",
+              "value": "3761",
+              "monthly_target": "58872",
+              "percent_target": "6"
+          },
+          {
+              "region_id": "R1720060",
+              "region": "Shabelle Hoose",
+              "period": "January",
+              "value": "0",
+              "monthly_target": "42202",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720056",
+              "region": "Galgaduud",
+              "period": "February",
+              "value": "1250",
+              "monthly_target": "45112",
+              "percent_target": "3"
+          },
+          {
+              "region_id": "R1720063",
+              "region": "Mudug",
+              "period": "February",
+              "value": "11190",
+              "monthly_target": "115999",
+              "percent_target": "10"
+          },
+          {
+              "region_id": "R1720058",
+              "region": "Hiraan",
+              "period": "February",
+              "value": "5700",
+              "monthly_target": "62481",
+              "percent_target": "9"
+          },
+          {
+              "region_id": "R1720062",
+              "region": "Shabelle Dhexe",
+              "period": "February",
+              "value": "0",
+              "monthly_target": "43550",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720057",
+              "region": "Gedo",
+              "period": "February",
+              "value": "17340",
+              "monthly_target": "61008",
+              "percent_target": "28"
+          },
+          {
+              "region_id": "R1720059",
+              "region": "Juba Hoose",
+              "period": "February",
+              "value": "4003",
+              "monthly_target": "46966",
+              "percent_target": "9"
+          },
+          {
+              "region_id": "R1720061",
+              "region": "Juba Dhexe",
+              "period": "February",
+              "value": "0",
+              "monthly_target": "0",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720053",
+              "region": "Banadir",
+              "period": "February",
+              "value": "27604",
+              "monthly_target": "131856",
+              "percent_target": "21"
+          },
+          {
+              "region_id": "R1720054",
+              "region": "Bari",
+              "period": "February",
+              "value": "25628",
+              "monthly_target": "87616",
+              "percent_target": "29"
+          },
+          {
+              "region_id": "R1720064",
+              "region": "Nugaal",
+              "period": "February",
+              "value": "13322",
+              "monthly_target": "47122",
+              "percent_target": "28"
+          },
+          {
+              "region_id": "R1720065",
+              "region": "Sanaag",
+              "period": "February",
+              "value": "11678",
+              "monthly_target": "105312",
+              "percent_target": "11"
+          },
+          {
+              "region_id": "R1720066",
+              "region": "Sool",
+              "period": "February",
+              "value": "12171",
+              "monthly_target": "110296",
+              "percent_target": "11"
+          },
+          {
+              "region_id": "R1720051",
+              "region": "Awdal",
+              "period": "February",
+              "value": "12216",
+              "monthly_target": "80790",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720067",
+              "region": "Togdheer",
+              "period": "February",
+              "value": "20554",
+              "monthly_target": "86563",
+              "percent_target": "24"
+          },
+          {
+              "region_id": "R1720068",
+              "region": "Woqooyi Galbeed",
+              "period": "February",
+              "value": "21896",
+              "monthly_target": "149040",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720052",
+              "region": "Bakool",
+              "period": "February",
+              "value": "7007",
+              "monthly_target": "44067",
+              "percent_target": "16"
+          },
+          {
+              "region_id": "R1720055",
+              "region": "Bay",
+              "period": "February",
+              "value": "7500",
+              "monthly_target": "58872",
+              "percent_target": "13"
+          },
+          {
+              "region_id": "R1720060",
+              "region": "Shabelle Hoose",
+              "period": "February",
+              "value": "0",
+              "monthly_target": "42202",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720056",
+              "region": "Galgaduud",
+              "period": "March",
+              "value": "3500",
+              "monthly_target": "45112",
+              "percent_target": "8"
+          },
+          {
+              "region_id": "R1720063",
+              "region": "Mudug",
+              "period": "March",
+              "value": "33555",
+              "monthly_target": "132536",
+              "percent_target": "25"
+          },
+          {
+              "region_id": "R1720058",
+              "region": "Hiraan",
+              "period": "March",
+              "value": "11025",
+              "monthly_target": "62481",
+              "percent_target": "18"
+          },
+          {
+              "region_id": "R1720062",
+              "region": "Shabelle Dhexe",
+              "period": "March",
+              "value": "4305",
+              "monthly_target": "43550",
+              "percent_target": "10"
+          },
+          {
+              "region_id": "R1720057",
+              "region": "Gedo",
+              "period": "March",
+              "value": "22664",
+              "monthly_target": "61008",
+              "percent_target": "37"
+          },
+          {
+              "region_id": "R1720059",
+              "region": "Juba Hoose",
+              "period": "March",
+              "value": "20940",
+              "monthly_target": "46966",
+              "percent_target": "45"
+          },
+          {
+              "region_id": "R1720061",
+              "region": "Juba Dhexe",
+              "period": "March",
+              "value": "0",
+              "monthly_target": "0",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720053",
+              "region": "Banadir",
+              "period": "March",
+              "value": "28598",
+              "monthly_target": "131856",
+              "percent_target": "22"
+          },
+          {
+              "region_id": "R1720054",
+              "region": "Bari",
+              "period": "March",
+              "value": "40771",
+              "monthly_target": "87616",
+              "percent_target": "47"
+          },
+          {
+              "region_id": "R1720064",
+              "region": "Nugaal",
+              "period": "March",
+              "value": "17097",
+              "monthly_target": "47122",
+              "percent_target": "36"
+          },
+          {
+              "region_id": "R1720065",
+              "region": "Sanaag",
+              "period": "March",
+              "value": "25720",
+              "monthly_target": "115278",
+              "percent_target": "22"
+          },
+          {
+              "region_id": "R1720066",
+              "region": "Sool",
+              "period": "March",
+              "value": "25628",
+              "monthly_target": "76394",
+              "percent_target": "34"
+          },
+          {
+              "region_id": "R1720051",
+              "region": "Awdal",
+              "period": "March",
+              "value": "15364",
+              "monthly_target": "80790",
+              "percent_target": "19"
+          },
+          {
+              "region_id": "R1720067",
+              "region": "Togdheer",
+              "period": "March",
+              "value": "24121",
+              "monthly_target": "86563",
+              "percent_target": "28"
+          },
+          {
+              "region_id": "R1720068",
+              "region": "Woqooyi Galbeed",
+              "period": "March",
+              "value": "23755",
+              "monthly_target": "149040",
+              "percent_target": "16"
+          },
+          {
+              "region_id": "R1720052",
+              "region": "Bakool",
+              "period": "March",
+              "value": "8095",
+              "monthly_target": "44067",
+              "percent_target": "18"
+          },
+          {
+              "region_id": "R1720055",
+              "region": "Bay",
+              "period": "March",
+              "value": "9000",
+              "monthly_target": "58872",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720060",
+              "region": "Shabelle Hoose",
+              "period": "March",
+              "value": "3526",
+              "monthly_target": "42202",
+              "percent_target": "8"
+          },
+          {
+              "region_id": "R1720056",
+              "region": "Galgaduud",
+              "period": "April",
+              "value": "13500",
+              "monthly_target": "68332",
+              "percent_target": "20"
+          },
+          {
+              "region_id": "R1720063",
+              "region": "Mudug",
+              "period": "April",
+              "value": "35877",
+              "monthly_target": "86143",
+              "percent_target": "42"
+          },
+          {
+              "region_id": "R1720058",
+              "region": "Hiraan",
+              "period": "April",
+              "value": "11912",
+              "monthly_target": "62481",
+              "percent_target": "19"
+          },
+          {
+              "region_id": "R1720062",
+              "region": "Shabelle Dhexe",
+              "period": "April",
+              "value": "14374",
+              "monthly_target": "144265",
+              "percent_target": "10"
+          },
+          {
+              "region_id": "R1720057",
+              "region": "Gedo",
+              "period": "April",
+              "value": "25748",
+              "monthly_target": "61008",
+              "percent_target": "42"
+          },
+          {
+              "region_id": "R1720059",
+              "region": "Juba Hoose",
+              "period": "April",
+              "value": "24936",
+              "monthly_target": "58716",
+              "percent_target": "42"
+          },
+          {
+              "region_id": "R1720061",
+              "region": "Juba Dhexe",
+              "period": "April",
+              "value": "0",
+              "monthly_target": "43550",
+              "percent_target": "0"
+          },
+          {
+              "region_id": "R1720053",
+              "region": "Banadir",
+              "period": "April",
+              "value": "58650",
+              "monthly_target": "156771",
+              "percent_target": "37"
+          },
+          {
+              "region_id": "R1720054",
+              "region": "Bari",
+              "period": "April",
+              "value": "38955",
+              "monthly_target": "87616",
+              "percent_target": "44"
+          },
+          {
+              "region_id": "R1720064",
+              "region": "Nugaal",
+              "period": "April",
+              "value": "19133",
+              "monthly_target": "47123",
+              "percent_target": "41"
+          },
+          {
+              "region_id": "R1720065",
+              "region": "Sanaag",
+              "period": "April",
+              "value": "29470",
+              "monthly_target": "59322",
+              "percent_target": "50"
+          },
+          {
+              "region_id": "R1720066",
+              "region": "Sool",
+              "period": "April",
+              "value": "25966",
+              "monthly_target": "37452",
+              "percent_target": "69"
+          },
+          {
+              "region_id": "R1720051",
+              "region": "Awdal",
+              "period": "April",
+              "value": "18385",
+              "monthly_target": "80790",
+              "percent_target": "23"
+          },
+          {
+              "region_id": "R1720067",
+              "region": "Togdheer",
+              "period": "April",
+              "value": "15337",
+              "monthly_target": "86563",
+              "percent_target": "18"
+          },
+          {
+              "region_id": "R1720068",
+              "region": "Woqooyi Galbeed",
+              "period": "April",
+              "value": "22930",
+              "monthly_target": "149040",
+              "percent_target": "15"
+          },
+          {
+              "region_id": "R1720052",
+              "region": "Bakool",
+              "period": "April",
+              "value": "12940",
+              "monthly_target": "44067",
+              "percent_target": "29"
+          },
+          {
+              "region_id": "R1720055",
+              "region": "Bay",
+              "period": "April",
+              "value": "11560",
+              "monthly_target": "95061",
+              "percent_target": "12"
+          },
+          {
+              "region_id": "R1720060",
+              "region": "Shabelle Hoose",
+              "period": "April",
+              "value": "18754",
+              "monthly_target": "61923",
+              "percent_target": "30"
+          }
       ],
-    "layer": "som_adm_1-6k13xf",
-    "url": "mapbox://ona.bnc2rzsw",
-    "join": [
-      "osm_id",
-      "region_id"
-    ]
+      "layer": "som_adm_1-6k13xf",
+      "url": "mapbox://ona.bnc2rzsw",
+      "join": [
+          "osm_id",
+          "region_id"
+      ]
   },
   "type": "fill",
   "property": "percent_target",
   "categories": {
-    "breaks": "yes",
-    "color": "Blues",
-    "clusters": 5,
-    "suffix": "%"
+      "breaks": "yes",
+      "color": "Blues",
+      "clusters": 5,
+      "suffix": "%"
   },
   "aggregate": {
-    "timeseries": {
-      "field": "period"
-    }
+      "timeseries": {
+          "field": "period"
+      }
   },
   "labels": {
-    "data": "data/som_region_labels.csv",
-    "label": "<b> {{percent_target}}% </b> <br> of {{monthly_target}}",
-    "join": [
-      "osm_id",
-      "region_id"
-    ],
-    "coordinates": [
-      "longitude",
-      "latitude"
-    ],
-    "minzoom": 4.5,
-    "height": 30,
-    "width": 30,
-    "offset": [
-      -15,
-      -5
-    ]
+      "data": "data/som_region_labels.csv",
+      "label": "<b> {{percent_target}}% </b> <br> of {{monthly_target}}",
+      "join": [
+          "osm_id",
+          "region_id"
+      ],
+      "coordinates": [
+          "longitude",
+          "latitude"
+      ],
+      "minzoom": 4.5,
+      "height": 30,
+      "width": 30,
+      "offset": [
+          -15,
+          -5
+      ]
   },
   "popup": {
-    "header": "region",
-    "body": "{{value}} people reached"
+      "header": "region",
+      "body": "{{value}} people reached"
   },
   "visible": false,
   "credit": "OCHA - Percentage of people (children < 3) and pregnant and lactating women reached with malnutrition prevention services (against monthly target) <br> Updated: June 8th, 2017",
   "charts": {
-    "pie": {
-      "type": "breaks",
-      "level": "Regions",
-      "column": "percent_target"
-    },
-    "primary": {
-      "type": "column",
-      "spec": {
-        "type": "percent",
-        "level": "region",
-        "column": "percent_target"
+      "pie": {
+          "type": "breaks",
+          "level": "Regions",
+          "column": "percent_target"
+      },
+      "primary": {
+          "type": "column",
+          "spec": {
+              "type": "percent",
+              "level": "region",
+              "column": "percent_target"
+          }
       }
-    }
   },
   "category": "Nutrition Cluster",
   "id": "children-women-mal-prevention",
   "loaded": false,
   "mergedData": [
       {
-        "monthly_target": "45112",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Galgaduud",
-        "region_id": "R1720056",
-        "value": "0"
-      },
-      {
-        "monthly_target": "115999",
-        "percent_target": "5",
-        "period": "January",
-        "region": "Mudug",
-        "region_id": "R1720063",
-        "value": "5232"
-      },
-      {
-        "monthly_target": "62481",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Hiraan",
-        "region_id": "R1720058",
-        "value": "0"
-      },
-      {
-        "monthly_target": "43550",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Shabelle Dhexe",
-        "region_id": "R1720062",
-        "value": "0"
-      },
-      {
-        "monthly_target": "61008",
-        "percent_target": "14",
-        "period": "January",
-        "region": "Gedo",
-        "region_id": "R1720057",
-        "value": "8555"
-      },
-      {
-        "monthly_target": "46966",
-        "percent_target": "9",
-        "period": "January",
-        "region": "Juba Hoose",
-        "region_id": "R1720059",
-        "value": "4003"
-      },
-      {
-        "monthly_target": "0",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Juba Dhexe",
-        "region_id": "R1720061",
-        "value": "0"
-      },
-      {
-        "monthly_target": "131856",
-        "percent_target": "2",
-        "period": "January",
-        "region": "Banadir",
-        "region_id": "R1720053",
-        "value": "2100"
-      },
-      {
-        "monthly_target": "87616",
-        "percent_target": "20",
-        "period": "January",
-        "region": "Bari",
-        "region_id": "R1720054",
-        "value": "17373"
-      },
-      {
-        "monthly_target": "47122",
-        "percent_target": "5",
-        "period": "January",
-        "region": "Nugaal",
-        "region_id": "R1720064",
-        "value": "2553"
-      },
-      {
-        "monthly_target": "105312",
-        "percent_target": "3",
-        "period": "January",
-        "region": "Sanaag",
-        "region_id": "R1720065",
-        "value": "3605"
-      },
-      {
-        "monthly_target": "98337",
-        "percent_target": "5",
-        "period": "January",
-        "region": "Sool",
-        "region_id": "R1720066",
-        "value": "4831"
-      },
-      {
-        "monthly_target": "80790",
-        "percent_target": "15",
-        "period": "January",
-        "region": "Awdal",
-        "region_id": "R1720051",
-        "value": "12216"
+          "region_id": "R1720056",
+          "region": "Galgaduud",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "45112",
+          "percent_target": "0"
+      },
+      {
+          "region_id": "R1720063",
+          "region": "Mudug",
+          "period": "January",
+          "value": "5232",
+          "monthly_target": "115999",
+          "percent_target": "5"
+      },
+      {
+          "region_id": "R1720058",
+          "region": "Hiraan",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "62481",
+          "percent_target": "0"
+      },
+      {
+          "region_id": "R1720062",
+          "region": "Shabelle Dhexe",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "43550",
+          "percent_target": "0"
+      },
+      {
+          "region_id": "R1720057",
+          "region": "Gedo",
+          "period": "January",
+          "value": "8555",
+          "monthly_target": "61008",
+          "percent_target": "14"
+      },
+      {
+          "region_id": "R1720059",
+          "region": "Juba Hoose",
+          "period": "January",
+          "value": "4003",
+          "monthly_target": "46966",
+          "percent_target": "9"
+      },
+      {
+          "region_id": "R1720061",
+          "region": "Juba Dhexe",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "0",
+          "percent_target": "0"
+      },
+      {
+          "region_id": "R1720053",
+          "region": "Banadir",
+          "period": "January",
+          "value": "2100",
+          "monthly_target": "131856",
+          "percent_target": "2"
+      },
+      {
+          "region_id": "R1720054",
+          "region": "Bari",
+          "period": "January",
+          "value": "17373",
+          "monthly_target": "87616",
+          "percent_target": "20"
+      },
+      {
+          "region_id": "R1720064",
+          "region": "Nugaal",
+          "period": "January",
+          "value": "2553",
+          "monthly_target": "47122",
+          "percent_target": "5"
+      },
+      {
+          "region_id": "R1720065",
+          "region": "Sanaag",
+          "period": "January",
+          "value": "3605",
+          "monthly_target": "105312",
+          "percent_target": "3"
+      },
+      {
+          "region_id": "R1720066",
+          "region": "Sool",
+          "period": "January",
+          "value": "4831",
+          "monthly_target": "98337",
+          "percent_target": "5"
+      },
+      {
+          "region_id": "R1720051",
+          "region": "Awdal",
+          "period": "January",
+          "value": "12216",
+          "monthly_target": "80790",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "86563",
-        "percent_target": "13",
-        "period": "January",
-        "region": "Togdheer",
-        "region_id": "R1720067",
-        "value": "11380"
+          "region_id": "R1720067",
+          "region": "Togdheer",
+          "period": "January",
+          "value": "11380",
+          "monthly_target": "86563",
+          "percent_target": "13"
       },
       {
-        "monthly_target": "149040",
-        "percent_target": "15",
-        "period": "January",
-        "region": "Woqooyi Galbeed",
-        "region_id": "R1720068",
-        "value": "21886"
+          "region_id": "R1720068",
+          "region": "Woqooyi Galbeed",
+          "period": "January",
+          "value": "21886",
+          "monthly_target": "149040",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "44067",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Bakool",
-        "region_id": "R1720052",
-        "value": "0"
+          "region_id": "R1720052",
+          "region": "Bakool",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "44067",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "58872",
-        "percent_target": "6",
-        "period": "January",
-        "region": "Bay",
-        "region_id": "R1720055",
-        "value": "3761"
+          "region_id": "R1720055",
+          "region": "Bay",
+          "period": "January",
+          "value": "3761",
+          "monthly_target": "58872",
+          "percent_target": "6"
       },
       {
-        "monthly_target": "42202",
-        "percent_target": "0",
-        "period": "January",
-        "region": "Shabelle Hoose",
-        "region_id": "R1720060",
-        "value": "0"
+          "region_id": "R1720060",
+          "region": "Shabelle Hoose",
+          "period": "January",
+          "value": "0",
+          "monthly_target": "42202",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "45112",
-        "percent_target": "3",
-        "period": "February",
-        "region": "Galgaduud",
-        "region_id": "R1720056",
-        "value": "1250"
+          "region_id": "R1720056",
+          "region": "Galgaduud",
+          "period": "February",
+          "value": "1250",
+          "monthly_target": "45112",
+          "percent_target": "3"
       },
       {
-        "monthly_target": "115999",
-        "percent_target": "10",
-        "period": "February",
-        "region": "Mudug",
-        "region_id": "R1720063",
-        "value": "11190"
+          "region_id": "R1720063",
+          "region": "Mudug",
+          "period": "February",
+          "value": "11190",
+          "monthly_target": "115999",
+          "percent_target": "10"
       },
       {
-        "monthly_target": "62481",
-        "percent_target": "9",
-        "period": "February",
-        "region": "Hiraan",
-        "region_id": "R1720058",
-        "value": "5700"
+          "region_id": "R1720058",
+          "region": "Hiraan",
+          "period": "February",
+          "value": "5700",
+          "monthly_target": "62481",
+          "percent_target": "9"
       },
       {
-        "monthly_target": "43550",
-        "percent_target": "0",
-        "period": "February",
-        "region": "Shabelle Dhexe",
-        "region_id": "R1720062",
-        "value": "0"
+          "region_id": "R1720062",
+          "region": "Shabelle Dhexe",
+          "period": "February",
+          "value": "0",
+          "monthly_target": "43550",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "61008",
-        "percent_target": "28",
-        "period": "February",
-        "region": "Gedo",
-        "region_id": "R1720057",
-        "value": "17340"
+          "region_id": "R1720057",
+          "region": "Gedo",
+          "period": "February",
+          "value": "17340",
+          "monthly_target": "61008",
+          "percent_target": "28"
       },
       {
-        "monthly_target": "46966",
-        "percent_target": "9",
-        "period": "February",
-        "region": "Juba Hoose",
-        "region_id": "R1720059",
-        "value": "4003"
+          "region_id": "R1720059",
+          "region": "Juba Hoose",
+          "period": "February",
+          "value": "4003",
+          "monthly_target": "46966",
+          "percent_target": "9"
       },
       {
-        "monthly_target": "0",
-        "percent_target": "0",
-        "period": "February",
-        "region": "Juba Dhexe",
-        "region_id": "R1720061",
-        "value": "0"
+          "region_id": "R1720061",
+          "region": "Juba Dhexe",
+          "period": "February",
+          "value": "0",
+          "monthly_target": "0",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "131856",
-        "percent_target": "21",
-        "period": "February",
-        "region": "Banadir",
-        "region_id": "R1720053",
-        "value": "27604"
+          "region_id": "R1720053",
+          "region": "Banadir",
+          "period": "February",
+          "value": "27604",
+          "monthly_target": "131856",
+          "percent_target": "21"
       },
       {
-        "monthly_target": "87616",
-        "percent_target": "29",
-        "period": "February",
-        "region": "Bari",
-        "region_id": "R1720054",
-        "value": "25628"
+          "region_id": "R1720054",
+          "region": "Bari",
+          "period": "February",
+          "value": "25628",
+          "monthly_target": "87616",
+          "percent_target": "29"
       },
       {
-        "monthly_target": "47122",
-        "percent_target": "28",
-        "period": "February",
-        "region": "Nugaal",
-        "region_id": "R1720064",
-        "value": "13322"
+          "region_id": "R1720064",
+          "region": "Nugaal",
+          "period": "February",
+          "value": "13322",
+          "monthly_target": "47122",
+          "percent_target": "28"
       },
       {
-        "monthly_target": "105312",
-        "percent_target": "11",
-        "period": "February",
-        "region": "Sanaag",
-        "region_id": "R1720065",
-        "value": "11678"
+          "region_id": "R1720065",
+          "region": "Sanaag",
+          "period": "February",
+          "value": "11678",
+          "monthly_target": "105312",
+          "percent_target": "11"
       },
       {
-        "monthly_target": "110296",
-        "percent_target": "11",
-        "period": "February",
-        "region": "Sool",
-        "region_id": "R1720066",
-        "value": "12171"
+          "region_id": "R1720066",
+          "region": "Sool",
+          "period": "February",
+          "value": "12171",
+          "monthly_target": "110296",
+          "percent_target": "11"
       },
       {
-        "monthly_target": "80790",
-        "percent_target": "15",
-        "period": "February",
-        "region": "Awdal",
-        "region_id": "R1720051",
-        "value": "12216"
+          "region_id": "R1720051",
+          "region": "Awdal",
+          "period": "February",
+          "value": "12216",
+          "monthly_target": "80790",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "86563",
-        "percent_target": "24",
-        "period": "February",
-        "region": "Togdheer",
-        "region_id": "R1720067",
-        "value": "20554"
+          "region_id": "R1720067",
+          "region": "Togdheer",
+          "period": "February",
+          "value": "20554",
+          "monthly_target": "86563",
+          "percent_target": "24"
       },
       {
-        "monthly_target": "149040",
-        "percent_target": "15",
-        "period": "February",
-        "region": "Woqooyi Galbeed",
-        "region_id": "R1720068",
-        "value": "21896"
+          "region_id": "R1720068",
+          "region": "Woqooyi Galbeed",
+          "period": "February",
+          "value": "21896",
+          "monthly_target": "149040",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "44067",
-        "percent_target": "16",
-        "period": "February",
-        "region": "Bakool",
-        "region_id": "R1720052",
-        "value": "7007"
+          "region_id": "R1720052",
+          "region": "Bakool",
+          "period": "February",
+          "value": "7007",
+          "monthly_target": "44067",
+          "percent_target": "16"
       },
       {
-        "monthly_target": "58872",
-        "percent_target": "13",
-        "period": "February",
-        "region": "Bay",
-        "region_id": "R1720055",
-        "value": "7500"
+          "region_id": "R1720055",
+          "region": "Bay",
+          "period": "February",
+          "value": "7500",
+          "monthly_target": "58872",
+          "percent_target": "13"
       },
       {
-        "monthly_target": "42202",
-        "percent_target": "0",
-        "period": "February",
-        "region": "Shabelle Hoose",
-        "region_id": "R1720060",
-        "value": "0"
+          "region_id": "R1720060",
+          "region": "Shabelle Hoose",
+          "period": "February",
+          "value": "0",
+          "monthly_target": "42202",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "45112",
-        "percent_target": "8",
-        "period": "March",
-        "region": "Galgaduud",
-        "region_id": "R1720056",
-        "value": "3500"
+          "region_id": "R1720056",
+          "region": "Galgaduud",
+          "period": "March",
+          "value": "3500",
+          "monthly_target": "45112",
+          "percent_target": "8"
       },
       {
-        "monthly_target": "132536",
-        "percent_target": "25",
-        "period": "March",
-        "region": "Mudug",
-        "region_id": "R1720063",
-        "value": "33555"
+          "region_id": "R1720063",
+          "region": "Mudug",
+          "period": "March",
+          "value": "33555",
+          "monthly_target": "132536",
+          "percent_target": "25"
       },
       {
-        "monthly_target": "62481",
-        "percent_target": "18",
-        "period": "March",
-        "region": "Hiraan",
-        "region_id": "R1720058",
-        "value": "11025"
+          "region_id": "R1720058",
+          "region": "Hiraan",
+          "period": "March",
+          "value": "11025",
+          "monthly_target": "62481",
+          "percent_target": "18"
       },
       {
-        "monthly_target": "43550",
-        "percent_target": "10",
-        "period": "March",
-        "region": "Shabelle Dhexe",
-        "region_id": "R1720062",
-        "value": "4305"
+          "region_id": "R1720062",
+          "region": "Shabelle Dhexe",
+          "period": "March",
+          "value": "4305",
+          "monthly_target": "43550",
+          "percent_target": "10"
       },
       {
-        "monthly_target": "61008",
-        "percent_target": "37",
-        "period": "March",
-        "region": "Gedo",
-        "region_id": "R1720057",
-        "value": "22664"
+          "region_id": "R1720057",
+          "region": "Gedo",
+          "period": "March",
+          "value": "22664",
+          "monthly_target": "61008",
+          "percent_target": "37"
       },
       {
-        "monthly_target": "46966",
-        "percent_target": "45",
-        "period": "March",
-        "region": "Juba Hoose",
-        "region_id": "R1720059",
-        "value": "20940"
+          "region_id": "R1720059",
+          "region": "Juba Hoose",
+          "period": "March",
+          "value": "20940",
+          "monthly_target": "46966",
+          "percent_target": "45"
       },
       {
-        "monthly_target": "0",
-        "percent_target": "0",
-        "period": "March",
-        "region": "Juba Dhexe",
-        "region_id": "R1720061",
-        "value": "0"
+          "region_id": "R1720061",
+          "region": "Juba Dhexe",
+          "period": "March",
+          "value": "0",
+          "monthly_target": "0",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "131856",
-        "percent_target": "22",
-        "period": "March",
-        "region": "Banadir",
-        "region_id": "R1720053",
-        "value": "28598"
+          "region_id": "R1720053",
+          "region": "Banadir",
+          "period": "March",
+          "value": "28598",
+          "monthly_target": "131856",
+          "percent_target": "22"
       },
       {
-        "monthly_target": "87616",
-        "percent_target": "47",
-        "period": "March",
-        "region": "Bari",
-        "region_id": "R1720054",
-        "value": "40771"
+          "region_id": "R1720054",
+          "region": "Bari",
+          "period": "March",
+          "value": "40771",
+          "monthly_target": "87616",
+          "percent_target": "47"
       },
       {
-        "monthly_target": "47122",
-        "percent_target": "36",
-        "period": "March",
-        "region": "Nugaal",
-        "region_id": "R1720064",
-        "value": "17097"
+          "region_id": "R1720064",
+          "region": "Nugaal",
+          "period": "March",
+          "value": "17097",
+          "monthly_target": "47122",
+          "percent_target": "36"
       },
       {
-        "monthly_target": "115278",
-        "percent_target": "22",
-        "period": "March",
-        "region": "Sanaag",
-        "region_id": "R1720065",
-        "value": "25720"
+          "region_id": "R1720065",
+          "region": "Sanaag",
+          "period": "March",
+          "value": "25720",
+          "monthly_target": "115278",
+          "percent_target": "22"
       },
       {
-        "monthly_target": "76394",
-        "percent_target": "34",
-        "period": "March",
-        "region": "Sool",
-        "region_id": "R1720066",
-        "value": "25628"
+          "region_id": "R1720066",
+          "region": "Sool",
+          "period": "March",
+          "value": "25628",
+          "monthly_target": "76394",
+          "percent_target": "34"
       },
       {
-        "monthly_target": "80790",
-        "percent_target": "19",
-        "period": "March",
-        "region": "Awdal",
-        "region_id": "R1720051",
-        "value": "15364"
+          "region_id": "R1720051",
+          "region": "Awdal",
+          "period": "March",
+          "value": "15364",
+          "monthly_target": "80790",
+          "percent_target": "19"
       },
       {
-        "monthly_target": "86563",
-        "percent_target": "28",
-        "period": "March",
-        "region": "Togdheer",
-        "region_id": "R1720067",
-        "value": "24121"
+          "region_id": "R1720067",
+          "region": "Togdheer",
+          "period": "March",
+          "value": "24121",
+          "monthly_target": "86563",
+          "percent_target": "28"
       },
       {
-        "monthly_target": "149040",
-        "percent_target": "16",
-        "period": "March",
-        "region": "Woqooyi Galbeed",
-        "region_id": "R1720068",
-        "value": "23755"
+          "region_id": "R1720068",
+          "region": "Woqooyi Galbeed",
+          "period": "March",
+          "value": "23755",
+          "monthly_target": "149040",
+          "percent_target": "16"
       },
       {
-        "monthly_target": "44067",
-        "percent_target": "18",
-        "period": "March",
-        "region": "Bakool",
-        "region_id": "R1720052",
-        "value": "8095"
+          "region_id": "R1720052",
+          "region": "Bakool",
+          "period": "March",
+          "value": "8095",
+          "monthly_target": "44067",
+          "percent_target": "18"
       },
       {
-        "monthly_target": "58872",
-        "percent_target": "15",
-        "period": "March",
-        "region": "Bay",
-        "region_id": "R1720055",
-        "value": "9000"
+          "region_id": "R1720055",
+          "region": "Bay",
+          "period": "March",
+          "value": "9000",
+          "monthly_target": "58872",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "42202",
-        "percent_target": "8",
-        "period": "March",
-        "region": "Shabelle Hoose",
-        "region_id": "R1720060",
-        "value": "3526"
+          "region_id": "R1720060",
+          "region": "Shabelle Hoose",
+          "period": "March",
+          "value": "3526",
+          "monthly_target": "42202",
+          "percent_target": "8"
       },
       {
-        "monthly_target": "68332",
-        "percent_target": "20",
-        "period": "April",
-        "region": "Galgaduud",
-        "region_id": "R1720056",
-        "value": "13500"
+          "region_id": "R1720056",
+          "region": "Galgaduud",
+          "period": "April",
+          "value": "13500",
+          "monthly_target": "68332",
+          "percent_target": "20"
       },
       {
-        "monthly_target": "86143",
-        "percent_target": "42",
-        "period": "April",
-        "region": "Mudug",
-        "region_id": "R1720063",
-        "value": "35877"
+          "region_id": "R1720063",
+          "region": "Mudug",
+          "period": "April",
+          "value": "35877",
+          "monthly_target": "86143",
+          "percent_target": "42"
       },
       {
-        "monthly_target": "62481",
-        "percent_target": "19",
-        "period": "April",
-        "region": "Hiraan",
-        "region_id": "R1720058",
-        "value": "11912"
+          "region_id": "R1720058",
+          "region": "Hiraan",
+          "period": "April",
+          "value": "11912",
+          "monthly_target": "62481",
+          "percent_target": "19"
       },
       {
-        "monthly_target": "144265",
-        "percent_target": "10",
-        "period": "April",
-        "region": "Shabelle Dhexe",
-        "region_id": "R1720062",
-        "value": "14374"
+          "region_id": "R1720062",
+          "region": "Shabelle Dhexe",
+          "period": "April",
+          "value": "14374",
+          "monthly_target": "144265",
+          "percent_target": "10"
       },
       {
-        "monthly_target": "61008",
-        "percent_target": "42",
-        "period": "April",
-        "region": "Gedo",
-        "region_id": "R1720057",
-        "value": "25748"
+          "region_id": "R1720057",
+          "region": "Gedo",
+          "period": "April",
+          "value": "25748",
+          "monthly_target": "61008",
+          "percent_target": "42"
       },
       {
-        "monthly_target": "58716",
-        "percent_target": "42",
-        "period": "April",
-        "region": "Juba Hoose",
-        "region_id": "R1720059",
-        "value": "24936"
-      },
-      {
-        "monthly_target": "43550",
-        "percent_target": "0",
-        "period": "April",
-        "region": "Juba Dhexe",
-        "region_id": "R1720061",
-        "value": "0"
-      },
-      {
-        "monthly_target": "156771",
-        "percent_target": "37",
-        "period": "April",
-        "region": "Banadir",
-        "region_id": "R1720053",
-        "value": "58650"
-      },
-      {
-        "monthly_target": "87616",
-        "percent_target": "44",
-        "period": "April",
-        "region": "Bari",
-        "region_id": "R1720054",
-        "value": "38955"
-      },
-      {
-        "monthly_target": "47123",
-        "percent_target": "41",
-        "period": "April",
-        "region": "Nugaal",
-        "region_id": "R1720064",
-        "value": "19133"
-      },
-      {
-        "monthly_target": "59322",
-        "percent_target": "50",
-        "period": "April",
-        "region": "Sanaag",
-        "region_id": "R1720065",
-        "value": "29470"
-      },
-      {
-        "monthly_target": "37452",
-        "percent_target": "69",
-        "period": "April",
-        "region": "Sool",
-        "region_id": "R1720066",
-        "value": "25966"
-      },
-      {
-        "monthly_target": "80790",
-        "percent_target": "23",
-        "period": "April",
-        "region": "Awdal",
-        "region_id": "R1720051",
-        "value": "18385"
-      },
-      {
-        "monthly_target": "86563",
-        "percent_target": "18",
-        "period": "April",
-        "region": "Togdheer",
-        "region_id": "R1720067",
-        "value": "15337"
-      },
-      {
-        "monthly_target": "149040",
-        "percent_target": "15",
-        "period": "April",
-        "region": "Woqooyi Galbeed",
-        "region_id": "R1720068",
-        "value": "22930"
-      },
-      {
-        "monthly_target": "44067",
-        "percent_target": "29",
-        "period": "April",
-        "region": "Bakool",
-        "region_id": "R1720052",
-        "value": "12940"
-      },
-      {
-        "monthly_target": "95061",
-        "percent_target": "12",
-        "period": "April",
-        "region": "Bay",
-        "region_id": "R1720055",
-        "value": "11560"
-      },
-      {
-        "monthly_target": "61923",
-        "percent_target": "30",
-        "period": "April",
-        "region": "Shabelle Hoose",
-        "region_id": "R1720060",
-        "value": "18754"
+          "region_id": "R1720059",
+          "region": "Juba Hoose",
+          "period": "April",
+          "value": "24936",
+          "monthly_target": "58716",
+          "percent_target": "42"
+      },
+      {
+          "region_id": "R1720061",
+          "region": "Juba Dhexe",
+          "period": "April",
+          "value": "0",
+          "monthly_target": "43550",
+          "percent_target": "0"
+      },
+      {
+          "region_id": "R1720053",
+          "region": "Banadir",
+          "period": "April",
+          "value": "58650",
+          "monthly_target": "156771",
+          "percent_target": "37"
+      },
+      {
+          "region_id": "R1720054",
+          "region": "Bari",
+          "period": "April",
+          "value": "38955",
+          "monthly_target": "87616",
+          "percent_target": "44"
+      },
+      {
+          "region_id": "R1720064",
+          "region": "Nugaal",
+          "period": "April",
+          "value": "19133",
+          "monthly_target": "47123",
+          "percent_target": "41"
+      },
+      {
+          "region_id": "R1720065",
+          "region": "Sanaag",
+          "period": "April",
+          "value": "29470",
+          "monthly_target": "59322",
+          "percent_target": "50"
+      },
+      {
+          "region_id": "R1720066",
+          "region": "Sool",
+          "period": "April",
+          "value": "25966",
+          "monthly_target": "37452",
+          "percent_target": "69"
+      },
+      {
+          "region_id": "R1720051",
+          "region": "Awdal",
+          "period": "April",
+          "value": "18385",
+          "monthly_target": "80790",
+          "percent_target": "23"
+      },
+      {
+          "region_id": "R1720067",
+          "region": "Togdheer",
+          "period": "April",
+          "value": "15337",
+          "monthly_target": "86563",
+          "percent_target": "18"
+      },
+      {
+          "region_id": "R1720068",
+          "region": "Woqooyi Galbeed",
+          "period": "April",
+          "value": "22930",
+          "monthly_target": "149040",
+          "percent_target": "15"
+      },
+      {
+          "region_id": "R1720052",
+          "region": "Bakool",
+          "period": "April",
+          "value": "12940",
+          "monthly_target": "44067",
+          "percent_target": "29"
+      },
+      {
+          "region_id": "R1720055",
+          "region": "Bay",
+          "period": "April",
+          "value": "11560",
+          "monthly_target": "95061",
+          "percent_target": "12"
+      },
+      {
+          "region_id": "R1720060",
+          "region": "Shabelle Hoose",
+          "period": "April",
+          "value": "18754",
+          "monthly_target": "61923",
+          "percent_target": "30"
       }
-    ],
+  ],
   "filters": {},
   "isChartMin": true,
   "legendBottom": 40,
-  "stopsData":[
+  "stopsData": [
       [
-        "R1720061",
-        "#eff3ff"
+          "R1720061",
+          "#eff3ff"
       ],
       [
-        "R1720056",
-        "#bdd7e7"
+          "R1720056",
+          "#bdd7e7"
       ],
       [
-        "R1720060",
-        "#bdd7e7"
+          "R1720060",
+          "#bdd7e7"
       ],
       [
-        "R1720062",
-        "#bdd7e7"
+          "R1720062",
+          "#bdd7e7"
       ],
       [
-        "R1720055",
-        "#bdd7e7"
+          "R1720055",
+          "#bdd7e7"
       ],
       [
-        "R1720068",
-        "#bdd7e7"
+          "R1720068",
+          "#bdd7e7"
       ],
       [
-        "R1720058",
-        "#bdd7e7"
+          "R1720058",
+          "#bdd7e7"
       ],
       [
-        "R1720052",
-        "#bdd7e7"
+          "R1720052",
+          "#bdd7e7"
       ],
       [
-        "R1720051",
-        "#6baed6"
+          "R1720051",
+          "#6baed6"
       ],
       [
-        "R1720065",
-        "#6baed6"
+          "R1720053",
+          "#6baed6"
       ],
       [
-        "R1720053",
-        "#6baed6"
+          "R1720065",
+          "#6baed6"
       ],
       [
-        "R1720063",
-        "#6baed6"
+          "R1720063",
+          "#6baed6"
       ],
       [
-        "R1720067",
-        "#6baed6"
+          "R1720067",
+          "#6baed6"
       ],
       [
-        "R1720066",
-        "#3182bd"
+          "R1720066",
+          "#3182bd"
       ],
       [
-        "R1720064",
-        "#3182bd"
+          "R1720064",
+          "#3182bd"
       ],
       [
-        "R1720057",
-        "#3182bd"
+          "R1720057",
+          "#3182bd"
       ],
       [
-        "R1720059",
-        "#3182bd"
+          "R1720059",
+          "#3182bd"
       ],
       [
-        "R1720054",
-        "#3182bd"
+          "R1720054",
+          "#3182bd"
       ]
-    ],
+  ],
   "breaks": [
-    6,
-    18,
-    30,
-    50,
-    69
+      6,
+      18,
+      30,
+      50,
+      69
   ],
   "colors": [
-    "#eff3ff",
-    "#bdd7e7",
-    "#6baed6",
-    "#3182bd",
-    "#08519c"
+      "#eff3ff",
+      "#bdd7e7",
+      "#6baed6",
+      "#3182bd",
+      "#08519c"
   ],
   "Data": [
       {
-        "monthly_target": "45112",
-        "percent_target": "8",
-        "period": "March",
-        "region": "Galgaduud",
-        "region_id": "R1720056",
-        "value": "3500"
+          "region_id": "R1720056",
+          "region": "Galgaduud",
+          "period": "March",
+          "value": "3500",
+          "monthly_target": "45112",
+          "percent_target": "8"
       },
       {
-        "monthly_target": "132536",
-        "percent_target": "25",
-        "period": "March",
-        "region": "Mudug",
-        "region_id": "R1720063",
-        "value": "33555"
+          "region_id": "R1720063",
+          "region": "Mudug",
+          "period": "March",
+          "value": "33555",
+          "monthly_target": "132536",
+          "percent_target": "25"
       },
       {
-        "monthly_target": "62481",
-        "percent_target": "18",
-        "period": "March",
-        "region": "Hiraan",
-        "region_id": "R1720058",
-        "value": "11025"
+          "region_id": "R1720058",
+          "region": "Hiraan",
+          "period": "March",
+          "value": "11025",
+          "monthly_target": "62481",
+          "percent_target": "18"
       },
       {
-        "monthly_target": "43550",
-        "percent_target": "10",
-        "period": "March",
-        "region": "Shabelle Dhexe",
-        "region_id": "R1720062",
-        "value": "4305"
+          "region_id": "R1720062",
+          "region": "Shabelle Dhexe",
+          "period": "March",
+          "value": "4305",
+          "monthly_target": "43550",
+          "percent_target": "10"
       },
       {
-        "monthly_target": "61008",
-        "percent_target": "37",
-        "period": "March",
-        "region": "Gedo",
-        "region_id": "R1720057",
-        "value": "22664"
+          "region_id": "R1720057",
+          "region": "Gedo",
+          "period": "March",
+          "value": "22664",
+          "monthly_target": "61008",
+          "percent_target": "37"
       },
       {
-        "monthly_target": "46966",
-        "percent_target": "45",
-        "period": "March",
-        "region": "Juba Hoose",
-        "region_id": "R1720059",
-        "value": "20940"
+          "region_id": "R1720059",
+          "region": "Juba Hoose",
+          "period": "March",
+          "value": "20940",
+          "monthly_target": "46966",
+          "percent_target": "45"
       },
       {
-        "monthly_target": "0",
-        "percent_target": "0",
-        "period": "March",
-        "region": "Juba Dhexe",
-        "region_id": "R1720061",
-        "value": "0"
+          "region_id": "R1720061",
+          "region": "Juba Dhexe",
+          "period": "March",
+          "value": "0",
+          "monthly_target": "0",
+          "percent_target": "0"
       },
       {
-        "monthly_target": "131856",
-        "percent_target": "22",
-        "period": "March",
-        "region": "Banadir",
-        "region_id": "R1720053",
-        "value": "28598"
+          "region_id": "R1720053",
+          "region": "Banadir",
+          "period": "March",
+          "value": "28598",
+          "monthly_target": "131856",
+          "percent_target": "22"
       },
       {
-        "monthly_target": "87616",
-        "percent_target": "47",
-        "period": "March",
-        "region": "Bari",
-        "region_id": "R1720054",
-        "value": "40771"
+          "region_id": "R1720054",
+          "region": "Bari",
+          "period": "March",
+          "value": "40771",
+          "monthly_target": "87616",
+          "percent_target": "47"
       },
       {
-        "monthly_target": "47122",
-        "percent_target": "36",
-        "period": "March",
-        "region": "Nugaal",
-        "region_id": "R1720064",
-        "value": "17097"
+          "region_id": "R1720064",
+          "region": "Nugaal",
+          "period": "March",
+          "value": "17097",
+          "monthly_target": "47122",
+          "percent_target": "36"
       },
       {
-        "monthly_target": "115278",
-        "percent_target": "22",
-        "period": "March",
-        "region": "Sanaag",
-        "region_id": "R1720065",
-        "value": "25720"
+          "region_id": "R1720065",
+          "region": "Sanaag",
+          "period": "March",
+          "value": "25720",
+          "monthly_target": "115278",
+          "percent_target": "22"
       },
       {
-        "monthly_target": "76394",
-        "percent_target": "34",
-        "period": "March",
-        "region": "Sool",
-        "region_id": "R1720066",
-        "value": "25628"
+          "region_id": "R1720066",
+          "region": "Sool",
+          "period": "March",
+          "value": "25628",
+          "monthly_target": "76394",
+          "percent_target": "34"
       },
       {
-        "monthly_target": "80790",
-        "percent_target": "19",
-        "period": "March",
-        "region": "Awdal",
-        "region_id": "R1720051",
-        "value": "15364"
+          "region_id": "R1720051",
+          "region": "Awdal",
+          "period": "March",
+          "value": "15364",
+          "monthly_target": "80790",
+          "percent_target": "19"
       },
       {
-        "monthly_target": "86563",
-        "percent_target": "28",
-        "period": "March",
-        "region": "Togdheer",
-        "region_id": "R1720067",
-        "value": "24121"
+          "region_id": "R1720067",
+          "region": "Togdheer",
+          "period": "March",
+          "value": "24121",
+          "monthly_target": "86563",
+          "percent_target": "28"
       },
       {
-        "monthly_target": "149040",
-        "percent_target": "16",
-        "period": "March",
-        "region": "Woqooyi Galbeed",
-        "region_id": "R1720068",
-        "value": "23755"
+          "region_id": "R1720068",
+          "region": "Woqooyi Galbeed",
+          "period": "March",
+          "value": "23755",
+          "monthly_target": "149040",
+          "percent_target": "16"
       },
       {
-        "monthly_target": "44067",
-        "percent_target": "18",
-        "period": "March",
-        "region": "Bakool",
-        "region_id": "R1720052",
-        "value": "8095"
+          "region_id": "R1720052",
+          "region": "Bakool",
+          "period": "March",
+          "value": "8095",
+          "monthly_target": "44067",
+          "percent_target": "18"
       },
       {
-        "monthly_target": "58872",
-        "percent_target": "15",
-        "period": "March",
-        "region": "Bay",
-        "region_id": "R1720055",
-        "value": "9000"
+          "region_id": "R1720055",
+          "region": "Bay",
+          "period": "March",
+          "value": "9000",
+          "monthly_target": "58872",
+          "percent_target": "15"
       },
       {
-        "monthly_target": "42202",
-        "percent_target": "8",
-        "period": "March",
-        "region": "Shabelle Hoose",
-        "region_id": "R1720060",
-        "value": "3526"
+          "region_id": "R1720060",
+          "region": "Shabelle Hoose",
+          "period": "March",
+          "value": "3526",
+          "monthly_target": "42202",
+          "percent_target": "8"
       }
-    ],
+  ],
   "stops": [
       [
-        [
           [
-            "R1720056",
-            "#eff3ff"
+              [
+                  "R1720061",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720062",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720055",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720068",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720067",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720058",
+                  "#6baed6"
+              ],
+              [
+                  "R1720056",
+                  "#6baed6"
+              ],
+              [
+                  "R1720051",
+                  "#6baed6"
+              ],
+              [
+                  "R1720052",
+                  "#6baed6"
+              ],
+              [
+                  "R1720060",
+                  "#6baed6"
+              ],
+              [
+                  "R1720053",
+                  "#3182bd"
+              ],
+              [
+                  "R1720064",
+                  "#3182bd"
+              ],
+              [
+                  "R1720063",
+                  "#3182bd"
+              ],
+              [
+                  "R1720057",
+                  "#3182bd"
+              ],
+              [
+                  "R1720059",
+                  "#3182bd"
+              ],
+              [
+                  "R1720054",
+                  "#3182bd"
+              ],
+              [
+                  "R1720065",
+                  "#3182bd"
+              ],
+              [
+                  "R1720066",
+                  "#08519c"
+              ]
           ],
           [
-            "R1720062",
-            "#eff3ff"
+              [
+                  "R1720062",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720061",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720060",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720056",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720058",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720059",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720063",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720066",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720065",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720055",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720051",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720068",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720052",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720053",
+                  "#6baed6"
+              ],
+              [
+                  "R1720067",
+                  "#6baed6"
+              ],
+              [
+                  "R1720057",
+                  "#6baed6"
+              ],
+              [
+                  "R1720064",
+                  "#6baed6"
+              ],
+              [
+                  "R1720054",
+                  "#6baed6"
+              ]
           ],
           [
-            "R1720061",
-            "#eff3ff"
+              [
+                  "R1720060",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720052",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720056",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720058",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720061",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720062",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720053",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720065",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720063",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720066",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720064",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720055",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720059",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720067",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720057",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720068",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720051",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720054",
+                  "#6baed6"
+              ]
           ],
           [
-            "R1720052",
-            "#eff3ff"
-          ],
-          [
-            "R1720058",
-            "#eff3ff"
-          ],
-          [
-            "R1720060",
-            "#eff3ff"
-          ],
-          [
-            "R1720053",
-            "#eff3ff"
-          ],
-          [
-            "R1720065",
-            "#eff3ff"
-          ],
-          [
-            "R1720066",
-            "#eff3ff"
-          ],
-          [
-            "R1720064",
-            "#eff3ff"
-          ],
-          [
-            "R1720063",
-            "#eff3ff"
-          ],
-          [
-            "R1720055",
-            "#eff3ff"
-          ],
-          [
-            "R1720059",
-            "#bdd7e7"
-          ],
-          [
-            "R1720067",
-            "#bdd7e7"
-          ],
-          [
-            "R1720057",
-            "#bdd7e7"
-          ],
-          [
-            "R1720068",
-            "#bdd7e7"
-          ],
-          [
-            "R1720051",
-            "#bdd7e7"
-          ],
-          [
-            "R1720054",
-            "#6baed6"
+              [
+                  "R1720061",
+                  "#eff3ff"
+              ],
+              [
+                  "R1720056",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720060",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720062",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720055",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720068",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720058",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720052",
+                  "#bdd7e7"
+              ],
+              [
+                  "R1720051",
+                  "#6baed6"
+              ],
+              [
+                  "R1720053",
+                  "#6baed6"
+              ],
+              [
+                  "R1720065",
+                  "#6baed6"
+              ],
+              [
+                  "R1720063",
+                  "#6baed6"
+              ],
+              [
+                  "R1720067",
+                  "#6baed6"
+              ],
+              [
+                  "R1720066",
+                  "#3182bd"
+              ],
+              [
+                  "R1720064",
+                  "#3182bd"
+              ],
+              [
+                  "R1720057",
+                  "#3182bd"
+              ],
+              [
+                  "R1720059",
+                  "#3182bd"
+              ],
+              [
+                  "R1720054",
+                  "#3182bd"
+              ]
           ]
-        ],
-        [
-          [
-            "R1720061",
-            "#eff3ff"
-          ],
-          [
-            "R1720062",
-            "#bdd7e7"
-          ],
-          [
-            "R1720055",
-            "#bdd7e7"
-          ],
-          [
-            "R1720068",
-            "#bdd7e7"
-          ],
-          [
-            "R1720067",
-            "#bdd7e7"
-          ],
-          [
-            "R1720058",
-            "#6baed6"
-          ],
-          [
-            "R1720056",
-            "#6baed6"
-          ],
-          [
-            "R1720051",
-            "#6baed6"
-          ],
-          [
-            "R1720052",
-            "#6baed6"
-          ],
-          [
-            "R1720060",
-            "#6baed6"
-          ],
-          [
-            "R1720053",
-            "#3182bd"
-          ],
-          [
-            "R1720064",
-            "#3182bd"
-          ],
-          [
-            "R1720059",
-            "#3182bd"
-          ],
-          [
-            "R1720057",
-            "#3182bd"
-          ],
-          [
-            "R1720063",
-            "#3182bd"
-          ],
-          [
-            "R1720054",
-            "#3182bd"
-          ],
-          [
-            "R1720065",
-            "#3182bd"
-          ],
-          [
-            "R1720066",
-            "#08519c"
-          ]
-        ],
-        [
-          [
-            "R1720060",
-            "#eff3ff"
-          ],
-          [
-            "R1720062",
-            "#eff3ff"
-          ],
-          [
-            "R1720061",
-            "#eff3ff"
-          ],
-          [
-            "R1720056",
-            "#eff3ff"
-          ],
-          [
-            "R1720058",
-            "#bdd7e7"
-          ],
-          [
-            "R1720059",
-            "#bdd7e7"
-          ],
-          [
-            "R1720063",
-            "#bdd7e7"
-          ],
-          [
-            "R1720065",
-            "#bdd7e7"
-          ],
-          [
-            "R1720066",
-            "#bdd7e7"
-          ],
-          [
-            "R1720055",
-            "#bdd7e7"
-          ],
-          [
-            "R1720068",
-            "#bdd7e7"
-          ],
-          [
-            "R1720051",
-            "#bdd7e7"
-          ],
-          [
-            "R1720052",
-            "#bdd7e7"
-          ],
-          [
-            "R1720053",
-            "#6baed6"
-          ],
-          [
-            "R1720067",
-            "#6baed6"
-          ],
-          [
-            "R1720057",
-            "#6baed6"
-          ],
-          [
-            "R1720064",
-            "#6baed6"
-          ],
-          [
-            "R1720054",
-            "#6baed6"
-          ]
-        ],
-        [
-          [
-            "R1720061",
-            "#eff3ff"
-          ],
-          [
-            "R1720056",
-            "#bdd7e7"
-          ],
-          [
-            "R1720060",
-            "#bdd7e7"
-          ],
-          [
-            "R1720062",
-            "#bdd7e7"
-          ],
-          [
-            "R1720055",
-            "#bdd7e7"
-          ],
-          [
-            "R1720068",
-            "#bdd7e7"
-          ],
-          [
-            "R1720058",
-            "#bdd7e7"
-          ],
-          [
-            "R1720052",
-            "#bdd7e7"
-          ],
-          [
-            "R1720051",
-            "#6baed6"
-          ],
-          [
-            "R1720065",
-            "#6baed6"
-          ],
-          [
-            "R1720053",
-            "#6baed6"
-          ],
-          [
-            "R1720063",
-            "#6baed6"
-          ],
-          [
-            "R1720067",
-            "#6baed6"
-          ],
-          [
-            "R1720066",
-            "#3182bd"
-          ],
-          [
-            "R1720064",
-            "#3182bd"
-          ],
-          [
-            "R1720057",
-            "#3182bd"
-          ],
-          [
-            "R1720059",
-            "#3182bd"
-          ],
-          [
-            "R1720054",
-            "#3182bd"
-          ]
-        ]
       ],
       [
-        [
           [
-            "R1720056",
-            3
+              [
+                  "R1720061",
+                  3
+              ],
+              [
+                  "R1720062",
+                  6
+              ],
+              [
+                  "R1720055",
+                  6
+              ],
+              [
+                  "R1720068",
+                  6
+              ],
+              [
+                  "R1720067",
+                  6
+              ],
+              [
+                  "R1720058",
+                  9
+              ],
+              [
+                  "R1720056",
+                  9
+              ],
+              [
+                  "R1720051",
+                  9
+              ],
+              [
+                  "R1720052",
+                  9
+              ],
+              [
+                  "R1720060",
+                  9
+              ],
+              [
+                  "R1720053",
+                  12
+              ],
+              [
+                  "R1720064",
+                  12
+              ],
+              [
+                  "R1720063",
+                  12
+              ],
+              [
+                  "R1720057",
+                  12
+              ],
+              [
+                  "R1720059",
+                  12
+              ],
+              [
+                  "R1720054",
+                  12
+              ],
+              [
+                  "R1720065",
+                  12
+              ],
+              [
+                  "R1720066",
+                  15
+              ]
           ],
           [
-            "R1720062",
-            3
+              [
+                  "R1720062",
+                  3
+              ],
+              [
+                  "R1720061",
+                  3
+              ],
+              [
+                  "R1720060",
+                  3
+              ],
+              [
+                  "R1720056",
+                  3
+              ],
+              [
+                  "R1720058",
+                  6
+              ],
+              [
+                  "R1720059",
+                  6
+              ],
+              [
+                  "R1720063",
+                  6
+              ],
+              [
+                  "R1720066",
+                  6
+              ],
+              [
+                  "R1720065",
+                  6
+              ],
+              [
+                  "R1720055",
+                  6
+              ],
+              [
+                  "R1720051",
+                  6
+              ],
+              [
+                  "R1720068",
+                  6
+              ],
+              [
+                  "R1720052",
+                  6
+              ],
+              [
+                  "R1720053",
+                  9
+              ],
+              [
+                  "R1720067",
+                  9
+              ],
+              [
+                  "R1720057",
+                  9
+              ],
+              [
+                  "R1720064",
+                  9
+              ],
+              [
+                  "R1720054",
+                  9
+              ]
           ],
           [
-            "R1720061",
-            3
+              [
+                  "R1720060",
+                  3
+              ],
+              [
+                  "R1720052",
+                  3
+              ],
+              [
+                  "R1720056",
+                  3
+              ],
+              [
+                  "R1720058",
+                  3
+              ],
+              [
+                  "R1720061",
+                  3
+              ],
+              [
+                  "R1720062",
+                  3
+              ],
+              [
+                  "R1720053",
+                  3
+              ],
+              [
+                  "R1720065",
+                  3
+              ],
+              [
+                  "R1720063",
+                  3
+              ],
+              [
+                  "R1720066",
+                  3
+              ],
+              [
+                  "R1720064",
+                  3
+              ],
+              [
+                  "R1720055",
+                  3
+              ],
+              [
+                  "R1720059",
+                  6
+              ],
+              [
+                  "R1720067",
+                  6
+              ],
+              [
+                  "R1720057",
+                  6
+              ],
+              [
+                  "R1720068",
+                  6
+              ],
+              [
+                  "R1720051",
+                  6
+              ],
+              [
+                  "R1720054",
+                  9
+              ]
           ],
           [
-            "R1720052",
-            3
-          ],
-          [
-            "R1720058",
-            3
-          ],
-          [
-            "R1720060",
-            3
-          ],
-          [
-            "R1720053",
-            3
-          ],
-          [
-            "R1720065",
-            3
-          ],
-          [
-            "R1720066",
-            3
-          ],
-          [
-            "R1720064",
-            3
-          ],
-          [
-            "R1720063",
-            3
-          ],
-          [
-            "R1720055",
-            3
-          ],
-          [
-            "R1720059",
-            6
-          ],
-          [
-            "R1720067",
-            6
-          ],
-          [
-            "R1720057",
-            6
-          ],
-          [
-            "R1720068",
-            6
-          ],
-          [
-            "R1720051",
-            6
-          ],
-          [
-            "R1720054",
-            9
+              [
+                  "R1720061",
+                  3
+              ],
+              [
+                  "R1720056",
+                  6
+              ],
+              [
+                  "R1720060",
+                  6
+              ],
+              [
+                  "R1720062",
+                  6
+              ],
+              [
+                  "R1720055",
+                  6
+              ],
+              [
+                  "R1720068",
+                  6
+              ],
+              [
+                  "R1720058",
+                  6
+              ],
+              [
+                  "R1720052",
+                  6
+              ],
+              [
+                  "R1720051",
+                  9
+              ],
+              [
+                  "R1720053",
+                  9
+              ],
+              [
+                  "R1720065",
+                  9
+              ],
+              [
+                  "R1720063",
+                  9
+              ],
+              [
+                  "R1720067",
+                  9
+              ],
+              [
+                  "R1720066",
+                  12
+              ],
+              [
+                  "R1720064",
+                  12
+              ],
+              [
+                  "R1720057",
+                  12
+              ],
+              [
+                  "R1720059",
+                  12
+              ],
+              [
+                  "R1720054",
+                  12
+              ]
           ]
-        ],
-        [
-          [
-            "R1720061",
-            3
-          ],
-          [
-            "R1720062",
-            6
-          ],
-          [
-            "R1720055",
-            6
-          ],
-          [
-            "R1720068",
-            6
-          ],
-          [
-            "R1720067",
-            6
-          ],
-          [
-            "R1720058",
-            9
-          ],
-          [
-            "R1720056",
-            9
-          ],
-          [
-            "R1720051",
-            9
-          ],
-          [
-            "R1720052",
-            9
-          ],
-          [
-            "R1720060",
-            9
-          ],
-          [
-            "R1720053",
-            12
-          ],
-          [
-            "R1720064",
-            12
-          ],
-          [
-            "R1720059",
-            12
-          ],
-          [
-            "R1720057",
-            12
-          ],
-          [
-            "R1720063",
-            12
-          ],
-          [
-            "R1720054",
-            12
-          ],
-          [
-            "R1720065",
-            12
-          ],
-          [
-            "R1720066",
-            15
-          ]
-        ],
-        [
-          [
-            "R1720060",
-            3
-          ],
-          [
-            "R1720062",
-            3
-          ],
-          [
-            "R1720061",
-            3
-          ],
-          [
-            "R1720056",
-            3
-          ],
-          [
-            "R1720058",
-            6
-          ],
-          [
-            "R1720059",
-            6
-          ],
-          [
-            "R1720063",
-            6
-          ],
-          [
-            "R1720065",
-            6
-          ],
-          [
-            "R1720066",
-            6
-          ],
-          [
-            "R1720055",
-            6
-          ],
-          [
-            "R1720068",
-            6
-          ],
-          [
-            "R1720051",
-            6
-          ],
-          [
-            "R1720052",
-            6
-          ],
-          [
-            "R1720053",
-            9
-          ],
-          [
-            "R1720067",
-            9
-          ],
-          [
-            "R1720057",
-            9
-          ],
-          [
-            "R1720064",
-            9
-          ],
-          [
-            "R1720054",
-            9
-          ]
-        ],
-        [
-          [
-            "R1720061",
-            3
-          ],
-          [
-            "R1720056",
-            6
-          ],
-          [
-            "R1720060",
-            6
-          ],
-          [
-            "R1720062",
-            6
-          ],
-          [
-            "R1720055",
-            6
-          ],
-          [
-            "R1720068",
-            6
-          ],
-          [
-            "R1720058",
-            6
-          ],
-          [
-            "R1720052",
-            6
-          ],
-          [
-            "R1720051",
-            9
-          ],
-          [
-            "R1720065",
-            9
-          ],
-          [
-            "R1720053",
-            9
-          ],
-          [
-            "R1720063",
-            9
-          ],
-          [
-            "R1720067",
-            9
-          ],
-          [
-            "R1720066",
-            12
-          ],
-          [
-            "R1720064",
-            12
-          ],
-          [
-            "R1720057",
-            12
-          ],
-          [
-            "R1720059",
-            12
-          ],
-          [
-            "R1720054",
-            12
-          ]
-        ]
       ],
       [
-        "January",
-        "April",
-        "February",
-        "March"
+          "April",
+          "February",
+          "January",
+          "March"
       ],
       [
-        6,
-        18,
-        30,
-        50,
-        69
-      ],
-      [
-        "#eff3ff",
-        "#bdd7e7",
-        "#6baed6",
-        "#3182bd",
-        "#08519c"
-      ],
-      [
-        [
-          [
-            "R1720056",
-            1
-          ],
-          [
-            "R1720062",
-            1
-          ],
-          [
-            "R1720061",
-            1
-          ],
-          [
-            "R1720052",
-            1
-          ],
-          [
-            "R1720058",
-            1
-          ],
-          [
-            "R1720060",
-            1
-          ],
-          [
-            "R1720053",
-            1
-          ],
-          [
-            "R1720065",
-            1
-          ],
-          [
-            "R1720066",
-            1
-          ],
-          [
-            "R1720064",
-            1
-          ],
-          [
-            "R1720063",
-            1
-          ],
-          [
-            "R1720055",
-            1
-          ],
-          [
-            "R1720059",
-            1
-          ],
-          [
-            "R1720067",
-            1
-          ],
-          [
-            "R1720057",
-            1
-          ],
-          [
-            "R1720068",
-            1
-          ],
-          [
-            "R1720051",
-            1
-          ],
-          [
-            "R1720054",
-            1
-          ]
-        ],
-        [
-          [
-            "R1720061",
-            1
-          ],
-          [
-            "R1720062",
-            1
-          ],
-          [
-            "R1720055",
-            1
-          ],
-          [
-            "R1720068",
-            1
-          ],
-          [
-            "R1720067",
-            1
-          ],
-          [
-            "R1720058",
-            1
-          ],
-          [
-            "R1720056",
-            1
-          ],
-          [
-            "R1720051",
-            1
-          ],
-          [
-            "R1720052",
-            1
-          ],
-          [
-            "R1720060",
-            1
-          ],
-          [
-            "R1720053",
-            1
-          ],
-          [
-            "R1720064",
-            1
-          ],
-          [
-            "R1720059",
-            1
-          ],
-          [
-            "R1720057",
-            1
-          ],
-          [
-            "R1720063",
-            1
-          ],
-          [
-            "R1720054",
-            1
-          ],
-          [
-            "R1720065",
-            1
-          ],
-          [
-            "R1720066",
-            1
-          ]
-        ],
-        [
-          [
-            "R1720060",
-            1
-          ],
-          [
-            "R1720062",
-            1
-          ],
-          [
-            "R1720061",
-            1
-          ],
-          [
-            "R1720056",
-            1
-          ],
-          [
-            "R1720058",
-            1
-          ],
-          [
-            "R1720059",
-            1
-          ],
-          [
-            "R1720063",
-            1
-          ],
-          [
-            "R1720065",
-            1
-          ],
-          [
-            "R1720066",
-            1
-          ],
-          [
-            "R1720055",
-            1
-          ],
-          [
-            "R1720068",
-            1
-          ],
-          [
-            "R1720051",
-            1
-          ],
-          [
-            "R1720052",
-            1
-          ],
-          [
-            "R1720053",
-            1
-          ],
-          [
-            "R1720067",
-            1
-          ],
-          [
-            "R1720057",
-            1
-          ],
-          [
-            "R1720064",
-            1
-          ],
-          [
-            "R1720054",
-            1
-          ]
-        ],
-        [
-          [
-            "R1720061",
-            1
-          ],
-          [
-            "R1720056",
-            1
-          ],
-          [
-            "R1720060",
-            1
-          ],
-          [
-            "R1720062",
-            1
-          ],
-          [
-            "R1720055",
-            1
-          ],
-          [
-            "R1720068",
-            1
-          ],
-          [
-            "R1720058",
-            1
-          ],
-          [
-            "R1720052",
-            1
-          ],
-          [
-            "R1720051",
-            1
-          ],
-          [
-            "R1720065",
-            1
-          ],
-          [
-            "R1720053",
-            1
-          ],
-          [
-            "R1720063",
-            1
-          ],
-          [
-            "R1720067",
-            1
-          ],
-          [
-            "R1720066",
-            1
-          ],
-          [
-            "R1720064",
-            1
-          ],
-          [
-            "R1720057",
-            1
-          ],
-          [
-            "R1720059",
-            1
-          ],
-          [
-            "R1720054",
-            1
-          ]
-        ]
-      ],
-      [
-        [
           6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          6,
-          18,
-          18,
-          18,
-          18,
-          18,
-          30
-        ],
-        [
-          6,
-          18,
-          18,
-          18,
           18,
           30,
-          30,
-          30,
-          30,
-          30,
-          50,
-          50,
-          50,
-          50,
-          50,
-          50,
           50,
           69
-        ],
-        [
-          6,
-          6,
-          6,
-          6,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          30,
-          30,
-          30,
-          30,
-          30
-        ],
-        [
-          6,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          30,
-          30,
-          30,
-          30,
-          30,
-          50,
-          50,
-          50,
-          50,
-          50
-        ]
+      ],
+      [
+          "#eff3ff",
+          "#bdd7e7",
+          "#6baed6",
+          "#3182bd",
+          "#08519c"
+      ],
+      [
+          [
+              [
+                  "R1720061",
+                  1
+              ],
+              [
+                  "R1720062",
+                  1
+              ],
+              [
+                  "R1720055",
+                  1
+              ],
+              [
+                  "R1720068",
+                  1
+              ],
+              [
+                  "R1720067",
+                  1
+              ],
+              [
+                  "R1720058",
+                  1
+              ],
+              [
+                  "R1720056",
+                  1
+              ],
+              [
+                  "R1720051",
+                  1
+              ],
+              [
+                  "R1720052",
+                  1
+              ],
+              [
+                  "R1720060",
+                  1
+              ],
+              [
+                  "R1720053",
+                  1
+              ],
+              [
+                  "R1720064",
+                  1
+              ],
+              [
+                  "R1720063",
+                  1
+              ],
+              [
+                  "R1720057",
+                  1
+              ],
+              [
+                  "R1720059",
+                  1
+              ],
+              [
+                  "R1720054",
+                  1
+              ],
+              [
+                  "R1720065",
+                  1
+              ],
+              [
+                  "R1720066",
+                  1
+              ]
+          ],
+          [
+              [
+                  "R1720062",
+                  1
+              ],
+              [
+                  "R1720061",
+                  1
+              ],
+              [
+                  "R1720060",
+                  1
+              ],
+              [
+                  "R1720056",
+                  1
+              ],
+              [
+                  "R1720058",
+                  1
+              ],
+              [
+                  "R1720059",
+                  1
+              ],
+              [
+                  "R1720063",
+                  1
+              ],
+              [
+                  "R1720066",
+                  1
+              ],
+              [
+                  "R1720065",
+                  1
+              ],
+              [
+                  "R1720055",
+                  1
+              ],
+              [
+                  "R1720051",
+                  1
+              ],
+              [
+                  "R1720068",
+                  1
+              ],
+              [
+                  "R1720052",
+                  1
+              ],
+              [
+                  "R1720053",
+                  1
+              ],
+              [
+                  "R1720067",
+                  1
+              ],
+              [
+                  "R1720057",
+                  1
+              ],
+              [
+                  "R1720064",
+                  1
+              ],
+              [
+                  "R1720054",
+                  1
+              ]
+          ],
+          [
+              [
+                  "R1720060",
+                  1
+              ],
+              [
+                  "R1720052",
+                  1
+              ],
+              [
+                  "R1720056",
+                  1
+              ],
+              [
+                  "R1720058",
+                  1
+              ],
+              [
+                  "R1720061",
+                  1
+              ],
+              [
+                  "R1720062",
+                  1
+              ],
+              [
+                  "R1720053",
+                  1
+              ],
+              [
+                  "R1720065",
+                  1
+              ],
+              [
+                  "R1720063",
+                  1
+              ],
+              [
+                  "R1720066",
+                  1
+              ],
+              [
+                  "R1720064",
+                  1
+              ],
+              [
+                  "R1720055",
+                  1
+              ],
+              [
+                  "R1720059",
+                  1
+              ],
+              [
+                  "R1720067",
+                  1
+              ],
+              [
+                  "R1720057",
+                  1
+              ],
+              [
+                  "R1720068",
+                  1
+              ],
+              [
+                  "R1720051",
+                  1
+              ],
+              [
+                  "R1720054",
+                  1
+              ]
+          ],
+          [
+              [
+                  "R1720061",
+                  1
+              ],
+              [
+                  "R1720056",
+                  1
+              ],
+              [
+                  "R1720060",
+                  1
+              ],
+              [
+                  "R1720062",
+                  1
+              ],
+              [
+                  "R1720055",
+                  1
+              ],
+              [
+                  "R1720068",
+                  1
+              ],
+              [
+                  "R1720058",
+                  1
+              ],
+              [
+                  "R1720052",
+                  1
+              ],
+              [
+                  "R1720051",
+                  1
+              ],
+              [
+                  "R1720053",
+                  1
+              ],
+              [
+                  "R1720065",
+                  1
+              ],
+              [
+                  "R1720063",
+                  1
+              ],
+              [
+                  "R1720067",
+                  1
+              ],
+              [
+                  "R1720066",
+                  1
+              ],
+              [
+                  "R1720064",
+                  1
+              ],
+              [
+                  "R1720057",
+                  1
+              ],
+              [
+                  "R1720059",
+                  1
+              ],
+              [
+                  "R1720054",
+                  1
+              ]
+          ]
+      ],
+      [
+          [
+              6,
+              18,
+              18,
+              18,
+              18,
+              30,
+              30,
+              30,
+              30,
+              30,
+              50,
+              50,
+              50,
+              50,
+              50,
+              50,
+              50,
+              69
+          ],
+          [
+              6,
+              6,
+              6,
+              6,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              30,
+              30,
+              30,
+              30,
+              30
+          ],
+          [
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              6,
+              18,
+              18,
+              18,
+              18,
+              18,
+              30
+          ],
+          [
+              6,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              18,
+              30,
+              30,
+              30,
+              30,
+              30,
+              50,
+              50,
+              50,
+              50,
+              50
+          ]
       ]
-    ],
-  "colorStops": [ [
-        "R1720061",
-        "#eff3ff"
-      ], [
-        "R1720056",
-        "#bdd7e7"
-      ], [
-        "R1720060",
-        "#bdd7e7"
-      ], [
-        "R1720062",
-        "#bdd7e7"
-      ], [
-        "R1720055",
-        "#bdd7e7"
-      ], [
-        "R1720068",
-        "#bdd7e7"
-      ], [
-        "R1720058",
-        "#bdd7e7"
-      ], [
-        "R1720052",
-        "#bdd7e7"
-      ], [
-        "R1720051",
-        "#6baed6"
-      ], [
-        "R1720065",
-        "#6baed6"
-      ], [
-        "R1720053",
-        "#6baed6"
-      ], [
-        "R1720063",
-        "#6baed6"
-      ], [
-        "R1720067",
-        "#6baed6"
-      ], [
-        "R1720066",
-        "#3182bd"
-      ], [
-        "R1720064",
-        "#3182bd"
-      ], [
-        "R1720057",
-        "#3182bd"
-      ], [
-        "R1720059",
-        "#3182bd"
-      ], [
-        "R1720054",
-        "#3182bd"
+  ],
+  "colorStops": [
+      [
+          "R1720061",
+          "#eff3ff"
+      ],
+      [
+          "R1720056",
+          "#bdd7e7"
+      ],
+      [
+          "R1720060",
+          "#bdd7e7"
+      ],
+      [
+          "R1720062",
+          "#bdd7e7"
+      ],
+      [
+          "R1720055",
+          "#bdd7e7"
+      ],
+      [
+          "R1720068",
+          "#bdd7e7"
+      ],
+      [
+          "R1720058",
+          "#bdd7e7"
+      ],
+      [
+          "R1720052",
+          "#bdd7e7"
+      ],
+      [
+          "R1720051",
+          "#6baed6"
+      ],
+      [
+          "R1720053",
+          "#6baed6"
+      ],
+      [
+          "R1720065",
+          "#6baed6"
+      ],
+      [
+          "R1720063",
+          "#6baed6"
+      ],
+      [
+          "R1720067",
+          "#6baed6"
+      ],
+      [
+          "R1720066",
+          "#3182bd"
+      ],
+      [
+          "R1720064",
+          "#3182bd"
+      ],
+      [
+          "R1720057",
+          "#3182bd"
+      ],
+      [
+          "R1720059",
+          "#3182bd"
+      ],
+      [
+          "R1720054",
+          "#3182bd"
       ]
-    ],
+  ],
   "styleSpec": {
-    "id": "children-women-mal-prevention",
-    "visible": false,
-    "type": "fill",
-    "source": {
-      "type": "vector",
-      "url": "mapbox://ona.bnc2rzsw"
-    },
-    "layout": {},
-    "paint": {
-      "fill-color": {
-        "property": "osm_id",
-          "stops": [
-                [
-                   "R1720061",
-                   "#eff3ff"
-                ],
-                [
-                   "R1720056",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720060",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720062",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720055",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720068",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720058",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720052",
-                   "#bdd7e7"
-                ],
-                [
-                   "R1720051",
-                   "#6baed6"
-                ],
-                [
-                   "R1720065",
-                   "#6baed6"
-                ],
-                [
-                   "R1720053",
-                   "#6baed6"
-                ],
-                [
-                   "R1720063",
-                   "#6baed6"
-                ],
-                [
-                   "R1720067",
-                   "#6baed6"
-                ],
-                [
-                   "R1720066",
-                   "#3182bd"
-                ],
-                [
-                   "R1720064",
-                   "#3182bd"
-                ],
-                [
-                   "R1720057",
-                   "#3182bd"
-                ],
-                [
-                   "R1720059",
-                   "#3182bd"
-                ],
-                [
-                   "R1720054",
-                   "#3182bd"
-                 ]
-               ],
-        "type": "categorical",
-        "default": "rgba(0,0,0,0)"
+      "id": "children-women-mal-prevention",
+      "visible": false,
+      "type": "fill",
+      "source": {
+          "type": "vector",
+          "url": "mapbox://ona.bnc2rzsw"
       },
-      "fill-opacity": 0.7,
-      "fill-outline-color": "#fff"
-    },
-    "source-layer": "som_adm_1-6k13xf"
+      "layout": {},
+      "paint": {
+          "fill-color": {
+              "property": "osm_id",
+              "stops": [
+                  [
+                      "R1720061",
+                      "#eff3ff"
+                  ],
+                  [
+                      "R1720056",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720060",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720062",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720055",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720068",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720058",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720052",
+                      "#bdd7e7"
+                  ],
+                  [
+                      "R1720051",
+                      "#6baed6"
+                  ],
+                  [
+                      "R1720053",
+                      "#6baed6"
+                  ],
+                  [
+                      "R1720065",
+                      "#6baed6"
+                  ],
+                  [
+                      "R1720063",
+                      "#6baed6"
+                  ],
+                  [
+                      "R1720067",
+                      "#6baed6"
+                  ],
+                  [
+                      "R1720066",
+                      "#3182bd"
+                  ],
+                  [
+                      "R1720064",
+                      "#3182bd"
+                  ],
+                  [
+                      "R1720057",
+                      "#3182bd"
+                  ],
+                  [
+                      "R1720059",
+                      "#3182bd"
+                  ],
+                  [
+                      "R1720054",
+                      "#3182bd"
+                  ]
+              ],
+              "type": "categorical",
+              "default": "rgba(0,0,0,0)"
+          },
+          "fill-opacity": 0.7,
+          "fill-outline-color": "#fff"
+      },
+      "source-layer": "som_adm_1-6k13xf"
   }
 }
