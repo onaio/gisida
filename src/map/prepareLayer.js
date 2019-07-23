@@ -285,7 +285,18 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       res => res,
     ) // pass in callback func to process response
       .then((data) => {
-        layerObj.source.data = superset.processData(data); // assign processed data to layerObj
+        const processedData = superset.processData(data);
+        let parsedData;
+        if (layerObj.source.type === 'geojson') {
+          parsedData = csvToGEOjson(layerObj, processedData);
+        } else {
+          parsedData = [...processedData];
+        }
+
+        layerObj.source.data = Array.isArray(parsedData)
+          ? [...parsedData]
+          : { ...parsedData };
+
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(layerObj);
         }
