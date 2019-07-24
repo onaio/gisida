@@ -1,6 +1,6 @@
 {
   "name": "gisida",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "A dashboard builder library for map visualizations",
   "keywords": [
     "data visualization",
@@ -69,7 +69,7 @@
     "redux-thunk": "^2.2.0",
     "simple-statistics": "^5.2.0",
     "uglifyjs-webpack-plugin": "1.1.5",
-    "webpack": "^3.8.1"
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.1.2",
@@ -86,6 +86,6 @@
     "mapbox-gl": "^0.53.1",
     "mock-browser": "^0.92.14",
     "prettier": "^1.16.4",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.3.6"
   }
 }
