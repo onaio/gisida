@@ -94,6 +94,7 @@ class SupAuthZ {
 
     return {
       isAuth,
+      user: this.user,
       authConfig: this.authConfig,
     };
   }
