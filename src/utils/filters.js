@@ -127,7 +127,7 @@ export function generateFilterOptions(layerData) {
   const layerFilter = (layerData.layerObj
     && layerData.layerObj.aggregate
     && layerData.layerObj.aggregate.filter)
-    || layerData.aggregate.filter;
+    || (layerData.aggregate && layerData.aggregate.filter);
 
   // loop through all filters
   for (let f = 0; f < layerFilter.length; f += 1) {
