@@ -26,8 +26,8 @@ export default function csvToGEOjson(spec, data) {
     }
 
     if (gpsProp && datum[gpsProp] && Array.isArray(datum[gpsProp])) {
-      properties[longProp] = properties[longProp] || datum[gpsProp][1];
-      properties[latProp] = properties[latProp] || datum[gpsProp][0];
+      properties[longProp] = Number(properties[longProp]) || Number(datum[gpsProp][1]);
+      properties[latProp] = Number(properties[latProp]) || Number(datum[gpsProp][0]);
     } else if (gpsProp && datum[gpsProp] && typeof datum[gpsProp] === 'string') {
       datum[gpsProp] = datum[gpsProp].split(' ').splice(0, 2);
       properties[longProp] = properties[longProp] || datum[gpsProp][1];
