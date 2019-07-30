@@ -291,8 +291,27 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       res => res,
     ) // pass in callback func to process response
       .then((data) => {
-        layerObj.source.data = superset.processData(data); // assign processed data to layerObj
-        layerObj.mergedData = [...layerObj.source.data];
+        const processedData = superset.processData(data);
+        let parsedData;
+        if (layerObj.source.type === 'geojson') {
+          parsedData = csvToGEOjson(layerObj, processedData);
+          if (layerObj.hideZeroVals) {
+            parsedData = {
+              type: 'FeatureCollection',
+              features: parsedData.features.filter(d => d.properties[layerObj.property] !== 0),
+            };
+          }
+        } else {
+          parsedData = [...processedData];
+        }
+
+        layerObj.source.data = Array.isArray(parsedData)
+          ? [...parsedData]
+          : { ...parsedData };
+
+        layerObj.mergedData = layerObj.source.data;
+
+
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(layerObj, currentState.LOCATIONS);
         }
