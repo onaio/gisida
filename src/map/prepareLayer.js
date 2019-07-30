@@ -27,14 +27,16 @@ export function buildLabels(layerObj, tsLayerObj, period) {
   const {
     coordinates, join, label, labelData,
   } = layerObj.labels;
+  let activeLayerData;
 
   // loop through all labels
   for (let l = 0; l < labelData.length; l += 1) {
     // loop through all data
     for (let d = 0; d < layerData.length; d += 1) {
       // check for join match between label and datum
-      if (labelData[l][join[0]] === layerData[d][join[1]]) {
-        const dataItem = commaFormatting(layerObj, layerData[d], false);
+      activeLayerData = layerData[d].properties || layerData[d];
+      if (labelData[l][join[0]] === activeLayerData[join[1]]) {
+        const dataItem = commaFormatting(layerObj, activeLayerData, false);
         // stash datum and coordi ates in label, push to labels array
         labels.push({
           ...labelData[l],
