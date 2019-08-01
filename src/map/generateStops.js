@@ -233,8 +233,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
       data.push(Number(sortedData[i].properties[(layer.property || layer.layerObj.property)]));
       periods.push(sortedData[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
-        osmIDs.push(sortedData[i].properties[(groupByProp || (layer.source.join[1] ||
-          layer.layerObj.source.join[1]))]);
+        osmIDs.push(sortedData[i].properties[(groupByProp
+          || ((layer.source && layer.source.join[1]) ||
+            (layer.layerObj && layer.layerObj.source.join[1])))]);
       }
     } else {
       periods.push(sortedData[i][timefield] || null);
