@@ -174,7 +174,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   let sortedData = [...rows];
   sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
-  if (layer.aggregate && layer.aggregate.timeseries) {
+  if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort']) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
       const { split, chunk } = layer.aggregate['date-parse'];
       sortedDataDate = rows.map((d) => {
