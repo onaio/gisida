@@ -181,7 +181,8 @@ export default function (layer, timefield, dispatch, nextIndex) {
   let sortedData = [...rows];
   sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
-  if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort']) {
+  if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort'] &&
+       !layer.aggregate['year-sort']) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
       const { split, chunk } = layer.aggregate['date-parse'];
       sortedDataDate = rows.map((d) => {
@@ -211,10 +212,23 @@ export default function (layer, timefield, dispatch, nextIndex) {
         return 0;
       });
     }
+  } else if (layer && layer.aggregate && layer.aggregate['year-sort']) {
+    /** Sorts data based on year alone keeping the week sort implemented on superset
+      * Should be done in superset in the future
+      */
+    const yearlySortedData = [];
+    const years = Array.from(new Set([...rows.map(d => d.year)])).sort();
+    years.forEach((year) => {
+      rows.forEach((datum) => {
+        if (datum.year === year) {
+          yearlySortedData.push(datum);
+        }
+      });
+    });
+    sortedData = [...yearlySortedData];
   } else {
     sortedData = [...rows];
   }
-
   const isGeoJSON = (layer.source && layer.source.data.features)
   || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
 
