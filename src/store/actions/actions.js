@@ -5,6 +5,11 @@ export const initApp = config => ({
   config,
 });
 
+export const initLocLib = config => ({
+  type: types.INIT_LOC_LIB,
+  config,
+});
+
 export const initLoc = config => ({
   type: types.INIT_LOC,
   config,
@@ -239,4 +244,5 @@ export default {
   setLocation,
   initLoc,
   toggleMapLocation,
+  initLocLib,
 };
