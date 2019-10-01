@@ -181,8 +181,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
   let sortedData = [...rows];
   sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
   let sortedDataDate;
-  if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort'] &&
-       !layer.aggregate['year-sort']) {
+  if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort']) {
     if (layer['data-parse'] && layer.aggregate['date-parse']) {
       const { split, chunk } = layer.aggregate['date-parse'];
       sortedDataDate = rows.map((d) => {
@@ -254,8 +253,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
       data.push(Number(sortedData[i].properties[(layer.property || layer.layerObj.property)]));
       periods.push(sortedData[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
-        osmIDs.push(sortedData[i].properties[(groupByProp || ((layer.source && layer.source.join[1])
-        || (layer.layerObj && layer.layerObj.source.join[1])))]);
+        osmIDs.push(sortedData[i].properties[(groupByProp
+          || ((layer.source && layer.source.join[1]) ||
+            (layer.layerObj && layer.layerObj.source.join[1])))]);
       }
     } else {
       periods.push(sortedData[i][timefield] || null);

@@ -19,7 +19,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     const currentState = dispatch(getCurrentState());
     const { layers, timeseries } = currentState[mapId];
 
-    // Generate list of active layers
+    // Generate list of active layers excluding chart layers
     const activeLayers = [];
     Object.keys(layers).forEach((key) => {
       const layer = layers[key];
@@ -56,14 +56,13 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           ? [...timeseries[layerId].data]
           : (layer.source && layer.source.data &&
             (layer.source.data.features || [...layer.source.data]));
-
         if (data && data.length) {
           let row;
           for (let r = 0; r < data.length; r += 1) {
             row = { ...(data[r].properties || data[r]) };
             const rowItem = {
-              ...row,
               ...feature.properties,
+              ...row,
             };
             // if row matches property
             if ((layer.popup.join
