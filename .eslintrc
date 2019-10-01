@@ -1,8 +1,11 @@
 {
   "env": {
-    "browser": true
+    "browser": true,
+    "jest/globals": true
   },
-  "extends": "airbnb",
+  "extends": [
+    "airbnb"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -11,8 +14,12 @@
     "sourceType": "module"
   },
   "rules": {
-    
+    "strict": 0,
+    "brace-style": 2
   },
+  "plugins": [
+    "jest"
+],
   "parser": "babel-eslint",
   "globals": {
     "mapboxgl": true,
