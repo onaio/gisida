@@ -106,7 +106,7 @@ export default function (layer, mapConfig, dispatch) {
             type: 'categorical',
           }) || layer.categories.color,
         'circle-opacity': 0.8,
-        'circle-stroke-color': '#fff',
+        'circle-stroke-color': layer['radius-prop'] ? 'transparent' : '#fff',
         'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)
           ? {
             property: layer.source.join[0],
@@ -163,7 +163,7 @@ export default function (layer, mapConfig, dispatch) {
         if (layer['is-radius-distance']) {
           // handle radius as a distance on the map
           styleSpec.paint['circle-radius'] = buildRadiusAsDistanceExpression(layer);
-        } else if (stops) {
+        } else if (!layer['radius-prop'] && stops) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
@@ -182,6 +182,7 @@ export default function (layer, mapConfig, dispatch) {
         styleSpec.source.data = dataCopy;
       }
     }
+
     // add filter
     if (layer.filter) {
       styleSpec.filter = layer.filter;

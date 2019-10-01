@@ -27,14 +27,16 @@ export function buildLabels(layerObj, tsLayerObj, period) {
   const {
     coordinates, join, label, labelData,
   } = layerObj.labels;
+  let activeLayerData;
 
   // loop through all labels
   for (let l = 0; l < labelData.length; l += 1) {
     // loop through all data
     for (let d = 0; d < layerData.length; d += 1) {
       // check for join match between label and datum
-      if (labelData[l][join[0]] === layerData[d][join[1]]) {
-        const dataItem = commaFormatting(layerObj, layerData[d], false);
+      activeLayerData = layerData[d].properties || layerData[d];
+      if (labelData[l][join[0]] === activeLayerData[join[1]]) {
+        const dataItem = commaFormatting(layerObj, activeLayerData, false);
         // stash datum and coordi ates in label, push to labels array
         labels.push({
           ...labelData[l],
@@ -289,8 +291,27 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       res => res,
     ) // pass in callback func to process response
       .then((data) => {
-        layerObj.source.data = superset.processData(data); // assign processed data to layerObj
-        layerObj.mergedData = [...layerObj.source.data];
+        const processedData = superset.processData(data);
+        let parsedData;
+        if (layerObj.source.type === 'geojson') {
+          parsedData = csvToGEOjson(layerObj, processedData);
+          if (layerObj.hideZeroVals) {
+            parsedData = {
+              type: 'FeatureCollection',
+              features: parsedData.features.filter(d => d.properties[layerObj.property] !== 0),
+            };
+          }
+        } else {
+          parsedData = [...processedData];
+        }
+
+        layerObj.source.data = Array.isArray(parsedData)
+          ? [...parsedData]
+          : { ...parsedData };
+
+        layerObj.mergedData = layerObj.source.data;
+
+
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(layerObj, currentState.LOCATIONS);
         }
