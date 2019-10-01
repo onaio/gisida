@@ -21,6 +21,7 @@ const defaultState = {
     location: null,
     locations: null,
   },
+  LOCLIB: {},
   STYLES: [
     {
       label: 'Satelitte',

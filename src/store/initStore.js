@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import * as actions from './actions/actions';
@@ -5,6 +6,7 @@ import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
+import getData from '../connectors/ona-api/data';
 
 
 export function loadLayers(mapId, dispatch, layers) {
@@ -80,6 +82,32 @@ function addConfigToStore(store, config) {
   store.dispatch(actions.initApp(config.APP));
   if (config.LOC) {
     store.dispatch(actions.initLoc(config.LOC));
+  }
+  const { locFormId, country } = config.APP.mapConfig;
+  /**
+   * Check  location formId and country
+   * Get all locations and filter by country
+   */
+  if (country && locFormId) {
+    let q = d3.queue();
+    q = q.defer(getData, locFormId, null, config.APP);
+    q.awaitAll((error, data) => {
+      if (error) {
+        // eslint-disable-next-line no-alert
+        alert('Error on location library endpoint');
+      } else {
+        const countryData = data[0].find(d => d.Country === country);
+        /**
+         * Destructure _geolocation and zoom_level
+         * _geolocation (will overide default center values on )
+         * zoom_level (will overide default zoom)
+         */
+        // eslint-disable-next-line camelcase
+        const locationData = (({ _geolocation, zoom_level }) =>
+          ({ _geolocation, zoom_level }))(countryData);
+        store.dispatch(actions.initLocLib(locationData));
+      }
+    });
   }
   if (config.SUPERSET_CONFIGS) {
     store.dispatch(actions.initSuperset(config.SUPERSET_CONFIGS));
