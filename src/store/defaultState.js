@@ -1,13 +1,9 @@
-
 const defaultState = {
   APP: {
     mapConfig: {
       container: 'map',
       style: '',
-      center: [
-        0,
-        0,
-      ],
+      center: [0, 0],
       zoom: 5,
     },
     accessToken: false,
@@ -31,8 +27,7 @@ const defaultState = {
       url: 'mapbox://styles/mapbox/satellite-streets-v9',
     },
   ],
-  REGIONS: [
-  ],
+  REGIONS: [],
   MAP: {
     isRendered: false,
     isLoaded: false,
@@ -55,8 +50,8 @@ const defaultState = {
       filterOptions: {},
       filterOptionsPrev: {},
       isOpen: false,
-      isMac: (window.navigator.platform.indexOf('Mac') !== -1),
-      isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
+      isMac: window.navigator.platform.indexOf('Mac') !== -1,
+      isLinux: window.navigator.platform.indexOf('Linux') !== -1,
       globalSearchField: false,
     },
     detailView: null,

@@ -33,25 +33,33 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const {
     colors, periods, limit, radiusRange,
   } = layer;
-  const clusters = (clusterLayer && clusterLayer.stops && nextIndex
-   && clusterLayer.stops[nextIndex] &&
-    ![...new Set(clusterLayer.stops[nextIndex].map(d => d[1]))].includes(undefined)) ?
-    [...new Set(clusterLayer.stops[nextIndex]
-      .map(d => d[1]))].length :
-    layer.clusters || (clusterLayer && clusterLayer.layerObj &&
-         clusterLayer.layerObj.colors && clusterLayer.layerObj.colors.length) ||
-          clusterLayer.categories.color.length;
+  const clusters =
+    clusterLayer &&
+    clusterLayer.stops &&
+    nextIndex &&
+    clusterLayer.stops[nextIndex] &&
+    ![...new Set(clusterLayer.stops[nextIndex].map(d => d[1]))].includes(undefined)
+      ? [...new Set(clusterLayer.stops[nextIndex].map(d => d[1]))].length
+      : layer.clusters ||
+        (clusterLayer &&
+          clusterLayer.layerObj &&
+          clusterLayer.layerObj.colors &&
+          clusterLayer.layerObj.colors.length) ||
+        clusterLayer.categories.color.length;
   const colorsStops = [];
   const radiusStops = [];
   let breaks = [];
   const radius = radiusRange || defaultRadiusRange;
 
   // Sort data based on data value
-  const list = layer.data.map((x, i) => ({
-    data: x,
-    osmIDs: layer.osmIDs[i],
-    periods: periods[i],
-  }), this);
+  const list = layer.data.map(
+    (x, i) => ({
+      data: x,
+      osmIDs: layer.osmIDs[i],
+      periods: periods[i],
+    }),
+    this,
+  );
   list.sort((a, b) => {
     if (a.data < b.data) {
       return -1;
@@ -66,11 +74,14 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   const period = list.map(items => items.periods);
 
   // Sort for limit limit || data based on osmIDs
-  const dataList = layer.osmIDs.map((x, i) => ({
-    osmIDs: x,
-    data: layer.data[i],
-    periods: periods[i],
-  }), this);
+  const dataList = layer.osmIDs.map(
+    (x, i) => ({
+      osmIDs: x,
+      data: layer.data[i],
+      periods: periods[i],
+    }),
+    this,
+  );
   dataList.sort((a, b) => {
     if (a.data < b.data) {
       return -1;
@@ -90,32 +101,39 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
   } else if (clusters && sortedData.length && sortedData.length < clusters) {
     ckmeansCluster = ckmeans(sortedData, sortedData.length);
   }
-  const cluster = (Array.isArray(clusters) && clusters)
-    || ckmeansCluster;
+  const cluster = (Array.isArray(clusters) && clusters) || ckmeansCluster;
 
   const currentState = dispatch && dispatch(getCurrentState());
-  if (currentState && currentState.FILTER &&
+  if (
+    currentState &&
+    currentState.FILTER &&
     currentState.FILTER[clusterLayer.id] &&
-    currentState.FILTER[clusterLayer.id].doUpdate) {
-    breaks = limit || (cluster && cluster.length &&
-      cluster.map(cl => cl[cl.length - 1]));
+    currentState.FILTER[clusterLayer.id].doUpdate
+  ) {
+    breaks =
+      limit ||
+      (cluster && cluster.length && cluster.map(cl => cl[cl.length - 1]));
   } else {
-    breaks = (clusterLayer.categories &&
-        clusterLayer.categories.label &&
-        clusterLayer.type !== 'chart') ?
-      limit :
-      ((cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) || limit);
+    breaks =
+      clusterLayer.categories &&
+      clusterLayer.categories.label &&
+      clusterLayer.type !== 'chart'
+        ? limit
+        : (cluster && cluster.length && cluster.map(cl => cl[cl.length - 1])) ||
+          limit;
   }
 
-  const OSMIDsExist = (layer.osmIDs && layer.osmIDs.length !== 0);
+  const OSMIDsExist = layer.osmIDs && layer.osmIDs.length !== 0;
   const data = limit ? rangeData : sortedData;
   const osmIDs = limit ? rangeID : osmID;
   const breakStops = [];
 
-  const activeBreaks = (clusterLayer.categories &&
-      clusterLayer.categories.label &&
-      clusterLayer.type !== 'chart') ?
-    limit : breaks;
+  const activeBreaks =
+    clusterLayer.categories &&
+    clusterLayer.categories.label &&
+    clusterLayer.type !== 'chart'
+      ? limit
+      : breaks;
 
   // Assign colors and radius to osmId or data value
   for (let k = 0; k < data.length; k += 1) {
@@ -124,7 +142,7 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
         // Check for repeating stop domains
         const stopValue = OSMIDsExist ? osmIDs[k] : data[k];
         colorsStops.push([stopValue, getColor(colors, i)]);
-        radiusStops.push([stopValue, (Number(radius[i]))]);
+        radiusStops.push([stopValue, Number(radius[i])]);
         breakStops.push(activeBreaks[i]);
         break;
       }
@@ -154,8 +172,15 @@ function getStops(layer, clusterLayer, nextIndex, dispatch) {
         }
       }
     }
-    return [periodStops, periodRadius, uniqPeriods, breaks, colors, periodStroke,
-      periodBreaks];
+    return [
+      periodStops,
+      periodRadius,
+      uniqPeriods,
+      breaks,
+      colors,
+      periodStroke,
+      periodBreaks,
+    ];
   }
   return [];
 }
@@ -164,8 +189,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const data = [];
   const osmIDs = [];
   const periods = [];
-  const stops = layer['unfiltered-stops'] ||
-   (layer.layerObj && layer.layerObj['unfiltered-stops']) ||
+  const stops =
+    layer['unfiltered-stops'] ||
+    (layer.layerObj && layer.layerObj['unfiltered-stops']) ||
     (layer && layer.layerObj && layer.layerObj.stops && layer.layerObj.stops);
   const { categories } = layer.categories ? layer : layer.layerObj;
   const clusters = categories && categories.clusters;
@@ -179,7 +205,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
   const rawData = layer.data || layer.source.data.features || layer.source.data || layer.mergedData;
   const rows = rawData.filter(d => ((d.properties || d)[layer.property] !== 'n/a'));
   let sortedData = [...rows];
-  sortedData = sortedData.filter(d => d.period !== '').filter(d => d.Phase !== '');
+  sortedData = sortedData
+    .filter(d => d.period !== '')
+    .filter(d => d.Phase !== '');
   let sortedDataDate;
   if (layer.aggregate && layer.aggregate.timeseries && !layer.aggregate['no-sort'] &&
        !layer.aggregate['year-sort']) {
@@ -190,8 +218,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
 
         return {
           ...dataCopy,
-          date: new Date((dataCopy.properties ||
-           dataCopy).period.split(split)[chunk]),
+          date: new Date((dataCopy.properties || dataCopy).period.split(split)[chunk]),
         };
       });
       sortedData = sortedDataDate.sort(comparator);
@@ -206,7 +233,9 @@ export default function (layer, timefield, dispatch, nextIndex) {
             a)[timefield].toString().split('-')[0]) - new Date((b.properties || b)[timefield].toString().split('-')[0]);
         } else if ((a.properties || a)[timefield] > (b.properties || b)[timefield]) {
           return 1;
-        } else if ((b.properties || b)[timefield] > (a.properties || a)[timefield]) {
+        } else if (
+          (b.properties || b)[timefield] > (a.properties || a)[timefield]
+        ) {
           return -1;
         }
         return 0;
@@ -214,8 +243,8 @@ export default function (layer, timefield, dispatch, nextIndex) {
     }
   } else if (layer && layer.aggregate && layer.aggregate['year-sort']) {
     /** Sorts data based on year alone keeping the week sort implemented on superset
-      * Should be done in superset in the future
-      */
+     * Should be done in superset in the future
+     */
     const yearlySortedData = [];
     const years = Array.from(new Set([...rows.map(d => d.year)])).sort();
     years.forEach((year) => {
@@ -229,8 +258,11 @@ export default function (layer, timefield, dispatch, nextIndex) {
   } else {
     sortedData = [...rows];
   }
-  const isGeoJSON = (layer.source && layer.source.data.features)
-  || (layer.layerObj && layer.layerObj.source && layer.layerObj.source.data.features);
+  const isGeoJSON =
+    (layer.source && layer.source.data.features) ||
+    (layer.layerObj &&
+      layer.layerObj.source &&
+      layer.layerObj.source.data.features);
 
   // if (isGeoJSON && layer.type === 'circle') {
   //   sortedData.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
@@ -238,25 +270,31 @@ export default function (layer, timefield, dispatch, nextIndex) {
   //   sortedData.sort((a, b) => a[layer.property] - b[layer.property]);
   // }
 
-  const geoJSONWithOSMKey = (isGeoJSON &&
-    ((layer && layer.source && layer.source.join &&
-       layer.source.join[1]) ||
-       (layer.layerObj && layer.layerObj.source.join[1])));
+  const geoJSONWithOSMKey =
+    isGeoJSON &&
+    ((layer && layer.source && layer.source.join && layer.source.join[1]) ||
+      (layer.layerObj && layer.layerObj.source.join[1]));
 
-  const radiusRange = layer['radius-range'] ||
-  (layer.layerObj && layer.layerObj['unfiltered-stops']);
+  const radiusRange =
+    layer['radius-range'] ||
+    (layer.layerObj && layer.layerObj['unfiltered-stops']);
 
-  const groupByProp = (layer.aggregate && layer.aggregate['group-by']) ||
-    (layer.layerObj && layer.layerObj.aggregate && layer.layerObj.aggregate['group-by']);
+  const groupByProp =
+    (layer.aggregate && layer.aggregate['group-by']) ||
+    (layer.layerObj &&
+      layer.layerObj.aggregate &&
+      layer.layerObj.aggregate['group-by']);
 
   for (let i = 0; i < sortedData.length; i += 1) {
     if (isGeoJSON) {
-      data.push(Number(sortedData[i].properties[(layer.property || layer.layerObj.property)]));
+      data.push(Number(sortedData[i].properties[layer.property || layer.layerObj.property]));
       periods.push(sortedData[i].properties[timefield] || null);
       if (geoJSONWithOSMKey) {
-        osmIDs.push(sortedData[i].properties[(groupByProp
-          || ((layer.source && layer.source.join[1]) ||
-            (layer.layerObj && layer.layerObj.source.join[1])))]);
+        osmIDs.push(sortedData[i].properties[
+          groupByProp ||
+              ((layer.source && layer.source.join[1]) ||
+                (layer.layerObj && layer.layerObj.source.join[1]))
+        ]);
       }
     } else {
       periods.push(sortedData[i][timefield] || null);
@@ -266,14 +304,29 @@ export default function (layer, timefield, dispatch, nextIndex) {
       } else {
         data.push(Number(propVal));
       }
-      osmIDs.push(sortedData[i][(groupByProp || (layer && layer.source &&
-         layer.source.join[1]) ||
-         (layer && layer.layerObj && layer.layerObj.source &&
-          layer.layerObj.source.join &&
-          layer.layerObj.source.join[1]))]);
+      osmIDs.push(sortedData[i][
+        groupByProp ||
+            (layer && layer.source && layer.source.join[1]) ||
+            (layer &&
+              layer.layerObj &&
+              layer.layerObj.source &&
+              layer.layerObj.source.join &&
+              layer.layerObj.source.join[1])
+      ]);
     }
   }
-  return getStops({
-    data, colors, osmIDs, periods, limit, clusters, radiusRange,
-  }, layer, nextIndex, dispatch);
+  return getStops(
+    {
+      data,
+      colors,
+      osmIDs,
+      periods,
+      limit,
+      clusters,
+      radiusRange,
+    },
+    layer,
+    nextIndex,
+    dispatch,
+  );
 }

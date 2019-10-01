@@ -36,9 +36,10 @@ export default function buildFilterState(
 
     filter = filters[filterKey];
     aggregate.filter[f] = filterKey;
-    aggregate['accepted-filter-values'][f] = filter.queriedOptionKeys
-      && filter.queriedOptionKeys.length
-      ? filter.queriedOptionKeys : [];
+    aggregate['accepted-filter-values'][f] =
+      filter.queriedOptionKeys && filter.queriedOptionKeys.length
+        ? filter.queriedOptionKeys
+        : [];
 
     aggregate['filter-label'][f] = filter.label || '';
 
@@ -48,25 +49,31 @@ export default function buildFilterState(
       for (let o = 0; o < optionKeys.length; o += 1) {
         option = options[optionKeys[o]];
 
-        if (((filter.isOriginal || filter.isFiltered) && option.enabled)
-          || ((!filter.isOriginal && !filter.isFiltered) && option.count)) {
+        if (
+          ((filter.isOriginal || filter.isFiltered) && option.enabled) ||
+          (!filter.isOriginal && !filter.isFiltered && option.count)
+        ) {
           aggregate['accepted-filter-values'][f].push(optionKeys[o]);
         }
       }
-      if (optionKeys.length === aggregate['accepted-filter-values'][f].length
-      || !aggregate['accepted-filter-values'][f].length) {
+      if (
+        optionKeys.length === aggregate['accepted-filter-values'][f].length ||
+        !aggregate['accepted-filter-values'][f].length
+      ) {
         aggregate['accepted-filter-values'][f] = 'all';
       }
-    // } else if (dataType === 'quantitative') {
-    //   aggregate['accepted-filter-values'][f] = filter.isFiltered ?
+      // } else if (dataType === 'quantitative') {
+      //   aggregate['accepted-filter-values'][f] = filter.isFiltered ?
     } else if (filter.dataType === 'quantitative') {
-      aggregate['accepted-filter-values'][f] = filter.queriedOptionKeys
-        && filter.queriedOptionKeys.length !== [...new Set(filter.options)].length
-        ? filter.queriedOptionKeys
-        : 'quant';
+      aggregate['accepted-filter-values'][f] =
+        filter.queriedOptionKeys &&
+        filter.queriedOptionKeys.length !== [...new Set(filter.options)].length
+          ? filter.queriedOptionKeys
+          : 'quant';
     } else if (!filter.isFiltered) {
       // if (filters[filterKey].isOriginal) {
-      aggregate['accepted-filter-values'][f] = filter.dataType === 'ordinal' ? 'all' : 'quant';
+      aggregate['accepted-filter-values'][f] =
+        filter.dataType === 'ordinal' ? 'all' : 'quant';
     }
   }
 
@@ -78,9 +85,10 @@ export default function buildFilterState(
         ? [...layerObj.source.data]
         : { ...layerObj.source.data },
     },
-    mergedData: layerObj.mergedData && Array.isArray(layerObj.mergedData)
-      ? [...layerObj.mergedData]
-      : { ...layerObj.mergedData },
+    mergedData:
+      layerObj.mergedData && Array.isArray(layerObj.mergedData)
+        ? [...layerObj.mergedData]
+        : { ...layerObj.mergedData },
     aggregate: {
       ...layerObj.aggregate,
     },
@@ -92,25 +100,29 @@ export default function buildFilterState(
     },
   };
 
-  const fauxLayerObj = regenStops ? {
-    ...layerObj,
-    source: {
-      ...layerObj.source,
-      data: Array.isArray(layerObj.source.data)
-        ? [...layerObj.source.data]
-        : { ...layerObj.source.data },
-    },
-    mergedData: layerObj.mergedData && Array.isArray(layerObj.mergedData)
-      ? [...layerObj.mergedData]
-      : { ...layerObj.mergedData },
-    aggregate: {
-      ...layerObj.aggregate,
-      ...aggregate,
-    },
-  } : null;
+  const fauxLayerObj = regenStops
+    ? {
+      ...layerObj,
+      source: {
+        ...layerObj.source,
+        data: Array.isArray(layerObj.source.data)
+          ? [...layerObj.source.data]
+          : { ...layerObj.source.data },
+      },
+      mergedData:
+          layerObj.mergedData && Array.isArray(layerObj.mergedData)
+            ? [...layerObj.mergedData]
+            : { ...layerObj.mergedData },
+      aggregate: {
+        ...layerObj.aggregate,
+        ...aggregate,
+      },
+    }
+    : null;
   const currentState = dispatch(getCurrentState());
   if (regenStops) {
-    fauxLayerObj.source.data = fauxLayerObj.mergedData || fauxLayerObj.source.data;
+    fauxLayerObj.source.data =
+      fauxLayerObj.mergedData || fauxLayerObj.source.data;
     fauxLayerObj.filterOptions = generateFilterOptions(fauxLayerObj);
     if (fauxLayerObj.aggregate.type) {
       fauxLayerObj.source.data = aggregateFormData(
@@ -120,11 +132,14 @@ export default function buildFilterState(
         isOr,
       );
     } else {
-      if (JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}'
-        && currentState[mapId].oldLayerObjs[layerObj.id]) {
+      if (
+        JSON.stringify(currentState[mapId].oldLayerObjs) !== '{}' &&
+        currentState[mapId].oldLayerObjs[layerObj.id]
+      ) {
         const { oldLayerObjs } = currentState[mapId];
         fauxLayerObj.mergedData = Array.isArray(oldLayerObjs[layerObj.id].mergedData)
-          ? [...oldLayerObjs[layerObj.id].mergedData] : { ...oldLayerObjs[layerObj.id].mergedData };
+          ? [...oldLayerObjs[layerObj.id].mergedData]
+          : { ...oldLayerObjs[layerObj.id].mergedData };
       }
       fauxLayerObj.source.data = processFilters(fauxLayerObj, null, isOr);
     }

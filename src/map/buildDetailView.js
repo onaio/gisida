@@ -23,9 +23,10 @@ const parseDetailValue = (spec, datum) => {
   if (Array.isArray(spec.prop) && spec.join) {
     const value = [];
     spec.prop.forEach((s) => {
-      const d = (typeof s === 'string' && datum[s])
-        ? datum[s]
-        : parseDetailValue(s, datum);
+      const d =
+        typeof s === 'string' && datum[s]
+          ? datum[s]
+          : parseDetailValue(s, datum);
       if (d) value.push(d);
     });
     return value.length ? value.join(spec.join) : false;
@@ -60,10 +61,11 @@ const parseDetailAlt = (spec, datum) => {
 };
 
 const parseDetailIconClassName = (spec) => {
-  const iconClassName = (spec.glyph && `glyphicon glyphicon-${spec.glyph}`)
-    || (spec.FA && `fas fa-${spec.FA}`)
-    || spec.className
-    || false;
+  const iconClassName =
+    (spec.glyph && `glyphicon glyphicon-${spec.glyph}`) ||
+    (spec.FA && `fas fa-${spec.FA}`) ||
+    spec.className ||
+    false;
 
   return `${spec.classPrefix || ''}${iconClassName}${spec.classSuffix || ''}`;
 };
@@ -152,7 +154,13 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
   }
 
   return {
-    value, icon, iconColor, alt, prefix: valPrefix, suffix: valSuffix, useAltAsPrefix,
+    value,
+    icon,
+    iconColor,
+    alt,
+    prefix: valPrefix,
+    suffix: valSuffix,
+    useAltAsPrefix,
   };
 };
 
@@ -184,12 +192,16 @@ export default (
   if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
     activeData = [...timeSeriesObj.data];
   } else {
-    activeData = layerObj &&
-      (layerObj.Data
-        || ((layerObj.source.data && layerObj.source.data.features) || layerObj.source.data));
+    activeData =
+      layerObj &&
+      (layerObj.Data ||
+        ((layerObj.source.data && layerObj.source.data.features) ||
+          layerObj.source.data));
   }
-  const layerObjDatum = activeData && activeData.length && activeData.find(d =>
-    (d.properties || d)[join[1]] === featureProperties[join[0]]);
+  const layerObjDatum =
+    activeData &&
+    activeData.length &&
+    activeData.find(d => (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
     featureProperties = {
@@ -210,7 +222,10 @@ export default (
   let parsedDetail;
   if (basicInfo) {
     for (let i = 0; i < basicInfo.length; i += 1) {
-      parsedDetail = buildParsedBasicDetailItem(basicInfo[i], featureProperties);
+      parsedDetail = buildParsedBasicDetailItem(
+        basicInfo[i],
+        featureProperties,
+      );
       if (parsedDetail) detailViewModel.parsedBasicInfo.push(parsedDetail);
     }
   }
