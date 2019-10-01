@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/gisida
     docker:
-      - image: circleci/node:8.6.0
+      - image: circleci/node:8.10.0
     steps:
       - checkout
       - run: 
@@ -17,7 +17,7 @@ jobs:
           command: npm test
   publish:
     docker:
-      - image: circleci/node:8.6.0
+      - image: circleci/node:8.10.0
     steps:
       - checkout
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
