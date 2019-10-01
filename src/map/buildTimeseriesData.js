@@ -36,7 +36,8 @@ export default function buildTimeseriesData(
   let strokeWidthStops;
   let adminFilter;
   let tsFilter;
-  const periodHasDataReducer = (sum, d) => sum + Number((d.properties || d)[layerProperty]);
+  const periodHasDataReducer = (sum, d) =>
+    sum + Number((d.properties || d)[layerProperty]);
   const periodDataFilter = (p) => {
     // define actual period data
     periodData[p] = {
@@ -44,24 +45,39 @@ export default function buildTimeseriesData(
         .filter(d => (d.properties || d)[layerObj.aggregate.timeseries.field] === p),
     };
     // determine if period data has any non-zero values
-    periodData[p].hasData = layerObj.aggregate.timeseries.showAllZeroPeriods ||
-      !!(periodData[p].data.reduce(periodHasDataReducer, 0));
+    periodData[p].hasData =
+      layerObj.aggregate.timeseries.showAllZeroPeriods ||
+      !!periodData[p].data.reduce(periodHasDataReducer, 0);
     // define admin timeseries filter
     if (layerObj.aggregate.timeseries.admin) {
-      periodData[p].adminFilter = ['all', ['<=', 'startYear', Number(p)], ['>', 'endYear', Number(p)]];
+      periodData[p].adminFilter = [
+        'all',
+        ['<=', 'startYear', Number(p)],
+        ['>', 'endYear', Number(p)],
+      ];
     } else if (layerObj.aggregate.timeseries.periodFilter) {
-      periodData[p].tsFilter = ['all', ['==', layerObj.aggregate.timeseries.field, p]];
+      periodData[p].tsFilter = [
+        'all',
+        ['==', layerObj.aggregate.timeseries.field, p],
+      ];
     }
   };
 
   for (let i = 0; i < timeSeriesLayers.length; i += 1) {
     layerId = timeSeriesLayers[i];
-    if (layerObj.id === layerId && !layerObj.layers && activeLayers.includes(layerId)
-      && (!timeseries[layerId] || doUpdateTsLayer)) {
+    if (
+      layerObj.id === layerId &&
+      !layerObj.layers &&
+      activeLayers.includes(layerId) &&
+      (!timeseries[layerId] || doUpdateTsLayer)
+    ) {
       index = getLastIndex(activeLayers, layerId);
       charts = layerObj && !!layerObj.charts ? layerObj.charts : null;
-      if (layers[index] && layers[index].visible === true &&
-        layerObj.source.data instanceof Object) {
+      if (
+        layers[index] &&
+        layers[index].visible === true &&
+        layerObj.source.data instanceof Object
+      ) {
         // Determine layer stops
         if (stops && layerObj.id === Stops.id) {
           if (layerObj.type === 'chart') {
@@ -84,9 +100,10 @@ export default function buildTimeseriesData(
           period = [];
           data = layerObj.source.data.features || layerObj.source.data;
           for (let d = 0; d < data.length; d += 1) {
-            datum = (data[d].properties
-              && data[d].properties[layerObj.aggregate.timeseries.field])
-              || data[d][layerObj.aggregate.timeseries.field];
+            datum =
+              (data[d].properties &&
+                data[d].properties[layerObj.aggregate.timeseries.field]) ||
+              data[d][layerObj.aggregate.timeseries.field];
 
             if (period.indexOf(datum) === -1) {
               period.push(datum);
@@ -94,21 +111,21 @@ export default function buildTimeseriesData(
           }
         }
 
-        if (!period.length) {
-          continue;
-        }
+        if (period.length) {
+          temporalIndex = period.length - 1;
 
-        temporalIndex = period.length - 1;
+          if (layerObj.aggregate && layerObj.aggregate.timeseries) {
+            // define period data for each period
+            layerProperty =
+              layerObj.property ||
+              (layerObj.source.join && layerObj.source.join[0]);
+            periodData = {};
+            period.forEach(periodDataFilter);
 
-        if (layerObj.aggregate && layerObj.aggregate.timeseries) {
-          // define period data for each period
-          layerProperty = layerObj.property || (layerObj.source.join && layerObj.source.join[0]);
-          periodData = {};
-          period.forEach(periodDataFilter);
-
-          ({ data, adminFilter, tsFilter } = periodData[period[temporalIndex]]);
-        } else {
-          ({ data } = layerObj.source);
+            ({ data, adminFilter, tsFilter } = periodData[period[temporalIndex]]);
+          } else {
+            ({ data } = layerObj.source);
+          }
         }
       }
 

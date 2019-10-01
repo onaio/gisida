@@ -1,4 +1,4 @@
-import reducers from '../../../src/store/reducers/reducers';
+import { APP } from '../../../src/store/reducers/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
@@ -9,56 +9,55 @@ describe('reducers.APP', () => {
       config: defaultState.APP,
     };
     const state = {
-      APP:
-        {
-          accessToken: false,
-          appName: 'React Gisida',
-          loaded: false,
-          mapConfig: {
-            center: [0, 0],
-            container: 'map',
-            style: '',
-            zoom: 5,
-          },
+      APP: {
+        accessToken: false,
+        appName: 'React Gisida',
+        loaded: false,
+        mapConfig: {
+          center: [0, 0],
+          container: 'map',
+          style: '',
+          zoom: 5,
         },
-      MAP:
-        {
-          activeLayerId: '',
-          lastLayerSelected: '',
-          activeLayerObjs: [],
-          currentRegion: '',
-          currentStyle: '',
-          detailView: null,
-          filter: {
-            filterOptions: {},
-            filters: {},
-            globalSearchField: false,
-            isFiltered: false,
-            isLinux: false,
-            isMac: false,
-            isOpen: false,
-            layerId: '',
-            prevFilters: null,
-          },
-          isLoaded: false,
-          isRendered: false,
-          layers: {},
-          defaultLayers: [],
-          showSpinner: false,
-          mapId: 'map-1',
-          menuIsOpen: true,
-          oldLayerObjs: {},
-          openCategories: [],
-          primaryLayer: '',
-          primarySubLayer: '',
-          reloadLayerId: null,
-          reloadLayers: false,
-          showFilterPanel: false,
-          activeLayerIds: [],
-          showProfile: false,
-          timeseries: {},
-          visibleLayerId: '',
+      },
+      MAP: {
+        activeLayerId: '',
+        lastLayerSelected: '',
+        activeLayerObjs: [],
+        currentRegion: '',
+        currentStyle: '',
+        detailView: null,
+        filter: {
+          filterOptions: {},
+          filterOptionsPrev: {},
+          filters: {},
+          globalSearchField: false,
+          isFiltered: false,
+          isLinux: false,
+          isMac: false,
+          isOpen: false,
+          layerId: '',
+          prevFilters: null,
         },
+        isLoaded: false,
+        isRendered: false,
+        layers: {},
+        defaultLayers: [],
+        showSpinner: false,
+        mapId: 'map-1',
+        menuIsOpen: true,
+        oldLayerObjs: {},
+        openCategories: [],
+        primaryLayer: '',
+        primarySubLayer: '',
+        reloadLayerId: null,
+        reloadLayers: false,
+        showFilterPanel: false,
+        activeLayerIds: [],
+        showProfile: false,
+        timeseries: {},
+        visibleLayerId: '',
+      },
       REGIONS: [],
       STYLES: [
         {
@@ -92,6 +91,6 @@ describe('reducers.APP', () => {
         locations: null,
       },
     };
-    expect(reducers.APP(defaultState, action)).toEqual(state);
+    expect(APP(defaultState, action)).toEqual(state);
   });
 });

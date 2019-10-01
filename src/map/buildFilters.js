@@ -35,11 +35,9 @@ export default function buildFilters(filters, layerFilters, prevFilters) {
     filter = {
       label: filters[filterKey].label,
       toggleAllOn: prevFilters
-        ? prevFilters[filterKey].toggleAllOn
-        : true, // controls toggle all functionality and text
+        ? prevFilters[filterKey].toggleAllOn : true, // controls toggle all functionality and text
       isFiltered: prevFilters
-        ? prevFilters[filterKey].isFiltered
-        : false, // whether any options have been modified
+        ? prevFilters[filterKey].isFiltered : false, // whether any options have been modified
       isOriginal: true, // whether the filter has been filtered
       options: {}, // actual filter options map
       isOpen: prevFilters ? prevFilters[filterKey].isOpen : false,

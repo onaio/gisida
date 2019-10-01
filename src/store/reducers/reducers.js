@@ -3,7 +3,6 @@ import defaultState from '../defaultState';
 import * as types from '../constants/actionTypes';
 import actions from '../actions/actions';
 
-
 export function APP(state = defaultState.APP, action) {
   switch (action.type) {
     case types.INIT_APP:
@@ -24,7 +23,9 @@ function LOC(state = defaultState.LOC, action) {
         ...state,
         locations: { ...action.config },
         location: {
-          ...Object.keys(action.config).map(d => action.config[d]).find(d => d.default === true),
+          ...Object.keys(action.config)
+            .map(d => action.config[d])
+            .find(d => d.default === true),
           doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
@@ -38,9 +39,10 @@ function LOC(state = defaultState.LOC, action) {
         ...state,
         doUpdateMap: mapId,
         active: typeof locations[loc] !== 'undefined' ? loc : active,
-        location: typeof locations[loc] !== 'undefined'
-          ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
-          : { ...state.location, doUpdateLOC: false },
+        location:
+          typeof locations[loc] !== 'undefined'
+            ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+            : { ...state.location, doUpdateLOC: false },
       };
     }
     case types.TOGGLE_MAP_LOCATION: {
@@ -48,9 +50,10 @@ function LOC(state = defaultState.LOC, action) {
       const { locations } = state;
       return {
         ...state,
-        location: typeof locations[loc] !== 'undefined' ?
-          { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC } :
-          { ...state.location, doUpdateLOC: false },
+        location:
+          typeof locations[loc] !== 'undefined'
+            ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+            : { ...state.location, doUpdateLOC: false },
       };
     }
     default:
@@ -90,16 +93,19 @@ export function STYLES(state = defaultState.STYLES, action) {
 function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case types.INIT_REGIONS: {
-      const regions = action.regions ? action.regions.map((r) => {
-        const region = r;
-        // check if mapconfig center matches region center to set current region
-        if (
-          region.center[0] === action.mapConfig.center[0] &&
-          region.center[1] === action.mapConfig.center[1]) {
-          region.current = true;
-        }
-        return region;
-      }) : [];
+      const regions = action.regions
+        ? action.regions.map((r) => {
+          const region = r;
+          // check if mapconfig center matches region center to set current region
+          if (
+            region.center[0] === action.mapConfig.center[0] &&
+              region.center[1] === action.mapConfig.center[1]
+          ) {
+            region.current = true;
+          }
+          return region;
+        })
+        : [];
       return regions;
     }
     case types.CHANGE_REGION: {
@@ -250,11 +256,15 @@ export function createMapReducer(mapId) {
           };
         case types.ADD_LAYER: {
           const layers = {};
-          const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
+          const reloadLayerId = state.layers[action.layer.id]
+            ? action.layer.id
+            : null;
           layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
-          const defaultLayers = Object.keys(state.layers).filter(l => state.layers[l].visible
-            && state.layers[l].id !== reloadLayerId && !state.layers[l].nondefault);
+          const defaultLayers = Object.keys(state.layers).filter(l =>
+            state.layers[l].visible &&
+              state.layers[l].id !== reloadLayerId &&
+              !state.layers[l].nondefault);
           return {
             ...state,
             layers: updatedLayers,
@@ -283,18 +293,20 @@ export function createMapReducer(mapId) {
             layer.layers.forEach((subLayerId) => {
               updatedLayers[subLayerId].visible = !layer.visible;
               updatedLayers[subLayerId].parent = layer.id;
-              primarySubLayer = updatedLayers[subLayerId].visible ? subLayerId : null;
+              primarySubLayer = updatedLayers[subLayerId].visible
+                ? subLayerId
+                : null;
             });
           }
 
-          const activeLayerIds = [
-            ...state.activeLayerIds,
-          ];
+          const activeLayerIds = [...state.activeLayerIds];
 
           const activeLayerObj = updatedLayers[layerId];
 
-          const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
-          const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
+          const addLayerToList =
+            !activeLayerIds.includes(layerId) && activeLayerObj.visible;
+          const removeLayerFromList =
+            activeLayerIds.includes(layerId) && !activeLayerObj.visible;
           if (!updatedLayers[layerId].parent) {
             if (addLayerToList) {
               activeLayerIds.push(layerId);
@@ -306,50 +318,65 @@ export function createMapReducer(mapId) {
             }
           }
 
-          const activeSubLayerIds = Object.keys(updatedLayers).filter(l => updatedLayers[l].visible
-            && updatedLayers[l].parent);
-          const activeFilterLayerIds = activeLayerIds.filter(l =>
-            updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
+          const activeSubLayerIds = Object.keys(updatedLayers)
+            .filter(l => updatedLayers[l].visible && updatedLayers[l].parent);
+          const activeFilterLayerIds = activeLayerIds
+            .filter(l => updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter);
 
           let filterLayerId = '';
-          if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
+          if (
+            updatedLayers[layerId].visible &&
+            layer.aggregate &&
+            layer.aggregate.filter
+          ) {
             filterLayerId = layerId;
           } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
-            filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
+            filterLayerId =
+              activeFilterLayerIds[activeFilterLayerIds.length - 1];
           }
 
           return {
             ...state,
-            primarySubLayer: primarySubLayer || activeSubLayerIds[activeSubLayerIds.length - 1],
+            primarySubLayer:
+              primarySubLayer ||
+              activeSubLayerIds[activeSubLayerIds.length - 1],
             // Update visible property
-            activeLayerId: updatedLayers[layerId].visible && layer.type !== 'line'
-              ? layerId
-              : activeLayerIds[activeLayerIds.length - 1],
+            activeLayerId:
+              updatedLayers[layerId].visible && layer.type !== 'line'
+                ? layerId
+                : activeLayerIds[activeLayerIds.length - 1],
             lastLayerSelected: !updatedLayers[layerId].visible
               ? activeLayerIds[activeLayerIds.length - 1]
               : layerId,
             layers: updatedLayers,
             reloadLayers: Math.random(),
-            showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
-            visibleLayerId: updatedLayers[layerId].visible && layer.credit
-              ? layer.id : activeLayerIds[activeLayerIds.length - 1],
-            primaryLayer: updatedLayers[layerId].visible && layer.credit
-              ? layer.id : activeLayerIds[activeLayerIds.length - 1],
+            showSpinner:
+              updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
+            visibleLayerId:
+              updatedLayers[layerId].visible && layer.credit
+                ? layer.id
+                : activeLayerIds[activeLayerIds.length - 1],
+            primaryLayer:
+              updatedLayers[layerId].visible && layer.credit
+                ? layer.id
+                : activeLayerIds[activeLayerIds.length - 1],
             timeseries: updatedTimeSeries,
             activeLayerIds,
             filter: {
               ...state.filter,
               layerId: filterLayerId,
             },
-            detailView: state.detailView
-              && (state.detailView && state.detailView.layerId === layerId)
-              && updatedLayers[layerId]
-              && updatedLayers[layerId].visible,
-            showFilterPanel: state.showFilterPanel
-              && layerId === filterLayerId
-              && filterLayerId !== ''
-              && updatedLayers[filterLayerId]
-              && updatedLayers[filterLayerId].visible,
+            detailView:
+              state.detailView &&
+              (state.detailView && state.detailView.layerId === layerId) &&
+              updatedLayers[layerId] &&
+              updatedLayers[layerId].visible,
+            showFilterPanel:
+              state.showFilterPanel &&
+              layerId === filterLayerId &&
+              filterLayerId !== '' &&
+              updatedLayers[filterLayerId] &&
+              updatedLayers[filterLayerId].visible,
           };
         }
         case types.RELOAD_LAYER: {
@@ -360,12 +387,14 @@ export function createMapReducer(mapId) {
         }
 
         case types.UPDATE_PRIMARY_LAYER: {
-          const primaryLayerHasFilter = state.layers[action.primaryLayer].aggregate
-            && state.layers[action.primaryLayer].aggregate.filter;
-          const activeIds = [
-            ...state.activeLayerIds,
-          ];
-          if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
+          const primaryLayerHasFilter =
+            state.layers[action.primaryLayer].aggregate &&
+            state.layers[action.primaryLayer].aggregate.filter;
+          const activeIds = [...state.activeLayerIds];
+          if (
+            action.primaryLayer !==
+            state.activeLayerIds[state.activeLayerIds.length - 1]
+          ) {
             if (activeIds.includes(action.primaryLayer)) {
               activeIds.splice(activeIds.indexOf(action.primaryLayer), 1);
               activeIds.splice(activeIds.length, 1, action.primaryLayer);
@@ -459,9 +488,7 @@ export function createMapReducer(mapId) {
 
         case types.TOGGLE_CATEGORIES: {
           const { category, index, isRefresh } = action;
-          const openCategories = [
-            ...state.openCategories,
-          ];
+          const openCategories = [...state.openCategories];
           if (index > -1) {
             openCategories.splice(index, 1);
           } else {
@@ -469,9 +496,7 @@ export function createMapReducer(mapId) {
           }
           return {
             ...state,
-            openCategories: isRefresh ? [] : [
-              ...openCategories,
-            ],
+            openCategories: isRefresh ? [] : [...openCategories],
           };
         }
 
@@ -492,12 +517,14 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             showFilterPanel: showDetailView ? false : state.showFilterPanel,
-            detailView: showDetailView ? {
-              model: { ...model },
-              spec: { ...detailSpec },
-              properties: { ...properties },
-              layerId,
-            } : null,
+            detailView: showDetailView
+              ? {
+                model: { ...model },
+                spec: { ...detailSpec },
+                properties: { ...properties },
+                layerId,
+              }
+              : null,
           };
         }
         case types.REQUEST_DATA: {
@@ -537,7 +564,9 @@ export function createMapReducer(mapId) {
             reloadLayers: Math.random(),
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
-            showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
+            showSpinner:
+              !updatedLayers[layer.id].isLoading &&
+              !updatedLayers[layer.id].loaded,
             doApplyFilters: (layer && layer.filters) || !!layer.filters.admin,
           };
         }
@@ -545,18 +574,23 @@ export function createMapReducer(mapId) {
           const { timeseries, layerId } = action;
           const { layers } = state;
           let nextLayers;
-          if (layers[layerId] &&
+          if (
+            layers[layerId] &&
             layers[layerId].filters &&
-            (layers[layerId].filters.admin ||
-              layers[layerId].filters.tsFilter)) {
+            (layers[layerId].filters.admin || layers[layerId].filters.tsFilter)
+          ) {
             nextLayers = {
               ...layers,
               [layerId]: {
                 ...layers[layerId],
                 filters: {
                   ...layers[layerId].filters,
-                  admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
-                  tsFilter: timeseries[layerId].tsFilter && [...timeseries[layerId].tsFilter],
+                  admin: timeseries[layerId].adminFilter && [
+                    ...timeseries[layerId].adminFilter,
+                  ],
+                  tsFilter: timeseries[layerId].tsFilter && [
+                    ...timeseries[layerId].tsFilter,
+                  ],
                 },
               },
             };
@@ -566,9 +600,10 @@ export function createMapReducer(mapId) {
             ...state,
             layers: nextLayers || layers,
             timeseries,
-            doApplyFilters: timeseries[layerId]
-            && (!!timeseries[layerId].adminFilter
-              || !!timeseries[layerId].tsFilter),
+            doApplyFilters:
+              timeseries[layerId] &&
+              (!!timeseries[layerId].adminFilter ||
+                !!timeseries[layerId].tsFilter),
             reloadLayers: Math.random(),
           };
         }
@@ -586,5 +621,13 @@ export function createMapReducer(mapId) {
   };
 }
 export default {
-  APP, LOC, SUPERSET_CONFIGS, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
+  APP,
+  LOC,
+  SUPERSET_CONFIGS,
+  STYLES,
+  REGIONS,
+  LOCATIONS,
+  LAYERS,
+  FILTER,
+  'map-1': createMapReducer('map-1'),
 };

@@ -1,5 +1,9 @@
-export default function mergeFilters(originalFilters, filteredFilters, clickedFilterKey) {
-  if (!filteredFilters || !(Object.keys(filteredFilters).length)) {
+export default function mergeFilters(
+  originalFilters,
+  filteredFilters,
+  clickedFilterKey,
+) {
+  if (!filteredFilters || !Object.keys(filteredFilters).length) {
     return originalFilters;
   }
   // Define keys of all the filters and an obj to map merged filters into
@@ -19,19 +23,18 @@ export default function mergeFilters(originalFilters, filteredFilters, clickedFi
     filterKey = filterKeys[f];
     filterIsOpen = originalFilters[filterKey].isOpen;
 
-    if (filterKey === clickedFilterKey && originalFilters[filterKey].isFiltered) {
+    if (
+      filterKey === clickedFilterKey &&
+      originalFilters[filterKey].isFiltered
+    ) {
       nextFilters[filterKey] = originalFilters[filterKey];
     } else {
-      nextFilter = Object.assign(
-        {},
-        filteredFilters[filterKey],
-        {
-          isOriginal: false,
-          isFiltered: originalFilters[filterKey].isFiltered,
-          toggleAllOn: originalFilters[filterKey].toggleAllOn,
-          isOpen: filterIsOpen,
-        },
-      );
+      nextFilter = Object.assign({}, filteredFilters[filterKey], {
+        isOriginal: false,
+        isFiltered: originalFilters[filterKey].isFiltered,
+        toggleAllOn: originalFilters[filterKey].toggleAllOn,
+        isOpen: filterIsOpen,
+      });
       fOptions = filteredFilters[filterKey].options;
       oOptions = originalFilters[filterKey].options;
       ooKeys = Object.keys(oOptions);

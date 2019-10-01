@@ -2,7 +2,6 @@ const protocol = 'https';
 const host = 'api.ona.io';
 const endpoint = 'api/v1/data';
 
-
 function formatParams(params) {
   if (!params) {
     return '';
@@ -13,9 +12,10 @@ function formatParams(params) {
 
 export default function getData(formID, properties, state, callback) {
   const { apiAccessToken, apiHost } = state;
-  const fields = properties && Array.isArray(properties)
-    ? properties.map(p => `"${p}"`).join()
-    : (properties && properties[formID].map(p => `"${p}"`).join()) || null;
+  const fields =
+    properties && Array.isArray(properties)
+      ? properties.map(p => `"${p}"`).join()
+      : (properties && properties[formID].map(p => `"${p}"`).join()) || null;
 
   const queryParams = fields && { fields: `[${fields}]` };
   const xobj = new XMLHttpRequest();

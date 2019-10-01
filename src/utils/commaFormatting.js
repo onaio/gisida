@@ -1,8 +1,7 @@
 export default function commaFormatting(layerObj, data, popup) {
   const str = popup
-    ?
-    (layerObj.popup && layerObj.popup.body)
-    : (layerObj.labels && layerObj.labels.label);
+    ? layerObj.popup && layerObj.popup.body
+    : layerObj.labels && layerObj.labels.label;
   const dataItem = data;
   const found = [];
   const rxp = /{{([^}]+)}/g;

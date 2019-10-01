@@ -6,7 +6,6 @@ import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
 
-
 export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
@@ -34,13 +33,14 @@ export function loadLayers(mapId, dispatch, layers) {
 
       // load json layer spec files
       if (typeof layer === 'string') {
-        const path = (layer.indexOf('http') !== -1 || layer.indexOf('/') === 0)
-          ? layer
-          : `config/layers/${layer}.json`;
+        const path =
+          layer.indexOf('http') !== -1 || layer.indexOf('/') === 0
+            ? layer
+            : `config/layers/${layer}.json`;
         // load local or remote layer spec
         return loadJSON(path, addLayerToStore);
       } else if (layer instanceof Object && layer.type) {
-      // use existing layer spec object
+        // use existing layer spec object
         layer.loaded = false;
         if (layer.visible && !layer.loaded) {
           prepareLayer(mapId, layer, dispatch);
@@ -87,10 +87,14 @@ function addConfigToStore(store, config) {
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
-  loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
+  loadJSON('config/locations.json', locations =>
+    store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
+export default function initStore(
+  customReducers = {},
+  siteConfigUrl = 'config/site-config.json',
+) {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
@@ -116,7 +120,8 @@ export default function initStore(customReducers = {}, siteConfigUrl = 'config/s
   const store = createStore(reducer, applyMiddleware(thunk));
 
   // Replace the store's reducer whenever a new reducer is registered.
-  reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
+  reducerRegistry.setChangeListener(reducers =>
+    store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
   loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
