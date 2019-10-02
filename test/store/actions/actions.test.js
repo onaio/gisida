@@ -2,7 +2,6 @@ import * as actions from '../../../src/store/actions/actions';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
-
 const layerId = 'test-layer';
 const layer = { id: layerId };
 const timeseries = { [layerId]: {} };
@@ -44,7 +43,7 @@ describe('actions', () => {
     const expectedAction = {
       type: types.ADD_LAYER,
       layer,
-      mapId
+      mapId,
     };
     expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
@@ -54,7 +53,7 @@ describe('actions', () => {
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
       mapId,
-      groupId: {'id': 'test-layer'},
+      groupId: { id: 'test-layer' },
       //group
     };
     expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
@@ -79,7 +78,6 @@ describe('actions', () => {
     };
     expect(actions.changeStyle(mapId, style)).toEqual(expectedAction);
   });
-
 
   test('should create an action to toggle layer', () => {
     const isInit = true;
@@ -156,7 +154,9 @@ describe('actions', () => {
       timeseries,
       mapId,
     };
-    expect(actions.receiveData(mapId, layer, timeseries)).toEqual(expectedAction);
+    expect(actions.receiveData(mapId, layer, timeseries)).toEqual(
+      expectedAction
+    );
   });
 
   test('should create an action to indicate map rendered', () => {
@@ -188,7 +188,6 @@ describe('actions', () => {
     };
     expect(actions.reloadLayers(mapId, reload)).toEqual(expectedAction);
   });
-
 
   test('should create an action to update timeseries', () => {
     const expectedAction = {
@@ -231,5 +230,92 @@ describe('actions', () => {
     const expectedAction = actions.returnState;
     expect(actions.getCurrentState()).toEqual(expectedAction);
   });
-});
 
+  test('should create an action to update location', () => {
+    const expectedAction = {
+      type: types.LOCATION_UPDATED,
+      mapId,
+    };
+    expect(actions.locationUpdated(mapId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to set location', () => {
+    const loc = [-74.5, 40];
+    const expectedAction = {
+      type: types.SET_LOCATION,
+      loc,
+      mapId,
+    };
+    expect(actions.setLocation(mapId, loc)).toEqual(expectedAction);
+  });
+
+  test('should create an action to toggle map location', () => {
+    const loc = [-74.5, 40];
+    const expectedAction = {
+      type: types.SET_LOCATION,
+      loc,
+    };
+    expect(actions.toggleMapLocation(loc)).toEqual(expectedAction);
+  });
+
+  test('should create an action to init superset', () => {
+    const config = defaultState.APP;
+    const expectedAction = {
+      type: types.INIT_SUPERSET,
+      config,
+    };
+    expect(actions.initSuperset(config)).toEqual(expectedAction);
+  });
+
+  test('should create an action to update a layer', () => {
+    const expectedAction = {
+      type: types.LAYER_RELOADED,
+      mapId,
+    };
+    expect(actions.layerReloaded(mapId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to reload layer', () => {
+    const expectedAction = {
+      type: types.RELOAD_LAYER,
+      layerId,
+      mapId,
+    };
+    expect(actions.reloadLayer(mapId, layerId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to reset filtered layer', () => {
+    const oldLayer = 'oldLayer';
+    const expectedAction = {
+      type: types.RESET_FILTERED_LAYER,
+      mapId,
+      oldLayer,
+    };
+    expect(actions.resetFilteredLayer(mapId, oldLayer)).toEqual(expectedAction);
+  });
+
+  test('should create an action to toggle categories', () => {
+    const category = 'category';
+    const index = 0;
+    const isRefresh = false;
+    const expectedAction = {
+      type: types.TOGGLE_CATEGORIES,
+      category,
+      index,
+      isRefresh,
+      mapId,
+    };
+    expect(actions.toggleCategories(mapId, category, index, isRefresh)).toEqual(
+      expectedAction
+    );
+  });
+
+  test('should create an action to init loc', () => {
+    const config = defaultState.APP;
+    const expectedAction = {
+      type: types.INIT_LOC,
+      config,
+    };
+    expect(actions.initLoc(config)).toEqual(expectedAction);
+  });
+});
