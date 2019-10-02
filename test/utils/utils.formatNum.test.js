@@ -1,8 +1,7 @@
 import formatNum from '../../src/utils/formatNum.js/';
 
 describe('formatNum', () => {
-
-  test('Formats 100 correctly', () => {
+  test('Formats 100 correctly', () => {
     expect(formatNum(100, 1)).toBe(100);
   });
 
@@ -21,4 +20,4 @@ describe('formatNum', () => {
   test('Formats 1,000,000 correctly', () => {
     expect(formatNum(1000000, 1)).toBe('1M');
   });
-})
+});
