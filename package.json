@@ -40,7 +40,8 @@
     },
     "ignore": [
       "build/gisida.js",
-      "build/gisida.js.map"
+      "build/gisida.js.map",
+      "test/*"
     ]
   },
   "jest": {

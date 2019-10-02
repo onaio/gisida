@@ -20,6 +20,14 @@
   "plugins": [
     "jest"
 ],
+"overrides": [
+  {
+    "files": ["test/*"],
+    "rules": {
+      "require-jsdoc": "off"
+    }
+  }
+],
   "parser": "babel-eslint",
   "globals": {
     "mapboxgl": true,
