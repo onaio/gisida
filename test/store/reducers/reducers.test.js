@@ -18,16 +18,16 @@ describe('reducers.APP', () => {
           center: [0, 0],
           container: 'map',
           style: '',
-          zoom: 10
-        }
-      }
+          zoom: 10,
+        },
+      },
     };
     // Case 1: The state obj is empty
     const stateEmpty = {};
     expect(reducers.APP(stateEmpty, action)).toEqual({
       ...stateEmpty,
       ...action.config,
-      loaded: true
+      loaded: true,
     });
 
     // Case 2: The state obj is not empty
@@ -39,14 +39,14 @@ describe('reducers.APP', () => {
         center: [0, 0],
         container: 'map',
         style: '',
-        zoom: 10
-      }
+        zoom: 10,
+      },
     };
 
     expect(reducers.APP(stateOld, action)).toEqual({
       ...stateOld,
       ...action.config,
-      loaded: true
+      loaded: true,
     });
   });
 });
@@ -59,8 +59,8 @@ describe('reducers.LOC', () => {
       zoom: 10.978331870416822,
       center: {
         lng: 69.13155473084771,
-        lat: 34.50960383103761
-      }
+        lat: 34.50960383103761,
+      },
     },
     loc2: {
       default: true, // Default is true
@@ -68,8 +68,8 @@ describe('reducers.LOC', () => {
       zoom: 10.978331870416822,
       center: {
         lng: 55.13155473084771,
-        lat: 34.50960383103761
-      }
+        lat: 34.50960383103761,
+      },
     },
     loc3: {
       default: true, // Default is true
@@ -77,9 +77,9 @@ describe('reducers.LOC', () => {
       zoom: 10.978331870416822,
       center: {
         lng: 73.13155473084771,
-        lat: 34.50960383103761
-      }
-    }
+        lat: 34.50960383103761,
+      },
+    },
   };
 
   const stateOld = {
@@ -88,11 +88,11 @@ describe('reducers.LOC', () => {
       ...Object.keys(config)
         .map(d => config[d])
         .find(d => d.default === true),
-      doUpdateLOC: false
+      doUpdateLOC: false,
     },
     active: Object.keys(config).find(d => config[d].default === true),
     default: Object.keys(config).find(d => config[d].default === true),
-    doUpdateMap: 'old-map-id'
+    doUpdateMap: 'old-map-id',
   };
 
   it('should return the initial state', () => {
@@ -102,7 +102,7 @@ describe('reducers.LOC', () => {
   it('should handle INIT_LOC', () => {
     const action = {
       type: types.INIT_LOC,
-      config
+      config,
     };
 
     // Case 1: Handle INIT_LOC when the state object is empty
@@ -115,11 +115,11 @@ describe('reducers.LOC', () => {
         ...Object.keys(config)
           .map(d => config[d])
           .find(d => d.default === true),
-        doUpdateLOC: false
+        doUpdateLOC: false,
       },
       active: Object.keys(config).find(d => config[d].default === true),
       default: Object.keys(config).find(d => config[d].default === true),
-      doUpdateMap: undefined
+      doUpdateMap: undefined,
     });
 
     // Case 2: Handle INIT_LOC when the state object is not empty
@@ -130,8 +130,8 @@ describe('reducers.LOC', () => {
         zoom: 10.978331870416822,
         center: {
           lng: 55.13155473084771,
-          lat: 34.50960383103761
-        }
+          lat: 34.50960383103761,
+        },
       },
       loc5: {
         default: true, // Default is true
@@ -139,13 +139,13 @@ describe('reducers.LOC', () => {
         zoom: 10.978331870416822,
         center: {
           lng: 55.13155473084771,
-          lat: 37.50960383103761
-        }
-      }
+          lat: 37.50960383103761,
+        },
+      },
     };
     const actionNewConfig = {
       type: types.INIT_LOC,
-      config: newConfig
+      config: newConfig,
     };
     expect(reducers.LOC(stateOld, actionNewConfig)).toEqual({
       ...stateOld,
@@ -154,11 +154,11 @@ describe('reducers.LOC', () => {
         ...Object.keys(newConfig)
           .map(d => newConfig[d])
           .find(d => d.default === true),
-        doUpdateLOC: false
+        doUpdateLOC: false,
       },
       active: Object.keys(newConfig).find(d => newConfig[d].default === true),
       default: Object.keys(newConfig).find(d => newConfig[d].default === true),
-      doUpdateMap: stateOld.doUpdateMap
+      doUpdateMap: stateOld.doUpdateMap,
     });
   });
 
@@ -168,7 +168,7 @@ describe('reducers.LOC', () => {
     const action = {
       type: types.SET_LOCATION,
       loc,
-      mapId
+      mapId,
     };
 
     // Case 1: Handle SET_LOCATION when the state object is empty
@@ -180,7 +180,7 @@ describe('reducers.LOC', () => {
     // Case 2.1 locations[loc] is undefined
     const stateOldUndefinedLoc = {
       ...stateOld,
-      locations: {}
+      locations: {},
     };
     expect(reducers.LOC(stateOldUndefinedLoc, action)).toEqual({
       ...stateOldUndefinedLoc,
@@ -188,8 +188,8 @@ describe('reducers.LOC', () => {
       active: stateOldUndefinedLoc.active,
       location: {
         ...stateOldUndefinedLoc.location,
-        doUpdateLOC: false
-      }
+        doUpdateLOC: false,
+      },
     });
 
     // Case 2.2 locations[loc] is defined
@@ -199,8 +199,8 @@ describe('reducers.LOC', () => {
       active: loc,
       location: {
         ...stateOld.locations[loc],
-        doUpdateLOC: !stateOld.location.doUpdateLOC
-      }
+        doUpdateLOC: !stateOld.location.doUpdateLOC,
+      },
     });
   });
 
@@ -208,7 +208,7 @@ describe('reducers.LOC', () => {
     const loc = 'loc1';
     const action = {
       type: types.TOGGLE_MAP_LOCATION,
-      loc
+      loc,
     };
 
     // Case 1: The state obj is empty
@@ -220,14 +220,14 @@ describe('reducers.LOC', () => {
     // Case 2.1 locations[loc] is undefined
     const stateOldUndefinedLoc = {
       ...stateOld,
-      locations: {}
+      locations: {},
     };
     expect(reducers.LOC(stateOldUndefinedLoc, action)).toEqual({
       ...stateOldUndefinedLoc,
       location: {
         ...stateOldUndefinedLoc.location,
-        doUpdateLOC: false
-      }
+        doUpdateLOC: false,
+      },
     });
 
     // Case 2.2 locations[loc] is defined
@@ -235,8 +235,8 @@ describe('reducers.LOC', () => {
       ...stateOld,
       location: {
         ...stateOld.locations[loc],
-        doUpdateLOC: !stateOld.location.doUpdateLOC
-      }
+        doUpdateLOC: !stateOld.location.doUpdateLOC,
+      },
     });
   });
 });

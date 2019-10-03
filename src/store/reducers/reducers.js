@@ -8,7 +8,7 @@ export function APP(state = defaultState.APP, action) {
       return {
         ...state,
         ...action.config,
-        loaded: true
+        loaded: true,
       };
     default:
       return state;
@@ -25,11 +25,11 @@ function LOC(state = defaultState.LOC, action) {
           ...Object.keys(action.config)
             .map(d => action.config[d])
             .find(d => d.default === true),
-          doUpdateLOC: false
+          doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
         default: Object.keys(action.config).find(d => action.config[d].default === true),
-        active: Object.keys(action.config).find(d => action.config[d].default === true)
+        active: Object.keys(action.config).find(d => action.config[d].default === true),
       };
     case types.SET_LOCATION: {
       const { loc, mapId } = action;
@@ -41,7 +41,7 @@ function LOC(state = defaultState.LOC, action) {
         location:
           typeof locations[loc] !== 'undefined'
             ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
-            : { ...state.location, doUpdateLOC: false }
+            : { ...state.location, doUpdateLOC: false },
       };
     }
     case types.TOGGLE_MAP_LOCATION: {
@@ -52,7 +52,7 @@ function LOC(state = defaultState.LOC, action) {
         location:
           typeof locations[loc] !== 'undefined'
             ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
-            : { ...state.location, doUpdateLOC: false }
+            : { ...state.location, doUpdateLOC: false },
       };
     }
     default:
@@ -130,22 +130,22 @@ function FILTER(state = defaultState.FILTER, action) {
         [action.layerId]: {
           ...action.filterState,
           doUpdate: true,
-          isClear: action.isClear || false
-        }
+          isClear: action.isClear || false,
+        },
       };
     }
     case types.FILTERS_UPDATED: {
       if (!action.layerId) {
         return {
-          ...state
+          ...state,
         };
       }
       return {
         ...state,
         [action.layerId]: {
           ...state[action.layerId],
-          doUpdate: false
-        }
+          doUpdate: false,
+        },
       };
     }
     default:
@@ -168,7 +168,7 @@ function SUPERSET_CONFIGS(state = {}, action) {
     case types.INIT_SUPERSET: {
       return {
         ...state,
-        ...action.config
+        ...action.config,
       };
     }
     default:
@@ -181,7 +181,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
     case types.ADD_LAYERS_LIST: {
       return {
         ...state,
-        layers: [...state.layers, ...action.layers]
+        layers: [...state.layers, ...action.layers],
       };
     }
     case types.ADD_LAYER_GROUP: {
@@ -205,8 +205,8 @@ function LAYERS(state = defaultState.LAYERS, action) {
         ...state,
         groups: {
           ...state.groups,
-          [action.groupId]: group
-        }
+          [action.groupId]: group,
+        },
       };
     }
     default:
@@ -223,29 +223,29 @@ export function createMapReducer(mapId) {
         case types.MAP_RENDERED:
           return {
             ...state,
-            isRendered: action.isRendered
+            isRendered: action.isRendered,
           };
         case types.MAP_LOADED:
           return {
             ...state,
             isLoaded: action.isLoaded,
             reloadLayers: true,
-            currentRegion: Math.random()
+            currentRegion: Math.random(),
           };
         case types.RELOAD_LAYERS:
           return {
             ...state,
-            reloadLayers: action.reload
+            reloadLayers: action.reload,
           };
         case types.CHANGE_STYLE:
           return {
             ...state,
-            currentStyle: action.style
+            currentStyle: action.style,
           };
         case types.CHANGE_REGION:
           return {
             ...state,
-            currentRegion: action.region
+            currentRegion: action.region,
           };
         case types.ADD_LAYER: {
           const layers = {};
@@ -264,21 +264,21 @@ export function createMapReducer(mapId) {
             activeLayerId: action.layer.id,
             defaultLayers,
             reloadLayerId,
-            reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers
+            reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
           };
         }
         case types.TOGGLE_LAYER: {
           const { layerId } = action;
           const layer = state.layers[layerId];
           const updatedTimeSeries = {
-            ...state.timeseries
+            ...state.timeseries,
           };
           const updatedLayers = {
             ...state.layers,
             [layerId]: {
               ...layer,
-              visible: action.isInit ? layer.visible : !layer.visible
-            }
+              visible: action.isInit ? layer.visible : !layer.visible,
+            },
           };
 
           let primarySubLayer = null;
@@ -347,7 +347,7 @@ export function createMapReducer(mapId) {
             activeLayerIds,
             filter: {
               ...state.filter,
-              layerId: filterLayerId
+              layerId: filterLayerId,
             },
             detailView:
               state.detailView &&
@@ -359,20 +359,20 @@ export function createMapReducer(mapId) {
               layerId === filterLayerId &&
               filterLayerId !== '' &&
               updatedLayers[filterLayerId] &&
-              updatedLayers[filterLayerId].visible
+              updatedLayers[filterLayerId].visible,
           };
         }
         case types.RELOAD_LAYER: {
           return {
             ...state,
-            reloadLayerId: action.layerId
+            reloadLayerId: action.layerId,
           };
         }
 
         case types.LAYER_RELOADED: {
           return {
             ...state,
-            reloadLayerId: null
+            reloadLayerId: null,
           };
         }
         case types.UPDATE_PRIMARY_LAYER: {
@@ -394,16 +394,16 @@ export function createMapReducer(mapId) {
             activeLayerIds: activeIds,
             filter: {
               ...state.filter,
-              layerId: primaryLayerHasFilter ? action.primaryLayer : false
+              layerId: primaryLayerHasFilter ? action.primaryLayer : false,
             },
-            showFilterPanel: primaryLayerHasFilter && state.showFilterPanel
+            showFilterPanel: primaryLayerHasFilter && state.showFilterPanel,
           };
         }
         case types.TOGGLE_FILTER: {
           return {
             ...state,
             detailView: null,
-            showFilterPanel: !state.showFilterPanel
+            showFilterPanel: !state.showFilterPanel,
           };
         }
         case types.SET_LAYER_FILTERS: {
@@ -416,47 +416,47 @@ export function createMapReducer(mapId) {
               ...layer,
               filters: {
                 ...filters,
-                [name || 'layerFilters']: layerFilters
-              }
-            }
+                [name || 'layerFilters']: layerFilters,
+              },
+            },
           };
           return {
             ...state,
             layers: updatedLayers,
-            doApplyFilters: true
+            doApplyFilters: true,
           };
         }
 
         case types.FILTERS_UPDATED: {
           return {
             ...state,
-            doApplyFilters: false
+            doApplyFilters: false,
           };
         }
 
         case types.TOGGLE_MENU: {
           return {
             ...state,
-            menuIsOpen: !state.menuIsOpen
+            menuIsOpen: !state.menuIsOpen,
           };
         }
 
         case types.RESET_FILTERED_LAYER: {
           const { oldLayer } = action;
           const oldLayerObjs = {
-            ...state.oldLayerObjs
+            ...state.oldLayerObjs,
           };
           if (!oldLayerObjs[oldLayer.id]) {
             oldLayerObjs[oldLayer.id] = {};
           }
           oldLayerObjs[oldLayer.id] = {
-            ...oldLayer
+            ...oldLayer,
           };
           return {
             ...state,
             oldLayerObjs: {
-              ...oldLayerObjs
-            }
+              ...oldLayerObjs,
+            },
           };
         }
 
@@ -470,7 +470,7 @@ export function createMapReducer(mapId) {
           }
           return {
             ...state,
-            openCategories: isRefresh ? [] : [...openCategories]
+            openCategories: isRefresh ? [] : [...openCategories],
           };
         }
 
@@ -479,7 +479,7 @@ export function createMapReducer(mapId) {
             return {
               ...state,
               detailView: null,
-              showFilterPanel: state.showFilterPanel
+              showFilterPanel: state.showFilterPanel,
             };
           }
 
@@ -494,9 +494,9 @@ export function createMapReducer(mapId) {
                   model: { ...model },
                   spec: { ...detailSpec },
                   properties: { ...properties },
-                  layerId
+                  layerId,
                 }
-              : null
+              : null,
           };
         }
         case types.REQUEST_DATA: {
@@ -507,14 +507,14 @@ export function createMapReducer(mapId) {
             [layerId]: {
               ...layer,
               isLoading: true,
-              loaded: false
-            }
+              loaded: false,
+            },
           };
           return {
             ...state,
             // Update isLoading property
             showSpinner: true,
-            layers: cloneDeep(updatedLayers)
+            layers: cloneDeep(updatedLayers),
           };
         }
         case types.RECEIVE_DATA: {
@@ -527,8 +527,8 @@ export function createMapReducer(mapId) {
               ...layer,
               labels: layer.labels,
               isLoading: false,
-              loaded: true
-            }
+              loaded: true,
+            },
           };
           return {
             ...state,
@@ -537,7 +537,7 @@ export function createMapReducer(mapId) {
             timeseries: action.timeseries,
             visibleLayerId: layer.id,
             showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
-            doApplyFilters: layer && layer.filters && !!layer.filters.admin
+            doApplyFilters: layer && layer.filters && !!layer.filters.admin,
           };
         }
         case types.UPDATE_TIMESERIES: {
@@ -551,9 +551,9 @@ export function createMapReducer(mapId) {
                 ...layers[layerId],
                 filters: {
                   ...layers[layerId].filters,
-                  admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter]
-                }
-              }
+                  admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
+                },
+              },
             };
           }
 
@@ -562,13 +562,13 @@ export function createMapReducer(mapId) {
             layers: nextLayers || layers,
             timeseries,
             doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
-            reloadLayers: Math.random()
+            reloadLayers: Math.random(),
           };
         }
         case types.TRIGGER_SPINNER: {
           return {
             ...state,
-            showSpinner: action.isLoaded
+            showSpinner: action.isLoaded,
           };
         }
         default:
@@ -587,5 +587,5 @@ export default {
   LOCATIONS,
   LAYERS,
   FILTER,
-  'map-1': createMapReducer('map-1')
+  'map-1': createMapReducer('map-1'),
 };
