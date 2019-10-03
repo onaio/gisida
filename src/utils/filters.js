@@ -388,7 +388,7 @@ export function filterDataByPeriod(layerData, periodField, period) {
   let periods = period ? [period] : layerData.map(datum => datum[periodField]);
   if (!period) periods = Array.from(new Set(periods));
 
-  if (months.indexOf(periods[0]) !== false) {
+  if (months.indexOf(periods[0]) !== -1) {
     periods.sort((a, b) => months.indexOf(a) - months.indexOf(b));
   } else if (periods[0].indexOf('/') !== -1) {
     periods.sort((a, b) => Number(a.split('/')[1]) - Number(b.split('/')[1]));
