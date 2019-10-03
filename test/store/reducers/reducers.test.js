@@ -86,12 +86,12 @@ describe('reducers.LOC', () => {
     locations: { ...config },
     location: {
       ...Object.keys(config)
-        .map(d => config[d])
-        .find(d => d.default === true),
+        .map((d) => config[d])
+        .find((d) => d.default === true),
       doUpdateLOC: false,
     },
-    active: Object.keys(config).find(d => config[d].default === true),
-    default: Object.keys(config).find(d => config[d].default === true),
+    active: Object.keys(config).find((d) => config[d].default === true),
+    default: Object.keys(config).find((d) => config[d].default === true),
     doUpdateMap: 'old-map-id',
   };
 
@@ -113,12 +113,12 @@ describe('reducers.LOC', () => {
       locations: { ...config },
       location: {
         ...Object.keys(config)
-          .map(d => config[d])
-          .find(d => d.default === true),
+          .map((d) => config[d])
+          .find((d) => d.default === true),
         doUpdateLOC: false,
       },
-      active: Object.keys(config).find(d => config[d].default === true),
-      default: Object.keys(config).find(d => config[d].default === true),
+      active: Object.keys(config).find((d) => config[d].default === true),
+      default: Object.keys(config).find((d) => config[d].default === true),
       doUpdateMap: undefined,
     });
 
@@ -152,12 +152,12 @@ describe('reducers.LOC', () => {
       locations: { ...newConfig },
       location: {
         ...Object.keys(newConfig)
-          .map(d => newConfig[d])
-          .find(d => d.default === true),
+          .map((d) => newConfig[d])
+          .find((d) => d.default === true),
         doUpdateLOC: false,
       },
-      active: Object.keys(newConfig).find(d => newConfig[d].default === true),
-      default: Object.keys(newConfig).find(d => newConfig[d].default === true),
+      active: Object.keys(newConfig).find((d) => newConfig[d].default === true),
+      default: Object.keys(newConfig).find((d) => newConfig[d].default === true),
       doUpdateMap: stateOld.doUpdateMap,
     });
   });
