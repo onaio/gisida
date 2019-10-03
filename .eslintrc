@@ -12,9 +12,7 @@
     "sourceType": "module"
   },
   "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": "error"
-  },
+  "rules": {},
   "parser": "babel-eslint",
   "globals": {
     "mapboxgl": true,
