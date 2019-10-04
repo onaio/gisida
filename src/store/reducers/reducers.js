@@ -89,7 +89,7 @@ export function STYLES(state = defaultState.STYLES, action) {
   }
 }
 
-function REGIONS(state = defaultState.REGIONS, action) {
+export function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case types.INIT_REGIONS: {
       const regions = action.regions

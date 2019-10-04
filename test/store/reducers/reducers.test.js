@@ -387,3 +387,120 @@ describe('reducers.STYLES', () => {
     ]);
   });
 });
+
+describe('reducers.REGIONS', () => {
+  const region1 = {
+    name: 'Region1',
+    zoom: 10,
+    center: [0, 0],
+  };
+  const region2 = {
+    name: 'Region2',
+    zoom: 10,
+    center: [1, 1],
+  };
+  const region3 = {
+    name: 'Region3',
+    zoom: 10,
+    center: [2, 2],
+  };
+  const stateEmpty = [];
+
+  it('should return the initial state', () => {
+    expect(reducers.REGIONS(undefined, {})).toEqual(defaultState.REGIONS);
+  });
+
+  it('should handle INIT_REGIONS', () => {
+    const action = {
+      type: types.INIT_REGIONS,
+      regions: [region1, region2, region3],
+      mapConfig: {
+        container: 'map',
+        style: '',
+        center: [0, 0],
+        zoom: 5,
+      },
+    };
+    const actionUndefinedRegions = {
+      ...action,
+      regions: undefined,
+    };
+    const actionNoMatch = {
+      ...action,
+      regions: [region2, region3],
+    };
+    const [firstRegion, ...otherRegions] = action.regions;
+
+    // Case 1: The state obj is empty
+    // Case 1.1: action.regions is undefined
+    expect(reducers.REGIONS(stateEmpty, actionUndefinedRegions)).toEqual([]);
+
+    // Case 1.2 action.regions is defined
+    // Case 1.2.1 Region center in action.regions matches action.mapConfig.center
+    expect(reducers.REGIONS(stateEmpty, action)).toEqual([
+      {
+        ...firstRegion,
+        current: true,
+      },
+      ...otherRegions,
+    ]);
+
+    // Case 1.2.2 No region center in action.regions matches action.mapConfig.center
+    expect(reducers.REGIONS(stateEmpty, actionNoMatch)).toEqual(actionNoMatch.regions);
+
+    // Case 2: The state obj is not empty
+    const stateOld = [region2, region3];
+
+    // Case 2.1: action.regions is undefined
+    expect(reducers.REGIONS(stateOld, actionUndefinedRegions)).toEqual([]);
+
+    // Case 2.2 action.regions is defined
+    // Case 2.2.1 Region center in action.regions matches action.mapConfig.center
+    expect(reducers.REGIONS(stateOld, action)).toEqual([
+      {
+        ...firstRegion,
+        current: true,
+      },
+      ...otherRegions,
+    ]);
+
+    // Case 2.2.2 No region center in action.regions matches action.mapConfig.center
+    expect(reducers.REGIONS(stateOld, actionNoMatch)).toEqual(actionNoMatch.regions);
+  });
+
+  it('should handle CHANGE_REGION', () => {
+    const action = {
+      type: types.CHANGE_REGION,
+      region: region1.name,
+      mapId: 'map-id',
+    };
+
+    // Case 1: The state obj is empty
+    expect(reducers.REGIONS(stateEmpty, action)).toEqual([]);
+
+    // Case 1.2: The state obj is not empty
+    const stateOldMatchExists = [region1, region2];
+
+    // Case 1.2.1: action.region matches region in state
+    expect(reducers.REGIONS(stateOldMatchExists, action)).toEqual([
+      {
+        ...region1,
+        current: true,
+      },
+      region2,
+    ]);
+
+    // Case 1.2.2: action.regions does not match region in state
+    const stateOldNoMatch = [region2, region3];
+    expect(reducers.REGIONS(stateOldNoMatch, action)).toEqual([
+      {
+        ...region2,
+        current: false,
+      },
+      {
+        ...region3,
+        current: false,
+      },
+    ]);
+  });
+});
