@@ -2,6 +2,9 @@ import * as reducers from '../../../src/store/reducers/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
+const mapId = 'map-id';
+const layerId = 'layer-id';
+
 describe('reducers.APP', () => {
   it('should return the initial state', () => {
     expect(reducers.APP(undefined, {})).toEqual(defaultState.APP);
@@ -164,7 +167,6 @@ describe('reducers.LOC', () => {
 
   it('should handle SET_LOCATION', () => {
     const loc = 'loc1';
-    const mapId = 'map-id';
     const action = {
       type: types.SET_LOCATION,
       loc,
@@ -314,7 +316,6 @@ describe('reducers.STYLES', () => {
   });
 
   it('should handle CHANGE_STYLE', () => {
-    const mapId = 'map-id';
     const action = {
       type: types.CHANGE_STYLE,
       style: style1.url,
@@ -472,7 +473,7 @@ describe('reducers.REGIONS', () => {
     const action = {
       type: types.CHANGE_REGION,
       region: region1.name,
-      mapId: 'map-id',
+      mapId,
     };
 
     // Case 1: The state obj is empty
@@ -502,5 +503,118 @@ describe('reducers.REGIONS', () => {
         current: false,
       },
     ]);
+  });
+});
+
+describe('reducers.FILTER', () => {
+  const stateEmpty = {};
+  const stateOld = {
+    [layerId]: {
+      doUpdate: false,
+      isClear: false,
+    },
+  };
+
+  it('should return the initial state', () => {
+    expect(reducers.FILTER(undefined, {})).toEqual(defaultState.FILTER);
+  });
+
+  it('should handle SAVE_FILTER_STATE', () => {
+    const action = {
+      type: types.SAVE_FILTER_STATE,
+      layerId,
+      filterState: {
+        filterOptions: {},
+      },
+      mapId,
+      isClear: true,
+    };
+    const actionUndefinedIsClear = {
+      ...action,
+      isClear: undefined,
+    };
+
+    // Case 1: The state obj is empty
+    // Case 1.1: action.isClear is defined
+    expect(reducers.FILTER(stateEmpty, action)).toEqual({
+      ...stateEmpty,
+      [action.layerId]: {
+        ...action.filterState,
+        doUpdate: true,
+        isClear: true,
+      },
+    });
+
+    // Case 1.2: action.isClear is undefined
+    expect(reducers.FILTER(stateEmpty, actionUndefinedIsClear)).toEqual({
+      ...stateEmpty,
+      [action.layerId]: {
+        ...action.filterState,
+        doUpdate: true,
+        isClear: false,
+      },
+    });
+
+    // Case 2: The state obj is not empty
+    // Case 2.1 action.isClear is defined
+    expect(reducers.FILTER(stateOld, action)).toEqual({
+      ...stateOld,
+      [action.layerId]: {
+        ...action.filterState,
+        doUpdate: true,
+        isClear: true,
+      },
+    });
+
+    // Case 2.2 action.isClear is undefined
+    expect(reducers.FILTER(stateOld, actionUndefinedIsClear)).toEqual({
+      ...stateOld,
+      [action.layerId]: {
+        ...action.filterState,
+        doUpdate: true,
+        isClear: false,
+      },
+    });
+  });
+
+  it('should handle FILTERS_UPDATED', () => {
+    const action = {
+      type: types.FILTERS_UPDATED,
+      mapId,
+      layerId,
+    };
+    const actionLayerIdUndfined = {
+      ...action,
+      layerId: undefined,
+    };
+
+    // Case 1: The state obj is empty
+    // Case 1.1: action.layerId is defined
+    expect(reducers.FILTER(stateEmpty, action)).toEqual({
+      ...stateEmpty,
+      [action.layerId]: {
+        doUpdate: false,
+      },
+    });
+
+    // Case 1.2: action.layerId is undefined
+    expect(reducers.FILTER(stateEmpty, actionLayerIdUndfined)).toEqual({
+      ...stateEmpty,
+    });
+
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.layerId is defined
+    expect(reducers.FILTER(stateOld, action)).toEqual({
+      ...stateEmpty,
+      [action.layerId]: {
+        ...stateOld[action.layerId],
+        doUpdate: false,
+      },
+    });
+
+    // Case 2.2: action.layerId is undefined
+    expect(reducers.FILTER(stateOld, actionLayerIdUndfined)).toEqual({
+      ...stateOld,
+    });
   });
 });

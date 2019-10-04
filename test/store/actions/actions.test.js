@@ -48,13 +48,13 @@ describe('actions', () => {
     expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to add layer group', () => {
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
       mapId,
       groupId: { id: 'test-layer' },
-      //group
+      // group
     };
     expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
   });
@@ -98,35 +98,41 @@ describe('actions', () => {
     expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to set layer filter', () => {
     const expectedAction = {
       type: types.SET_LAYER_FILTERS,
-      //layerId,
-      //layerFilters,
+      // layerId,
+      // layerFilters,
       mapId,
     };
     expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to update filters', () => {
     const expectedAction = {
       type: types.FILTERS_UPDATED,
       mapId,
+      layerId,
     };
-    expect(actions.filtersUpdated(mapId)).toEqual(expectedAction);
+    expect(actions.filtersUpdated(mapId, layerId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to save filter state', () => {
+    const filterState = {
+      filterOptions: {},
+    };
+    const isClear = true;
     const expectedAction = {
       type: types.SAVE_FILTER_STATE,
-      //layerId,
-      //filterState,
+      layerId,
+      filterState,
       mapId,
+      isClear,
     };
-    expect(actions.saveFilterState(mapId)).toEqual(expectedAction);
+    expect(actions.saveFilterState(mapId, layerId, filterState, isClear)).toEqual(expectedAction);
   });
 
   test('should create an action to update primary layer', () => {
@@ -154,9 +160,7 @@ describe('actions', () => {
       timeseries,
       mapId,
     };
-    expect(actions.receiveData(mapId, layer, timeseries)).toEqual(
-      expectedAction
-    );
+    expect(actions.receiveData(mapId, layer, timeseries)).toEqual(expectedAction);
   });
 
   test('should create an action to indicate map rendered', () => {
@@ -198,12 +202,12 @@ describe('actions', () => {
     expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to view in detail', () => {
     const expectedAction = {
       type: types.DETAIL_VIEW,
       mapId,
-      //payload,
+      // payload,
     };
     expect(actions.detailView(mapId)).toEqual(expectedAction);
   });
@@ -305,9 +309,7 @@ describe('actions', () => {
       isRefresh,
       mapId,
     };
-    expect(actions.toggleCategories(mapId, category, index, isRefresh)).toEqual(
-      expectedAction
-    );
+    expect(actions.toggleCategories(mapId, category, index, isRefresh)).toEqual(expectedAction);
   });
 
   test('should create an action to init loc', () => {

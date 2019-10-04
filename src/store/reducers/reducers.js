@@ -122,7 +122,7 @@ export function REGIONS(state = defaultState.REGIONS, action) {
   }
 }
 
-function FILTER(state = defaultState.FILTER, action) {
+export function FILTER(state = defaultState.FILTER, action) {
   switch (action.type) {
     case types.SAVE_FILTER_STATE: {
       return {
