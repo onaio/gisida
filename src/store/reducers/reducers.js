@@ -23,13 +23,13 @@ export function LOC(state = defaultState.LOC, action) {
         locations: { ...action.config },
         location: {
           ...Object.keys(action.config)
-            .map((d) => action.config[d])
-            .find((d) => d.default === true),
+            .map(d => action.config[d])
+            .find(d => d.default === true),
           doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
-        default: Object.keys(action.config).find((d) => action.config[d].default === true),
-        active: Object.keys(action.config).find((d) => action.config[d].default === true),
+        default: Object.keys(action.config).find(d => action.config[d].default === true),
+        active: Object.keys(action.config).find(d => action.config[d].default === true),
       };
     case types.SET_LOCATION: {
       const { loc, mapId } = action;
@@ -63,7 +63,7 @@ export function LOC(state = defaultState.LOC, action) {
 export function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
     case types.INIT_STYLES: {
-      const styles = action.styles.map((s) => {
+      const styles = action.styles.map(s => {
         const style = s;
         if (style.url === action.mapConfig.style) style.current = true;
         return style;
@@ -71,7 +71,7 @@ export function STYLES(state = defaultState.STYLES, action) {
       return styles;
     }
     case types.CHANGE_STYLE: {
-      const updatedStyles = state.map((s) => {
+      const updatedStyles = state.map(s => {
         const style = s;
         if (action.style === style.url) {
           if (action.mapId) {
@@ -93,7 +93,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case types.INIT_REGIONS: {
       const regions = action.regions
-        ? action.regions.map((r) => {
+        ? action.regions.map(r => {
             const region = r;
             // check if mapconfig center matches region center to set current region
             if (
@@ -108,7 +108,7 @@ function REGIONS(state = defaultState.REGIONS, action) {
       return regions;
     }
     case types.CHANGE_REGION: {
-      const updatedRegions = state.map((r) => {
+      const updatedRegions = state.map(r => {
         const region = r;
         if (action.region === region.name) {
           region.current = true;
@@ -186,7 +186,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
     }
     case types.ADD_LAYER_GROUP: {
       // parse action.group for urls
-      const groupMapper = (layer) => {
+      const groupMapper = layer => {
         if (typeof layer === 'string') {
           if (layer.indexOf('http') === -1) {
             return layer;
@@ -195,7 +195,7 @@ function LAYERS(state = defaultState.LAYERS, action) {
           return pathSplit[pathSplit.length - 1];
         }
         const subGroup = {};
-        Object.keys(layer).forEach((key) => {
+        Object.keys(layer).forEach(key => {
           subGroup[key] = layer[key].map(groupMapper);
         });
         return subGroup;
@@ -253,7 +253,7 @@ export function createMapReducer(mapId) {
           layers[action.layer.id] = { ...action.layer };
           const updatedLayers = { ...state.layers, ...layers };
           const defaultLayers = Object.keys(state.layers).filter(
-            (l) =>
+            l =>
               state.layers[l].visible &&
               state.layers[l].id !== reloadLayerId &&
               !state.layers[l].nondefault
@@ -283,7 +283,7 @@ export function createMapReducer(mapId) {
 
           let primarySubLayer = null;
           if (layer.layers) {
-            layer.layers.forEach((subLayerId) => {
+            layer.layers.forEach(subLayerId => {
               updatedLayers[subLayerId].visible = !layer.visible;
               updatedLayers[subLayerId].parent = layer.id;
               primarySubLayer = updatedLayers[subLayerId].visible ? subLayerId : null;
@@ -308,10 +308,10 @@ export function createMapReducer(mapId) {
           }
 
           const activeSubLayerIds = Object.keys(updatedLayers).filter(
-            (l) => updatedLayers[l].visible && updatedLayers[l].parent
+            l => updatedLayers[l].visible && updatedLayers[l].parent
           );
           const activeFilterLayerIds = activeLayerIds.filter(
-            (l) => updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter
+            l => updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter
           );
 
           let filterLayerId = '';
