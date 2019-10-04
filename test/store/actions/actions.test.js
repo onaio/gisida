@@ -320,4 +320,33 @@ describe('actions', () => {
     };
     expect(actions.initLoc(config)).toEqual(expectedAction);
   });
+
+  test('should create an action to init locations', () => {
+    const locations = {
+      loc1: {
+        default: true, // Default is true
+        label: 'loc1',
+        zoom: 10.978331870416822,
+        center: {
+          lng: 55.13155473084771,
+          lat: 34.50960383103761,
+        },
+      },
+      loc2: {
+        default: true, // Default is true
+        label: 'loc2',
+        zoom: 10.978331870416822,
+        center: {
+          lng: 55.13155473084771,
+          lat: 37.50960383103761,
+        },
+      },
+    };
+
+    const expectedAction = {
+      type: types.INIT_LOCATIONS,
+      locations,
+    };
+    expect(actions.initLocations(locations)).toEqual(expectedAction);
+  });
 });

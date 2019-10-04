@@ -153,7 +153,7 @@ export function FILTER(state = defaultState.FILTER, action) {
   }
 }
 
-function LOCATIONS(state = {}, action) {
+export function LOCATIONS(state = {}, action) {
   switch (action.type) {
     case types.INIT_LOCATIONS: {
       return { ...state, ...action.locations };
