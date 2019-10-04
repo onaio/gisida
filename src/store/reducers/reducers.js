@@ -163,7 +163,7 @@ export function LOCATIONS(state = {}, action) {
   }
 }
 
-function SUPERSET_CONFIGS(state = {}, action) {
+export function SUPERSET_CONFIGS(state = {}, action) {
   switch (action.type) {
     case types.INIT_SUPERSET: {
       return {
