@@ -1,17 +1,17 @@
 version: 2
- commands:
-      early_return_for_forked_pull_requests:
-        description: >-
-          If this build is from a fork, stop executing the current job and return success.
-          This is useful to avoid steps that will fail due to missing credentials.
-        steps:
-          - run:
-              name: Early return if this build is from a forked PR
-              command: |
-                if [ -n "$CIRCLE_PR_NUMBER" ]; then
-                  echo "Nothing to do for forked PRs, so marking this step successful"
-                  circleci step halt
-                fi
+commands:
+  early_return_for_forked_pull_requests:
+    description: >-
+      If this build is from a fork, stop executing the current job and return success.
+      This is useful to avoid steps that will fail due to missing credentials.
+    steps:
+      - run:
+          name: Early return if this build is from a forked PR
+          command: |
+            if [ -n "$CIRCLE_PR_NUMBER" ]; then
+              echo "Nothing to do for forked PRs, so marking this step successful"
+              circleci step halt
+            fi
 jobs:
   build:
     working_directory: ~/gisida
@@ -19,13 +19,13 @@ jobs:
       - image: circleci/node:6.11.5
     steps:
       - checkout
-      - run: 
+      - run:
           name: Install dependencies
           command: yarn install
       - run:
           name: Run eslint
           command: npm run lint
-      - run: 
+      - run:
           name: Run jest
           command: npm test
   publish:
@@ -51,4 +51,3 @@ workflows:
               only: /[0-9]+(\.[0-9]+)*/
             tags:
               only: /v[0-9]+(\.[0-9]+)*/
-  
