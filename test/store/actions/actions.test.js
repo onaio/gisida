@@ -48,15 +48,16 @@ describe('actions', () => {
     expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
 
-  // added by Philipp
-  test('should create an action to add layer group', () => {
+  test('should creADD_LAYER_GRate an action to add layer group', () => {
+    const group = ['E1', 'E2'];
+    const groupId = 'group-id';
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
       mapId,
-      groupId: { id: 'test-layer' },
-      // group
+      groupId,
+      group,
     };
-    expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
+    expect(actions.addLayerGroup(mapId, groupId, group)).toEqual(expectedAction);
   });
 
   test('should create an action to change region', () => {
@@ -348,5 +349,42 @@ describe('actions', () => {
       locations,
     };
     expect(actions.initLocations(locations)).toEqual(expectedAction);
+  });
+
+  test('should create an action to add layers list', () => {
+    const layers = {
+      layers: [
+        {
+          id: 'rivers',
+          source: 'my-source',
+          'source-layer': 'waterway',
+          type: 'line',
+          paint: {
+            'line-color': '#FFC0CB',
+          },
+        },
+        {
+          id: 'museums',
+          type: 'circle',
+          source: 'museums',
+          layout: {
+            visibility: 'visible',
+          },
+          paint: {
+            'circle-radius': 8,
+            'circle-color': 'rgba(55,148,179,1)',
+          },
+          'source-layer': 'museum-cusco',
+        },
+      ],
+      groups: {
+        group2: ['E3', 'E4', 'E5'],
+      },
+    };
+    const expectedAction = {
+      type: types.ADD_LAYERS_LIST,
+      layers,
+    };
+    expect(actions.addLayersList(layers)).toEqual(expectedAction);
   });
 });

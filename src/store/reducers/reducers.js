@@ -176,7 +176,7 @@ export function SUPERSET_CONFIGS(state = {}, action) {
   }
 }
 
-function LAYERS(state = defaultState.LAYERS, action) {
+export function LAYERS(state = defaultState.LAYERS, action) {
   switch (action.type) {
     case types.ADD_LAYERS_LIST: {
       return {
