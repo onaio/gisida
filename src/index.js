@@ -1,11 +1,30 @@
+import app from './store/reducers/app';
+import filter from './store/reducers/filter';
+import layersReducer from './store/reducers/layers';
+import loc from './store/reducers/loc';
+import locationsReducer from './store/reducers/locations';
+import regions from './store/reducers/regions';
+import styles from './store/reducers/styles';
+import supersetConfig from './store/reducers/superset-config';
+
 const gisida = {};
 
 gisida.version = require('../package.json').version;
 gisida.initStore = require('./store/initStore').default;
 gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
-gisida.createMapReducer = require('./store/reducers/reducers').createMapReducer;
-gisida.reducers = require('./store/reducers/reducers').default;
+gisida.createMapReducer = require('./store/reducers/createMapReducer').createMapReducer;
+
+gisida.reducers = {
+  ...app,
+  filter,
+  layersReducer,
+  loc,
+  locationsReducer,
+  regions,
+  styles,
+  supersetConfig,
+};
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
 gisida.addPopUp = require('./map/addPopUp').default;
@@ -27,8 +46,8 @@ gisida.parseData = require('./utils/parseData').default;
 gisida.lngLat = require('./utils/lngLat').default;
 
 gisida.defaultReducers = {};
-gisida.defaultReducers.APP = require('./store/reducers/reducers').APP;
-gisida.defaultReducers.STYLES = require('./store/reducers/reducers').STYLES;
+gisida.defaultReducers.APP = require('./store/reducers/app').APP;
+gisida.defaultReducers.STYLES = require('./store/reducers/styles');
 
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;

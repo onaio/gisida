@@ -1,13 +1,20 @@
-import * as reducers from '../../../src/store/reducers/reducers';
+import APP from '../../../src/store/reducers/app';
+import FILTER from '../../../src/store/reducers/filter';
+import LAYERS from '../../../src/store/reducers/layers';
+import LOC from '../../../src/store/reducers/loc';
+import LOCATIONS from '../../../src/store/reducers/locations';
+import STYLES from '../../../src/store/reducers/styles';
+import SUPERSET_CONFIGS from '../../../src/store/reducers/superset-config';
+import REGIONS from '../../../src/store/reducers/regions';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
 const mapId = 'map-id';
 const layerId = 'layer-id';
 
-describe('reducers.APP', () => {
+describe('APP', () => {
   it('should return the initial state', () => {
-    expect(reducers.APP(undefined, {})).toEqual(defaultState.APP);
+    expect(APP(undefined, {})).toEqual(defaultState.APP);
   });
 
   it('should handle INIT_APP', () => {
@@ -27,7 +34,7 @@ describe('reducers.APP', () => {
     };
     // Case 1: The state obj is empty
     const stateEmpty = {};
-    expect(reducers.APP(stateEmpty, action)).toEqual({
+    expect(APP(stateEmpty, action)).toEqual({
       ...stateEmpty,
       ...action.config,
       loaded: true,
@@ -46,7 +53,7 @@ describe('reducers.APP', () => {
       },
     };
 
-    expect(reducers.APP(stateOld, action)).toEqual({
+    expect(APP(stateOld, action)).toEqual({
       ...stateOld,
       ...action.config,
       loaded: true,
@@ -54,7 +61,7 @@ describe('reducers.APP', () => {
   });
 });
 
-describe('reducers.LOC', () => {
+describe('LOC', () => {
   const config = {
     loc1: {
       default: false, // Default is false
@@ -99,7 +106,7 @@ describe('reducers.LOC', () => {
   };
 
   it('should return the initial state', () => {
-    expect(reducers.LOC(undefined, {})).toEqual(defaultState.LOC);
+    expect(LOC(undefined, {})).toEqual(defaultState.LOC);
   });
 
   it('should handle INIT_LOC', () => {
@@ -111,7 +118,7 @@ describe('reducers.LOC', () => {
     // Case 1: Handle INIT_LOC when the state object is empty
     const stateEmpty = {};
 
-    expect(reducers.LOC(stateEmpty, action)).toEqual({
+    expect(LOC(stateEmpty, action)).toEqual({
       ...stateEmpty,
       locations: { ...config },
       location: {
@@ -150,7 +157,7 @@ describe('reducers.LOC', () => {
       type: types.INIT_LOC,
       config: newConfig,
     };
-    expect(reducers.LOC(stateOld, actionNewConfig)).toEqual({
+    expect(LOC(stateOld, actionNewConfig)).toEqual({
       ...stateOld,
       locations: { ...newConfig },
       location: {
@@ -175,7 +182,7 @@ describe('reducers.LOC', () => {
 
     // Case 1: Handle SET_LOCATION when the state object is empty
     expect(() => {
-      reducers.LOC({}, action);
+      LOC({}, action);
     }).toThrow(TypeError);
 
     // Case 2: Handle SET_LOCATION when state object is not empty
@@ -184,7 +191,7 @@ describe('reducers.LOC', () => {
       ...stateOld,
       locations: {},
     };
-    expect(reducers.LOC(stateOldUndefinedLoc, action)).toEqual({
+    expect(LOC(stateOldUndefinedLoc, action)).toEqual({
       ...stateOldUndefinedLoc,
       doUpdateMap: mapId,
       active: stateOldUndefinedLoc.active,
@@ -195,7 +202,7 @@ describe('reducers.LOC', () => {
     });
 
     // Case 2.2 locations[loc] is defined
-    expect(reducers.LOC(stateOld, action)).toEqual({
+    expect(LOC(stateOld, action)).toEqual({
       ...stateOld,
       doUpdateMap: mapId,
       active: loc,
@@ -215,7 +222,7 @@ describe('reducers.LOC', () => {
 
     // Case 1: The state obj is empty
     expect(() => {
-      reducers.LOC({}, action);
+      LOC({}, action);
     }).toThrow(TypeError);
 
     // Case 2: The state obj is not empty
@@ -224,7 +231,7 @@ describe('reducers.LOC', () => {
       ...stateOld,
       locations: {},
     };
-    expect(reducers.LOC(stateOldUndefinedLoc, action)).toEqual({
+    expect(LOC(stateOldUndefinedLoc, action)).toEqual({
       ...stateOldUndefinedLoc,
       location: {
         ...stateOldUndefinedLoc.location,
@@ -233,7 +240,7 @@ describe('reducers.LOC', () => {
     });
 
     // Case 2.2 locations[loc] is defined
-    expect(reducers.LOC(stateOld, action)).toEqual({
+    expect(LOC(stateOld, action)).toEqual({
       ...stateOld,
       location: {
         ...stateOld.locations[loc],
@@ -243,7 +250,7 @@ describe('reducers.LOC', () => {
   });
 });
 
-describe('reducers.STYLES', () => {
+describe('STYLES', () => {
   const style1 = {
     label: 'Satelitte',
     url: 'mapbox://styles/mapbox/satellite-v9',
@@ -258,7 +265,7 @@ describe('reducers.STYLES', () => {
   };
 
   it('should return the initial state', () => {
-    expect(reducers.STYLES(undefined, {})).toEqual(defaultState.STYLES);
+    expect(STYLES(undefined, {})).toEqual(defaultState.STYLES);
   });
 
   it('should handle INIT_STYLES', () => {
@@ -285,7 +292,7 @@ describe('reducers.STYLES', () => {
 
     expect(expectedStyles[0].current === undefined);
     expect(expectedStyles[1].current === undefined);
-    expect(reducers.STYLES(stateEmpty, action)).toEqual(expectedStyles);
+    expect(STYLES(stateEmpty, action)).toEqual(expectedStyles);
 
     // Case 1.2 action.mapConfig.style matches style in the array of styles
     const actionMatchExists = {
@@ -303,16 +310,16 @@ describe('reducers.STYLES', () => {
 
     expect(expectedStylesMatchExists[0].current === true);
     expect(expectedStylesMatchExists[1].current === undefined);
-    expect(reducers.STYLES(stateEmpty, actionMatchExists)).toEqual(expectedStylesMatchExists);
+    expect(STYLES(stateEmpty, actionMatchExists)).toEqual(expectedStylesMatchExists);
 
     // Case 2: The state obj is not empty
     const stateOld = [style1, style2];
 
     // Case 2.1 Mapconfig style does not match style in array of styles
-    expect(reducers.STYLES(stateOld, action)).toEqual(expectedStyles);
+    expect(STYLES(stateOld, action)).toEqual(expectedStyles);
 
     // Case 2.2 Mapconfig style matches style in array of styles
-    expect(reducers.STYLES(stateOld, actionMatchExists)).toEqual(expectedStylesMatchExists);
+    expect(STYLES(stateOld, actionMatchExists)).toEqual(expectedStylesMatchExists);
   });
 
   it('should handle CHANGE_STYLE', () => {
@@ -328,14 +335,14 @@ describe('reducers.STYLES', () => {
 
     // Case 1: The state obj is empty
     const stateEmpty = [];
-    expect(reducers.STYLES(stateEmpty, action)).toEqual([]);
+    expect(STYLES(stateEmpty, action)).toEqual([]);
 
     // Case 2: The state obj is not empty
     // Case 2.1: action.style matches style in state
     const stateOldMatchExists = [style1, style2, style3];
 
     // Case 2.1.1: mapId is defined in action
-    expect(reducers.STYLES(stateOldMatchExists, action)).toEqual([
+    expect(STYLES(stateOldMatchExists, action)).toEqual([
       {
         ...style1,
         [mapId]: {
@@ -347,7 +354,7 @@ describe('reducers.STYLES', () => {
     ]);
 
     // Case 2.1.2: mapId is not defined in action
-    expect(reducers.STYLES(stateOldMatchExists, actionMapIdUndefined)).toEqual([
+    expect(STYLES(stateOldMatchExists, actionMapIdUndefined)).toEqual([
       {
         ...style1,
         current: true,
@@ -360,7 +367,7 @@ describe('reducers.STYLES', () => {
     const stateOldNoMatch = [style2, style3];
 
     // Case 2.2.1: mapId is defined in action
-    expect(reducers.STYLES(stateOldNoMatch, action)).toEqual([
+    expect(STYLES(stateOldNoMatch, action)).toEqual([
       {
         ...style2,
         [mapId]: {
@@ -376,7 +383,7 @@ describe('reducers.STYLES', () => {
     ]);
 
     // Case 2.2.2: mapId is not defined in action
-    expect(reducers.STYLES(stateOldNoMatch, actionMapIdUndefined)).toEqual([
+    expect(STYLES(stateOldNoMatch, actionMapIdUndefined)).toEqual([
       {
         ...style2,
         current: false,
@@ -389,7 +396,7 @@ describe('reducers.STYLES', () => {
   });
 });
 
-describe('reducers.REGIONS', () => {
+describe('REGIONS', () => {
   const region1 = {
     name: 'Region1',
     zoom: 10,
@@ -408,7 +415,7 @@ describe('reducers.REGIONS', () => {
   const stateEmpty = [];
 
   it('should return the initial state', () => {
-    expect(reducers.REGIONS(undefined, {})).toEqual(defaultState.REGIONS);
+    expect(REGIONS(undefined, {})).toEqual(defaultState.REGIONS);
   });
 
   it('should handle INIT_REGIONS', () => {
@@ -434,11 +441,11 @@ describe('reducers.REGIONS', () => {
 
     // Case 1: The state obj is empty
     // Case 1.1: action.regions is undefined
-    expect(reducers.REGIONS(stateEmpty, actionUndefinedRegions)).toEqual([]);
+    expect(REGIONS(stateEmpty, actionUndefinedRegions)).toEqual([]);
 
     // Case 1.2 action.regions is defined
     // Case 1.2.1 Region center in action.regions matches action.mapConfig.center
-    expect(reducers.REGIONS(stateEmpty, action)).toEqual([
+    expect(REGIONS(stateEmpty, action)).toEqual([
       {
         ...firstRegion,
         current: true,
@@ -447,17 +454,17 @@ describe('reducers.REGIONS', () => {
     ]);
 
     // Case 1.2.2 No region center in action.regions matches action.mapConfig.center
-    expect(reducers.REGIONS(stateEmpty, actionNoMatch)).toEqual(actionNoMatch.regions);
+    expect(REGIONS(stateEmpty, actionNoMatch)).toEqual(actionNoMatch.regions);
 
     // Case 2: The state obj is not empty
     const stateOld = [region2, region3];
 
     // Case 2.1: action.regions is undefined
-    expect(reducers.REGIONS(stateOld, actionUndefinedRegions)).toEqual([]);
+    expect(REGIONS(stateOld, actionUndefinedRegions)).toEqual([]);
 
     // Case 2.2 action.regions is defined
     // Case 2.2.1 Region center in action.regions matches action.mapConfig.center
-    expect(reducers.REGIONS(stateOld, action)).toEqual([
+    expect(REGIONS(stateOld, action)).toEqual([
       {
         ...firstRegion,
         current: true,
@@ -466,7 +473,7 @@ describe('reducers.REGIONS', () => {
     ]);
 
     // Case 2.2.2 No region center in action.regions matches action.mapConfig.center
-    expect(reducers.REGIONS(stateOld, actionNoMatch)).toEqual(actionNoMatch.regions);
+    expect(REGIONS(stateOld, actionNoMatch)).toEqual(actionNoMatch.regions);
   });
 
   it('should handle CHANGE_REGION', () => {
@@ -477,13 +484,13 @@ describe('reducers.REGIONS', () => {
     };
 
     // Case 1: The state obj is empty
-    expect(reducers.REGIONS(stateEmpty, action)).toEqual([]);
+    expect(REGIONS(stateEmpty, action)).toEqual([]);
 
     // Case 1.2: The state obj is not empty
     const stateOldMatchExists = [region1, region2];
 
     // Case 1.2.1: action.region matches region in state
-    expect(reducers.REGIONS(stateOldMatchExists, action)).toEqual([
+    expect(REGIONS(stateOldMatchExists, action)).toEqual([
       {
         ...region1,
         current: true,
@@ -493,7 +500,7 @@ describe('reducers.REGIONS', () => {
 
     // Case 1.2.2: action.regions does not match region in state
     const stateOldNoMatch = [region2, region3];
-    expect(reducers.REGIONS(stateOldNoMatch, action)).toEqual([
+    expect(REGIONS(stateOldNoMatch, action)).toEqual([
       {
         ...region2,
         current: false,
@@ -506,7 +513,7 @@ describe('reducers.REGIONS', () => {
   });
 });
 
-describe('reducers.FILTER', () => {
+describe('FILTER', () => {
   const stateEmpty = {};
   const stateOld = {
     [layerId]: {
@@ -516,7 +523,7 @@ describe('reducers.FILTER', () => {
   };
 
   it('should return the initial state', () => {
-    expect(reducers.FILTER(undefined, {})).toEqual(defaultState.FILTER);
+    expect(FILTER(undefined, {})).toEqual(defaultState.FILTER);
   });
 
   it('should handle SAVE_FILTER_STATE', () => {
@@ -536,7 +543,7 @@ describe('reducers.FILTER', () => {
 
     // Case 1: The state obj is empty
     // Case 1.1: action.isClear is defined
-    expect(reducers.FILTER(stateEmpty, action)).toEqual({
+    expect(FILTER(stateEmpty, action)).toEqual({
       ...stateEmpty,
       [action.layerId]: {
         ...action.filterState,
@@ -546,7 +553,7 @@ describe('reducers.FILTER', () => {
     });
 
     // Case 1.2: action.isClear is undefined
-    expect(reducers.FILTER(stateEmpty, actionUndefinedIsClear)).toEqual({
+    expect(FILTER(stateEmpty, actionUndefinedIsClear)).toEqual({
       ...stateEmpty,
       [action.layerId]: {
         ...action.filterState,
@@ -557,7 +564,7 @@ describe('reducers.FILTER', () => {
 
     // Case 2: The state obj is not empty
     // Case 2.1 action.isClear is defined
-    expect(reducers.FILTER(stateOld, action)).toEqual({
+    expect(FILTER(stateOld, action)).toEqual({
       ...stateOld,
       [action.layerId]: {
         ...action.filterState,
@@ -567,7 +574,7 @@ describe('reducers.FILTER', () => {
     });
 
     // Case 2.2 action.isClear is undefined
-    expect(reducers.FILTER(stateOld, actionUndefinedIsClear)).toEqual({
+    expect(FILTER(stateOld, actionUndefinedIsClear)).toEqual({
       ...stateOld,
       [action.layerId]: {
         ...action.filterState,
@@ -590,7 +597,7 @@ describe('reducers.FILTER', () => {
 
     // Case 1: The state obj is empty
     // Case 1.1: action.layerId is defined
-    expect(reducers.FILTER(stateEmpty, action)).toEqual({
+    expect(FILTER(stateEmpty, action)).toEqual({
       ...stateEmpty,
       [action.layerId]: {
         doUpdate: false,
@@ -598,13 +605,13 @@ describe('reducers.FILTER', () => {
     });
 
     // Case 1.2: action.layerId is undefined
-    expect(reducers.FILTER(stateEmpty, actionLayerIdUndfined)).toEqual({
+    expect(FILTER(stateEmpty, actionLayerIdUndfined)).toEqual({
       ...stateEmpty,
     });
 
     // Case 2: The state obj is not empty
     // Case 2.1: action.layerId is defined
-    expect(reducers.FILTER(stateOld, action)).toEqual({
+    expect(FILTER(stateOld, action)).toEqual({
       ...stateEmpty,
       [action.layerId]: {
         ...stateOld[action.layerId],
@@ -613,15 +620,15 @@ describe('reducers.FILTER', () => {
     });
 
     // Case 2.2: action.layerId is undefined
-    expect(reducers.FILTER(stateOld, actionLayerIdUndfined)).toEqual({
+    expect(FILTER(stateOld, actionLayerIdUndfined)).toEqual({
       ...stateOld,
     });
   });
 });
 
-describe('reducers.LOCATIONS', () => {
+describe('LOCATIONS', () => {
   it('should return the initial state', () => {
-    expect(reducers.LOCATIONS(undefined, {})).toEqual({});
+    expect(LOCATIONS(undefined, {})).toEqual({});
   });
 
   it('should handle INIT_LOCATIONS', () => {
@@ -650,7 +657,7 @@ describe('reducers.LOCATIONS', () => {
     };
 
     // Case 1: The state obj is empty
-    expect(reducers.LOCATIONS({}, action)).toEqual({
+    expect(LOCATIONS({}, action)).toEqual({
       ...action.locations,
     });
 
@@ -666,16 +673,16 @@ describe('reducers.LOCATIONS', () => {
         },
       },
     };
-    expect(reducers.LOCATIONS(stateOld, action)).toEqual({
+    expect(LOCATIONS(stateOld, action)).toEqual({
       ...stateOld,
       ...action.locations,
     });
   });
 });
 
-describe('reducers.SUPERSET_CONFIGS', () => {
+describe('SUPERSET_CONFIGS', () => {
   it('should return the initial state', () => {
-    expect(reducers.SUPERSET_CONFIGS(undefined, {})).toEqual({});
+    expect(SUPERSET_CONFIGS(undefined, {})).toEqual({});
   });
 
   it('should handle INIT_SUPERSET', () => {
@@ -695,7 +702,7 @@ describe('reducers.SUPERSET_CONFIGS', () => {
     };
 
     // Case 1: The state obj is empty
-    expect(reducers.SUPERSET_CONFIGS({}, action)).toEqual({
+    expect(SUPERSET_CONFIGS({}, action)).toEqual({
       ...action.config,
     });
 
@@ -711,14 +718,14 @@ describe('reducers.SUPERSET_CONFIGS', () => {
       appName: 'React Gisida Gisida',
       loaded: true,
     };
-    expect(reducers.SUPERSET_CONFIGS(stateOld, action)).toEqual({
+    expect(SUPERSET_CONFIGS(stateOld, action)).toEqual({
       ...stateOld,
       ...action.config,
     });
   });
 });
 
-describe('reducers.LAYERS', () => {
+describe('LAYERS', () => {
   const stateEmpty = {};
   const stateOld = {
     layers: [
@@ -744,7 +751,7 @@ describe('reducers.LAYERS', () => {
   };
 
   it('should return the initial state', () => {
-    expect(reducers.LAYERS(undefined, {})).toEqual(defaultState.LAYERS);
+    expect(LAYERS(undefined, {})).toEqual(defaultState.LAYERS);
   });
 
   it('should handle ADD_LAYERS_LIST', () => {
@@ -782,11 +789,11 @@ describe('reducers.LAYERS', () => {
 
     // Case 1: The state obj is empty
     expect(() => {
-      reducers.LAYERS(stateEmpty, action);
+      LAYERS(stateEmpty, action);
     }).toThrow(TypeError);
 
     // Case 2: The state obj is not empty
-    expect(reducers.LAYERS(stateOld, action)).toEqual({
+    expect(LAYERS(stateOld, action)).toEqual({
       ...stateOld,
       layers: [...stateOld.layers, ...action.layers],
     });
@@ -819,21 +826,21 @@ describe('reducers.LAYERS', () => {
     // Case 1: The state obj is empty
     // Case 1.1: action.group has layer of type string
     // Case 1.1.1: action.group has a layer without a 'http' substring
-    expect(reducers.LAYERS(stateEmpty, action)).toEqual({
+    expect(LAYERS(stateEmpty, action)).toEqual({
       groups: {
         [action.groupId]: action.group,
       },
     });
 
     // Case 1.1.2: action.group has a layer with a http substring
-    expect(reducers.LAYERS(stateEmpty, actionHttpSubstring)).toEqual({
+    expect(LAYERS(stateEmpty, actionHttpSubstring)).toEqual({
       groups: {
         [action.groupId]: [actionHttpSubstring.group[0], actionHttpSubstring.group[1], 'E3'],
       },
     });
 
     // Case 1.2 action.group has a layer of type object
-    expect(reducers.LAYERS(stateEmpty, actionLayerObj)).toEqual({
+    expect(LAYERS(stateEmpty, actionLayerObj)).toEqual({
       groups: {
         [action.groupId]: [
           actionLayerObj.group[0],
@@ -849,7 +856,7 @@ describe('reducers.LAYERS', () => {
     // Case 2: The state obj is not empty
     // Case 2.1: action.group has layer of type string
     // Case 2.1.1 action.group has a layer without a 'http' substring
-    expect(reducers.LAYERS(stateOld, action)).toEqual({
+    expect(LAYERS(stateOld, action)).toEqual({
       ...stateOld,
       groups: {
         ...stateOld.groups,
@@ -858,7 +865,7 @@ describe('reducers.LAYERS', () => {
     });
 
     // Case 2.1.2: action.group has a layer with a http substring
-    expect(reducers.LAYERS(stateOld, actionHttpSubstring)).toEqual({
+    expect(LAYERS(stateOld, actionHttpSubstring)).toEqual({
       ...stateOld,
       groups: {
         ...stateOld.groups,
@@ -867,7 +874,7 @@ describe('reducers.LAYERS', () => {
     });
 
     // Case 2.2: action.group has a layer of type object
-    expect(reducers.LAYERS(stateOld, actionLayerObj)).toEqual({
+    expect(LAYERS(stateOld, actionLayerObj)).toEqual({
       ...stateOld,
       groups: {
         ...stateOld.groups,
