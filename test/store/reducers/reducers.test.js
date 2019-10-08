@@ -1,11 +1,13 @@
-import APP from '../../../src/store/reducers/app';
-import FILTER from '../../../src/store/reducers/filter';
-import LAYERS from '../../../src/store/reducers/layers';
-import LOC from '../../../src/store/reducers/loc';
-import LOCATIONS from '../../../src/store/reducers/locations';
-import STYLES from '../../../src/store/reducers/styles';
-import SUPERSET_CONFIGS from '../../../src/store/reducers/superset-config';
-import REGIONS from '../../../src/store/reducers/regions';
+import {
+  APP,
+  FILTER,
+  LAYERS,
+  LOC,
+  LOCATIONS,
+  STYLES,
+  SUPERSET_CONFIGS,
+  REGIONS,
+} from '../../../src/store/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
