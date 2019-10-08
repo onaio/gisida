@@ -1,9 +1,9 @@
 import defaultState from '../defaultState';
-import * as types from '../constants/actionTypes';
+import { INIT_LOC, SET_LOCATION, TOGGLE_MAP_LOCATION } from '../constants/actionTypes';
 
 export default function LOC(state = defaultState.LOC, action) {
   switch (action.type) {
-    case types.INIT_LOC:
+    case INIT_LOC:
       return {
         ...state,
         locations: { ...action.config },
@@ -17,7 +17,7 @@ export default function LOC(state = defaultState.LOC, action) {
         default: Object.keys(action.config).find(d => action.config[d].default === true),
         active: Object.keys(action.config).find(d => action.config[d].default === true),
       };
-    case types.SET_LOCATION: {
+    case SET_LOCATION: {
       const { loc, mapId } = action;
       const { active, locations } = state;
       return {
@@ -30,7 +30,7 @@ export default function LOC(state = defaultState.LOC, action) {
             : { ...state.location, doUpdateLOC: false },
       };
     }
-    case types.TOGGLE_MAP_LOCATION: {
+    case TOGGLE_MAP_LOCATION: {
       const { loc } = action;
       const { locations } = state;
       return {

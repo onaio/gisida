@@ -1,12 +1,9 @@
-
-
 import defaultState from '../defaultState';
-import * as types from '../constants/actionTypes';
-
+import { FILTERS_UPDATED, SAVE_FILTER_STATE } from '../constants/actionTypes';
 
 export default function FILTER(state = defaultState.FILTER, action) {
   switch (action.type) {
-    case types.SAVE_FILTER_STATE: {
+    case SAVE_FILTER_STATE: {
       return {
         ...state,
         [action.layerId]: {
@@ -16,7 +13,7 @@ export default function FILTER(state = defaultState.FILTER, action) {
         },
       };
     }
-    case types.FILTERS_UPDATED: {
+    case FILTERS_UPDATED: {
       if (!action.layerId) {
         return {
           ...state,
@@ -34,4 +31,3 @@ export default function FILTER(state = defaultState.FILTER, action) {
       return state;
   }
 }
-
