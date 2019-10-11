@@ -6,10 +6,11 @@ const parseDetailValue = (spec, datum) => {
   if (!spec) return false;
 
   // 2) if single property then just get it from the datum
-  if (typeof spec === 'string' && datum[spec]) {
+  if (typeof spec === 'string' && datum[spec] === 0 ?
+    true : typeof spec === 'string' && datum[spec]) {
     return datum[spec];
   // 3) if single property but it's undefined as datum prop, return false
-  } else if (typeof spec === 'string' && !datum[spec]) {
+  } else if (typeof spec === 'string' && datum[spec] === undefined) {
     return false;
   }
 
@@ -118,7 +119,9 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
 
   // 1) Parse list item innerHTML (text) from prop(s)
   const value = parseDetailValue(detail.value, properties);
-  if (!value) return false;
+  if (!value && value !== 0) {
+    return false;
+  }
 
   // 2) Parse glyphicon from icon (options); Note: this doesn't work with multiple props
   if (detail.icon) {
