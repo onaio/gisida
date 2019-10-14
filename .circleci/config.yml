@@ -6,15 +6,18 @@ jobs:
       - image: circleci/node:8.10.0
     steps:
       - checkout
+      -run:
+          name: Update Yarn
+          command: 
       - run: 
           name: Install dependencies
           command: yarn install
       - run:
           name: Run eslint
-          command: npm run lint
+          command: yarn lint
       - run: 
           name: Run jest
-          command: npm test
+          command: yarn test
   publish:
     docker:
       - image: circleci/node:8.10.0
