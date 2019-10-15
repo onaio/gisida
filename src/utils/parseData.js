@@ -23,7 +23,6 @@ export default function parseData(spec, datum) {
     return parsedData;
   }
 
-  const unparsedDatum = JSON.stringify(datum);
   const datumProps = Object.keys(datum);
   let datumVal; // the value of the actual datum property
   let propSpec; // references the data parse spec object for the specific property
@@ -131,6 +130,5 @@ export default function parseData(spec, datum) {
       parsedDatum[datumProps[p]] = parseVal;
     }
   }
-  parsedDatum.unparsedDatum = unparsedDatum;
   return { ...parsedDatum };
 }
