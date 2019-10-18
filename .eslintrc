@@ -1,8 +1,9 @@
 {
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true
   },
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -10,9 +11,8 @@
     },
     "sourceType": "module"
   },
-  "rules": {
-    
-  },
+  "plugins": ["prettier"],
+  "rules": {},
   "parser": "babel-eslint",
   "globals": {
     "mapboxgl": true,

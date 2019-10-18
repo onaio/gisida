@@ -2,7 +2,6 @@ import * as actions from '../../../src/store/actions/actions';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
-
 const layerId = 'test-layer';
 const layer = { id: layerId };
 const timeseries = { [layerId]: {} };
@@ -44,20 +43,21 @@ describe('actions', () => {
     const expectedAction = {
       type: types.ADD_LAYER,
       layer,
-      mapId
+      mapId,
     };
     expect(actions.addLayer(mapId, layer)).toEqual(expectedAction);
   });
 
-  //added by Philipp
-  test('should create an action to add layer group', () => {
+  test('should creADD_LAYER_GRate an action to add layer group', () => {
+    const group = ['E1', 'E2'];
+    const groupId = 'group-id';
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
       mapId,
-      groupId: {'id': 'test-layer'},
-      //group
+      groupId,
+      group,
     };
-    expect(actions.addLayerGroup(mapId, layer)).toEqual(expectedAction);
+    expect(actions.addLayerGroup(mapId, groupId, group)).toEqual(expectedAction);
   });
 
   test('should create an action to change region', () => {
@@ -80,7 +80,6 @@ describe('actions', () => {
     expect(actions.changeStyle(mapId, style)).toEqual(expectedAction);
   });
 
-
   test('should create an action to toggle layer', () => {
     const isInit = true;
     const expectedAction = {
@@ -100,35 +99,41 @@ describe('actions', () => {
     expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to set layer filter', () => {
     const expectedAction = {
       type: types.SET_LAYER_FILTERS,
-      //layerId,
-      //layerFilters,
+      // layerId,
+      // layerFilters,
       mapId,
     };
     expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to update filters', () => {
     const expectedAction = {
       type: types.FILTERS_UPDATED,
       mapId,
+      layerId,
     };
-    expect(actions.filtersUpdated(mapId)).toEqual(expectedAction);
+    expect(actions.filtersUpdated(mapId, layerId)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to save filter state', () => {
+    const filterState = {
+      filterOptions: {},
+    };
+    const isClear = true;
     const expectedAction = {
       type: types.SAVE_FILTER_STATE,
-      //layerId,
-      //filterState,
+      layerId,
+      filterState,
       mapId,
+      isClear,
     };
-    expect(actions.saveFilterState(mapId)).toEqual(expectedAction);
+    expect(actions.saveFilterState(mapId, layerId, filterState, isClear)).toEqual(expectedAction);
   });
 
   test('should create an action to update primary layer', () => {
@@ -189,7 +194,6 @@ describe('actions', () => {
     expect(actions.reloadLayers(mapId, reload)).toEqual(expectedAction);
   });
 
-
   test('should create an action to update timeseries', () => {
     const expectedAction = {
       type: types.UPDATE_TIMESERIES,
@@ -199,12 +203,12 @@ describe('actions', () => {
     expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
   });
 
-  //added by Philipp
+  // added by Philipp
   test('should create an action to view in detail', () => {
     const expectedAction = {
       type: types.DETAIL_VIEW,
       mapId,
-      //payload,
+      // payload,
     };
     expect(actions.detailView(mapId)).toEqual(expectedAction);
   });
@@ -231,5 +235,156 @@ describe('actions', () => {
     const expectedAction = actions.returnState;
     expect(actions.getCurrentState()).toEqual(expectedAction);
   });
-});
 
+  test('should create an action to update location', () => {
+    const expectedAction = {
+      type: types.LOCATION_UPDATED,
+      mapId,
+    };
+    expect(actions.locationUpdated(mapId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to set location', () => {
+    const loc = [-74.5, 40];
+    const expectedAction = {
+      type: types.SET_LOCATION,
+      loc,
+      mapId,
+    };
+    expect(actions.setLocation(mapId, loc)).toEqual(expectedAction);
+  });
+
+  test('should create an action to toggle map location', () => {
+    const loc = [-74.5, 40];
+    const expectedAction = {
+      type: types.SET_LOCATION,
+      loc,
+    };
+    expect(actions.toggleMapLocation(loc)).toEqual(expectedAction);
+  });
+
+  test('should create an action to init superset', () => {
+    const config = defaultState.APP;
+    const expectedAction = {
+      type: types.INIT_SUPERSET,
+      config,
+    };
+    expect(actions.initSuperset(config)).toEqual(expectedAction);
+  });
+
+  test('should create an action to update a layer', () => {
+    const expectedAction = {
+      type: types.LAYER_RELOADED,
+      mapId,
+    };
+    expect(actions.layerReloaded(mapId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to reload layer', () => {
+    const expectedAction = {
+      type: types.RELOAD_LAYER,
+      layerId,
+      mapId,
+    };
+    expect(actions.reloadLayer(mapId, layerId)).toEqual(expectedAction);
+  });
+
+  test('should create an action to reset filtered layer', () => {
+    const oldLayer = 'oldLayer';
+    const expectedAction = {
+      type: types.RESET_FILTERED_LAYER,
+      mapId,
+      oldLayer,
+    };
+    expect(actions.resetFilteredLayer(mapId, oldLayer)).toEqual(expectedAction);
+  });
+
+  test('should create an action to toggle categories', () => {
+    const category = 'category';
+    const index = 0;
+    const isRefresh = false;
+    const expectedAction = {
+      type: types.TOGGLE_CATEGORIES,
+      category,
+      index,
+      isRefresh,
+      mapId,
+    };
+    expect(actions.toggleCategories(mapId, category, index, isRefresh)).toEqual(expectedAction);
+  });
+
+  test('should create an action to init loc', () => {
+    const config = defaultState.APP;
+    const expectedAction = {
+      type: types.INIT_LOC,
+      config,
+    };
+    expect(actions.initLoc(config)).toEqual(expectedAction);
+  });
+
+  test('should create an action to init locations', () => {
+    const locations = {
+      loc1: {
+        default: true, // Default is true
+        label: 'loc1',
+        zoom: 10.978331870416822,
+        center: {
+          lng: 55.13155473084771,
+          lat: 34.50960383103761,
+        },
+      },
+      loc2: {
+        default: true, // Default is true
+        label: 'loc2',
+        zoom: 10.978331870416822,
+        center: {
+          lng: 55.13155473084771,
+          lat: 37.50960383103761,
+        },
+      },
+    };
+
+    const expectedAction = {
+      type: types.INIT_LOCATIONS,
+      locations,
+    };
+    expect(actions.initLocations(locations)).toEqual(expectedAction);
+  });
+
+  test('should create an action to add layers list', () => {
+    const layers = {
+      layers: [
+        {
+          id: 'rivers',
+          source: 'my-source',
+          'source-layer': 'waterway',
+          type: 'line',
+          paint: {
+            'line-color': '#FFC0CB',
+          },
+        },
+        {
+          id: 'museums',
+          type: 'circle',
+          source: 'museums',
+          layout: {
+            visibility: 'visible',
+          },
+          paint: {
+            'circle-radius': 8,
+            'circle-color': 'rgba(55,148,179,1)',
+          },
+          'source-layer': 'museum-cusco',
+        },
+      ],
+      groups: {
+        group2: ['E3', 'E4', 'E5'],
+      },
+    };
+    const expectedAction = {
+      type: types.ADD_LAYERS_LIST,
+      layers,
+    };
+    expect(actions.addLayersList(layers)).toEqual(expectedAction);
+  });
+});
