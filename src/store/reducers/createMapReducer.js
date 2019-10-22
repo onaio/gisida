@@ -367,6 +367,6 @@ export function createMapReducer(mapId) {
   };
 }
 
-export default {
-  'map-1': createMapReducer('map-1'),
-};
+const MAP = createMapReducer('map-1');
+
+export default MAP;
