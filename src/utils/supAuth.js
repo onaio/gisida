@@ -120,10 +120,12 @@ class SupAuthZ {
       ? files.fetchCSV(path).then(res => this.parseCSVauth(res))
       : files.fetchJSON(path);
   }
-  async getMediaAuthConfig(pk) {
+  async getMediaAuthConfig(pk, token = this.token) {
     const self = this;
+    localStorage.setItem('csvId', pk);
     return ONA.API.fetch({
-      token: this.token,
+      // token: this.token,
+      token,
       endpoint: 'metadata',
       mimeType: 'text/csv',
       extraPath: `${pk}.csv`,
