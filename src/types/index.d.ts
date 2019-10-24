@@ -1,3 +1,5 @@
+import { promises } from "fs";
+
 declare module 'gisida' {
     interface dispatch {
         (arg:any):any
@@ -96,6 +98,13 @@ declare module 'gisida' {
         export function defaultOauthC():any;
         export function defaultSupAuthC(User:object, AuthConfig:object):any
         export function defaultUnSupAuthZ():any;
+        export function authorizeUser(APP:object, AUTH:object, accessToken:string, willAuthorize?:boolean):any;
+        export function getUser():any;
+        export function getAuthConfig(pk:any):any;
+        export function getLocalAuthConfig(path:string):any;
+        export function getMediaAuthConfig(pk:any, token:string):any;
+        export function parseCSVauth(res:Array<object>):object;
+        export function defaultSupViewAuthC(path:any):any;
     }
 
     export const ONA: {
