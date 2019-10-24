@@ -113,7 +113,7 @@ declare module 'gisida' {
     export function getData(formID:number, properties:Array<any>, state:object, callback:any):any;
     export function aggregateFormData(layerData:object, locations:object, filterOptions:object, isOr:boolean):Array<any>;
     export function parseData(spec:object,datum:Array<any>):Array<any>
-    export namespace history {};
+    export namespace history {}
 
     export function oauthURL(clientID:string, callback:string, baseURL:string):string;
     export function buildParsedBasicDetailItem(detail:object, properties:object):object;
