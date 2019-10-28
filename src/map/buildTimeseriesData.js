@@ -42,10 +42,17 @@ export default function buildTimeseriesData(
         .filter(d => (d.properties || d)[layerObj.aggregate.timeseries.field] === p),
     };
     // determine if period data has any non-zero values
-    periodData[p].hasData = !!(periodData[p].data.reduce(periodHasDataReducer, 0));
+    periodData[p].hasData =
+     layerObj.aggregate.timeseries.showAllZeroPeriods ||
+      !!periodData[p].data.reduce(periodHasDataReducer, 0);
     // define admin timeseries filter
     if (layerObj.aggregate.timeseries.admin) {
       periodData[p].adminFilter = ['all', ['<=', 'startYear', Number(p)], ['>', 'endYear', Number(p)]];
+    } else if (layerObj.aggregate.timeseries.periodFilter) {
+      periodData[p].tsFilter = [
+        'all',
+        ['==', layerObj.aggregate.timeseries.field, p],
+      ];
     }
   };
 
