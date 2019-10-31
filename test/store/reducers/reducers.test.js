@@ -7,9 +7,11 @@ import {
   STYLES,
   SUPERSET_CONFIGS,
   REGIONS,
+  MAP,
 } from '../../../src/store/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
+import { isNumber } from 'util';
 
 const mapId = 'map-id';
 const layerId = 'layer-id';
@@ -890,5 +892,94 @@ describe('LAYERS', () => {
         ],
       },
     });
+  });
+});
+
+describe('MAP', () => {
+  const stateEmpty = {};
+  const stateOld = {
+    isRendered: true,
+    mapId,
+  };
+  const stateOldMapIdNoMatch = {
+    ...stateOld,
+    mapId: 'no-match-id',
+  };
+
+  it('should return the initial state', () => {
+    expect(MAP(undefined, {})).toEqual(defaultState.MAP);
+  });
+
+  it('should handle MAP_RENDERED', () => {
+    const action = {
+      type: types.MAP_RENDERED,
+      isRendered: false,
+      mapId,
+    };
+
+    // Case 1: The state object is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({ ...stateOld, isRendered: action.isRendered });
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+  });
+
+  it('should handle MAP_LOADED', () => {
+    const action = {
+      type: types.MAP_LOADED,
+      isLoaded: false,
+      mapId,
+    };
+
+    // Case 1: The state object is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId matches state.mapId
+    const expectedObj = MAP(stateOld, action);
+    const { currentRegion } = expectedObj;
+    delete expectedObj.currentRegion;
+
+    expect(typeof currentRegion).toBe('number');
+    expect(expectedObj).toEqual({
+      ...stateOld,
+      isLoaded: action.isLoaded,
+      reloadLayers: true,
+    });
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+  });
+
+  it('should handle RELOAD_LAYERS', () => {
+    const action = {
+      type: types.RELOAD_LAYERS,
+      reload: true,
+      mapId,
+    };
+
+    // Case 1: The state object is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({ ...stateOld, reloadLayers: action.reload });
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+  });
+
+  it('should handle CHANGE_STYLE', () => {
+    const action = {
+      type: types.CHANGE_STYLE,
+      style: 'mapbox://styles/mapbox/satellite-v9',
+      mapId,
+    };
+
+    // Case 1: The state object is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({ ...stateOld, currentStyle: action.style });
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
   });
 });
