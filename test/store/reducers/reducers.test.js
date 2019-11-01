@@ -11,10 +11,10 @@ import {
 } from '../../../src/store/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
-import { isNumber } from 'util';
 
 const mapId = 'map-id';
 const layerId = 'layer-id';
+const layer = { id: layerId };
 
 describe('APP', () => {
   it('should return the initial state', () => {
@@ -900,6 +900,8 @@ describe('MAP', () => {
   const stateOld = {
     isRendered: true,
     mapId,
+    layers: {},
+    reloadLayers: false,
   };
   const stateOldMapIdNoMatch = {
     ...stateOld,
@@ -981,5 +983,119 @@ describe('MAP', () => {
     expect(MAP(stateOld, action)).toEqual({ ...stateOld, currentStyle: action.style });
     // Case 2.1: action.mapId does NOT match state.mapId
     expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+  });
+
+  it('should handle CHANGE_REGION', () => {
+    const action = {
+      type: types.CHANGE_REGION,
+      region: Math.random(),
+      mapId,
+    };
+
+    // Case 1: The state object is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({ ...stateOld, currentRegion: action.region });
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+  });
+
+  it('should handle ADD_LAYER', () => {
+    const action = {
+      type: types.ADD_LAYER,
+      layer,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+    // Case 2: The state obj is not empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.1: action.mapId matches state.mapId
+    // Case 2.1.1: action.layer.id does NOT match state.layers[action.layer.id]
+    // Case 2.1.1.1: Layers that satisy default layer conditions DO NOT exist in state
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      reloadLayerId: null,
+      layers: { ...stateOld.layers, [action.layer.id]: { ...action.layer } },
+      defaultLayers: [],
+      activeLayerId: action.layer.id,
+      reloadLayers: stateOld.reloadLayers,
+    });
+
+    // Case 2.1.1.1: Layers that satisfy default layer conditions exist in state
+    const stateOldLayerDefault = {
+      ...stateOld,
+      layers: {
+        ...stateOld.layers,
+        'layer-2': {
+          id: 'layer-2',
+          visible: true,
+          nondefault: false,
+        },
+      },
+    };
+
+    expect(MAP(stateOldLayerDefault, action)).toEqual({
+      ...stateOldLayerDefault,
+      reloadLayerId: null,
+      layers: { ...stateOldLayerDefault.layers, [action.layer.id]: { ...action.layer } },
+      defaultLayers: ['layer-2'],
+      activeLayerId: action.layer.id,
+      reloadLayers: stateOldLayerDefault.reloadLayers,
+    });
+
+    // Case 2.1.2: action.layer.id matches state.layers[action.layer.id]
+    // Case 2.1.2.1: Layers that satisfy default layer conditions DO NOT exist in state
+    const stateOldLayerObjNotEmpty = {
+      ...stateOld,
+      layers: {
+        [layerId]: {
+          id: layerId,
+        },
+      },
+    };
+    const expectedObj = MAP(stateOldLayerObjNotEmpty, action);
+    const { reloadLayers } = expectedObj;
+    delete stateOldLayerObjNotEmpty.reloadLayers;
+    delete expectedObj.reloadLayers;
+
+    expect(typeof reloadLayers).toBe('number');
+    expect(expectedObj).toEqual({
+      ...stateOldLayerObjNotEmpty,
+      reloadLayerId: action.layer.id,
+      layers: { ...stateOldLayerObjNotEmpty.layers, [action.layer.id]: { ...action.layer } },
+      defaultLayers: [],
+      activeLayerId: action.layer.id,
+    });
+
+    // Case 2.1.2.1: Layers that satisfy default layer conditions exist in state
+    const stateOldLayerObjNotEmptyDefault = {
+      ...stateOldLayerObjNotEmpty,
+      layers: {
+        ...stateOldLayerObjNotEmpty.layers,
+        'layer-2': {
+          id: 'layer-2',
+          visible: true,
+          nondefault: false,
+        },
+      },
+    };
+
+    const expectedObjDefault = MAP(stateOldLayerObjNotEmptyDefault, action);
+    expect(typeof expectedObjDefault.reloadLayers).toBe('number');
+    delete stateOldLayerObjNotEmptyDefault.reloadLayers;
+    delete expectedObjDefault.reloadLayers;
+
+    expect(expectedObjDefault).toEqual({
+      ...stateOldLayerObjNotEmptyDefault,
+      reloadLayerId: action.layer.id,
+      layers: { ...stateOldLayerObjNotEmptyDefault.layers, [action.layer.id]: { ...action.layer } },
+      defaultLayers: ['layer-2'],
+      activeLayerId: action.layer.id,
+    });
   });
 });
