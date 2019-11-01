@@ -83,17 +83,18 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               });
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
+                const test = "";
                 const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g,'').replace(/}}?/g,''))
                 bodyProperties.map(val => {
-                  content = rowItem[val].split(',')
-                  if (content.length > 1) {
-                    rowItem[val] = content.join(', ')
+                  const contentArr = rowItem[val.trim()] ? rowItem[val.trim()].split(',') : []
+                  if (contentArr.length > 1) {
+                    rowItem[val] = contentArr.join(', ')
                   }
                 })
                 content =
                 `<div>` +
                   `<div><b>${row[layer.popup.header]}</b></div>` +
-                  `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>` +
+                  `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
                 `<\div>`
               } else {
                 content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
