@@ -3,7 +3,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import * as actions from './actions/actions';
 import defaultReducers from './reducers/reducers';
-import { loadJSON } from '../utils/files';
+import { loadJSON, loadSiteConfigJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
 import getData from '../connectors/ona-api/data';
@@ -147,6 +147,6 @@ export default function initStore(customReducers = {}, siteConfigUrl = 'config/s
   reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
-  loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
+  loadSiteConfigJSON(siteConfigUrl, config => addConfigToStore(store, config));
   return store;
 }
