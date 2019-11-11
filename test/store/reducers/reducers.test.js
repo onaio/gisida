@@ -917,6 +917,7 @@ describe('MAP', () => {
     layers: {},
     reloadLayers: false,
     timeseries: {},
+    activeLayerIds: [],
   };
   const stateOldMapIdNoMatch = {
     ...stateOld,
@@ -1422,5 +1423,65 @@ describe('MAP', () => {
       detailView: false,
       showFilterPanel: false,
     });
+  });
+
+  it('should handle RELOAD_LAYER', () => {
+    const action = {
+      type: types.RELOAD_LAYER,
+      mapId,
+      layerId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      reloadLayerId: action.layerId,
+    });
+  });
+
+  it('should handle LAYER_RELOADED', () => {
+    const action = {
+      type: types.LAYER_RELOADED,
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      reloadLayerId: null,
+    });
+  });
+
+  it('should handle UPDATE_PRIMARY_LAYER', () => {
+    const action = {
+      type: types.UPDATE_PRIMARY_LAYER,
+      primaryLayer: layerId,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(() => {
+      MAP(stateOld, action);
+    }).toThrow(TypeError);
   });
 });
