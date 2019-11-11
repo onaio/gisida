@@ -11,7 +11,7 @@ function formatParams(params) {
   return `?${paramsList.join('&')}`;
 }
 
-export default function getData(formID, properties, state, callback) {
+export default function getData(formID, properties, state, callback, query={}) {
   const { apiAccessToken, apiHost } = state;
   const fields = properties && Array.isArray(properties)
     ? properties.map(p => `"${p}"`).join()
@@ -21,7 +21,8 @@ export default function getData(formID, properties, state, callback) {
   const xobj = new XMLHttpRequest();
   const mimeType = 'application/json';
   const activeHost = apiHost || host;
-  const path = `${protocol}://${activeHost}/${endpoint}/${formID}.json${formatParams(queryParams)}`;
+  const queryset = `&query=${JSON.stringify(query)}`
+  const path = `${protocol}://${activeHost}/${endpoint}/${formID}.json${formatParams(queryParams)}${queryset}`;
 
   try {
     xobj.overrideMimeType(mimeType);

@@ -1,4 +1,6 @@
 import { parse } from 'papaparse';
+import * as d3 from 'd3';
+import  getData  from '../connectors/ona-api/data'
 
 function fetchURL(path, mimeType, callback) {
   const xobj = new XMLHttpRequest();
@@ -31,25 +33,31 @@ export function loadSiteConfigJSON(path, callback, id) {
   fetchURL(path, 'application/json', (response) => {
     const siteConfig = JSON.parse(response);
     const mapConfig = siteConfig.APP.mapConfig;
-    const { center, zoom, countryName, countriesUrl } = mapConfig
+    const { center, zoom, countryName, formId } = mapConfig
     if (center && zoom) {
       callback(siteConfig, id);
     }
     else {
-
-      if (!countryName || !countriesUrl) {
-        throw "countryName and countriesUrl or center and zoom must be provided in the site-config.json file";
+      if (!countryName || !formId) {
+        throw "countryName and formId or center and zoom must be provided in the site-config.json file";
       }
-      fetch(countriesUrl).then(res => res.json()).then(data => {
-        const countryConfig = data.find(item => item.Country===countryName);
-        if (!countryConfig) {throw `${countryName} was not found in this list ${countriesUrl} of countries`};
-        if (!zoom) {siteConfig.APP.mapConfig.zoom = parseFloat(countryConfig.zoom_level)};
-        siteConfig.APP.mapConfig.center = {
-          lat:countryConfig._geolocation[0],
-          lng:countryConfig._geolocation[1]
-        };
-        callback(siteConfig, id);
-      })
+      const fields = ["Country", "_geolocation", "zoom_level"]
+      const query = {"Country": countryName}
+      getData(formId, fields, siteConfig.APP, processData, query);
+
+      function processData(error, data) {     
+        if (error) {
+          throw error
+        } else {
+          if (data.length < 1) {throw `${countryName} doesn't exist in the form (${formId}) provided`};
+          if (!zoom) {siteConfig.APP.mapConfig.zoom = parseFloat(data[0].zoom_level)};
+          siteConfig.APP.mapConfig.center = {
+            lat:data[0]._geolocation[0],
+            lng:data[0]._geolocation[1]
+          };
+          callback(siteConfig, id);
+          }
+      }
     }
   });
 }
