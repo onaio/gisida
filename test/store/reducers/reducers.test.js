@@ -1483,15 +1483,15 @@ describe('MAP', () => {
     expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
 
     // Case 2.2: action.mapId matches state.mapId
-    // Case 2.2.1: state.layers obj is empty
+    // Case 2.2.1: state.layers[action.primaryLayer] is undefined
     expect(() => {
       MAP(stateOld, action);
     }).toThrow(TypeError);
 
-    // Case 2.2.2: state.layers obj is NOT empty
-    // case 2.2.2.1.1: action.primary matches last item in state.activeLayerIds
-    // Case 2.2.2.2.1: state.layers[action.primaryLayer].aggregate is undefined
-    // Case 2.2.2.3.1: state.showFilterPanel is false
+    // Case 2.2.2: state.layers[action.primaryLayer] is defined
+    // case 2.2.2.1: action.primaryLayer matches last item in state.activeLayerIds
+    // Case 2.2.2.1.1: state.layers[action.primaryLayer].aggregate is undefined
+    // Case 2.2.2.1.1.1: state.showFilterPanel is false
     expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
       ...stateOldLayerObjNotEmpty,
       detailView: null,
@@ -1505,13 +1505,27 @@ describe('MAP', () => {
       showFilterPanel: undefined,
     });
 
-    // Case 2.2.2.1.2: action.primary does NOT match last item in state.activeLayerIds
-    // Case 2.2.2.2.2.1: state.layers[action.primaryLayer].aggregate is defined,
-    // state.layers[action.primaryLayer].aggregate.filter is undefined
-    // Case 2.2.2.3.2: state.showFilterPanel is true
-    const stateOldLayersAggregateFilterUndefined = {
+    // Case 2.2.2.1.1.2: state.showFilterPanel is true
+    const stateOldShowFilterPanelTrue = {
       ...stateOldLayerObjNotEmpty,
       showFilterPanel: true,
+    };
+    expect(MAP(stateOldShowFilterPanelTrue, action)).toEqual({
+      ...stateOldShowFilterPanelTrue,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: stateOldShowFilterPanelTrue.activeLayerIds,
+      filter: {
+        ...stateOldShowFilterPanelTrue.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.1.2: state.layers[action.primaryLayer].aggregate is defined
+    const stateOldAggregate = {
+      ...stateOldLayerObjNotEmpty,
       layers: {
         ...stateOldLayerObjNotEmpty.layers,
         [layerId]: {
@@ -1526,44 +1540,216 @@ describe('MAP', () => {
           },
         },
       },
-      activeLayerIds: [layerId, layerId2],
     };
-    expect(MAP(stateOldLayersAggregateFilterUndefined, action)).toEqual({
-      ...stateOldLayersAggregateFilterUndefined,
+    // Case 2.2.2.1.2.1: state.layers[action.primaryLayer].aggregate.filter is undefined
+    // Case 2.2.2.1.2.1.1: state.showFilterPanel is false
+    expect(MAP(stateOldAggregate, action)).toEqual({
+      ...stateOldAggregate,
       detailView: null,
       activeLayerId: action.primaryLayer,
       primaryLayer: action.primaryLayer,
-      activeLayerIds: [layerId2, layerId],
+      activeLayerIds: stateOldAggregate.activeLayerIds,
       filter: {
-        ...stateOldLayersAggregateFilterUndefined.filter,
+        ...stateOldAggregate.filter,
         layerId: false,
       },
       showFilterPanel: undefined,
     });
 
-    // Case 2.2.2.2.2.2: state.layers[action.primaryLayer].aggregate is defined,
-    // state.layers[action.primaryLayer].aggregate.filter is defined
-    const stateOldLayersAggregateFilterDefined = {
-      ...stateOldLayersAggregateFilterUndefined,
+    // Case 2.2.2.1.2.1.2: state.showFilterPanel is true
+    const stateOldAggregateShowFilterPanelTrue = {
+      ...stateOldAggregate,
+      showFilterPanel: true,
+    };
+    expect(MAP(stateOldAggregateShowFilterPanelTrue, action)).toEqual({
+      ...stateOldAggregateShowFilterPanelTrue,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: stateOldAggregateShowFilterPanelTrue.activeLayerIds,
+      filter: {
+        ...stateOldAggregateShowFilterPanelTrue.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.1.2.2: state.layers[action.primaryLayer].aggregate.filter is defined
+    // Case 2.2.2.1.2.2.1: state.showFilterPanel is false
+    const stateOldAggregateFilter = {
+      ...stateOldAggregate,
       layers: {
-        ...stateOldLayersAggregateFilterUndefined.layers,
+        ...stateOldAggregate.layers,
         [layerId]: {
-          ...stateOldLayersAggregateFilterUndefined.layers[layerId],
+          ...stateOldAggregate.layers[layerId],
           aggregate: {
-            ...stateOldLayersAggregateFilterUndefined.layers[layerId].aggregate,
+            ...stateOldAggregate.layers[layerId].aggregate,
             filter: ['filter1', 'filter2'],
           },
         },
       },
     };
-    expect(MAP(stateOldLayersAggregateFilterDefined, action)).toEqual({
-      ...stateOldLayersAggregateFilterDefined,
+    expect(MAP(stateOldAggregateFilter, action)).toEqual({
+      ...stateOldAggregateFilter,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: stateOldAggregateFilter.activeLayerIds,
+      filter: {
+        ...stateOldAggregateFilter.filter,
+        layerId: action.primaryLayer,
+      },
+      showFilterPanel: false,
+    });
+
+    // Case 2.2.2.1.2.2.2: state.showFilterPanel is true
+    const stateOldAggregateFilterShowFilterPanel = {
+      ...stateOldAggregateFilter,
+      showFilterPanel: true,
+    };
+    expect(MAP(stateOldAggregateFilterShowFilterPanel, action)).toEqual({
+      ...stateOldAggregateFilterShowFilterPanel,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: stateOldAggregateFilterShowFilterPanel.activeLayerIds,
+      filter: {
+        ...stateOldAggregateFilterShowFilterPanel.filter,
+        layerId: action.primaryLayer,
+      },
+      showFilterPanel: true,
+    });
+
+    // Case 2.2.2.2: action.primaryLayer does NOT match last item in state.activeLayerIds
+    const stateOldActiveLayerNoMatch = {
+      ...stateOldLayerObjNotEmpty,
+      activeLayerIds: [layerId, layerId2],
+    };
+    // Case 2.2.2.2.1: state.layers[action.primaryLayer].aggregate is undefined
+    // Case 2.2.2.2.1.1: state.showFilterPanel is false
+    expect(MAP(stateOldActiveLayerNoMatch, action)).toEqual({
+      ...stateOldActiveLayerNoMatch,
       detailView: null,
       activeLayerId: action.primaryLayer,
       primaryLayer: action.primaryLayer,
       activeLayerIds: [layerId2, layerId],
       filter: {
-        ...stateOldLayersAggregateFilterDefined.filter,
+        ...stateOldActiveLayerNoMatch.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.2.1.2: state.showFilterPanel is true
+    const stateOldActiveLayerNoMatchShowFilterPanel = {
+      ...stateOldActiveLayerNoMatch,
+      showFilterPanel: true,
+    };
+    expect(MAP(stateOldActiveLayerNoMatchShowFilterPanel, action)).toEqual({
+      ...stateOldActiveLayerNoMatchShowFilterPanel,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldActiveLayerNoMatchShowFilterPanel.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.2.2: state.layers[action.primaryLayer].aggregate is defined
+    const stateOldActiveLayerNoMatchAggregate = {
+      ...stateOldActiveLayerNoMatch,
+      layers: {
+        ...stateOldActiveLayerNoMatch.layers,
+        [layerId]: {
+          ...stateOldActiveLayerNoMatch.layers[layerId],
+          layers: [layerId2],
+          type: 'line',
+          credit: '',
+          aggregate: {
+            timeseries: {
+              field: 'period',
+            },
+          },
+        },
+      },
+    };
+    // Case 2.2.2.2.2.1: state.layers[action.primaryLayer].aggregate.filter is undefined
+    // Case 2.2.2.2.2.1.1: state.showFilterPanel is false
+    expect(MAP(stateOldActiveLayerNoMatchAggregate, action)).toEqual({
+      ...stateOldActiveLayerNoMatchAggregate,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldActiveLayerNoMatchAggregate.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.2.2.1.2: state.showFilterPanel is true
+    const stateOldActiveLayerNoMatchAggregateShowFilterPanel = {
+      ...stateOldActiveLayerNoMatchAggregate,
+      showFilterPanel: true,
+    };
+    expect(MAP(stateOldActiveLayerNoMatchAggregateShowFilterPanel, action)).toEqual({
+      ...stateOldActiveLayerNoMatchAggregateShowFilterPanel,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldActiveLayerNoMatchAggregateShowFilterPanel.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.2.2.2: state.layers[action.primaryLayer].aggregate.filter is defined
+    // Case 2.2.2.2.2.2.1: state.showFilterPanel is false
+    const stateOldActiveLayerNoMatchAggregateFilter = {
+      ...stateOldActiveLayerNoMatchAggregate,
+      layers: {
+        ...stateOldActiveLayerNoMatchAggregate.layers,
+        [layerId]: {
+          ...stateOldActiveLayerNoMatchAggregate.layers[layerId],
+          aggregate: {
+            ...stateOldActiveLayerNoMatchAggregate.layers[layerId].aggregate,
+            filter: ['filter1', 'filter2'],
+          },
+        },
+      },
+    };
+    expect(MAP(stateOldActiveLayerNoMatchAggregateFilter, action)).toEqual({
+      ...stateOldActiveLayerNoMatchAggregateFilter,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldActiveLayerNoMatchAggregateFilter.filter,
+        layerId: action.primaryLayer,
+      },
+      showFilterPanel: false,
+    });
+
+    // Case 2.2.2.2.2.2.2: state.showFilterPanel is true
+    const stateOldActiveLayerNoMatchAggregateFilterShowFilterPanel = {
+      ...stateOldActiveLayerNoMatchAggregateFilter,
+      showFilterPanel: true,
+    };
+    expect(MAP(stateOldActiveLayerNoMatchAggregateFilterShowFilterPanel, action)).toEqual({
+      ...stateOldActiveLayerNoMatchAggregateFilterShowFilterPanel,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldActiveLayerNoMatchAggregateFilterShowFilterPanel.filter,
         layerId: action.primaryLayer,
       },
       showFilterPanel: true,
