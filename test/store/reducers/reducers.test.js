@@ -923,6 +923,7 @@ describe('MAP', () => {
     showFilterPanel: false,
     menuIsOpen: false,
     oldLayerObjs: {},
+    openCategories: ['category1', 'category2'],
   };
   const stateOldMapIdNoMatch = {
     ...stateOld,
@@ -1747,6 +1748,66 @@ describe('MAP', () => {
       oldLayerObjs: {
         [action.oldLayer.id]: action.oldLayer,
       },
+    });
+  });
+
+  it('should handle TOGGLE_CATEGORIES', () => {
+    const category = 'category3';
+    const index = 0;
+    const isRefresh = false;
+    const action = {
+      type: types.TOGGLE_CATEGORIES,
+      category,
+      index,
+      isRefresh,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.2.1: action.index > -1
+    // Case 2.2.1.1: action.isRefresh is false
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      openCategories: ['category2'],
+    });
+
+    // Case 2.2.1.2: action.isRefresh is true
+    const actionWithRefresh = {
+      ...action,
+      isRefresh: true,
+    };
+    expect(MAP(stateOld, actionWithRefresh)).toEqual({
+      ...stateOld,
+      openCategories: [],
+    });
+
+    // Case 2.2.2: action.index is < 0
+    // Case 2.2.2.1: action.isRefresh is false
+    const actionIndexLessThanZero = {
+      ...action,
+      index: -1,
+    };
+
+    expect(MAP(stateOld, actionIndexLessThanZero)).toEqual({
+      ...stateOld,
+      openCategories: [...stateOld.openCategories, action.category],
+    });
+
+    // Case 2.2.2.2: action.isRefresh is true
+    const actionIndexLessZeroWithRefresh = {
+      ...actionIndexLessThanZero,
+      isRefresh: true,
+    };
+    expect(MAP(stateOld, actionIndexLessZeroWithRefresh)).toEqual({
+      ...stateOld,
+      openCategories: [],
     });
   });
 });
