@@ -918,6 +918,11 @@ describe('MAP', () => {
     reloadLayers: false,
     timeseries: {},
     activeLayerIds: [],
+    filter: {},
+    detailView: null,
+    showFilterPanel: false,
+    menuIsOpen: false,
+    oldLayerObjs: {},
   };
   const stateOldMapIdNoMatch = {
     ...stateOld,
@@ -929,9 +934,6 @@ describe('MAP', () => {
       [layerId]: layer,
     },
     activeLayerIds: [layerId],
-    filter: {},
-    detailView: null,
-    showFilterPanel: false,
   };
 
   it('should return the initial state', () => {
@@ -1199,7 +1201,7 @@ describe('MAP', () => {
             timeseries: {
               field: 'period',
             },
-            filter: {},
+            filter: [],
           },
         },
         [layerId2]: layer2,
@@ -1480,8 +1482,271 @@ describe('MAP', () => {
     expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
 
     // Case 2.2: action.mapId matches state.mapId
+    // Case 2.2.1: state.layers obj is empty
     expect(() => {
       MAP(stateOld, action);
     }).toThrow(TypeError);
+
+    // Case 2.2.2: state.layers obj is NOT empty
+    // case 2.2.2.1.1: action.primary matches last item in state.activeLayerIds
+    // Case 2.2.2.2.1: state.layers[action.primaryLayer].aggregate is undefined
+    // Case 2.2.2.3.1: state.showFilterPanel is false
+    expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
+      ...stateOldLayerObjNotEmpty,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: stateOldLayerObjNotEmpty.activeLayerIds,
+      filter: {
+        ...stateOldLayerObjNotEmpty.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.1.2: action.primary does NOT match last item in state.activeLayerIds
+    // Case 2.2.2.2.2.1: state.layers[action.primaryLayer].aggregate is defined,
+    // state.layers[action.primaryLayer].aggregate.filter is undefined
+    // Case 2.2.2.3.2: state.showFilterPanel is true
+    const stateOldLayersAggregateFilterUndefined = {
+      ...stateOldLayerObjNotEmpty,
+      showFilterPanel: true,
+      layers: {
+        ...stateOldLayerObjNotEmpty.layers,
+        [layerId]: {
+          ...stateOldLayerObjNotEmpty.layers[layerId],
+          layers: [layerId2],
+          type: 'line',
+          credit: '',
+          aggregate: {
+            timeseries: {
+              field: 'period',
+            },
+          },
+        },
+      },
+      activeLayerIds: [layerId, layerId2],
+    };
+    expect(MAP(stateOldLayersAggregateFilterUndefined, action)).toEqual({
+      ...stateOldLayersAggregateFilterUndefined,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldLayersAggregateFilterUndefined.filter,
+        layerId: false,
+      },
+      showFilterPanel: undefined,
+    });
+
+    // Case 2.2.2.2.2.2: state.layers[action.primaryLayer].aggregate is defined,
+    // state.layers[action.primaryLayer].aggregate.filter is defined
+    const stateOldLayersAggregateFilterDefined = {
+      ...stateOldLayersAggregateFilterUndefined,
+      layers: {
+        ...stateOldLayersAggregateFilterUndefined.layers,
+        [layerId]: {
+          ...stateOldLayersAggregateFilterUndefined.layers[layerId],
+          aggregate: {
+            ...stateOldLayersAggregateFilterUndefined.layers[layerId].aggregate,
+            filter: ['filter1', 'filter2'],
+          },
+        },
+      },
+    };
+    expect(MAP(stateOldLayersAggregateFilterDefined, action)).toEqual({
+      ...stateOldLayersAggregateFilterDefined,
+      detailView: null,
+      activeLayerId: action.primaryLayer,
+      primaryLayer: action.primaryLayer,
+      activeLayerIds: [layerId2, layerId],
+      filter: {
+        ...stateOldLayersAggregateFilterDefined.filter,
+        layerId: action.primaryLayer,
+      },
+      showFilterPanel: true,
+    });
+  });
+
+  it('should handle TOGGLE_FILTER', () => {
+    const action = {
+      type: types.TOGGLE_FILTER,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      detailView: null,
+      showFilterPanel: !stateOld.showFilterPanel,
+    });
+  });
+
+  it('should handle SET_LAYER_FILTERS', () => {
+    const action = {
+      type: types.SET_LAYER_FILTERS,
+      layerId,
+      layerFilters: ['all'],
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.1:  state.layers[action.layerId] is undefined
+    expect(() => {
+      MAP(stateOld, action);
+    }).toThrow(TypeError);
+
+    // Case 2.2.2: state.layers[action.layerId] is defined
+    // Case 2.2.2.1.1: state.layers[action.layerId].filters is undefined
+    // Case 2.2.2.2.1: action.name is undefined
+    expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
+      ...stateOldLayerObjNotEmpty,
+      layers: {
+        ...stateOldLayerObjNotEmpty.layers,
+        [layerId]: {
+          ...stateOldLayerObjNotEmpty.layers[layerId],
+          filters: {
+            layerFilters: action.layerFilters,
+          },
+        },
+      },
+      doApplyFilters: true,
+    });
+
+    // Case 2.2.2.1.2: state.layers[action.layerId].filters is defined
+    // Case 2.2.2.2.2: action.name is defined
+    const actionNameDefined = {
+      ...action,
+      name: 'name',
+    };
+    const stateOldLayerObjFiltersDefined = {
+      ...stateOldLayerObjNotEmpty,
+      layers: {
+        ...stateOldLayerObjNotEmpty.layers,
+        [layerId]: {
+          ...stateOldLayerObjNotEmpty.layers[layerId],
+          filters: {
+            oldFilter: ['all'],
+          },
+        },
+      },
+    };
+    expect(MAP(stateOldLayerObjFiltersDefined, actionNameDefined)).toEqual({
+      ...stateOldLayerObjFiltersDefined,
+      layers: {
+        ...stateOldLayerObjFiltersDefined.layers,
+        [layerId]: {
+          ...stateOldLayerObjFiltersDefined.layers[layerId],
+          filters: {
+            ...stateOldLayerObjFiltersDefined.layers[layerId].filters,
+            name: action.layerFilters,
+          },
+        },
+      },
+      doApplyFilters: true,
+    });
+  });
+
+  it('should handle FILTERS_UPDATED', () => {
+    const action = {
+      type: types.FILTERS_UPDATED,
+      mapId,
+      layerId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      doApplyFilters: false,
+    });
+  });
+
+  it('should handle TOGGLE_MENU', () => {
+    const action = {
+      type: types.TOGGLE_MENU,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      menuIsOpen: !stateOld.menuIsOpen,
+    });
+  });
+
+  it('should handle RESET_FILTERED_LAYER', () => {
+    const action = {
+      type: types.RESET_FILTERED_LAYER,
+      mapId,
+      oldLayer: layer,
+    };
+
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.2.1: state.oldLayerObjs[action.oldLayer.id] is undefined
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      oldLayerObjs: {
+        [action.oldLayer.id]: action.oldLayer,
+      },
+    });
+
+    // Case 2.2.2: state.oldLayerObjs[action.oldLayer.id] is defined
+    const stateOldOldLayerDefined = {
+      ...stateOld,
+      oldLayerObjs: {
+        [layerId]: {
+          ...layer,
+          layers: [layerId2],
+          type: 'line',
+          credit: '',
+          aggregate: {
+            timeseries: {
+              field: 'period',
+            },
+          },
+        },
+      },
+    };
+    expect(MAP(stateOldOldLayerDefined, action)).toEqual({
+      ...stateOldOldLayerDefined,
+      oldLayerObjs: {
+        [action.oldLayer.id]: action.oldLayer,
+      },
+    });
   });
 });

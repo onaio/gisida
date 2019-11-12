@@ -99,15 +99,15 @@ describe('actions', () => {
     expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
-  // added by Philipp
   test('should create an action to set layer filter', () => {
+    const layerFilters = ['all'];
     const expectedAction = {
       type: types.SET_LAYER_FILTERS,
-      // layerId,
-      // layerFilters,
+      layerId,
+      layerFilters,
       mapId,
     };
-    expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
+    expect(actions.setLayerFilter(mapId, layerId, layerFilters)).toEqual(expectedAction);
   });
 
   // added by Philipp
