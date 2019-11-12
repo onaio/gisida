@@ -929,7 +929,7 @@ describe('MAP', () => {
     ...stateOld,
     mapId: 'no-match-id',
   };
-  const stateOldLayerObjNotEmpty = {
+  const stateOldLayersNotEmpty = {
     ...stateOld,
     layers: {
       [layerId]: layer,
@@ -1075,38 +1075,38 @@ describe('MAP', () => {
 
     // Case 2.2.2: action.layer.id matches state.layers[action.layer.id]
     // Case 2.2.2.1: Layers that satisfy default layer conditions DO NOT exist in state
-    const expectedObj = MAP(stateOldLayerObjNotEmpty, action);
+    const expectedObj = MAP(stateOldLayersNotEmpty, action);
     const { reloadLayers } = expectedObj;
-    delete stateOldLayerObjNotEmpty.reloadLayers;
+    delete stateOldLayersNotEmpty.reloadLayers;
     delete expectedObj.reloadLayers;
 
     expect(typeof reloadLayers).toBe('number');
     expect(expectedObj).toEqual({
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       reloadLayerId: action.layer.id,
-      layers: { ...stateOldLayerObjNotEmpty.layers, [action.layer.id]: { ...action.layer } },
+      layers: { ...stateOldLayersNotEmpty.layers, [action.layer.id]: { ...action.layer } },
       defaultLayers: [],
       activeLayerId: action.layer.id,
     });
 
     // Case 2.2.2.2: Layers that satisfy default layer conditions exist in state
-    const stateOldLayerObjNotEmptyDefault = {
-      ...stateOldLayerObjNotEmpty,
+    const stateOldLayersNotEmptyDefault = {
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId2]: layer2,
       },
     };
 
-    const expectedObjDefault = MAP(stateOldLayerObjNotEmptyDefault, action);
+    const expectedObjDefault = MAP(stateOldLayersNotEmptyDefault, action);
     expect(typeof expectedObjDefault.reloadLayers).toBe('number');
-    delete stateOldLayerObjNotEmptyDefault.reloadLayers;
+    delete stateOldLayersNotEmptyDefault.reloadLayers;
     delete expectedObjDefault.reloadLayers;
 
     expect(expectedObjDefault).toEqual({
-      ...stateOldLayerObjNotEmptyDefault,
+      ...stateOldLayersNotEmptyDefault,
       reloadLayerId: action.layer.id,
-      layers: { ...stateOldLayerObjNotEmptyDefault.layers, [action.layer.id]: { ...action.layer } },
+      layers: { ...stateOldLayersNotEmptyDefault.layers, [action.layer.id]: { ...action.layer } },
       defaultLayers: [layerId2],
       activeLayerId: action.layer.id,
     });
@@ -1152,31 +1152,31 @@ describe('MAP', () => {
     // Case 2.2.2.1.5.1: state.layers[action.layerId].aggregate does NOT exist
     // Case 2.2.2.1.6.1: state.detailView is NULL
     // Case 2.2.2.1.7.1: state.showFilterPanel is false
-    const expectedObj = MAP(stateOldLayerObjNotEmpty, action);
+    const expectedObj = MAP(stateOldLayersNotEmpty, action);
     const { reloadLayers } = expectedObj;
-    delete stateOldLayerObjNotEmpty.reloadLayers;
+    delete stateOldLayersNotEmpty.reloadLayers;
     delete expectedObj.reloadLayers;
 
     expect(typeof reloadLayers).toBe('number');
     expect(expectedObj).toEqual({
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       primarySubLayer: undefined,
       activeLayerId: action.layerId,
       lastLayerSelected: action.layerId,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           visible: action.isInit,
         },
       },
       showSpinner: true,
       visibleLayerId: layerId,
       primaryLayer: layerId,
-      timeseries: stateOldLayerObjNotEmpty.timeseries,
-      activeLayerIds: stateOldLayerObjNotEmpty.activeLayerIds,
+      timeseries: stateOldLayersNotEmpty.timeseries,
+      activeLayerIds: stateOldLayersNotEmpty.activeLayerIds,
       filter: {
-        ...stateOldLayerObjNotEmpty.filter,
+        ...stateOldLayersNotEmpty.filter,
         layerId: '',
       },
       detailView: null,
@@ -1190,11 +1190,11 @@ describe('MAP', () => {
     // Case 2.2.2.1.6.2.1: state.detailView is NOT null, state.detailView.layerId === action.layerId
     // Case 2.2.2.1.7.2: state.showFilterPanel is true
     const stateOldLayerObjLayersExists = {
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           layers: [layerId2],
           type: 'line',
           credit: '',
@@ -1313,32 +1313,32 @@ describe('MAP', () => {
     // Case 2.2.2.2.5.1: state.layers[action.layerId].aggregate does NOT exist
     // Case 2.2.2.2.6.1: state.detailView is NULL
     // Case 2.2.2.2.7.1: state.showFilterPanel is false
-    const expectedObjInitFalse = MAP(stateOldLayerObjNotEmpty, actionInitFalse);
+    const expectedObjInitFalse = MAP(stateOldLayersNotEmpty, actionInitFalse);
 
     expect(typeof expectedObjInitFalse.reloadLayers).toBe('number');
 
-    delete stateOldLayerObjNotEmpty.reloadLayers;
+    delete stateOldLayersNotEmpty.reloadLayers;
     delete expectedObjInitFalse.reloadLayers;
 
     expect(expectedObjInitFalse).toEqual({
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       primarySubLayer: undefined,
       activeLayerId: undefined,
       lastLayerSelected: undefined,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           visible: false,
         },
       },
       showSpinner: false,
       visibleLayerId: undefined,
       primaryLayer: undefined,
-      timeseries: stateOldLayerObjNotEmpty.timeseries,
+      timeseries: stateOldLayersNotEmpty.timeseries,
       activeLayerIds: [],
       filter: {
-        ...stateOldLayerObjNotEmpty.filter,
+        ...stateOldLayersNotEmpty.filter,
         layerId: '',
       },
       detailView: null,
@@ -1492,14 +1492,14 @@ describe('MAP', () => {
     // case 2.2.2.1: action.primaryLayer matches last item in state.activeLayerIds
     // Case 2.2.2.1.1: state.layers[action.primaryLayer].aggregate is undefined
     // Case 2.2.2.1.1.1: state.showFilterPanel is false
-    expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
-      ...stateOldLayerObjNotEmpty,
+    expect(MAP(stateOldLayersNotEmpty, action)).toEqual({
+      ...stateOldLayersNotEmpty,
       detailView: null,
       activeLayerId: action.primaryLayer,
       primaryLayer: action.primaryLayer,
-      activeLayerIds: stateOldLayerObjNotEmpty.activeLayerIds,
+      activeLayerIds: stateOldLayersNotEmpty.activeLayerIds,
       filter: {
-        ...stateOldLayerObjNotEmpty.filter,
+        ...stateOldLayersNotEmpty.filter,
         layerId: false,
       },
       showFilterPanel: undefined,
@@ -1507,7 +1507,7 @@ describe('MAP', () => {
 
     // Case 2.2.2.1.1.2: state.showFilterPanel is true
     const stateOldShowFilterPanelTrue = {
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       showFilterPanel: true,
     };
     expect(MAP(stateOldShowFilterPanelTrue, action)).toEqual({
@@ -1525,11 +1525,11 @@ describe('MAP', () => {
 
     // Case 2.2.2.1.2: state.layers[action.primaryLayer].aggregate is defined
     const stateOldAggregate = {
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           layers: [layerId2],
           type: 'line',
           credit: '',
@@ -1622,7 +1622,7 @@ describe('MAP', () => {
 
     // Case 2.2.2.2: action.primaryLayer does NOT match last item in state.activeLayerIds
     const stateOldActiveLayerNoMatch = {
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       activeLayerIds: [layerId, layerId2],
     };
     // Case 2.2.2.2.1: state.layers[action.primaryLayer].aggregate is undefined
@@ -1800,12 +1800,12 @@ describe('MAP', () => {
     // Case 2.2.2: state.layers[action.layerId] is defined
     // Case 2.2.2.1: state.layers[action.layerId].filters is undefined
     // Case 2.2.2.1.1: action.name is undefined
-    expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
-      ...stateOldLayerObjNotEmpty,
+    expect(MAP(stateOldLayersNotEmpty, action)).toEqual({
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           filters: {
             layerFilters: action.layerFilters,
           },
@@ -1819,12 +1819,12 @@ describe('MAP', () => {
       ...action,
       name: 'name',
     };
-    expect(MAP(stateOldLayerObjNotEmpty, actionNameDefined)).toEqual({
-      ...stateOldLayerObjNotEmpty,
+    expect(MAP(stateOldLayersNotEmpty, actionNameDefined)).toEqual({
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           filters: {
             [actionNameDefined.name]: actionNameDefined.layerFilters,
           },
@@ -1835,11 +1835,11 @@ describe('MAP', () => {
 
     // Case 2.2.2.2: state.layers[action.layerId].filters is defined
     const stateOldLayerObjFiltersDefined = {
-      ...stateOldLayerObjNotEmpty,
+      ...stateOldLayersNotEmpty,
       layers: {
-        ...stateOldLayerObjNotEmpty.layers,
+        ...stateOldLayersNotEmpty.layers,
         [layerId]: {
-          ...stateOldLayerObjNotEmpty.layers[layerId],
+          ...stateOldLayersNotEmpty.layers[layerId],
           filters: {
             oldFilter: ['all'],
           },
