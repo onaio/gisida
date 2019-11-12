@@ -1606,14 +1606,14 @@ describe('MAP', () => {
     expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
 
     // Case 2.2: action.mapId matches state.mapId
-    // Case 2.1:  state.layers[action.layerId] is undefined
+    // Case 2.2.1:  state.layers[action.layerId] is undefined
     expect(() => {
       MAP(stateOld, action);
     }).toThrow(TypeError);
 
     // Case 2.2.2: state.layers[action.layerId] is defined
-    // Case 2.2.2.1.1: state.layers[action.layerId].filters is undefined
-    // Case 2.2.2.2.1: action.name is undefined
+    // Case 2.2.2.1: state.layers[action.layerId].filters is undefined
+    // Case 2.2.2.1.1: action.name is undefined
     expect(MAP(stateOldLayerObjNotEmpty, action)).toEqual({
       ...stateOldLayerObjNotEmpty,
       layers: {
@@ -1628,12 +1628,26 @@ describe('MAP', () => {
       doApplyFilters: true,
     });
 
-    // Case 2.2.2.1.2: state.layers[action.layerId].filters is defined
-    // Case 2.2.2.2.2: action.name is defined
+    // Case 2.2.2.1.2: action.name is defined
     const actionNameDefined = {
       ...action,
       name: 'name',
     };
+    expect(MAP(stateOldLayerObjNotEmpty, actionNameDefined)).toEqual({
+      ...stateOldLayerObjNotEmpty,
+      layers: {
+        ...stateOldLayerObjNotEmpty.layers,
+        [layerId]: {
+          ...stateOldLayerObjNotEmpty.layers[layerId],
+          filters: {
+            [actionNameDefined.name]: actionNameDefined.layerFilters,
+          },
+        },
+      },
+      doApplyFilters: true,
+    });
+
+    // Case 2.2.2.2: state.layers[action.layerId].filters is defined
     const stateOldLayerObjFiltersDefined = {
       ...stateOldLayerObjNotEmpty,
       layers: {
@@ -1646,6 +1660,24 @@ describe('MAP', () => {
         },
       },
     };
+
+    // Case 2.2.2.2.1: action.name is undefined
+    expect(MAP(stateOldLayerObjFiltersDefined, action)).toEqual({
+      ...stateOldLayerObjFiltersDefined,
+      layers: {
+        ...stateOldLayerObjFiltersDefined.layers,
+        [layerId]: {
+          ...stateOldLayerObjFiltersDefined.layers[layerId],
+          filters: {
+            ...stateOldLayerObjFiltersDefined.layers[layerId].filters,
+            layerFilters: action.layerFilters,
+          },
+        },
+      },
+      doApplyFilters: true,
+    });
+
+    // Case 2.2.2.2.2: action.name is defined
     expect(MAP(stateOldLayerObjFiltersDefined, actionNameDefined)).toEqual({
       ...stateOldLayerObjFiltersDefined,
       layers: {
@@ -1654,7 +1686,7 @@ describe('MAP', () => {
           ...stateOldLayerObjFiltersDefined.layers[layerId],
           filters: {
             ...stateOldLayerObjFiltersDefined.layers[layerId].filters,
-            name: action.layerFilters,
+            [actionNameDefined.name]: actionNameDefined.layerFilters,
           },
         },
       },
