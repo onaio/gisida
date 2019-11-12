@@ -203,14 +203,28 @@ describe('actions', () => {
     expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
   });
 
-  // added by Philipp
   test('should create an action to view in detail', () => {
+    const payload = {
+      model: {
+        title: 'Title',
+        subTitle: 'SubTitle',
+      },
+      layerId,
+      properties: null,
+      detailSpec: {
+        title: 'title',
+        'sub-title': 'sub-title',
+        'basic-info': 'basic-info',
+        'image-url': 'url',
+      },
+    };
+
     const expectedAction = {
       type: types.DETAIL_VIEW,
       mapId,
-      // payload,
+      payload,
     };
-    expect(actions.detailView(mapId)).toEqual(expectedAction);
+    expect(actions.detailView(mapId, payload)).toEqual(expectedAction);
   });
 
   test('should create an action to turn off spinner', () => {

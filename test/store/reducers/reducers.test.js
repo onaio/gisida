@@ -2028,4 +2028,105 @@ describe('MAP', () => {
       openCategories: [],
     });
   });
+
+  it('should handle DETAIL_VIEW', () => {
+    const payload = {
+      model: {
+        title: 'Title',
+        subTitle: 'SubTitle',
+      },
+      layerId,
+      properties: {
+        title: 'title',
+        'sub-title': 'sub-title',
+        'basic-info': 'basic-info',
+        'image-url': 'url',
+      },
+      detailSpec: {
+        title: 'title',
+        'sub-title': 'sub-title',
+        'basic-info': 'basic-info',
+        'image-url': 'url',
+      },
+    };
+    const action = {
+      type: types.DETAIL_VIEW,
+      mapId,
+      payload,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.1: action.payload is null
+    const actionUndefinedPayload = {
+      ...action,
+      payload: null,
+    };
+    expect(MAP(stateOld, actionUndefinedPayload)).toEqual({
+      ...stateOld,
+      detailView: null,
+    });
+
+    // Case 2.2: action.payload is NOT null
+    // Case 2.2.1: action.payload.properties is NOT null
+    // Case 2.2.1.1: action.payload.layerId is NOT null
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      showFilterPanel: false,
+      detailView: {
+        model: action.payload.model,
+        spec: action.payload.detailSpec,
+        properties: action.payload.properties,
+        layerId: action.payload.layerId,
+      },
+    });
+
+    // Case 2.2.1.2: action.payload.layerId is null
+    const actionPayloadLayerIdNull = {
+      ...action,
+      payload: {
+        ...action.payload,
+        layerId: null,
+      },
+    };
+    expect(MAP(stateOld, actionPayloadLayerIdNull)).toEqual({
+      ...stateOld,
+      showFilterPanel: stateOld.showFilterPanel,
+      detailView: null,
+    });
+
+    // Case 2.2.2: action.payload.properties is null
+    const actionPayloadPropertiesNull = {
+      ...action,
+      payload: {
+        ...action.payload,
+        properties: null,
+      },
+    };
+    // Case 2.2.2.1: action.payload.layerId is NOT null
+    expect(MAP(stateOld, actionPayloadPropertiesNull)).toEqual({
+      ...stateOld,
+      showFilterPanel: stateOld.showFilterPanel,
+      detailView: null,
+    });
+
+    // Case 2.2.2.2: action.payload.layerId is null
+    const actionPayloadPropertiesNullLayerIdNull = {
+      ...actionPayloadPropertiesNull,
+      payload: {
+        ...actionPayloadPropertiesNull.payload,
+        layerId: null,
+      },
+    };
+    expect(MAP(stateOld, actionPayloadPropertiesNullLayerIdNull)).toEqual({
+      ...stateOld,
+      showFilterPanel: stateOld.showFilterPanel,
+      detailView: null,
+    });
+  });
 });
