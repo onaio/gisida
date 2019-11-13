@@ -199,8 +199,9 @@ describe('actions', () => {
       type: types.UPDATE_TIMESERIES,
       timeseries,
       mapId,
+      layerId,
     };
-    expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
+    expect(actions.updateTimeseries(mapId, timeseries, layerId)).toEqual(expectedAction);
   });
 
   test('should create an action to view in detail', () => {
