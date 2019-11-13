@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash.clonedeep';
 import {
   APP,
   FILTER,
@@ -2127,6 +2128,49 @@ describe('MAP', () => {
       ...stateOld,
       showFilterPanel: stateOld.showFilterPanel,
       detailView: null,
+    });
+  });
+
+  it('should handle REQUEST_DATA', () => {
+    const action = {
+      type: types.REQUEST_DATA,
+      layerId,
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.2.1: state.layers[action.layerdId] is undefined
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      showSpinner: true,
+      layers: cloneDeep({
+        ...stateOld.layers,
+        [action.layerId]: {
+          ...stateOld.layers[action.layerId],
+          isLoading: true,
+          loaded: false,
+        },
+      }),
+    });
+
+    // Case 2.2.2: state.layers[action.layerId] is defined
+    expect(MAP(stateOldLayersNotEmpty, action)).toEqual({
+      ...stateOldLayersNotEmpty,
+      showSpinner: true,
+      layers: cloneDeep({
+        ...stateOldLayersNotEmpty.layers,
+        [action.layerId]: {
+          ...stateOldLayersNotEmpty.layers[action.layerId],
+          isLoading: true,
+          loaded: false,
+        },
+      }),
     });
   });
 });
