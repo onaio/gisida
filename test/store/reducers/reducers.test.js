@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash.clonedeep';
 import {
   APP,
   FILTER,
@@ -30,6 +29,7 @@ const layer2 = {
   loaded: false,
   credit: 'credit',
 };
+const timeseries = { [layerId]: {} };
 
 describe('APP', () => {
   it('should return the initial state', () => {
@@ -2149,28 +2149,216 @@ describe('MAP', () => {
     expect(MAP(stateOld, action)).toEqual({
       ...stateOld,
       showSpinner: true,
-      layers: cloneDeep({
+      layers: {
         ...stateOld.layers,
         [action.layerId]: {
           ...stateOld.layers[action.layerId],
           isLoading: true,
           loaded: false,
         },
-      }),
+      },
     });
 
     // Case 2.2.2: state.layers[action.layerId] is defined
     expect(MAP(stateOldLayersNotEmpty, action)).toEqual({
       ...stateOldLayersNotEmpty,
       showSpinner: true,
-      layers: cloneDeep({
+      layers: {
         ...stateOldLayersNotEmpty.layers,
         [action.layerId]: {
           ...stateOldLayersNotEmpty.layers[action.layerId],
           isLoading: true,
           loaded: false,
         },
-      }),
+      },
+    });
+  });
+
+  it('should handle RECEIVE_DATA', () => {
+    const action = {
+      type: types.RECEIVE_DATA,
+      layer,
+      timeseries,
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    // Case 2.2.1: state.layers[action.layer.id] is undefined
+    // Case 2.2.1.1: action.layer.filters is undefined
+    const expectedObj = MAP(stateOld, action);
+    expect(typeof expectedObj.reloadLayers).toBe('number');
+
+    delete stateOld.reloadLayers;
+    delete expectedObj.reloadLayers;
+
+    expect(expectedObj).toEqual({
+      ...stateOld,
+      layers: {
+        ...stateOld.layers,
+        [action.layer.id]: {
+          ...stateOld.layers[action.layer.id],
+          ...action.layer,
+          labels: action.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: action.timeseries,
+      visibleLayerId: action.layer.id,
+      showSpinner: false,
+      doApplyFilters: undefined,
+    });
+
+    // Case 2.2.1.2: action.layer.filters is defined
+    // Case 2.2.1.2.1: action.layer.filters.admin is false
+    const actionLayerFilters = {
+      ...action,
+      layer: {
+        ...action.layer,
+        filters: {
+          layerFilters: ['all'],
+          admin: false,
+        },
+      },
+    };
+    const expctedObjLayerFilters = MAP(stateOld, actionLayerFilters);
+    expect(typeof expctedObjLayerFilters.reloadLayers).toBe('number');
+
+    delete stateOld.reloadLayers;
+    delete expctedObjLayerFilters.reloadLayers;
+
+    expect(expctedObjLayerFilters).toEqual({
+      ...stateOld,
+      layers: {
+        ...stateOld.layers,
+        [actionLayerFilters.layer.id]: {
+          ...stateOld.layers[actionLayerFilters.layer.id],
+          ...actionLayerFilters.layer,
+          labels: actionLayerFilters.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: actionLayerFilters.timeseries,
+      visibleLayerId: actionLayerFilters.layer.id,
+      showSpinner: false,
+      doApplyFilters: false,
+    });
+
+    // Case 2.2.1.2.2: action.layer.filters.admin is true
+    const actionLayerFiltersAdmin = {
+      ...actionLayerFilters,
+      layer: {
+        ...actionLayerFilters.layer,
+        filters: {
+          ...actionLayerFilters.layer.filters,
+          admin: true,
+        },
+      },
+    };
+    const expctedObjLayerFiltersAdmin = MAP(stateOld, actionLayerFiltersAdmin);
+    expect(typeof expctedObjLayerFiltersAdmin.reloadLayers).toBe('number');
+
+    delete stateOld.reloadLayers;
+    delete expctedObjLayerFiltersAdmin.reloadLayers;
+
+    expect(expctedObjLayerFiltersAdmin).toEqual({
+      ...stateOld,
+      layers: {
+        ...stateOld.layers,
+        [actionLayerFiltersAdmin.layer.id]: {
+          ...stateOld.layers[actionLayerFiltersAdmin.layer.id],
+          ...actionLayerFiltersAdmin.layer,
+          labels: actionLayerFiltersAdmin.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: actionLayerFiltersAdmin.timeseries,
+      visibleLayerId: actionLayerFiltersAdmin.layer.id,
+      showSpinner: false,
+      doApplyFilters: true,
+    });
+
+    // Case 2.2.2: state.layers[action.layer.id] is defined
+    // Case 2.2.2.1: action.layer.filters is undefined
+    const expectedObjLayerExists = MAP(stateOldLayersNotEmpty, action);
+    expect(typeof expectedObjLayerExists.reloadLayers).toBe('number');
+
+    delete stateOldLayersNotEmpty.reloadLayers;
+    delete expectedObjLayerExists.reloadLayers;
+
+    expect(expectedObjLayerExists).toEqual({
+      ...stateOldLayersNotEmpty,
+      layers: {
+        ...stateOldLayersNotEmpty.layers,
+        [action.layer.id]: {
+          ...stateOldLayersNotEmpty.layers[action.layer.id],
+          ...action.layer,
+          labels: action.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: action.timeseries,
+      visibleLayerId: action.layer.id,
+      showSpinner: false,
+      doApplyFilters: undefined,
+    });
+    // Case 2.2.2.2: action.layer.filters is defined
+    // Case 2.2.2.2.1: action.layer.filters.admin is false
+    const expctedObjLayerExistsFilters = MAP(stateOldLayersNotEmpty, actionLayerFilters);
+    expect(typeof expctedObjLayerExistsFilters.reloadLayers).toBe('number');
+
+    delete stateOldLayersNotEmpty.reloadLayers;
+    delete expctedObjLayerExistsFilters.reloadLayers;
+
+    expect(expctedObjLayerExistsFilters).toEqual({
+      ...stateOldLayersNotEmpty,
+      layers: {
+        ...stateOldLayersNotEmpty.layers,
+        [actionLayerFilters.layer.id]: {
+          ...stateOldLayersNotEmpty.layers[actionLayerFilters.layer.id],
+          ...actionLayerFilters.layer,
+          labels: actionLayerFilters.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: actionLayerFilters.timeseries,
+      visibleLayerId: actionLayerFilters.layer.id,
+      showSpinner: false,
+      doApplyFilters: false,
+    });
+    // Case 2.2.2.2.2: action.layer.filters.admin is true
+    const expctedObjLayerExistsFiltersAdmin = MAP(stateOldLayersNotEmpty, actionLayerFiltersAdmin);
+    expect(typeof expctedObjLayerExistsFiltersAdmin.reloadLayers).toBe('number');
+
+    delete stateOldLayersNotEmpty.reloadLayers;
+    delete expctedObjLayerExistsFiltersAdmin.reloadLayers;
+
+    expect(expctedObjLayerExistsFiltersAdmin).toEqual({
+      ...stateOldLayersNotEmpty,
+      layers: {
+        ...stateOldLayersNotEmpty.layers,
+        [actionLayerFiltersAdmin.layer.id]: {
+          ...stateOldLayersNotEmpty.layers[actionLayerFiltersAdmin.layer.id],
+          ...actionLayerFiltersAdmin.layer,
+          labels: actionLayerFiltersAdmin.layer.labels,
+          isLoading: false,
+          loaded: true,
+        },
+      },
+      timeseries: actionLayerFiltersAdmin.timeseries,
+      visibleLayerId: actionLayerFiltersAdmin.layer.id,
+      showSpinner: false,
+      doApplyFilters: true,
     });
   });
 });
