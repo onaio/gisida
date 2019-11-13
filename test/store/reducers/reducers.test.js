@@ -2598,4 +2598,24 @@ describe('MAP', () => {
       doApplyFilters: true,
     });
   });
+
+  it('should handle TRIGGER_SPINNER', () => {
+    const action = {
+      type: types.TRIGGER_SPINNER,
+      isLoaded: false,
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(MAP(stateEmpty, action)).toEqual({});
+
+    // Case 2: The state obj is NOT empty
+    // Case 2.1: action.mapId does NOT match state.mapId
+    expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
+
+    // Case 2.2: action.mapId matches state.mapId
+    expect(MAP(stateOld, action)).toEqual({
+      ...stateOld,
+      showSpinner: action.isLoaded,
+    });
+  });
 });
