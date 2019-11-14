@@ -99,15 +99,15 @@ describe('actions', () => {
     expect(actions.toggleFilter(mapId)).toEqual(expectedAction);
   });
 
-  // added by Philipp
   test('should create an action to set layer filter', () => {
+    const layerFilters = ['all'];
     const expectedAction = {
       type: types.SET_LAYER_FILTERS,
-      // layerId,
-      // layerFilters,
+      layerId,
+      layerFilters,
       mapId,
     };
-    expect(actions.setLayerFilter(mapId)).toEqual(expectedAction);
+    expect(actions.setLayerFilter(mapId, layerId, layerFilters)).toEqual(expectedAction);
   });
 
   // added by Philipp
@@ -199,18 +199,33 @@ describe('actions', () => {
       type: types.UPDATE_TIMESERIES,
       timeseries,
       mapId,
+      layerId,
     };
-    expect(actions.updateTimeseries(mapId, timeseries)).toEqual(expectedAction);
+    expect(actions.updateTimeseries(mapId, timeseries, layerId)).toEqual(expectedAction);
   });
 
-  // added by Philipp
   test('should create an action to view in detail', () => {
+    const payload = {
+      model: {
+        title: 'Title',
+        subTitle: 'SubTitle',
+      },
+      layerId,
+      properties: null,
+      detailSpec: {
+        title: 'title',
+        'sub-title': 'sub-title',
+        'basic-info': 'basic-info',
+        'image-url': 'url',
+      },
+    };
+
     const expectedAction = {
       type: types.DETAIL_VIEW,
       mapId,
-      // payload,
+      payload,
     };
-    expect(actions.detailView(mapId)).toEqual(expectedAction);
+    expect(actions.detailView(mapId, payload)).toEqual(expectedAction);
   });
 
   test('should create an action to turn off spinner', () => {
