@@ -15,6 +15,7 @@ import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
+import {readData} from '../utils/readLayerdata'
 
 /**
  * Builds labels based on label spec and layer data
@@ -65,7 +66,7 @@ export function buildLabels(layerObj, tsLayerObj, period) {
  * @param {*} layer
  * @param {*} dispatch
  */
-function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
+export function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   let layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { mapConfig } = currentState.APP;
@@ -382,7 +383,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
  * @param {*} layer
  * @param {*} dispatch
  */
-function fetchMultipleSources(mapId, layer, dispatch) {
+export function fetchMultipleSources(mapId, layer, dispatch) {
   const layerObj = { ...layer };
   const currentState = dispatch(getCurrentState());
   const { APP } = currentState;

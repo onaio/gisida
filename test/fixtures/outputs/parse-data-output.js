@@ -23,7 +23,7 @@ export const parseOutputSpecDataCmplx =
   "partner_details/organisation":"SRCS Puntland"
 },
 {
-  "site_activity":"OTP, SC",
+  "site_activity":"OTP, SC, ",
   "NU_indicators/site_type":"Fixed",
   "NU_indicators/facility_type":"Stabilization Center",
   "partner_details/organisation":"Other",
