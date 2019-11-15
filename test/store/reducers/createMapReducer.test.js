@@ -284,18 +284,19 @@ describe('MAP', () => {
     expect(expectedObj).toEqual({
       ...stateOldLayersNotEmpty,
       primarySubLayer: undefined,
-      activeLayerId: action.layerId,
+      activeLayerId:
+        stateOldLayersNotEmpty.activeLayerIds[stateOldLayersNotEmpty.activeLayerIds.length - 1],
       lastLayerSelected: action.layerId,
       layers: {
         ...stateOldLayersNotEmpty.layers,
-        [layerId]: {
-          ...stateOldLayersNotEmpty.layers[layerId],
-          visible: action.isInit,
+        [action.layerId]: {
+          ...stateOldLayersNotEmpty.layers[action.layerId],
+          visible: stateOldLayersNotEmpty.layers[action.layerId].visible,
         },
       },
       showSpinner: true,
-      visibleLayerId: layerId,
-      primaryLayer: layerId,
+      visibleLayerId: action.layerId,
+      primaryLayer: action.layerId,
       timeseries: stateOldLayersNotEmpty.timeseries,
       activeLayerIds: stateOldLayersNotEmpty.activeLayerIds,
       filter: {
@@ -309,7 +310,7 @@ describe('MAP', () => {
     // Case 2.2.2.1.1.2: state.layers[action.layerId].layers is defined
     // Case 2.2.2.1.2.2: state.layers[action.layerId].type is 'line'
     // Case 2.2.2.1.3.2: state.layers[action.layerId].credit is empty
-    // Case 2.2.2.1.5.2: state.layers[action.layerId].aggregate exists
+    // Case 2.2.2.1.5.2.1: state.layers[action.layerId].aggregate exists, state.layers[action.layerId].aggregate.filter is defined
     // Case 2.2.2.1.6.2.1: state.detailView is NOT null, state.detailView.layerId === action.layerId
     // Case 2.2.2.1.7.2: state.showFilterPanel is true
     const stateOldLayerObjLayersExists = {
@@ -343,20 +344,17 @@ describe('MAP', () => {
     expect(expectedObjLayerObjLayersExist).toEqual({
       ...stateOldLayerObjLayersExists,
       primarySubLayer: undefined,
-      activeLayerId:
-        stateOldLayerObjLayersExists.activeLayerIds[
-          stateOldLayerObjLayersExists.activeLayerIds.length - 1
-        ],
+      activeLayerId: action.layerId,
       lastLayerSelected: action.layerId,
       layers: {
         ...stateOldLayerObjLayersExists.layers,
-        [layerId]: {
-          ...stateOldLayerObjLayersExists.layers[layerId],
-          visible: action.isInit,
+        [action.layerId]: {
+          ...stateOldLayerObjLayersExists.layers[action.layerId],
+          visible: stateOldLayersNotEmpty.layers[action.layerId].visible,
         },
         [layerId2]: {
           ...layer2,
-          visible: !stateOldLayerObjLayersExists.layers[layerId].visible,
+          visible: !stateOldLayerObjLayersExists.layers[action.layerId].visible,
         },
       },
       showSpinner: true,
