@@ -57,6 +57,13 @@ describe('MAP', () => {
     expect(MAP(undefined, {})).toEqual(defaultState.MAP);
   });
 
+  it('should return existing state if action type is not handled', () => {
+    const actionNoType = {
+      mapId,
+    };
+    expect(MAP(stateOld, actionNoType)).toEqual(stateOld);
+  });
+
   it('should handle MAP_RENDERED', () => {
     const action = {
       type: MAP_RENDERED,
