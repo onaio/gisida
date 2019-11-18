@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
-import * as types from '../constants/actionTypes';
-import defaultState from '../defaultState';
+import * as types from '../../constants/actionTypes';
+import defaultState from '../../defaultState';
 
 function mapRendered(state, action) {
   return {
