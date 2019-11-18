@@ -296,26 +296,21 @@ function detailView(state, action) {
 }
 
 function requestData(state, action) {
-  const { layer } = action;
-  const oldLayer = state.layers[layer.id];
+  const { layerId } = action;
+  const layer = state.layers[layerId];
   const updatedLayers = {
     ...state.layers,
-    [layer.id]: {
-      ...oldLayer,
+    [layerId]: {
       ...layer,
-      labels: layer.labels,
-      isLoading: false,
-      loaded: true,
+      isLoading: true,
+      loaded: false,
     },
   };
   return {
     ...state,
+    // Update isLoading property
+    showSpinner: true,
     layers: cloneDeep(updatedLayers),
-    reloadLayers: Math.random(),
-    timeseries: action.timeseries,
-    visibleLayerId: layer.id,
-    showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
-    doApplyFilters: layer && layer.filters && !!layer.filters.admin,
   };
 }
 
@@ -403,24 +398,24 @@ export function createMapReducer(mapId) {
         }
 
         case types.LAYER_RELOADED: {
-          return layerReloaded(state, action);
+          return layerReloaded(state);
         }
         case types.UPDATE_PRIMARY_LAYER: {
           return updatePrimaryLayer(state, action);
         }
         case types.TOGGLE_FILTER: {
-          return toggleFilter(state, action);
+          return toggleFilter(state);
         }
         case types.SET_LAYER_FILTERS: {
           return setLayerFilters(state, action);
         }
 
         case types.FILTERS_UPDATED: {
-          return filtersUpdated(state, action);
+          return filtersUpdated(state);
         }
 
         case types.TOGGLE_MENU: {
-          return toggleMenu(state, action);
+          return toggleMenu(state);
         }
 
         case types.RESET_FILTERED_LAYER: {
