@@ -1,7 +1,7 @@
-import parseData from '../../src/utils/parseData.js/'; //function
+import parseData from '../../src/utils/parseData'; // function
 
-import { parseInputSpecObj, parseInputSpecData, parseInputSpecObjCmplx, parseInputSpecDataCmplx } from '../fixtures/parse-data-inputs'; //obj, array
-import { parseOutputSpecData, parseOutputSpecDataCmplx } from '../fixtures/outputs/parse-data-output.js'; //array
+import { parseInputSpecObj, parseInputSpecData, parseInputSpecObjCmplx, parseInputSpecDataCmplx } from '../fixtures/parse-data-inputs'; // obj, array
+import { parseOutputSpecData, parseOutputSpecDataCmplx } from '../fixtures/outputs/parse-data-output'; // array
 
 describe('parseData', () => {
 
@@ -17,7 +17,7 @@ describe('parseData', () => {
 		expect(parseData(parseInputSpecObj, parseInputSpecData[2])).toEqual(parseOutputSpecData[2]);
 	});
 
-	//now testing the complex data
+	// now testing the complex data
 
 	test('should return correct parsed Data object', () => {
 		expect(parseData(parseInputSpecObjCmplx, parseInputSpecDataCmplx[0])).toEqual(parseOutputSpecDataCmplx[0]);

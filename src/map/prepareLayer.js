@@ -15,7 +15,8 @@ import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
-import {readData} from '../utils/readLayerdata'
+import {readData} from '../utils/readLayerdata';
+import { fetchMultipleSources } from '../utils/fetchMultipleSourceData'
 
 /**
  * Builds labels based on label spec and layer data

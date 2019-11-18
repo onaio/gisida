@@ -152,6 +152,5 @@ export default function buildTimeseriesData(
       };
     }
   }
-
   return timeseriesMap;
 }

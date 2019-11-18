@@ -1,8 +1,8 @@
-import groupBy from '../../src/utils/groupBy.js/';
+import groupBy from '../../src/utils/groupBy';
 
-//ex data to test on:
-import exInputForGroupBy from '../fixtures/group-by-input.js/';
-import exOutputForGroupBy from '../fixtures/outputs/group-by-output.js';
+// ex data to test on:
+import exInputForGroupBy from '../fixtures/group-by-input';
+import exOutputForGroupBy from '../fixtures/outputs/group-by-output';
 
 describe('groupBy', () => {
 

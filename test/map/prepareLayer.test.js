@@ -1,39 +1,37 @@
-import prepareLayer, {buildLabels, renderData, fetchMultipleSources} from '../../src/map/prepareLayer'
+import prepareLayer from '../../src/map/prepareLayer'
 import layer from '../fixtures/default-layer.json'
+import initStore from '../../src/store/initStore';
 
-var readData = require('../../src/utils/readLayerdata')
-var dataLoader = require('../../src/utils/files');
+const readData = require('../../src/utils/readLayerdata')
+const multipeSourceData = require('../../src/utils/fetchMultipleSourceData')
 
 const mapId = 'map-1';
 
-jest.mock(readData, () => jest.fn())
+// initialize store
+const store = initStore({})
 
-describe('prepareLayer with string(link) data source', () => {
-    const dispatch = jest.fn();
-
-    test('dispatch function was called', () => {
-    prepareLayer(mapId, layer, dispatch, false, false);
-        expect(dispatch).toHaveBeenCalledTimes(1);
+describe('prepareLayer', () => {
+    test('dispatch function should always be called', () => {
+        const dispatch = jest.spyOn(store, 'dispatch');
+        prepareLayer(mapId, layer.testLayer1, store.dispatch, false, false);
+        expect(dispatch).toHaveBeenCalled;
+        dispatch.mockClear()
     })
 
-    test('readData function was called', () => {
+    test('data with string source should call readData', () => {
         const mockreaddata = jest.spyOn(readData, 'readData');
-        prepareLayer(mapId, layer, dispatch, false, false);
+        prepareLayer(mapId, layer.testLayer1, store.dispatch, false, false);
         expect(mockreaddata).toHaveBeenCalledTimes(1);
     })
-})
-
-// describe('prepareLayer with array as data source', () => {
-//     const dispatch = jest.fn().;
-//     layer.source.data = [
-//         "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
-//         "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
-//         "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
-//     ]
-//     prepareLayer(mapId, layer, dispatch, false, false);
     
-//     test('readData function was called', () => {
-//         expect(mockreaddata).toHaveBeenCalledTimes(1);
-//     })
-// })
+    test('Input data with multiple sources should call fetchMultipleSources function', () => {
+        layer.testLayer2.source.data = [
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
+        ]
+        const mockFetchMultipleSources = jest.spyOn(multipeSourceData, 'fetchMultipleSources');
+        prepareLayer(mapId, layer.testLayer2, store.dispatch, false, false);
+        expect(mockFetchMultipleSources).toHaveBeenCalledTimes(1);
+    })
+})
 

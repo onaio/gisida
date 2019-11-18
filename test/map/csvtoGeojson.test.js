@@ -5,8 +5,7 @@ import csvToGEOjson from '../../src/map/csvToGEOjson'
 
 
 describe('csvToGEOjson', () => {
-    console.log(csvToGEOjson)
     test('function returns correct jeojson data', () => {
-        expect(csvToGEOjson(layer, inputData)).toEqual(outputData)
+        expect(csvToGEOjson(layer.testLayer1, inputData)).toEqual(outputData)
     })
 })

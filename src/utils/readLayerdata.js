@@ -2,7 +2,7 @@ import superset from '@onaio/superset-connector';
 import csvToGEOjson from '../map/csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import { loadJSON, loadCSV } from '../utils/files';
-import { generateFilterOptions, processFilters } from '../utils/filters';
+import { generateFilterOptions } from '../utils/filters';
 import parseData from './../utils/parseData';
 import {renderData} from '../map/prepareLayer'
 import { getCurrentState } from '../store/actions/actions';
