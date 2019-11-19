@@ -13,7 +13,7 @@ import { renderData } from '../map/prepareLayer';
  * @param {*} layer
  * @param {*} dispatch
  */
-export function fetchMultipleSources(mapId, layer, dispatch) {
+export default function fetchMultipleSources(mapId, layer, dispatch) {
     const layerObj = { ...layer };
     const currentState = dispatch(getCurrentState());
     const { APP } = currentState;

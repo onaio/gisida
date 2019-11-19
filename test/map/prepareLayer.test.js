@@ -14,12 +14,12 @@ describe('prepareLayer', () => {
     test('dispatch function should always be called', () => {
         const dispatch = jest.spyOn(store, 'dispatch');
         prepareLayer(mapId, layer.testLayer1, store.dispatch, false, false);
-        expect(dispatch).toHaveBeenCalled;
+        expect(dispatch).toHaveBeenCalled; // eslint-disable-line
         dispatch.mockClear()
     })
 
     test('data with string source should call readData', () => {
-        const mockreaddata = jest.spyOn(readData, 'readData');
+        const mockreaddata = jest.spyOn(readData, 'default');
         prepareLayer(mapId, layer.testLayer1, store.dispatch, false, false);
         expect(mockreaddata).toHaveBeenCalledTimes(1);
     })
@@ -29,7 +29,7 @@ describe('prepareLayer', () => {
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
         ]
-        const mockFetchMultipleSources = jest.spyOn(multipeSourceData, 'fetchMultipleSources');
+        const mockFetchMultipleSources = jest.spyOn(multipeSourceData, 'default');
         prepareLayer(mapId, layer.testLayer2, store.dispatch, false, false);
         expect(mockFetchMultipleSources).toHaveBeenCalledTimes(1);
     })

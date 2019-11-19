@@ -7,7 +7,7 @@ import parseData from './../utils/parseData';
 import {renderData} from '../map/prepareLayer'
 import { getCurrentState } from '../store/actions/actions';
 
-export function readData(mapId, layer, dispatch, doUpdateTsLayer) {
+export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     const layerObj = { ...layer };
     const sourceURL = layer.source.data;
     const fileType = typeof layer.source.data === 'string'
