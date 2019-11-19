@@ -1,6 +1,8 @@
-import prepareLayer from '../../src/map/prepareLayer'
+import prepareLayer, { buildLabels } from '../../src/map/prepareLayer'
 import layer from '../fixtures/default-layer.json'
 import initStore from '../../src/store/initStore';
+import buildLabelsInput from '../fixtures/buildLabels-input.json';
+import buildLabelsOutput from '../fixtures/outputs/buildLabels-output.json';
 
 const readData = require('../../src/utils/readLayerdata')
 const multipeSourceData = require('../../src/utils/fetchMultipleSourceData')
@@ -35,3 +37,8 @@ describe('prepareLayer', () => {
     })
 })
 
+describe('buildLabels', () => {
+    test('should return correct label', () => {
+        expect(buildLabels(buildLabelsInput)).toEqual(buildLabelsOutput)
+    })
+})
