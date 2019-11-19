@@ -4,13 +4,12 @@ import {
   TOGGLE_FILTER,
   DETAIL_VIEW,
 } from '../../constants/actionTypes';
-import { MAP } from '../../defaultState';
+import defaultState from '../../defaultState';
 
 export default function detailViewReducer(
   state = {
-    detailView: MAP.detailView,
-    layers: MAP.layers,
-    showFilterPanel: MAP.showFilterPanel,
+    detailView: defaultState.MAP.detailView,
+    layers: defaultState.MAP.layers,
   },
   action
 ) {
@@ -26,6 +25,7 @@ export default function detailViewReducer(
         },
       };
       return {
+        ...state,
         detailView:
           state.detailView &&
           (state.detailView && state.detailView.layerId === layerId) &&
