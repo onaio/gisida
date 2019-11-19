@@ -1,5 +1,4 @@
 import buildDetailView from '../../src/map/buildDetailView';
-import layer from '../fixtures/default-layer.json'
 
 const mapId = 'map-1';
 const dispatch = jest.fn();
