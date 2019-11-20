@@ -1,6 +1,10 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as types from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import layersReducer from './layersReducer';
+import detailViewReducer from './detailViewReducer';
+import reloadLayersReducer from './reloadLayersReducer';
+import showSpinnerReducer from './showSpinnerReducer';
 
 function mapRendered(state, action) {
   return {
@@ -391,7 +395,28 @@ export function createMapReducer(mapId) {
           return addLayer(state, action);
         }
         case types.TOGGLE_LAYER: {
-          return toggleLayer(state, action);
+          toggleLayer(state, action);
+          return {
+            layers: layersReducer(state.layers, action),
+            detailView: detailViewReducer(
+              { detailView: state.detailView, layers: state.layers },
+              action
+            ),
+            reloadLayers: reloadLayersReducer(
+              {
+                reloadLayers: state.reloadLayers,
+                layers: state.layers,
+              },
+              action
+            ),
+            showSpinner: showSpinnerReducer(
+              {
+                showSpinner: state.showSpinner,
+                layers: state.layers,
+              },
+              action
+            ),
+          };
         }
         case types.RELOAD_LAYER: {
           return reloadLayer(state, action);

@@ -1,39 +1,13 @@
 import { TOGGLE_LAYER, RECEIVE_DATA } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import { toggleLayer as toggleLayerLayersReducer } from './layersReducer';
+import { toggleLayer as toggleLayerActiveLayerIdsReducer } from './activeLayerIdsReducer';
 
 function toggleLayer(state, action) {
   const { layerId } = action;
   const layer = state.layers[layerId];
-  const updatedLayers = {
-    ...state.layers,
-    [layerId]: {
-      ...layer,
-      visible: action.isInit ? layer.visible : !layer.visible,
-    },
-  };
-  if (layer.layers) {
-    layer.layers.forEach(subLayerId => {
-      updatedLayers[subLayerId].visible = !layer.visible;
-      updatedLayers[subLayerId].parent = layer.id;
-    });
-  }
-
-  const activeLayerIds = [...state.activeLayerIds];
-
-  const activeLayerObj = updatedLayers[layerId];
-
-  const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
-  const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
-  if (!updatedLayers[layerId].parent) {
-    if (addLayerToList) {
-      activeLayerIds.push(layerId);
-    } else if (removeLayerFromList) {
-      const index = activeLayerIds.indexOf(layerId);
-      if (index > -1) {
-        activeLayerIds.splice(index, 1);
-      }
-    }
-  }
+  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
+  const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
 
   return {
     ...state,

@@ -5,6 +5,7 @@ import {
   DETAIL_VIEW,
 } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import { toggleLayer } from './layersReducer';
 
 export default function detailViewReducer(
   state = {
@@ -16,14 +17,8 @@ export default function detailViewReducer(
   switch (action.type) {
     case TOGGLE_LAYER: {
       const { layerId } = action;
-      const layer = state.layers[layerId];
-      const updatedLayers = {
-        ...state.layers,
-        [layerId]: {
-          ...layer,
-          visible: action.isInit ? layer.visible : !layer.visible,
-        },
-      };
+      const updatedLayers = toggleLayer(state.layers, action);
+
       return {
         ...state,
         detailView:

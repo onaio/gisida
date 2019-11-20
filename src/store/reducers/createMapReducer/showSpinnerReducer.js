@@ -5,6 +5,39 @@ import {
   TRIGGER_SPINNER,
 } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import {
+  toggleLayer as toggleLayerLayersReducer,
+  receiveData as receiveDataLayersReducer,
+} from './layersReducer';
+
+function toggleLayer(state, action) {
+  const { layerId } = action;
+  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
+  return {
+    ...state,
+    showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
+  };
+}
+
+function requestData(state) {
+  return {
+    ...state,
+    showSpinner: true,
+  };
+}
+
+function receiveData(state, action) {
+  const { layer } = action;
+  const updatedLayers = receiveDataLayersReducer(state.layers, action);
+  return {
+    ...state,
+    showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
+  };
+}
+
+function triggerSpinner(state, action) {
+  return { ...state, showSpinner: action.isLoaded };
+}
 
 export default function showSpinnerReducer(
   state = {
@@ -15,45 +48,16 @@ export default function showSpinnerReducer(
 ) {
   switch (action.type) {
     case TOGGLE_LAYER: {
-      const { layerId } = action;
-      const layer = state.layers[layerId];
-      const updatedLayers = {
-        ...state.layers,
-        [layerId]: {
-          ...layer,
-          visible: action.isInit ? layer.visible : !layer.visible,
-        },
-      };
-      return {
-        ...state,
-        showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
-      };
+      return toggleLayer(state, action);
     }
     case REQUEST_DATA: {
-      return {
-        ...state,
-        showSpinner: true,
-      };
+      return requestData(state);
     }
     case RECEIVE_DATA: {
-      const { layer } = action;
-      const oldLayer = state.layers[layer.id];
-      const updatedLayers = {
-        ...state.layers,
-        [layer.id]: {
-          ...oldLayer,
-          ...layer,
-          isLoading: false,
-          loaded: true,
-        },
-      };
-      return {
-        ...state,
-        showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
-      };
+      return receiveData(state, action);
     }
     case TRIGGER_SPINNER: {
-      return { ...state, showSpinner: action.isLoaded };
+      return triggerSpinner(state, action);
     }
     default:
       return state;
