@@ -1,4 +1,4 @@
-export const aggregateLayerOutput = {
+const aggregateLayerOutput = {
     "type": "FeatureCollection",
     "features": [
       {
@@ -143,3 +143,5 @@ export const aggregateLayerOutput = {
       }
     ]
   }
+
+  export default aggregateLayerOutput;

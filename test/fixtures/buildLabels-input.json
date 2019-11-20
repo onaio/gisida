@@ -330,5 +330,39 @@
         "ADMN0_EN": "Bangladesh"
       }
     ]
+  },
+  "detail-view": {
+    "UID": "SSID",
+    "title": {
+      "prop": "Site_name"
+    },
+    "sub-title": {
+      "prop": "New_Camp_N"
+    },
+    "basic-info": [
+      {
+        "value": "New_Camp_S",
+        "icon": "map-marker",
+        "alt": "Location ID"
+      },
+      {
+        "value": "Settlement",
+        "icon": "home",
+        "alt": "Settlement Type"
+      },
+      {
+        "value": {
+          "prop": ["longitude", "latitude"],
+          "join": ", "
+        },
+        "icon": "screenshot",
+        "alt": "GPS coordinates"
+      },
+      {
+        "value": "reporter/reporter_org",
+        "icon": "user",
+        "alt": "Reporter Org"
+      }
+    ]
   }
 }
