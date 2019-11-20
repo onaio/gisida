@@ -1,8 +1,12 @@
 import { ADD_LAYER, RELOAD_LAYER, LAYER_RELOADED } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
 
+export function getReloadLayerId(layers, action) {
+  return layers[action.layer.id] ? action.layer.id : null;
+}
+
 function addLayer(state, action) {
-  const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
+  const reloadLayerId = getReloadLayerId(state.layers, action);
 
   return {
     ...state,

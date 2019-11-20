@@ -7,6 +7,49 @@ import {
   UPDATE_TIMESERIES,
 } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import { getReloadLayerId } from './reloadLayerIdReducer';
+
+function mapLoaded(state) {
+  return {
+    ...state,
+    reloadLayers: true,
+  };
+}
+
+function reloadLayers(state, action) {
+  return {
+    ...state,
+    reloadLayers: action.reload,
+  };
+}
+
+function addLayer(state, action) {
+  return {
+    ...state,
+    reloadLayers: getReloadLayerId(state.layers, action) ? Math.random() : state.reloadLayers,
+  };
+}
+
+function toggleLayer(state) {
+  return {
+    ...state,
+    reloadLayers: Math.random(),
+  };
+}
+
+function receiveData(state) {
+  return {
+    ...state,
+    reloadLayers: Math.random(),
+  };
+}
+
+function updateTimeSeries(state) {
+  return {
+    ...state,
+    reloadLayers: Math.random(),
+  };
+}
 
 export default function reloadLayersReducer(
   state = {
@@ -17,41 +60,22 @@ export default function reloadLayersReducer(
 ) {
   switch (action.type) {
     case MAP_LOADED: {
-      return {
-        ...state,
-        reloadLayers: true,
-      };
+      return mapLoaded(state);
     }
     case RELOAD_LAYERS: {
-      return {
-        ...state,
-        reloadLayers: action.reload,
-      };
+      return reloadLayers(state, action);
     }
     case ADD_LAYER: {
-      const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
-      return {
-        ...state,
-        reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
-      };
+      return addLayer(state, action);
     }
     case TOGGLE_LAYER: {
-      return {
-        ...state,
-        reloadLayers: Math.random(),
-      };
+      return toggleLayer(state);
     }
     case RECEIVE_DATA: {
-      return {
-        ...state,
-        reloadLayers: Math.random(),
-      };
+      return receiveData(state);
     }
     case UPDATE_TIMESERIES: {
-      return {
-        ...state,
-        reloadLayers: Math.random(),
-      };
+      return updateTimeSeries(state);
     }
     default:
       return state;

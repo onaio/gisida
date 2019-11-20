@@ -1,5 +1,19 @@
 import { ADD_LAYER } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
+import { getReloadLayerId } from './reloadLayerIdReducer';
+
+function addLayer(state, action) {
+  const defaultLayers = Object.keys(state.layers).filter(
+    l =>
+      state.layers[l].visible &&
+      state.layers[l].id !== getReloadLayerId(state.layers, action) &&
+      !state.layers[l].nondefault
+  );
+  return {
+    ...state,
+    defaultLayers,
+  };
+}
 
 export default function defaultLayersReducer(
   state = {
@@ -10,17 +24,7 @@ export default function defaultLayersReducer(
 ) {
   switch (action.type) {
     case ADD_LAYER: {
-      const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
-      const defaultLayers = Object.keys(state.layers).filter(
-        l =>
-          state.layers[l].visible &&
-          state.layers[l].id !== reloadLayerId &&
-          !state.layers[l].nondefault
-      );
-      return {
-        ...state,
-        defaultLayers,
-      };
+      return addLayer(state, action);
     }
     default:
       return state;
