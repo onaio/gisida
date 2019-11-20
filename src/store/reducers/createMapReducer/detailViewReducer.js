@@ -5,7 +5,59 @@ import {
   DETAIL_VIEW,
 } from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
-import { toggleLayer } from './layersReducer';
+import { toggleLayer as toggleLayerLayersReducer } from './layersReducer';
+
+function toggleLayer(state, action) {
+  const { layerId } = action;
+  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
+
+  return {
+    ...state,
+    detailView:
+      state.detailView &&
+      (state.detailView && state.detailView.layerId === layerId) &&
+      updatedLayers[layerId] &&
+      updatedLayers[layerId].visible,
+  };
+}
+
+function updatePrimaryLayer(state) {
+  return {
+    ...state,
+    detailView: null,
+  };
+}
+
+function toggleFilter(state) {
+  return {
+    ...state,
+    detailView: null,
+  };
+}
+
+function detailView(state, action) {
+  if (!action.payload) {
+    return {
+      ...state,
+      detailView: null,
+    };
+  }
+
+  const { properties, layerId, model, detailSpec } = action.payload;
+  const showDetailView = !!properties && !!layerId;
+
+  return {
+    ...state,
+    detailView: showDetailView
+      ? {
+          model: { ...model },
+          spec: { ...detailSpec },
+          properties: { ...properties },
+          layerId,
+        }
+      : null,
+  };
+}
 
 export default function detailViewReducer(
   state = {
@@ -16,52 +68,16 @@ export default function detailViewReducer(
 ) {
   switch (action.type) {
     case TOGGLE_LAYER: {
-      const { layerId } = action;
-      const updatedLayers = toggleLayer(state.layers, action);
-
-      return {
-        ...state,
-        detailView:
-          state.detailView &&
-          (state.detailView && state.detailView.layerId === layerId) &&
-          updatedLayers[layerId] &&
-          updatedLayers[layerId].visible,
-      };
+      return toggleLayer(state, action);
     }
     case UPDATE_PRIMARY_LAYER: {
-      return {
-        ...state,
-        detailView: null,
-      };
+      return updatePrimaryLayer(state, action);
     }
     case TOGGLE_FILTER: {
-      return {
-        ...state,
-        detailView: null,
-      };
+      return toggleFilter(state, action);
     }
     case DETAIL_VIEW: {
-      if (!action.payload) {
-        return {
-          ...state,
-          detailView: null,
-        };
-      }
-
-      const { properties, layerId, model, detailSpec } = action.payload;
-      const showDetailView = !!properties && !!layerId;
-
-      return {
-        ...state,
-        detailView: showDetailView
-          ? {
-              model: { ...model },
-              spec: { ...detailSpec },
-              properties: { ...properties },
-              layerId,
-            }
-          : null,
-      };
+      return detailView(state, action);
     }
     default:
       return state;

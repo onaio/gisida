@@ -3,11 +3,7 @@ import defaultState from '../../defaultState';
 import { toggleLayer as toggleLayerLayersReducer } from './layersReducer';
 import { toggleLayer as toggleLayerActiveLayerIdsReducer } from './activeLayerIdsReducer';
 
-function toggleLayer(state, action) {
-  const { layerId } = action;
-  const layer = state.layers[layerId];
-  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
-  const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
+export function getFilterLayerId(updatedLayers, activeLayerIds, layerId, layer) {
   const activeFilterLayerIds = activeLayerIds.filter(
     l => updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter
   );
@@ -18,6 +14,16 @@ function toggleLayer(state, action) {
     filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
   }
 
+  return filterLayerId;
+}
+
+function toggleLayer(state, action) {
+  const { layerId } = action;
+  const layer = state.layers[layerId];
+  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
+  const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
+  const filterLayerId = getFilterLayerId(updatedLayers, activeLayerIds, layerId, layer);
+
   return {
     ...state,
     filter: {
@@ -27,10 +33,11 @@ function toggleLayer(state, action) {
   };
 }
 
+export function primaryLayerHasFilter(layers, action) {
+  return layers[action.primaryLayer].aggregate && layers[action.primaryLayer].aggregate.filter;
+}
+
 function updatePrimaryLayer(state, action) {
-  const primaryLayerHasFilter =
-    state.layers[action.primaryLayer].aggregate &&
-    state.layers[action.primaryLayer].aggregate.filter;
   const activeIds = [...state.activeLayerIds];
   if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
     if (activeIds.includes(action.primaryLayer)) {
@@ -42,7 +49,7 @@ function updatePrimaryLayer(state, action) {
     ...state,
     filter: {
       ...state.filter,
-      layerId: primaryLayerHasFilter ? action.primaryLayer : false,
+      layerId: primaryLayerHasFilter(state.layers, action) ? action.primaryLayer : false,
     },
   };
 }
