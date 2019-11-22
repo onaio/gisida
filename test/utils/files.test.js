@@ -2,11 +2,11 @@ import { isNumber, comparator } from '../../src/utils/files'
 
 describe('isNumber', () => {
 
-	test('Returns true for being a number', () => {
+	test('Returns true for being a whole number', () => {
 		expect(isNumber(4)).toBe(true);
 	});
 
-	test('Returns true for being a number', () => {
+	test('Returns true for being a decimal number', () => {
 		expect(isNumber(2.6)).toBe(true);
 	});
 

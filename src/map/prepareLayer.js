@@ -771,6 +771,6 @@ export default function prepareLayer(
         renderData(mapId, subLayer, dispatch, doUpdateTsLayer);
       }
     });
-    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+    // renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
   }
 }

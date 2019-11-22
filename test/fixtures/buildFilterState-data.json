@@ -1,0 +1,93 @@
+{
+  "filterOptions": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "type": "stops",
+      "filterValues": {
+        "BRAC": 8,
+        "CODEC": 12,
+        "BITA": 1,
+        "YPSA": 2,
+        "Coast Trust": 1,
+        "Dan Church Aid": 2,
+        "Save the Children": 1
+      }
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "type": "stops",
+      "filterValues": {
+        "Ukhia": 21,
+        "Teknaf": 3,
+        "undefined": 3
+      }
+    }
+  },
+
+  "filters": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "toggleAllOn": true,
+      "isFiltered": false,
+      "isOriginal": false,
+      "dataType": "ordinal",
+      "options": {
+        "BRAC": {
+          "enabled": false,
+          "count": 1
+        },
+        "CODEC": {
+          "enabled": false,
+          "count": 1
+        },
+        "Dan Church Aid": {
+          "enabled": false,
+          "count": 1
+        },
+        "BITA": {
+          "count": 0,
+          "enabled": false,
+          "hidden": false
+        },
+        "YPSA": {
+          "count": 0,
+          "enabled": false,
+          "hidden": false
+        },
+        "Coast Trust": {
+          "count": 0,
+          "enabled": false,
+          "hidden": false
+        },
+        "Save the Children": {
+          "count": 0,
+          "enabled": false,
+          "hidden": false
+        }
+      },
+      "isOpen": false,
+      "doAdvFiltering": false,
+      "queries": []
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "isFiltered": true,
+      "isOriginal": true,
+      "toggleAllOn": true,
+      "options": {
+        "Ukhia": {
+          "enabled": false,
+          "count": 21
+        },
+        "Teknaf": {
+          "enabled": true,
+          "count": 3
+        }
+      },
+      "isOpen": true,
+      "dataType": "ordinal",
+      "doAdvFiltering": false,
+      "queries": []
+    }
+  }
+}
