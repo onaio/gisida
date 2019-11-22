@@ -27,15 +27,18 @@ function toggleFilter() {
   return null;
 }
 
+export function showDetailView(properties, layerId) {
+  return !!properties && !!layerId;
+}
+
 function detailView(action) {
   if (!action.payload) {
     return null;
   }
 
   const { properties, layerId, model, detailSpec } = action.payload;
-  const showDetailView = !!properties && !!layerId;
 
-  return showDetailView
+  return showDetailView(properties, layerId)
     ? {
         model: { ...model },
         spec: { ...detailSpec },

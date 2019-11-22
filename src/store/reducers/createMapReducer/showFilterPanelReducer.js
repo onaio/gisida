@@ -8,6 +8,7 @@ import defaultState from '../../defaultState';
 import { toggleLayer as toggleLayerLayersReducer } from './layersReducer';
 import { getFilterLayerId, primaryLayerHasFilter } from './filterReducer';
 import { toggleLayer as toggleLayerActiveLayerIdsReducer } from './activeLayerIdsReducer';
+import { showDetailView } from './detailViewReducer';
 
 function toggleLayer(state, action) {
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
@@ -39,9 +40,8 @@ function detailView(state, action) {
   }
 
   const { properties, layerId } = action.payload;
-  const showDetailView = !!properties && !!layerId;
 
-  return showDetailView ? false : state.showFilterPanel;
+  return showDetailView(properties, layerId) ? false : state.showFilterPanel;
 }
 
 export default function showFilterPanelReducer(
