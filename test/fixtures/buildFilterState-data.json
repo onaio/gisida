@@ -89,5 +89,30 @@
       "doAdvFiltering": false,
       "queries": []
     }
+  },
+
+  "buildFiltersMapData": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "type": "stops",
+      "filterValues": {
+        "BRAC": 8,
+        "CODEC": 12,
+        "BITA": 1,
+        "YPSA": 2,
+        "Coast Trust": 1,
+        "Dan Church Aid": 2,
+        "Save the Children": 1
+      }
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "type": "stops",
+      "filterValues": {
+        "Ukhia": 21,
+        "Teknaf": 3,
+        "undefined": 3
+      }
+    }
   }
 }

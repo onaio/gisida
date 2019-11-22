@@ -1,0 +1,62 @@
+{
+  "Upazila": {
+    "dataType": "ordinal",
+    "doAdvFiltering": false,
+    "isFiltered": false,
+    "isOpen": false,
+    "isOriginal": true,
+    "label": "Upazila",
+    "options": {
+      "Teknaf": {
+        "count": 3,
+        "enabled": false
+      },
+      "Ukhia": {
+        "count": 21,
+        "enabled": false
+      }
+    },
+    "queries": [],
+    "toggleAllOn": true
+  },
+  "reporter/reporter_org": {
+    "dataType": "ordinal",
+    "doAdvFiltering": false,
+    "isFiltered": false,
+    "isOpen": false,
+    "isOriginal": true,
+    "label": "Partner",
+    "options": {
+      "BITA": {
+        "count": 1,
+        "enabled": false
+      },
+      "BRAC": {
+        "count": 8,
+        "enabled": false
+      },
+      "CODEC": {
+        "count": 12,
+        "enabled": false
+      },
+      "Coast Trust": {
+        "count": 1,
+        "enabled": false
+      },
+      "Dan Church Aid": {
+        "count": 2,
+        "enabled": false
+      },
+      "Save the Children": {
+        "count": 1,
+        "enabled": false
+      },
+      "YPSA": {
+        "count": 2,
+        "enabled": false
+      }
+    },
+    "queries": [],
+    "toggleAllOn": true
+  }
+}
