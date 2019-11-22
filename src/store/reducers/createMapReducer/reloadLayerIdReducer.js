@@ -6,9 +6,7 @@ export function getReloadLayerId(layers, action) {
 }
 
 function addLayer(state, action) {
-  const reloadLayerId = getReloadLayerId(state.layers, action);
-
-  return reloadLayerId;
+  return getReloadLayerId(state.layers, action);
 }
 
 function reloadLayer(action) {
