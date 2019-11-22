@@ -19,10 +19,8 @@ export function toggleLayer(state, action) {
       }
     }
   }
-  return {
-    ...state,
-    activeLayerIds,
-  };
+
+  return activeLayerIds;
 }
 
 function updatePrimaryLayer(state, action) {
@@ -34,10 +32,7 @@ function updatePrimaryLayer(state, action) {
     }
   }
 
-  return {
-    ...state,
-    activeLayerIds: activeIds,
-  };
+  return activeIds;
 }
 
 export default function activeLayerIdsReducer(
@@ -55,6 +50,6 @@ export default function activeLayerIdsReducer(
       return updatePrimaryLayer(state, action);
     }
     default:
-      return state;
+      return state.activeLayerIds;
   }
 }

@@ -25,11 +25,8 @@ function toggleLayer(state, action) {
   const filterLayerId = getFilterLayerId(updatedLayers, activeLayerIds, layerId, layer);
 
   return {
-    ...state,
-    filter: {
-      ...state.filter,
-      layerId: filterLayerId,
-    },
+    ...state.filter,
+    layerId: filterLayerId,
   };
 }
 
@@ -46,11 +43,8 @@ function updatePrimaryLayer(state, action) {
     }
   }
   return {
-    ...state,
-    filter: {
-      ...state.filter,
-      layerId: primaryLayerHasFilter(state.layers, action) ? action.primaryLayer : false,
-    },
+    ...state.filter,
+    layerId: primaryLayerHasFilter(state.layers, action) ? action.primaryLayer : false,
   };
 }
 
@@ -70,6 +64,6 @@ export default function filterReducer(
       return updatePrimaryLayer(state, action);
     }
     default:
-      return state;
+      return state.filter;
   }
 }

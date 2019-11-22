@@ -10,52 +10,38 @@ import { getFilterLayerId, primaryLayerHasFilter } from './filterReducer';
 import { toggleLayer as toggleLayerActiveLayerIdsReducer } from './activeLayerIdsReducer';
 
 function toggleLayer(state, action) {
-  const updatedLayers = toggleLayerLayersReducer(state, action);
+  const updatedLayers = toggleLayerLayersReducer(state.layers, action);
   const { layerId } = action;
   const layer = state.layers[layerId];
   const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
   const filterLayerId = getFilterLayerId(updatedLayers, activeLayerIds, layerId, layer);
 
-  return {
-    ...state,
-    showFilterPanel:
-      state.showFilterPanel &&
-      layerId === filterLayerId &&
-      filterLayerId !== '' &&
-      updatedLayers[filterLayerId] &&
-      updatedLayers[filterLayerId].visible,
-  };
+  return (
+    state.showFilterPanel &&
+    layerId === filterLayerId &&
+    filterLayerId !== '' &&
+    updatedLayers[filterLayerId] &&
+    updatedLayers[filterLayerId].visible
+  );
 }
 
 function updatePrimaryLayer(state, action) {
-  return {
-    ...state,
-    showFilterPanel: primaryLayerHasFilter(state.layers, action) && state.showFilterPanel,
-  };
+  return primaryLayerHasFilter(state.layers, action) && state.showFilterPanel;
 }
 
 function toggleFilter(state) {
-  return {
-    ...state,
-    showFilterPanel: !state.showFilterPanel,
-  };
+  return !state.showFilterPanel;
 }
 
 function detailView(state, action) {
   if (!action.payload) {
-    return {
-      ...state,
-      showFilterPanel: state.showFilterPanel,
-    };
+    return state.showFilterPanel;
   }
 
   const { properties, layerId } = action.payload;
   const showDetailView = !!properties && !!layerId;
 
-  return {
-    ...state,
-    showFilterPanel: showDetailView ? false : state.showFilterPanel,
-  };
+  return showDetailView ? false : state.showFilterPanel;
 }
 
 export default function showFilterPanelReducer(
@@ -80,6 +66,6 @@ export default function showFilterPanelReducer(
       return detailView(state, action);
     }
     default:
-      return state;
+      return state.showFilterPanel;
   }
 }

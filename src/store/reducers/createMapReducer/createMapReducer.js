@@ -1,227 +1,265 @@
-import cloneDeep from 'lodash.clonedeep';
 import * as types from '../../constants/actionTypes';
 import defaultState from '../../defaultState';
-import layersReducer from './layersReducer';
-import detailViewReducer from './detailViewReducer';
+import mapRenderedReducer from './mapRenderedReducer';
+import mapLoadedReducer from './mapLoadedReducer';
 import reloadLayersReducer from './reloadLayersReducer';
+import currentStyleReducer from './currentStyleReducer';
+import currentRegionReducer from './currentRegionReducer';
+import layersReducer from './layersReducer';
+import defaultLayersReducer from './defaultLayersReducer';
+import oldLayerObjsReducer from './oldLayerObjsReducer';
 import showSpinnerReducer from './showSpinnerReducer';
+import menuReducer from './menuReducer';
+import categoriesReducer from './categoriesReducer';
+import timeseriesReducer from './timeSeriesReducer';
+import layerVisibilityReducer from './layerVisibilityReducer';
+import filterReducer from './filterReducer';
+import detailViewReducer from './detailViewReducer';
+import showFilterPanelReducer from './showFilterPanelReducer';
+import activeLayerIdReducer from './activeLayerIdReducer';
+import activeLayerIdsReducer from './activeLayerIdsReducer';
+import lastLayerSelectedReducer from './lastLayerSelectedReducer';
+import primaryLayerReducer from './primaryLayerReducer';
+import primarySubLayerReducer from './primarySubLayerReducer';
+import reloadLayerIdReducer from './reloadLayerIdReducer';
 
 function mapRendered(state, action) {
   return {
     ...state,
-    isRendered: action.isRendered,
+    isRendered: mapRenderedReducer(state.isRendered, action),
   };
 }
 
 function mapLoaded(state, action) {
   return {
     ...state,
-    isLoaded: action.isLoaded,
-    reloadLayers: true,
-    currentRegion: Math.random(),
+    isLoaded: mapLoadedReducer(state.isLoaded, action),
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
+    currentRegion: currentRegionReducer(state.changeRegion, action),
   };
 }
 
 function reloadLayers(state, action) {
   return {
     ...state,
-    reloadLayers: action.reload,
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
   };
 }
 
 function changeStyle(state, action) {
   return {
     ...state,
-    currentStyle: action.style,
+    currentStyle: currentStyleReducer(state.currentStyle, action),
   };
 }
 
 function changeRegion(state, action) {
   return {
     ...state,
-    currentRegion: action.region,
+    currentRegion: currentRegionReducer(state.changeRegion, action),
   };
 }
 
 function addLayer(state, action) {
-  const layers = {};
-  const reloadLayerId = state.layers[action.layer.id] ? action.layer.id : null;
-  layers[action.layer.id] = { ...action.layer };
-  const updatedLayers = { ...state.layers, ...layers };
-  const defaultLayers = Object.keys(state.layers).filter(
-    l =>
-      state.layers[l].visible && state.layers[l].id !== reloadLayerId && !state.layers[l].nondefault
-  );
   return {
     ...state,
-    layers: updatedLayers,
-    activeLayerId: action.layer.id,
-    defaultLayers,
-    reloadLayerId,
-    reloadLayers: reloadLayerId ? Math.random() : state.reloadLayers,
+    layers: layersReducer(state.layers, action),
+    activeLayerId: activeLayerIdReducer(
+      {
+        activeLayerId: state.activeLayerId,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    defaultLayers: defaultLayersReducer(
+      { defaultLayers: state.defaultLayers, layers: state.layers },
+      action
+    ),
+    reloadLayerId: reloadLayerIdReducer(
+      {
+        reloadLayerId: state.reloadLayerId,
+        layers: state.layers,
+      },
+      action
+    ),
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
   };
 }
 
 function toggleLayer(state, action) {
-  const { layerId } = action;
-  const layer = state.layers[layerId];
-  const updatedTimeSeries = {
-    ...state.timeseries,
-  };
-  const updatedLayers = {
-    ...state.layers,
-    [layerId]: {
-      ...layer,
-      visible: action.isInit ? layer.visible : !layer.visible,
-    },
-  };
-
-  let primarySubLayer = null;
-  if (layer.layers) {
-    layer.layers.forEach(subLayerId => {
-      updatedLayers[subLayerId].visible = !layer.visible;
-      updatedLayers[subLayerId].parent = layer.id;
-      primarySubLayer = updatedLayers[subLayerId].visible ? subLayerId : null;
-    });
-  }
-
-  const activeLayerIds = [...state.activeLayerIds];
-
-  const activeLayerObj = updatedLayers[layerId];
-
-  const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
-  const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
-  if (!updatedLayers[layerId].parent) {
-    if (addLayerToList) {
-      activeLayerIds.push(layerId);
-    } else if (removeLayerFromList) {
-      const index = activeLayerIds.indexOf(layerId);
-      if (index > -1) {
-        activeLayerIds.splice(index, 1);
-      }
-    }
-  }
-
-  const activeSubLayerIds = Object.keys(updatedLayers).filter(
-    l => updatedLayers[l].visible && updatedLayers[l].parent
-  );
-  const activeFilterLayerIds = activeLayerIds.filter(
-    l => updatedLayers[l].aggregate && updatedLayers[l].aggregate.filter
-  );
-
-  let filterLayerId = '';
-  if (updatedLayers[layerId].visible && layer.aggregate && layer.aggregate.filter) {
-    filterLayerId = layerId;
-  } else if (activeFilterLayerIds && activeFilterLayerIds.length) {
-    filterLayerId = activeFilterLayerIds[activeFilterLayerIds.length - 1];
-  }
-
   return {
     ...state,
-    primarySubLayer: primarySubLayer || activeSubLayerIds[activeSubLayerIds.length - 1],
-    // Update visible property
-    activeLayerId:
-      updatedLayers[layerId].visible && layer.type !== 'line'
-        ? layerId
-        : activeLayerIds[activeLayerIds.length - 1],
-    lastLayerSelected: !updatedLayers[layerId].visible
-      ? activeLayerIds[activeLayerIds.length - 1]
-      : layerId,
-    layers: updatedLayers,
-    reloadLayers: Math.random(),
-    showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
-    visibleLayerId:
-      updatedLayers[layerId].visible && layer.credit
-        ? layer.id
-        : activeLayerIds[activeLayerIds.length - 1],
-    primaryLayer:
-      updatedLayers[layerId].visible && layer.credit
-        ? layer.id
-        : activeLayerIds[activeLayerIds.length - 1],
-    timeseries: updatedTimeSeries,
-    activeLayerIds,
-    filter: {
-      ...state.filter,
-      layerId: filterLayerId,
-    },
-    detailView:
-      state.detailView &&
-      (state.detailView && state.detailView.layerId === layerId) &&
-      updatedLayers[layerId] &&
-      updatedLayers[layerId].visible,
-    showFilterPanel:
-      state.showFilterPanel &&
-      layerId === filterLayerId &&
-      filterLayerId !== '' &&
-      updatedLayers[filterLayerId] &&
-      updatedLayers[filterLayerId].visible,
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
+    layers: layersReducer(state.layers, action),
+    showSpinner: showSpinnerReducer(
+      { showSpinner: state.showSpinner, layers: state.layers },
+      action
+    ),
+    timeseries: timeseriesReducer(state.timeseries, action),
+    visibleLayerId: layerVisibilityReducer(
+      {
+        activeLayerIds: state.activeLayerIds,
+        layers: state.layers,
+        visibleLayerId: state.visibleLayerId,
+      },
+      action
+    ),
+    filter: filterReducer(
+      {
+        filter: state.filter,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    detailView: detailViewReducer({ detailView: state.detailView, layers: state.layers }, action),
+    showFilterPanel: showFilterPanelReducer(
+      {
+        showFilterPanel: state.showFilterPanel,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    activeLayerIds: activeLayerIdsReducer(
+      {
+        activeLayerIds: state.activeLayerIds,
+        layers: state.layers,
+      },
+      action
+    ),
+    activeLayerId: activeLayerIdReducer(
+      {
+        activeLayerId: state.activeLayerId,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    lastLayerSelected: lastLayerSelectedReducer(
+      {
+        lastLayerSelected: state.lastLayerSelected,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    primaryLayer: primaryLayerReducer(
+      {
+        primaryLayer: state.primaryLayer,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    primarySubLayer: primarySubLayerReducer(
+      {
+        primarySubLayer: state.primarySubLayer,
+        layers: state.layers,
+      },
+      action
+    ),
   };
 }
 
 function reloadLayer(state, action) {
   return {
     ...state,
-    reloadLayerId: action.layerId,
+    reloadLayerId: reloadLayerIdReducer(
+      { reloadLayerId: state.reloadLayerId, layers: state.layers },
+      action
+    ),
   };
 }
 
-function layerReloaded(state) {
+function layerReloaded(state, action) {
   return {
     ...state,
-    reloadLayerId: null,
+    reloadLayerId: reloadLayerIdReducer(
+      { reloadLayerId: state.reloadLayerId, layers: state.layers },
+      action
+    ),
   };
 }
 
 function updatePrimaryLayer(state, action) {
-  const primaryLayerHasFilter =
-    state.layers[action.primaryLayer].aggregate &&
-    state.layers[action.primaryLayer].aggregate.filter;
-  const activeIds = [...state.activeLayerIds];
-  if (action.primaryLayer !== state.activeLayerIds[state.activeLayerIds.length - 1]) {
-    if (activeIds.includes(action.primaryLayer)) {
-      activeIds.splice(activeIds.indexOf(action.primaryLayer), 1);
-      activeIds.splice(activeIds.length, 1, action.primaryLayer);
-    }
-  }
   return {
     ...state,
-    detailView: null,
-    activeLayerId: action.primaryLayer,
-    primaryLayer: action.primaryLayer,
-    activeLayerIds: activeIds,
-    filter: {
-      ...state.filter,
-      layerId: primaryLayerHasFilter ? action.primaryLayer : false,
-    },
-    showFilterPanel: primaryLayerHasFilter && state.showFilterPanel,
+    detailView: detailViewReducer({ detailView: state.detailView, layers: state.layers }, action),
+    activeLayerId: activeLayerIdReducer(
+      {
+        activeLayerId: state.activeLayerId,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    primaryLayer: primaryLayerReducer(
+      {
+        primaryLayer: state.primaryLayer,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    activeLayerIds: activeLayerIdsReducer(
+      {
+        activeLayerIds: state.activeLayerIds,
+        layers: state.layers,
+      },
+      action
+    ),
+    filter: filterReducer(
+      {
+        filter: state.filter,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    showFilterPanel: showFilterPanelReducer(
+      {
+        showFilterPanel: state.showFilterPanel,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
   };
 }
 
-function toggleFilter(state) {
+function toggleFilter(state, action) {
   return {
     ...state,
-    detailView: null,
-    showFilterPanel: !state.showFilterPanel,
+    detailView: detailViewReducer({ detailView: state.detailView, layers: state.layers }, action),
+    showFilterPanel: showFilterPanelReducer(
+      {
+        showFilterPanel: state.showFilterPanel,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
   };
 }
 
 function setLayerFilters(state, action) {
-  const { layerId, layerFilters, name } = action;
-  const layer = state.layers[layerId];
-  const filters = layer.filters ? { ...layer.filters } : {};
-  const updatedLayers = {
-    ...state.layers,
-    [layerId]: {
-      ...layer,
-      filters: {
-        ...filters,
-        [name || 'layerFilters']: layerFilters,
-      },
-    },
-  };
   return {
     ...state,
-    layers: updatedLayers,
+    layers: layersReducer(state.layers, action),
     doApplyFilters: true,
   };
 }
@@ -233,145 +271,103 @@ function filtersUpdated(state) {
   };
 }
 
-function toggleMenu(state) {
+function toggleMenu(state, action) {
   return {
     ...state,
-    menuIsOpen: !state.menuIsOpen,
+    menuIsOpen: menuReducer(state.menuIsOpen, action),
   };
 }
 
 function resetFilteredLayer(state, action) {
-  const { oldLayer } = action;
-  const oldLayerObjs = {
-    ...state.oldLayerObjs,
-  };
-  if (!oldLayerObjs[oldLayer.id]) {
-    oldLayerObjs[oldLayer.id] = {};
-  }
-  oldLayerObjs[oldLayer.id] = {
-    ...oldLayer,
-  };
   return {
     ...state,
-    oldLayerObjs: {
-      ...oldLayerObjs,
-    },
+    oldLayerObjs: oldLayerObjsReducer(state.oldLayerObjs, action),
   };
 }
 
 function toggleCategories(state, action) {
-  const { category, index, isRefresh } = action;
-  const openCategories = [...state.openCategories];
-  if (index > -1) {
-    openCategories.splice(index, 1);
-  } else {
-    openCategories.push(category);
-  }
   return {
     ...state,
-    openCategories: isRefresh ? [] : [...openCategories],
+    openCategories: categoriesReducer(state.openCategories, action),
   };
 }
 
 function detailView(state, action) {
-  if (!action.payload) {
-    return {
-      ...state,
-      detailView: null,
-      showFilterPanel: state.showFilterPanel,
-    };
-  }
-
-  const { properties, layerId, model, detailSpec } = action.payload;
-  const showDetailView = !!properties && !!layerId;
-
   return {
     ...state,
-    showFilterPanel: showDetailView ? false : state.showFilterPanel,
-    detailView: showDetailView
-      ? {
-          model: { ...model },
-          spec: { ...detailSpec },
-          properties: { ...properties },
-          layerId,
-        }
-      : null,
+    showFilterPanel: showFilterPanelReducer(
+      {
+        showFilterPanel: state.showFilterPanel,
+        layers: state.layers,
+        activeLayerIds: state.activeLayerIds,
+      },
+      action
+    ),
+    detailView: detailViewReducer({ detailView: state.detailView, layers: state.layers }, action),
   };
 }
 
 function requestData(state, action) {
-  const { layerId } = action;
-  const layer = state.layers[layerId];
-  const updatedLayers = {
-    ...state.layers,
-    [layerId]: {
-      ...layer,
-      isLoading: true,
-      loaded: false,
-    },
-  };
   return {
     ...state,
     // Update isLoading property
-    showSpinner: true,
-    layers: cloneDeep(updatedLayers),
+    showSpinner: showSpinnerReducer(
+      { showSpinner: state.showSpinner, layers: state.layers },
+      action
+    ),
+    layers: layersReducer(state.layers, action),
   };
 }
 
 function receiveData(state, action) {
   const { layer } = action;
-  const oldLayer = state.layers[layer.id];
-  const updatedLayers = {
-    ...state.layers,
-    [layer.id]: {
-      ...oldLayer,
-      ...layer,
-      labels: layer.labels,
-      isLoading: false,
-      loaded: true,
-    },
-  };
+
   return {
     ...state,
-    layers: cloneDeep(updatedLayers),
-    reloadLayers: Math.random(),
-    timeseries: action.timeseries,
-    visibleLayerId: layer.id,
-    showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
+    layers: layersReducer(state.layers, action),
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
+    timeseries: timeseriesReducer(state.timeseries, action),
+    visibleLayerId: layerVisibilityReducer(
+      {
+        activeLayerIds: state.activeLayerIds,
+        layers: state.layers,
+        visibleLayerId: state.visibleLayerId,
+      },
+      action
+    ),
+    showSpinner: showSpinnerReducer(
+      { showSpinner: state.showSpinner, layers: state.layers },
+      action
+    ),
     doApplyFilters: layer && layer.filters && !!layer.filters.admin,
   };
 }
 
 function updateTimeSeries(state, action) {
   const { timeseries, layerId } = action;
-  const { layers } = state;
-  let nextLayers;
-  if (layers[layerId] && layers[layerId].filters && layers[layerId].filters.admin) {
-    nextLayers = {
-      ...layers,
-      [layerId]: {
-        ...layers[layerId],
-        filters: {
-          ...layers[layerId].filters,
-          admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
-        },
-      },
-    };
-  }
 
   return {
     ...state,
-    layers: nextLayers || layers,
-    timeseries,
+    layers: layersReducer(state.layers, action),
+    timeseries: timeseriesReducer(state.timeseries, action),
     doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
-    reloadLayers: Math.random(),
+    reloadLayers: reloadLayersReducer(
+      { reloadLayers: state.reloadLayers, layers: state.layers },
+      action
+    ),
   };
 }
 
 function triggerSpinner(state, action) {
   return {
     ...state,
-    showSpinner: action.isLoaded,
+    showSpinner: showSpinnerReducer(
+      { showSpinner: state.showSpinner, layers: state.layers },
+      action
+    ),
   };
 }
 
@@ -395,52 +391,31 @@ export function createMapReducer(mapId) {
           return addLayer(state, action);
         }
         case types.TOGGLE_LAYER: {
-          toggleLayer(state, action);
-          return {
-            layers: layersReducer(state.layers, action),
-            detailView: detailViewReducer(
-              { detailView: state.detailView, layers: state.layers },
-              action
-            ),
-            reloadLayers: reloadLayersReducer(
-              {
-                reloadLayers: state.reloadLayers,
-                layers: state.layers,
-              },
-              action
-            ),
-            showSpinner: showSpinnerReducer(
-              {
-                showSpinner: state.showSpinner,
-                layers: state.layers,
-              },
-              action
-            ),
-          };
+          return toggleLayer(state, action);
         }
         case types.RELOAD_LAYER: {
           return reloadLayer(state, action);
         }
 
         case types.LAYER_RELOADED: {
-          return layerReloaded(state);
+          return layerReloaded(state, action);
         }
         case types.UPDATE_PRIMARY_LAYER: {
           return updatePrimaryLayer(state, action);
         }
         case types.TOGGLE_FILTER: {
-          return toggleFilter(state);
+          return toggleFilter(state, action);
         }
         case types.SET_LAYER_FILTERS: {
           return setLayerFilters(state, action);
         }
 
         case types.FILTERS_UPDATED: {
-          return filtersUpdated(state);
+          return filtersUpdated(state, action);
         }
 
         case types.TOGGLE_MENU: {
-          return toggleMenu(state);
+          return toggleMenu(state, action);
         }
 
         case types.RESET_FILTERED_LAYER: {

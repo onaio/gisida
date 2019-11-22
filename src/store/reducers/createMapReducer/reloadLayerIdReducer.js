@@ -8,24 +8,15 @@ export function getReloadLayerId(layers, action) {
 function addLayer(state, action) {
   const reloadLayerId = getReloadLayerId(state.layers, action);
 
-  return {
-    ...state,
-    reloadLayerId,
-  };
+  return reloadLayerId;
 }
 
-function reloadLayer(state, action) {
-  return {
-    ...state,
-    reloadLayerId: action.layerId,
-  };
+function reloadLayer(action) {
+  return action.layerId;
 }
 
-function layerReloaded(state) {
-  return {
-    ...state,
-    reloadLayerId: null,
-  };
+function layerReloaded() {
+  return null;
 }
 
 export default function reloadLayerIdReducer(
@@ -40,12 +31,12 @@ export default function reloadLayerIdReducer(
       return addLayer(state, action);
     }
     case RELOAD_LAYER: {
-      return reloadLayer(state, action);
+      return reloadLayer(action);
     }
     case LAYER_RELOADED: {
-      return layerReloaded(state, action);
+      return layerReloaded();
     }
     default:
-      return state;
+      return state.reloadLayerId;
   }
 }

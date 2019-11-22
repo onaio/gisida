@@ -9,10 +9,8 @@ function addLayer(state, action) {
       state.layers[l].id !== getReloadLayerId(state.layers, action) &&
       !state.layers[l].nondefault
   );
-  return {
-    ...state,
-    defaultLayers,
-  };
+
+  return defaultLayers;
 }
 
 export default function defaultLayersReducer(
@@ -27,6 +25,6 @@ export default function defaultLayersReducer(
       return addLayer(state, action);
     }
     default:
-      return state;
+      return state.defaultLayers;
   }
 }

@@ -8,12 +8,7 @@ function toggleLayer(state, action) {
   const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
 
-  return {
-    ...state,
-    lastLayerSelected: !updatedLayers[layerId].visible
-      ? activeLayerIds[activeLayerIds.length - 1]
-      : layerId,
-  };
+  return !updatedLayers[layerId].visible ? activeLayerIds[activeLayerIds.length - 1] : layerId;
 }
 
 export default function lastLayerSelectedReducer(
@@ -29,6 +24,6 @@ export default function lastLayerSelectedReducer(
       return toggleLayer(state, action);
     }
     default:
-      return state;
+      return state.lastLayerSelected;
   }
 }

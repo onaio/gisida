@@ -13,30 +13,23 @@ import {
 function toggleLayer(state, action) {
   const { layerId } = action;
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
-  return {
-    ...state,
-    showSpinner: updatedLayers[layerId].visible && !updatedLayers[layerId].loaded,
-  };
+
+  return updatedLayers[layerId].visible && !updatedLayers[layerId].loaded;
 }
 
-function requestData(state) {
-  return {
-    ...state,
-    showSpinner: true,
-  };
+function requestData() {
+  return true;
 }
 
 function receiveData(state, action) {
   const { layer } = action;
   const updatedLayers = receiveDataLayersReducer(state.layers, action);
-  return {
-    ...state,
-    showSpinner: !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded,
-  };
+
+  return !updatedLayers[layer.id].isLoading && !updatedLayers[layer.id].loaded;
 }
 
-function triggerSpinner(state, action) {
-  return { ...state, showSpinner: action.isLoaded };
+function triggerSpinner(action) {
+  return action.isLoaded;
 }
 
 export default function showSpinnerReducer(
@@ -51,15 +44,15 @@ export default function showSpinnerReducer(
       return toggleLayer(state, action);
     }
     case REQUEST_DATA: {
-      return requestData(state);
+      return requestData();
     }
     case RECEIVE_DATA: {
       return receiveData(state, action);
     }
     case TRIGGER_SPINNER: {
-      return triggerSpinner(state, action);
+      return triggerSpinner(action);
     }
     default:
-      return state;
+      return state.showSpinner;
   }
 }

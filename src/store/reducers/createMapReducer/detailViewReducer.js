@@ -11,52 +11,38 @@ function toggleLayer(state, action) {
   const { layerId } = action;
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
 
-  return {
-    ...state,
-    detailView:
-      state.detailView &&
-      (state.detailView && state.detailView.layerId === layerId) &&
-      updatedLayers[layerId] &&
-      updatedLayers[layerId].visible,
-  };
+  return (
+    state.detailView &&
+    (state.detailView && state.detailView.layerId === layerId) &&
+    updatedLayers[layerId] &&
+    updatedLayers[layerId].visible
+  );
 }
 
-function updatePrimaryLayer(state) {
-  return {
-    ...state,
-    detailView: null,
-  };
+function updatePrimaryLayer() {
+  return null;
 }
 
-function toggleFilter(state) {
-  return {
-    ...state,
-    detailView: null,
-  };
+function toggleFilter() {
+  return null;
 }
 
-function detailView(state, action) {
+function detailView(action) {
   if (!action.payload) {
-    return {
-      ...state,
-      detailView: null,
-    };
+    return null;
   }
 
   const { properties, layerId, model, detailSpec } = action.payload;
   const showDetailView = !!properties && !!layerId;
 
-  return {
-    ...state,
-    detailView: showDetailView
-      ? {
-          model: { ...model },
-          spec: { ...detailSpec },
-          properties: { ...properties },
-          layerId,
-        }
-      : null,
-  };
+  return showDetailView
+    ? {
+        model: { ...model },
+        spec: { ...detailSpec },
+        properties: { ...properties },
+        layerId,
+      }
+    : null;
 }
 
 export default function detailViewReducer(
@@ -71,15 +57,15 @@ export default function detailViewReducer(
       return toggleLayer(state, action);
     }
     case UPDATE_PRIMARY_LAYER: {
-      return updatePrimaryLayer(state, action);
+      return updatePrimaryLayer();
     }
     case TOGGLE_FILTER: {
-      return toggleFilter(state, action);
+      return toggleFilter();
     }
     case DETAIL_VIEW: {
-      return detailView(state, action);
+      return detailView(action);
     }
     default:
-      return state;
+      return state.detailView;
   }
 }

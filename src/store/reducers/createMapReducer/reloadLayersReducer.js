@@ -9,46 +9,28 @@ import {
 import defaultState from '../../defaultState';
 import { getReloadLayerId } from './reloadLayerIdReducer';
 
-function mapLoaded(state) {
-  return {
-    ...state,
-    reloadLayers: true,
-  };
+function mapLoaded() {
+  return true;
 }
 
-function reloadLayers(state, action) {
-  return {
-    ...state,
-    reloadLayers: action.reload,
-  };
+function reloadLayers(action) {
+  return action.reload;
 }
 
 function addLayer(state, action) {
-  return {
-    ...state,
-    reloadLayers: getReloadLayerId(state.layers, action) ? Math.random() : state.reloadLayers,
-  };
+  return getReloadLayerId(state.layers, action) ? Math.random() : state.reloadLayers;
 }
 
-function toggleLayer(state) {
-  return {
-    ...state,
-    reloadLayers: Math.random(),
-  };
+function toggleLayer() {
+  return Math.random();
 }
 
-function receiveData(state) {
-  return {
-    ...state,
-    reloadLayers: Math.random(),
-  };
+function receiveData() {
+  return Math.random();
 }
 
-function updateTimeSeries(state) {
-  return {
-    ...state,
-    reloadLayers: Math.random(),
-  };
+function updateTimeSeries() {
+  return Math.random();
 }
 
 export default function reloadLayersReducer(
@@ -60,24 +42,24 @@ export default function reloadLayersReducer(
 ) {
   switch (action.type) {
     case MAP_LOADED: {
-      return mapLoaded(state);
+      return mapLoaded();
     }
     case RELOAD_LAYERS: {
-      return reloadLayers(state, action);
+      return reloadLayers(action);
     }
     case ADD_LAYER: {
       return addLayer(state, action);
     }
     case TOGGLE_LAYER: {
-      return toggleLayer(state);
+      return toggleLayer();
     }
     case RECEIVE_DATA: {
-      return receiveData(state);
+      return receiveData();
     }
     case UPDATE_TIMESERIES: {
-      return updateTimeSeries(state);
+      return updateTimeSeries();
     }
     default:
-      return state;
+      return state.reloadLayers;
   }
 }

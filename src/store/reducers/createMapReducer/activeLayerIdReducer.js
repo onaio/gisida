@@ -9,27 +9,17 @@ function toggleLayer(state, action) {
   const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
 
-  return {
-    ...state,
-    activeLayerId:
-      updatedLayers[layerId].visible && layer.type !== 'line'
-        ? layerId
-        : activeLayerIds[activeLayerIds.length - 1],
-  };
+  return updatedLayers[layerId].visible && layer.type !== 'line'
+    ? layerId
+    : activeLayerIds[activeLayerIds.length - 1];
 }
 
-function updatePrimaryLayer(state, action) {
-  return {
-    ...state,
-    activeLayerId: action.primaryLayer,
-  };
+function updatePrimaryLayer(action) {
+  return action.primaryLayer;
 }
 
-function addLayer(state, action) {
-  return {
-    ...state,
-    activeLayerId: action.layer.id,
-  };
+function addLayer(action) {
+  return action.layer.id;
 }
 
 export default function activeLayerIdReducer(
@@ -45,12 +35,12 @@ export default function activeLayerIdReducer(
       return toggleLayer(state, action);
     }
     case UPDATE_PRIMARY_LAYER: {
-      return updatePrimaryLayer(state, action);
+      return updatePrimaryLayer(action);
     }
     case ADD_LAYER: {
-      return addLayer(state);
+      return addLayer(action);
     }
     default:
-      return state;
+      return state.activeLayerId;
   }
 }

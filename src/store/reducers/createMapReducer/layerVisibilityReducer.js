@@ -9,21 +9,14 @@ function toggleLayer(state, action) {
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
   const activeLayerIds = toggleLayerActiveLayerIdsReducer(state, action);
 
-  return {
-    ...state,
-    visibleLayerId:
-      updatedLayers[layerId].visible && layer.credit
-        ? layer.id
-        : activeLayerIds[activeLayerIds.length - 1],
-  };
+  return updatedLayers[layerId].visible && layer.credit
+    ? layer.id
+    : activeLayerIds[activeLayerIds.length - 1];
 }
 
-function receiveData(state, action) {
+function receiveData(action) {
   const { layer } = action;
-  return {
-    ...state,
-    visibleLayerId: layer.id,
-  };
+  return layer.id;
 }
 
 export default function layerVisibilityReducer(
@@ -39,9 +32,9 @@ export default function layerVisibilityReducer(
       return toggleLayer(state, action);
     }
     case RECEIVE_DATA: {
-      return receiveData(state, action);
+      return receiveData(action);
     }
     default:
-      return state;
+      return state.visibleLayerId;
   }
 }

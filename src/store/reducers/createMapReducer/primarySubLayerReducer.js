@@ -18,10 +18,7 @@ function toggleLayer(state, action) {
     l => updatedLayers[l].visible && updatedLayers[l].parent
   );
 
-  return {
-    ...state,
-    primarySubLayer: primarySubLayer || activeSubLayerIds[activeSubLayerIds.length - 1],
-  };
+  return primarySubLayer || activeSubLayerIds[activeSubLayerIds.length - 1];
 }
 
 export default function primarySubLayerReducer(
@@ -36,6 +33,6 @@ export default function primarySubLayerReducer(
       return toggleLayer(state, action);
     }
     default:
-      return state;
+      return state.primarySubLayer;
   }
 }
