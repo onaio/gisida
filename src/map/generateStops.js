@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import colorbrewer from 'colorbrewer';
 import { ckmeans } from 'simple-statistics';
 import { comparator } from '../utils/files';
@@ -349,3 +350,5 @@ export default function (layer, timefield, dispatch, nextIndex) {
     dispatch,
   );
 }
+=======
+>>>>>>> refactored buildFiltersMap in maps
