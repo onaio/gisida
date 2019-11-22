@@ -1,24 +1,24 @@
-export const filtersOutputData = [{
-	"NU_indicators/region_label":{
-		"label":"Region",
-		"filterValues":{},
-		"type": "vector"
+export const filtersOutputData = [
+
+[292856,285677,292859,285678,"data/Nutrition_Fixed_Sites.csv"],
+
+{
+	"Upazila": {
+	  "filterValues": {
+		"undefined": 1
+	  },
+	  "label": "Upazila",
+	  "type": "stops"
 	},
-	"NU_indicators/district_label":{
-		"label":"District",
-		"filterValues":{},
-		"type": "vector"
-	},
-	"Type of site":{
-		"label":"Type of Site",
-		"filterValues":{},
-		"type": "vector"
-	},
-	"How many KMs has to travel the furthest away patient to reach the nutrition site?":{
-		"label":"Max Distance Traveled (km)",
-		"filterValues":{},
-		"type": "vector"
+	"reporter/reporter_org": {
+	  "filterValues": {
+		"govt": 1
+	  },
+	  "label": "Partner",
+	  "type": "stops"
 	}
-},
-[292856,285677,292859,285678,"data/Nutrition_Fixed_Sites.csv"]
+  },
+
 ];
+
+export default {filtersOutputData}
