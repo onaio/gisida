@@ -171,7 +171,7 @@ export const aggregateLayerOutput2 = {
             "period": [
               2019,
               10,
-              4
+              5
             ],
             "properties": {
               "_attachments": [],
@@ -291,14 +291,14 @@ export const aggregateLayerOutput2 = {
         "latitude": undefined,
         "longitude": undefined,
         "parsedUID": undefined,
-        "period": "Nov w 4 2019",
+        "period": "Nov w 5 2019",
         "reporter/reporter_org": undefined,
         "submission/hc_loc": "undefined",
         "submission/location_type": undefined,
        "submission/reporting_period": undefined,
         "total": 1,
         "value-count": 0,
-        "weekYear": "2019,10,4"
+        "weekYear": "2019,10,5"
       },
       "type": "Feature"
     }

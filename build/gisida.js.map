@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"version":3,"file":"gisida.js","sources":["webpack:///gisida.js"],"mappings":"AAAA;;;;AA6zSA;;;;;;AAk4EA","sourceRoot":""}
+=======
+{"version":3,"file":"gisida.js","sources":["webpack:///gisida.js"],"mappings":"AAAA;;;;AAmkMA;;;;;;AA2/eA;;;;;;AAysEA","sourceRoot":""}
+>>>>>>> refactored aggregateLayer test output data
