@@ -324,11 +324,6 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
           ? [...parsedData]
           : { ...parsedData };
 
-<<<<<<< HEAD
-=======
-        layerObj.mergedData = layerObj.source.data;
-
->>>>>>> Fix failing jest/lint tests
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(
             layerObj,
@@ -428,17 +423,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return false;
     };
 
-<<<<<<< HEAD
     if (Array.isArray(mergedData)) {
       mergedData = mergedData.filter(d =>
 
         d[layerObj.property] !== null).filter(intialFilter);
-=======
-    if (Array.isArray(mergedData) && !layerObj['merge-locations']) {
-      mergedData = mergedData
-        .filter(d => d[layerObj.property] !== null)
-        .filter(intialFilter);
->>>>>>> Fix failing jest/lint tests
     } else if (Array.isArray(mergedData.features)) {
       mergedData.features = mergedData.features
         .filter(d => d[layerObj.property] !== undefined)
@@ -656,21 +644,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         ? generateFilterOptionsPrev(layerObj)
         : generateFilterOptions(layerObj);
     }
-<<<<<<< HEAD
     layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
       aggregateFormData(layerObj, currentState.LOCATIONS).filter(d =>
         d[layerObj.property]) : mergedData;
 
-=======
-    layerObj.source.data =
-      layerObj.aggregate && layerObj.aggregate.type
-        ? aggregateFormData(
-          layerObj,
-          currentState.LOCATIONS,
-          layerObj.filterOptions || false,
-        )
-        : mergedData;
->>>>>>> Fix failing jest/lint tests
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });

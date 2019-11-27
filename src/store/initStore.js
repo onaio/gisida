@@ -94,6 +94,7 @@ function addConfigToStore(store, config) {
 
 export default function initStore(
   customReducers = {},
+  loadState,
   siteConfigUrl = 'config/site-config.json',
 ) {
   // Register initial reducers
@@ -130,8 +131,6 @@ export default function initStore(
       applyMiddleware(thunk),
     );
   }
-  // Create initial store
-  const store = createStore(reducer, applyMiddleware(thunk));
 
   // Replace the store's reducer whenever a new reducer is registered.
   reducerRegistry.setChangeListener(reducers =>
