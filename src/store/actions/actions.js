@@ -275,7 +275,6 @@ export const getAuthConfigs = config => ({
   config,
 });
 
-
 export const receiveForms = forms => ({
   type: types.RECEIVE_FORMS,
   forms,
@@ -299,15 +298,6 @@ export const loginUser = (token) => {
     return ONAoauth(reqConfig, token, dispatch);
   };
 };
-
-// export const getUserForms = (token) => {
-//   const reqConfig = {
-//     token,
-//     endpoint: 'forms',
-//   };
-
-//   // return dispatch => fetchAPIForms(reqConfig, dispatch);
-// };
 
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('access_token');
