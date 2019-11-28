@@ -1265,7 +1265,7 @@ describe('MAP', () => {
     expect(MAP(stateOldMapIdNoMatch, action)).toEqual(stateOldMapIdNoMatch);
 
     // Case 2.2: action.mapId matches state.mapId
-    // Case 2.2.1: state.layers[action.layerdId] is undefined
+    // Case 2.2.1: state.layers[action.layerId] is undefined
     expect(MAP(stateOld, action)).toEqual({
       ...stateOld,
       showSpinner: true,
