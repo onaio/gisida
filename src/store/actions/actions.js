@@ -123,6 +123,14 @@ export const toggleCategories = (mapId, category, index, isRefresh) => ({
   mapId,
 });
 
+export const toggleGroups = (mapId, group, index, isRefresh) => ({
+  type: types.TOGGLE_GROUPS,
+  group,
+  index,
+  isRefresh,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -246,4 +254,5 @@ export default {
   setLocation,
   initLoc,
   toggleMapLocation,
+  toggleGroups,
 };

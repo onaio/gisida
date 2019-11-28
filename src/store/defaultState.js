@@ -64,6 +64,7 @@ const defaultState = {
     primaryLayer: '',
     primarySubLayer: '',
     reloadLayerId: null,
+    openGroups: [],
   },
   FILTER: {},
   LAYERS: {

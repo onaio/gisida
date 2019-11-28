@@ -10,7 +10,7 @@ export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
     // helper function to handle layers from spec
-    const mapLayers = (Layer) => {
+    const mapLayers = Layer => {
       const layer = typeof Layer === 'string' ? Layer : { ...Layer };
       // callback function for handling json repsponse
       function addLayerToStore(responseObj) {
@@ -48,7 +48,7 @@ export function loadLayers(mapId, dispatch, layers) {
         return true;
       }
 
-      Object.keys(layer).forEach((key) => {
+      Object.keys(layer).forEach(key => {
         layer[key].map(mapLayers);
       });
 
@@ -87,27 +87,23 @@ function addConfigToStore(store, config) {
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
-  loadJSON('config/locations.json', locations =>
-    store.dispatch(actions.initLocations(locations)));
+  loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
-export default function initStore(
-  customReducers = {},
-  siteConfigUrl = 'config/site-config.json',
-) {
+export default function initStore(customReducers = {}, siteConfigUrl = 'config/site-config.json') {
   // Register initial reducers
   const reducersToRegiser = {
     ...defaultReducers,
     ...customReducers,
   };
-  Object.keys(reducersToRegiser).forEach((reducerName) => {
+  Object.keys(reducersToRegiser).forEach(reducerName => {
     reducerRegistry.register(reducerName, reducersToRegiser[reducerName]);
   });
   // Preserve initial state for not-yet-loaded reducers
-  const combine = (r) => {
+  const combine = r => {
     const reducers = { ...r };
     const reducerNames = Object.keys(reducers);
-    Object.keys(defaultReducers).forEach((item) => {
+    Object.keys(defaultReducers).forEach(item => {
       if (reducerNames.indexOf(item) === -1) {
         reducers[item] = (state = null) => state;
       }
@@ -120,8 +116,7 @@ export default function initStore(
   const store = createStore(reducer, applyMiddleware(thunk));
 
   // Replace the store's reducer whenever a new reducer is registered.
-  reducerRegistry.setChangeListener(reducers =>
-    store.replaceReducer(combine(reducers)));
+  reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
   // Read site-config.json and add to redux store
   loadJSON(siteConfigUrl, config => addConfigToStore(store, config));
