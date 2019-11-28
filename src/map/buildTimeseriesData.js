@@ -46,7 +46,7 @@ export default function buildTimeseriesData(
     };
     // determine if period data has any non-zero values
     periodData[p].hasData =
-     layerObj.aggregate.timeseries.showAllZeroPeriods ||
+      layerObj.aggregate.timeseries.showAllZeroPeriods ||
       !!periodData[p].data.reduce(periodHasDataReducer, 0);
     // define admin timeseries filter
     if (layerObj.aggregate.timeseries.admin) {

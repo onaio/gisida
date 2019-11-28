@@ -124,6 +124,14 @@ export const toggleCategories = (mapId, category, index, isRefresh) => ({
   mapId,
 });
 
+export const toggleGroups = (mapId, group, index, isRefresh) => ({
+  type: types.TOGGLE_GROUPS,
+  group,
+  index,
+  isRefresh,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -166,7 +174,7 @@ export const saveFilterOptions = (mapId, filterOptions) => ({
   filterOptions,
 });
 
-export const updateTimeseries = (mapId, timeseries) => ({
+export const updateTimeseries = (mapId, timeseries, layerId) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
   mapId,
@@ -205,6 +213,7 @@ export const loginRequest = credentials => ({
   credentials,
 });
 
+// eslint-disable-next-line
 export const loginSuccess = user => ({
   type: types.LOGIN_SUCCESS,
   isAuthenticated: true,
@@ -229,69 +238,53 @@ export const initAuth = config => ({
   config,
 });
 
-export const requestLogin = (creds) => {
-  return {
-    type: types.LOGIN_REQUEST,
-    isFetching: true,
-    isAuthenticated: false,
-    creds,
-  };
-};
+export const requestLogin = creds => ({
+  type: types.LOGIN_REQUEST,
+  isFetching: true,
+  isAuthenticated: false,
+  creds,
+});
 
-export const receiveLogin = (user) => {
-  return {
-    type: types.LOGIN_SUCCESS,
-    isFetching: false,
-    isAuthenticated: true,
-    user,
-  };
-};
+export const receiveLogin = user => ({
+  type: types.LOGIN_SUCCESS,
+  isFetching: false,
+  isAuthenticated: true,
+  user,
+});
 
-export const loginError = (message) => {
-  return {
-    type: types.LOGIN_FAILURE,
-    isFetching: false,
-    isAuthenticated: false,
-    message,
-  };
-};
+export const loginError = message => ({
+  type: types.LOGIN_FAILURE,
+  isFetching: false,
+  isAuthenticated: false,
+  message,
+});
 
-export const receiveLogout = () => {
-  return {
-    type: types.LOGOUT_SUCCESS,
-    isFetching: false,
-    isAuthenticated: false,
-  }
-}
+export const receiveLogout = () => ({
+  type: types.LOGOUT_SUCCESS,
+  isFetching: false,
+  isAuthenticated: false,
+});
 
-export const receiveToken = (token) => {
-  return {
-    type: types.RECEIVE_TOKEN,
-    token,
-  };
-};
+export const receiveToken = token => ({
+  type: types.RECEIVE_TOKEN,
+  token,
+});
 
-export const getAuthConfigs = (config) => {
-  return {
-    type: types.GET_AUTH_CONFIGS,
-    config,
-  };
-};
+export const getAuthConfigs = config => ({
+  type: types.GET_AUTH_CONFIGS,
+  config,
+});
 
 
-export const receiveForms = (forms) => {
-  return {
-    type: types.RECEIVE_FORMS,
-    forms,
-  };
-};
+export const receiveForms = forms => ({
+  type: types.RECEIVE_FORMS,
+  forms,
+});
 
-export const fetchFormsError = (message) => {
-  return {
-    type: types.FETCH_FORMS_ERROR,
-    message,
-  };
-};
+export const fetchFormsError = message => ({
+  type: types.FETCH_FORMS_ERROR,
+  message,
+});
 
 // todo - Migrate to ONA Connector?
 export const loginUser = (token) => {
@@ -307,22 +300,20 @@ export const loginUser = (token) => {
   };
 };
 
-export const getUserForms = (token) => {
-  const reqConfig = {
-    token,
-    endpoint: 'forms',
-  };
+// export const getUserForms = (token) => {
+//   const reqConfig = {
+//     token,
+//     endpoint: 'forms',
+//   };
 
-  return dispatch => fetchAPIForms(reqConfig, dispatch);
-};
+//   // return dispatch => fetchAPIForms(reqConfig, dispatch);
+// };
 
-export const logoutUser = () => {
-  return (dispatch) => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('state');
-    dispatch(receiveLogout());
-    window.location.reload();
-  };
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('state');
+  dispatch(receiveLogout());
+  window.location.reload();
 };
 export const locationUpdated = mapId => ({
   type: types.LOCATION_UPDATED,
@@ -373,10 +364,11 @@ export default {
   receiveLogin,
   toggleCategories,
   initAuth,
+  saveFilterOptions,
   locationUpdated,
   setLocation,
   initLoc,
   toggleMapLocation,
   getAuthConfigs,
-  saveFilterOptions,
+  toggleGroups,
 };

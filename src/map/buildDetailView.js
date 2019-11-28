@@ -9,8 +9,8 @@ const parseDetailValue = (spec, datum) => {
   if (typeof spec === 'string' && datum[spec] === 0 ?
     true : typeof spec === 'string' && datum[spec]) {
     return datum[spec];
-  // 3) if single property but it's undefined as datum prop, return false
-  } else if (typeof spec === 'string' && datum[spec] === undefined) {
+    // 3) if single property but it's undefined as datum prop, return false
+  } else if (typeof spec === 'string' && !datum[spec]) {
     return false;
   }
 

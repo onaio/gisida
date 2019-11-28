@@ -316,6 +316,12 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         let parsedData;
         if (layerObj.source.type === 'geojson') {
           parsedData = csvToGEOjson(layerObj, processedData);
+          if (layerObj.hideZeroVals) {
+            parsedData = {
+              type: 'FeatureCollection',
+              features: parsedData.features.filter(d => d.properties[layerObj.property] !== 0),
+            };
+          }
         } else {
           parsedData = [...processedData];
         }
@@ -323,6 +329,8 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         layerObj.source.data = Array.isArray(parsedData)
           ? [...parsedData]
           : { ...parsedData };
+
+        layerObj.mergedData = layerObj.source.data;
 
         if (layerObj.aggregate && layerObj.aggregate.type) {
           layerObj.source.data = aggregateFormData(
@@ -423,10 +431,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       return false;
     };
 
-    if (Array.isArray(mergedData)) {
-      mergedData = mergedData.filter(d =>
-
-        d[layerObj.property] !== null).filter(intialFilter);
+    if (Array.isArray(mergedData) && !layerObj['merge-locations']) {
+      mergedData = mergedData
+        .filter(d => d[layerObj.property] !== null)
+        .filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
       mergedData.features = mergedData.features
         .filter(d => d[layerObj.property] !== undefined)
@@ -644,10 +652,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         ? generateFilterOptionsPrev(layerObj)
         : generateFilterOptions(layerObj);
     }
-    layerObj.source.data = layerObj.aggregate && layerObj.aggregate.type ?
-      aggregateFormData(layerObj, currentState.LOCATIONS).filter(d =>
-        d[layerObj.property]) : mergedData;
-
+    layerObj.source.data =
+      layerObj.aggregate && layerObj.aggregate.type
+        ? aggregateFormData(
+          layerObj,
+          currentState.LOCATIONS,
+          layerObj.filterOptions || false,
+        )
+        : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
   });

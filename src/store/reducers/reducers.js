@@ -470,12 +470,6 @@ export function createMapReducer(mapId) {
           };
         }
 
-        case types.LAYER_RELOADED: {
-          return {
-            ...state,
-            reloadLayerId: null,
-          };
-        }
         case types.UPDATE_PRIMARY_LAYER: {
           const primaryLayerHasFilter =
             state.layers[action.primaryLayer].aggregate &&
@@ -587,6 +581,20 @@ export function createMapReducer(mapId) {
           return {
             ...state,
             openCategories: isRefresh ? [] : [...openCategories],
+          };
+        }
+
+        case types.TOGGLE_GROUPS: {
+          const { group, index, isRefresh } = action;
+          const openGroups = [...state.openGroups];
+          if (index > -1) {
+            openGroups.splice(index, 1);
+          } else {
+            openGroups.push(group);
+          }
+          return {
+            ...state,
+            openGroups: isRefresh ? [] : [...openGroups],
           };
         }
 
