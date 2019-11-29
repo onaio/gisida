@@ -102,7 +102,8 @@ class SupAuthZ {
   // Promise Methods for Fetching local files and API Responses
   async getUser() {
     const self = this;
-    // make api call to get user
+    // make api call to get user sleep for 2 sec to avoid 401 response(to be api builders)
+    await this.sleep(2000);
     const User = await ONA.API.fetch({
       token: self.token,
       endpoint: 'user',
@@ -237,6 +238,7 @@ class SupAuthZ {
     this.defaultUnSupAuthZ();
     return false;
   }
+  sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default new SupAuthZ();
