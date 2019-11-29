@@ -48,6 +48,7 @@ class SupAuthZ {
   token;
   pk;
   authConfig;
+  endpoint = '';
 
   defaultOauthC = defaultOauthC;
   defaultSupAuthC = defaultSupAuthC;
@@ -63,12 +64,14 @@ class SupAuthZ {
 
   // Method called from callback to initiate Promise chain - willAuthorize is optional
   async authorizeUser(APP, AUTH, accessToken, willAuthorize) {
+    console.log('app', APP)
     this.config = APP;
     this.auth = AUTH;
     this.token = accessToken;
     localStorage.setItem('access_token', accessToken);
     this.user = await this.getUser();
     localStorage.setItem('user', JSON.stringify(this.user));
+    this.endpoint = APP.authConfigApiMap || "metadata";
     if (!this.config.authConfig) {
       return true;
     }
@@ -120,13 +123,13 @@ class SupAuthZ {
       ? files.fetchCSV(path).then(res => this.parseCSVauth(res))
       : files.fetchJSON(path);
   }
-  async getMediaAuthConfig(pk, token = this.token) {
+  async getMediaAuthConfig(pk, token = this.token, endpoint=this.endpoint) {
     const self = this;
     localStorage.setItem('csvId', pk);
     return ONA.API.fetch({
       // token: this.token,
       token,
-      endpoint: 'metadata',
+      endpoint,
       mimeType: 'text/csv',
       extraPath: `${pk}.csv`,
       base: self.auth && self.auth.apiBase,
