@@ -38,7 +38,6 @@ export const oauthURL = (clientID, callback, baseURL) => {
 export const ONAoauth = (reqConfig, token, dispatch) => api(reqConfig).then(({ user, res }) => {
   if (!res.ok) {
     dispatch(loginError(user.detail));
-    console.log('!res.ok', user);
     window.authRes = res;
     history.replace('/login');
   } else {

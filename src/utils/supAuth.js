@@ -64,7 +64,6 @@ class SupAuthZ {
 
   // Method called from callback to initiate Promise chain - willAuthorize is optional
   async authorizeUser(APP, AUTH, accessToken, willAuthorize) {
-    console.log('app', APP)
     this.config = APP;
     this.auth = AUTH;
     this.token = accessToken;
