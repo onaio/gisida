@@ -50,15 +50,19 @@ export default (config, callback) => (callback ?
     res,
   })));
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 export class API {
   constructor() {
     this.apiHeaders = apiHeaders;
     this.apiRequest = apiRequest;
     this.fetchAPI = fetchAPI;
-    this.fetch = async (config, callback, n = 3) => fetchAPI(config).then((res) => {
+    this.fetch = async (config, callback, n = 15) => fetchAPI(config).then(async (res) => {
       if (res.status === 401 && n > 0) {
+        await sleep(2000);
         return this.fetch(config, callback, n - 1);
       }
+      n = 0;
       // Define response parse method
       let parse;
       switch (config.mimeType) {
