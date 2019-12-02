@@ -1,3 +1,5 @@
+/* eslint-disable arrow-parens */
+/* eslint-disable comma-dangle */
 import * as files from './files';
 import ONA from '../connectors/ona-api/ona';
 
@@ -102,22 +104,22 @@ class SupAuthZ {
   // Promise Methods for Fetching local files and API Responses
   async getUser() {
     const self = this;
-    // make api call to get user sleep for 2 sec to avoid 401 response(to be api builders)
-    await this.sleep(2000);
-    const User = await ONA.API.fetch({
-      token: self.token,
-      endpoint: 'user',
-      base: self.auth && self.auth.apiBase,
-    }, user => user);
+    const User = await ONA.API.fetch(
+      {
+        token: self.token,
+        endpoint: 'user',
+        base: self.auth && self.auth.apiBase,
+        method: 'POST',
+      },
+      user => user
+    );
     return User;
   }
   async getAuthConfig(pk) {
-    return (typeof pk === 'string')
-      ? SupAuthZ.getLocalAuthConfig(pk)
-      : this.getMediaAuthConfig(pk);
+    return typeof pk === 'string' ? SupAuthZ.getLocalAuthConfig(pk) : this.getMediaAuthConfig(pk);
   }
   static async getLocalAuthConfig(path) {
-    return (path.indexOf('.csv') !== -1)
+    return path.indexOf('.csv') !== -1
       ? files.fetchCSV(path).then(res => this.parseCSVauth(res))
       : files.fetchJSON(path);
   }
@@ -132,7 +134,7 @@ class SupAuthZ {
       extraPath: `${pk}.csv`,
       base: self.auth && self.auth.apiBase,
     }).then(({ user }) => {
-      if ((user.length === 0) || (user.detail && user.detail === 'Not found.')) {
+      if (user.length === 0 || (user.detail && user.detail === 'Not found.')) {
         return false;
       }
       const auth = this.parseCSVauth(user);
@@ -168,7 +170,7 @@ class SupAuthZ {
         if (Prop === 'SITE' && user[Prop] === 'OK') {
           authConfig.push(user.username);
 
-        // Check User Auth Prop for View specific Auth (exclude Public Views)
+          // Check User Auth Prop for View specific Auth (exclude Public Views)
         } else if (Prop.indexOf('VIEW.') === 0 && user[Prop] === 'OK') {
           // Define actual View name
           [, propName] = Prop.split('.');
@@ -179,7 +181,7 @@ class SupAuthZ {
           // Add username to list of authorized users
           if (prop) authConfig.VIEWS[prop].push(user.username);
 
-        // Check User Auth Prop for Layer specific Auth (exclude Public Layers)
+          // Check User Auth Prop for Layer specific Auth (exclude Public Layers)
         } else if (Prop.indexOf('LAYER.') === 0 && user[Prop] === 'OK') {
           // Define actual Layer name
           [, layerName] = Prop.split('.');
@@ -201,7 +203,7 @@ class SupAuthZ {
     return authConfig;
   }
 
-  defaultSupViewAuthC = (path) => {
+  defaultSupViewAuthC = path => {
     // Define this.user
     if (!this.user && !localStorage.getItem('user')) {
       this.defaultUnSupAuthZ();
@@ -237,8 +239,7 @@ class SupAuthZ {
     }
     this.defaultUnSupAuthZ();
     return false;
-  }
-  sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+  };
 }
 
 export default new SupAuthZ();
