@@ -43,9 +43,9 @@ const fetchAPI = config => fetch(apiRequest(config, apiHeaders(config)));
 // config.params   - (optional) Additional parameters to be appeneded to API Path
 // config.mimeType - (optional) Specify mimeType for Request Headers
 // callback        - (optional) Function to take JSON response, otherwise res is simply returned
-export default (config, callback) => (callback
-  ? fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(callback)
-  : fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(({ user, res }) => ({
+export default (config, callback) => (callback ?
+  fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(callback) :
+  fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(({ user, res }) => ({
     user,
     res,
   })));
@@ -55,7 +55,10 @@ export class API {
     this.apiHeaders = apiHeaders;
     this.apiRequest = apiRequest;
     this.fetchAPI = fetchAPI;
-    this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
+    this.fetch = async (config, callback, n = 3) => fetchAPI(config).then((res) => {
+      if (res.status === 401 && n > 0) {
+        return this.fetch(config, callback, n - 1);
+      }
       // Define response parse method
       let parse;
       switch (config.mimeType) {
