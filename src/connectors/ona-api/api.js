@@ -1,4 +1,10 @@
+/* eslint-disable arrow-parens */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable indent */
 import { parseCSV } from './../../utils/files';
+import isTokenExpired from './../../utils/isTokenExpired';
+import defaultUnSupAuthZ from './common';
+import history from './../../helpers/history';
 
 // Map of ONA API Endpoints
 const apiMap = {
@@ -10,7 +16,7 @@ const apiMap = {
 };
 
 // Generate Headers for API Fetch
-const apiHeaders = (config) => {
+const apiHeaders = config => {
   const headers = new Headers();
   if (config && config.mimeType) headers.append('Content-Type', config.mimeType);
   if (!config || !config.token) return headers;
@@ -43,39 +49,62 @@ const fetchAPI = config => fetch(apiRequest(config, apiHeaders(config)));
 // config.params   - (optional) Additional parameters to be appeneded to API Path
 // config.mimeType - (optional) Specify mimeType for Request Headers
 // callback        - (optional) Function to take JSON response, otherwise res is simply returned
-export default (config, callback) => (callback
-  ? fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(callback)
-  : fetchAPI(config).then(res => res.json().then(user => ({ user, res }))).then(({ user, res }) => ({
-    user,
-    res,
-  })));
+export default (config, callback) =>
+  callback
+    ? fetchAPI(config)
+        .then(res => res.json().then(user => ({ user, res })))
+        .then(callback)
+    : fetchAPI(config)
+        .then(res => res.json().then(user => ({ user, res })))
+        .then(({ user, res }) => ({
+          user,
+          res,
+        }));
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const logoutUser = () => {
+  // Log out user and redirect user to login page
+  defaultUnSupAuthZ();
+  return history.push('/login');
+};
 
 export class API {
   constructor() {
     this.apiHeaders = apiHeaders;
     this.apiRequest = apiRequest;
     this.fetchAPI = fetchAPI;
-    this.fetch = async (config, callback) => fetchAPI(config).then((res) => {
-      // Define response parse method
-      let parse;
-      switch (config.mimeType) {
-        case 'text/csv':
-          parse = 'text';
-          break;
-        case 'image/jpeg':
-          parse = 'blob';
-          break;
-        default:
-          parse = 'json';
-      }
+    this.fetch = async (config, callback, n = 15) =>
+      fetchAPI(config).then(async res => {
+        // Logout user if request if token is expired
+        if (res.status === 401 && isTokenExpired) {
+          logoutUser();
+        }
+        if (res.status === 401 && n > 0) {
+          await sleep(2000);
+          return this.fetch(config, callback, n - 1);
+        }
 
-      // Return parsed Response
-      // todo - Change "user" to "body"
-      return res[parse]().then((parsed) => {
-        // if parsed text is CSV then return Papaparse via parseCSV
-        if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
-        return parsed;
-      }, (callback || (user => ({ res, user }))));
-    });
+        // Define response parse method
+        let parse;
+        switch (config.mimeType) {
+          case 'text/csv':
+            parse = 'text';
+            break;
+          case 'image/jpeg':
+            parse = 'blob';
+            break;
+          default:
+            parse = 'json';
+        }
+
+        // Return parsed Response
+        // todo - Change "user" to "body"
+        return res[parse]().then(parsed => {
+          // if parsed text is CSV then return Papaparse via parseCSV
+          if (config.mimeType === 'text/csv') return { user: parseCSV(parsed) };
+          return parsed;
+        }, callback || (user => ({ res, user })));
+      });
   }
 }
