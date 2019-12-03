@@ -1,4 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable global-require */
 if (!global._babelPolyfill) require('babel-polyfill');
+
 const gisida = {};
 
 gisida.version = require('../package.json').version;
@@ -59,6 +62,6 @@ gisida.localStorage = {};
 
 gisida.localStorage.loadState = require('./utils/localStorage').loadState;
 gisida.localStorage.saveState = require('./utils/localStorage').saveState;
-
+gisida.isTokenExpired = require('./utils/isTokenExpired').default;
 
 module.exports = gisida;

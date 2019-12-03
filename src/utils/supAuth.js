@@ -2,6 +2,7 @@
 /* eslint-disable comma-dangle */
 import * as files from './files';
 import ONA from '../connectors/ona-api/ona';
+import defaultUnSupAuthZ from './../connectors/ona-api/common';
 
 // Default Authentications
 export const defaultOauthC = () => !!localStorage.getItem('access_token');
@@ -36,12 +37,6 @@ export const defaultSupAuthC = (User, AuthConfig) => {
     }
   }
   return false;
-};
-
-export const defaultUnSupAuthZ = () => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('user');
-  localStorage.removeItem('authConfig');
 };
 
 class SupAuthZ {
