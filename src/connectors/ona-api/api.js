@@ -2,9 +2,6 @@
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable indent */
 import { parseCSV } from './../../utils/files';
-import isTokenExpired from './../../utils/isTokenExpired';
-import defaultUnSupAuthZ from './common';
-import history from './../../helpers/history';
 
 // Map of ONA API Endpoints
 const apiMap = {
@@ -63,12 +60,6 @@ export default (config, callback) =>
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const logoutUser = () => {
-  // Log out user and redirect user to login page
-  defaultUnSupAuthZ();
-  return history.push('/login');
-};
-
 export class API {
   constructor() {
     this.apiHeaders = apiHeaders;
@@ -76,10 +67,7 @@ export class API {
     this.fetchAPI = fetchAPI;
     this.fetch = async (config, callback, n = 15) =>
       fetchAPI(config).then(async res => {
-        // Logout user if request if token is expired
-        if (res.status === 401 && isTokenExpired) {
-          logoutUser();
-        }
+        // TODO: Logout user if request if token is expired
         if (res.status === 401 && n > 0) {
           await sleep(2000);
           return this.fetch(config, callback, n - 1);
