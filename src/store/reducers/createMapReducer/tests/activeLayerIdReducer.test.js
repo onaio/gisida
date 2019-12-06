@@ -1,6 +1,6 @@
 import activeLayerIdReducer from './../activeLayerIdReducer';
 import defaultState from './../../../../../src/store/defaultState';
-import { TOGGLE_LAYER, UPDATE_PRIMARY_LAYER, ADD_LAYER } from './../../../constants/actionTypes';
+import { TOGGLE_LAYER } from './../../../constants/actionTypes';
 
 const mapId = 'map-1';
 const layerId = 'test-layer';
@@ -133,10 +133,42 @@ describe('activeLayerIdReducer', () => {
       'layer3'
     );
 
+    // Case 2.2.2: action.isInit is false
+    // Case 2.2.2.1: state.layers[action.layerId].visible is true
+    // Case 2.2.2.1.1: state.activeLayerIds includes action.layerId
+    // Case 2.2.2.1.1.1: state.layers[action.layerId].type is NOT line
     const actionIsInitFalse = {
       ...action,
       isInit: false,
     };
     expect(activeLayerIdReducer(stateOld, actionIsInitFalse)).toEqual(undefined);
+
+    // Case 2.2.2.1.1.2: state.layers[action.layerId] type is line
+    expect(activeLayerIdReducer(stateLine, actionIsInitFalse)).toEqual(undefined);
+
+    // Case 2.2.2.1.2: state.activeLayerIds does NOT include action.layerId
+    // Case 2.2.2.1.2.1: state.layers[action.layerId].type is NOT line
+    expect(activeLayerIdReducer(stateNotInActiveLayerIds, actionIsInitFalse)).toEqual('layer2');
+
+    // Case 2.2.2.1.2.2: state.layers[action.layerId].type is line
+    expect(activeLayerIdReducer(stateLineNotInActiveLayerIds, actionIsInitFalse)).toEqual('layer2');
+
+    // Case 2.2.2.2: state.layers[action.layerId].visible false
+    // Case 2.2.2.2.1: state.activeLayerIds includes action.layerId
+    // Case 2.2.2.2.1.1: state.layers[action.layerId].type is NOT line
+    expect(activeLayerIdReducer(stateVisibleFalse, actionIsInitFalse)).toEqual(layerId);
+
+    // Case 2.2.2.2.1.2: state.layers[action.layerId] type is line
+    expect(activeLayerIdReducer(stateVisibleFalseLine, actionIsInitFalse)).toEqual(layerId);
+
+    // Case 2.2.2.2.2: state.activeLayerIds does NOT include action.layerId
+    // Case 2.2.2.2.2.1: state.layers[action.layerId].type is NOT line
+    expect(activeLayerIdReducer(stateVisibleFalseNotInActiveLayerIds, actionIsInitFalse)).toEqual(
+      layerId
+    );
+    // Case 2.2.2.2.2.2: state.layers[action.layerId] type is line
+    expect(
+      activeLayerIdReducer(stateVisibleFalseNotInActiveLayerIdsLine, actionIsInitFalse)
+    ).toEqual(layerId);
   });
 });
