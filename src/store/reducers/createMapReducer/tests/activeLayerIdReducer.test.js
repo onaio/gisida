@@ -1,6 +1,6 @@
 import activeLayerIdReducer from './../activeLayerIdReducer';
 import defaultState from './../../../../../src/store/defaultState';
-import { TOGGLE_LAYER } from './../../../constants/actionTypes';
+import { TOGGLE_LAYER, UPDATE_PRIMARY_LAYER, ADD_LAYER } from './../../../constants/actionTypes';
 
 const mapId = 'map-1';
 const layerId = 'test-layer';
@@ -170,5 +170,32 @@ describe('activeLayerIdReducer', () => {
     expect(
       activeLayerIdReducer(stateVisibleFalseNotInActiveLayerIdsLine, actionIsInitFalse)
     ).toEqual(layerId);
+  });
+
+  it('should handle UPDATE_PRIMARY_LAYER', () => {
+    const action = {
+      type: UPDATE_PRIMARY_LAYER,
+      primaryLayer: layerId,
+      mapId,
+    };
+    // Case 1: The state obj is empty
+    expect(activeLayerIdReducer({}, action)).toEqual(action.primaryLayer);
+
+    // Case 2: The state obj is NOT empty
+    expect(activeLayerIdReducer(stateOld, action)).toEqual(action.primaryLayer);
+  });
+
+  it('should handle ADD_LAYER', () => {
+    const action = {
+      type: ADD_LAYER,
+      layer,
+      mapId,
+    };
+
+    // Case 1: The state obj is empty
+    expect(activeLayerIdReducer({}, action)).toEqual(action.layer.id);
+
+    // Case 2: The state obj is NOT empty
+    expect(activeLayerIdReducer(stateOld, action)).toEqual(action.layer.id);
   });
 });
