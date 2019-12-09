@@ -65,6 +65,9 @@ const defaultState = {
     primarySubLayer: '',
     reloadLayerId: null,
     openGroups: [],
+    menuScroll: {
+      scrollTop: 0,
+    },
   },
   AUTH: {
     isFetching: false,

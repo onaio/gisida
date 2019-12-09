@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 import * as types from '../constants/actionTypes';
 import { ONAoauth } from '../../connectors/ona-api/auth';
 
@@ -286,20 +287,20 @@ export const fetchFormsError = message => ({
 });
 
 // todo - Migrate to ONA Connector?
-export const loginUser = (token) => {
+export const loginUser = token => {
   const reqConfig = {
     token,
     endpoint: 'user',
   };
 
-  return (dispatch) => {
+  return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(token));
     return ONAoauth(reqConfig, token, dispatch);
   };
 };
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = () => dispatch => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('state');
   dispatch(receiveLogout());
@@ -319,6 +320,12 @@ export const setLocation = (mapId, loc) => ({
 export const toggleMapLocation = loc => ({
   type: types.SET_LOCATION,
   loc,
+});
+
+export const setMenuScroll = (mapId, scrollTop) => ({
+  type: types.SET_MENU_SCROLL,
+  mapId,
+  scrollTop,
 });
 
 export default {
@@ -361,4 +368,5 @@ export default {
   toggleMapLocation,
   getAuthConfigs,
   toggleGroups,
+  setMenuScroll,
 };
