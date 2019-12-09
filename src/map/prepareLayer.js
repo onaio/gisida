@@ -324,13 +324,13 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         if (layerObj.aggregate.hasCustomFilter) {
           const reportsPerFacility = {};
           uniqueFacilities.forEach((facility) => {
-            reportsPerFacility[facility] = processedData.filter(d => d.facility_id === facility)
+            reportsPerFacility[facility] = processedData.filter(facilityData => facilityData.facility_id === facility)
               .map(d => d.reporting_period);
           });
           processedData.forEach((pdata) => {
-            if (reportsPerFacility[data.facility_id] &&
-               reportsPerFacility[data.facility_id].length) {
-              pdata.no_of_reports = reportsPerFacility[data.facility_id].length;
+            if (reportsPerFacility[pdata.facility_id] &&
+               reportsPerFacility[pdata.facility_id].length) {
+              pdata.no_of_reports = reportsPerFacility[pdata.facility_id].length;
             } else {
               pdata.no_of_reports = '0';
             }
