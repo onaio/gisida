@@ -328,7 +328,8 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
               .map(d => d.reporting_period);
           });
           processedData.forEach((pdata) => {
-            if (reportsPerFacility[data.facility_id].length) {
+            if (reportsPerFacility[data.facility_id] &&
+               reportsPerFacility[data.facility_id].length) {
               pdata.no_of_reports = reportsPerFacility[data.facility_id].length;
             } else {
               pdata.no_of_reports = '0';
