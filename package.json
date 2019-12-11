@@ -58,7 +58,8 @@
       "!**/serviceWorker.js",
       "!**/index.js",
       "!**/test/**",
-      "!**/build/**"
+      "!**/build/**",
+      "!**/tests/**"
     ]
   },
   "dependencies": {
