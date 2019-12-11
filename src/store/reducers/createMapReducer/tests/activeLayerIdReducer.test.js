@@ -300,7 +300,7 @@ describe('activeLayerIdReducer', () => {
     expect(
       activeLayerIdReducer(stateVisibleFalseNotInActiveLayerIdsLine, actionIsInitFalse)
     ).toEqual(layerId);
-    // Case 2.2.2.2.2.2.2: satte.layers[action.layerId].parent is defined
+    // Case 2.2.2.2.2.2.2: state.layers[action.layerId].parent is defined
     expect(
       activeLayerIdReducer(stateVisibleFalseNotInActiveLayerIdsLineParent, actionIsInitFalse)
     ).toEqual('layer3');

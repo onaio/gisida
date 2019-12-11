@@ -6,10 +6,12 @@ export function toggleLayer(state, action) {
   const { layerId } = action;
   const updatedLayers = toggleLayerLayersReducer(state.layers, action);
   const activeLayerIds = [...state.activeLayerIds];
-  const activeLayerObj = updatedLayers[layerId];
-  const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
-  const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
+
   if (!updatedLayers[layerId].parent) {
+    const activeLayerObj = updatedLayers[layerId];
+    const addLayerToList = !activeLayerIds.includes(layerId) && activeLayerObj.visible;
+    const removeLayerFromList = activeLayerIds.includes(layerId) && !activeLayerObj.visible;
+
     if (addLayerToList) {
       activeLayerIds.push(layerId);
     } else if (removeLayerFromList) {
