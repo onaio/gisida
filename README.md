@@ -176,27 +176,3 @@ $ npm build
 ```
 $ npm publish
 ```
-
-### Releases
-
-1. Check https://github.com/onaio/gisida/releases to see what the next release version number should be, i.e. if the last release is `0.0.7` the next should be `0.0.8` depending on the Semantic Versioning guide, refer to (https://semver.org/).
-
-2. Create branch for new version being released, `git checkout -b <version-number>`
-
-```
-$ git checkout -b 0.0.8
-```
-
-3. Run `npm version <version-number>`. This creates a commit and updates version number in package.json.
-
-```
-$ npm version 0.0.8
-```
-
-4. Push release branch to Github and tag `git push -u --follow-tags origin <version-number>` e.g
-
-```
-$ git push -u --follow-tags origin 0.0.8
-```
-
-5. Merge release to master once it passes review

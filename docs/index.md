@@ -50,3 +50,18 @@ Gisida and Gisida React use [Semantic Versioning](https://semver.org/) schema, a
 - `v1.2.3-reveal.1` A **tagged** release which may or may standardized and included in future releases (we try not to do this but can be useful in a time-crunch)
 
 _Note: Release candidates and tagged releases are the only time releases should be made from feature branches._
+
+### Release Process
+
+All major, minor, and patch releases should be tagged from `staging`, release candidate and tagged releases may use feature branches. When tagging and publishing a new release, take the following steps:
+
+1. Merge your feature branch to `staging`
+2. Go to the [Github Releases page](https://github.com/onaio/gisida/releases) and click `Draft a new release`
+3. Name the Tag version according to the Semantic Versioning described above
+4. Select `staging` for the Target branch
+5. Use the Tag version as the Release title
+6. Include in the description a list of all merged PRs since the last release
+7. Click Publish release
+8. Merge `staging` into `master`
+9. Publish the release by locally running: `git fetch --tags origin && npm login && npm publish --tag=<version>`
+10. Verify the release was published to npm
