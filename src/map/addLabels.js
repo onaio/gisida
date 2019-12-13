@@ -27,7 +27,10 @@ export default function addLabels(map, layer, data) {
           labels.push({
             el,
             offset: layer.labels.offset,
-            coordinates: [label[layer.labels.coordinates[0]], label[layer.labels.coordinates[1]]],
+            coordinates: [
+              label[layer.labels.coordinates[0]],
+              label[layer.labels.coordinates[1]],
+            ],
           });
         }
       });
@@ -48,9 +51,11 @@ export default function addLabels(map, layer, data) {
       nextLayer.labels.maxzoom = 22;
     }
     map.on('zoom', () => {
-      if (map.getZoom() > layer.labels.minzoom
-        && map.getZoom() < layer.labels.maxzoom
-        && map.getLayer(layer.id) !== undefined) {
+      if (
+        map.getZoom() > layer.labels.minzoom &&
+        map.getZoom() < layer.labels.maxzoom &&
+        map.getLayer(layer.id) !== undefined
+      ) {
         removeLabels(layer);
 
         labels.forEach((row) => {

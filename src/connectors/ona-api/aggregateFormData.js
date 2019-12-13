@@ -13,8 +13,10 @@ export function processFormData(formData, layerObj) {
   const matchingValues = aggregateOptions['matching-values'];
   const includeRows = aggregateOptions['include-rows'];
   const submissionDateField = aggregateOptions['date-by'] || 'today';
-  const longProp = (layerObj['geo-columns'] && layerObj['geo-columns'][0]) || 'Longitude';
-  const latProp = (layerObj['geo-columns'] && layerObj['geo-columns'][1]) || 'Latitude';
+  const longProp =
+    (layerObj['geo-columns'] && layerObj['geo-columns'][0]) || 'Longitude';
+  const latProp =
+    (layerObj['geo-columns'] && layerObj['geo-columns'][1]) || 'Latitude';
   const isGeoJson = layerObj.source.type === 'geojson';
   const possibleDateFormats = [
     'YYYY-MM-DD',
@@ -26,13 +28,32 @@ export function processFormData(formData, layerObj) {
     moment.CUSTOM_FORMAT,
   ];
 
-  const isCumulative = aggregateOptions.timeseries && aggregateOptions.timeseries.type === 'cumulative';
-  const isUsingToday = aggregateOptions.isUsingToday || submissionDateField === 'today';
+  const isCumulative =
+    aggregateOptions.timeseries &&
+    aggregateOptions.timeseries.type === 'cumulative';
+  const isUsingToday =
+    aggregateOptions.isUsingToday || submissionDateField === 'today';
 
   if (includeRows) {
     includeRows.forEach(([field, values]) => {
       data = data.filter(datum => values.includes(datum[field]));
     });
+  }
+
+  function matchingRowsGenerator(rowData, indicator, filterVals) {
+    const dataCopy = [...rowData];
+    let datum;
+    const matches = [];
+    for (let d = 0; d < dataCopy.length; d += 1) {
+      datum = dataCopy[d];
+      for (let f = 0; f < filterVals.length; f += 1) {
+        if (datum[indicator].includes(filterVals[f])) {
+          matches.push(datum);
+          break;
+        }
+      }
+    }
+    return matches;
   }
 
   // Add week number to data
@@ -45,13 +66,22 @@ export function processFormData(formData, layerObj) {
       let weekMonth;
 
       for (let i = 0; i < possibleDateFormats.length; i += 1) {
-        period = moment(datum[submissionDateField], possibleDateFormats[i], true);
+        period = moment(
+          datum[submissionDateField],
+          possibleDateFormats[i],
+          true,
+        );
         week = period.week();
         year = period.year();
         month = period.month();
         if (!Number.isNaN(week)) {
           const m = moment().week(week);
-          weekMonth = (m.week() - moment(m).startOf('month').week()) + 1;
+          weekMonth =
+            (m.week() -
+            moment(m)
+              .startOf('month')
+              .week()) +
+            1;
         }
         if (week && !Number.isNaN(week)) {
           break;
@@ -79,7 +109,6 @@ export function processFormData(formData, layerObj) {
     });
   }
 
-
   // Group data by period property
   data = groupBy(data, isUsingToday ? 'period' : aggregateOptions['date-by']);
 
@@ -96,7 +125,11 @@ export function processFormData(formData, layerObj) {
     availablePeriods = availablePeriods
       .map((p) => {
         const [y, m, wkm] = p.split(',');
-        return [Number.parseInt(y, 10), Number.parseInt(m, 10), Number.parseInt(wkm, 10)];
+        return [
+          Number.parseInt(y, 10),
+          Number.parseInt(m, 10),
+          Number.parseInt(wkm, 10),
+        ];
       })
       .sort(comparator)
       .map(p => p.toString());
@@ -123,7 +156,9 @@ export function processFormData(formData, layerObj) {
     const groupedPeriodData = groupBy(periodData, groupByField);
     const [year, month, weekMonth] = availablePeriods[i].split(',');
     currentPeriod = isUsingToday
-      ? `${moment().month(month).format('MMM')} w ${weekMonth} ${year}`
+      ? `${moment()
+        .month(month)
+        .format('MMM')} w ${weekMonth} ${year}`
       : availablePeriods[i];
     currentPeriodaggregatedData = [];
 
@@ -150,7 +185,9 @@ export function processFormData(formData, layerObj) {
 
       if (isGeoJson) {
         groupProps[availableGroups[j]].coordinates = [
-          groupData[0][latProp], groupData[0][longProp]];
+          groupData[0][latProp],
+          groupData[0][longProp],
+        ];
       }
 
       let numberProps;
@@ -171,18 +208,21 @@ export function processFormData(formData, layerObj) {
       }
 
       // Get group data from previous period
-      const previousPeriodGroupData =
-        aggregatedData.filter(d => d[groupByField] === availableGroups[j]);
+      const previousPeriodGroupData = aggregatedData
+        .filter(d => d[groupByField] === availableGroups[j]);
       if (isCumulative && previousPeriodGroupData.length) {
-        prevRowsCount = previousPeriodGroupData[previousPeriodGroupData.length - 1]['value-count'] || 0;
-        prevSumTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1][indicatorField]
-          || 0;
-        prevTotal = previousPeriodGroupData[previousPeriodGroupData.length - 1].total || 0;
+        const prevGroupedDataVal =
+          previousPeriodGroupData[previousPeriodGroupData.length - 1];
+        prevRowsCount = Number(prevGroupedDataVal['value-count']) || 0;
+        prevSumTotal = Number(prevGroupedDataVal[indicatorField]) || 0;
+        prevTotal =
+          previousPeriodGroupData[previousPeriodGroupData.length - 1].total ||
+          0;
         if (extraProps && extraProps.length) {
           numberProps.forEach((p) => {
-            prevExtraPropsSumTotal[p] = previousPeriodGroupData[
-              previousPeriodGroupData.length - 1][p]
-              || 0;
+            prevExtraPropsSumTotal[p] =
+              previousPeriodGroupData[previousPeriodGroupData.length - 1][p] ||
+              0;
           });
         }
       }
@@ -190,8 +230,11 @@ export function processFormData(formData, layerObj) {
       // Handle actual aggregation
       if (aggregateOptions.type === 'count') {
         // Count rows that match the values list for the indicator field
-        matchingRows = groupData.filter(datum =>
-          matchingValues.includes(datum[indicatorField]));
+        matchingRows = matchingRowsGenerator(
+          groupData,
+          indicatorField,
+          matchingValues,
+        );
       } else if (aggregateOptions.type === 'sum') {
         // reduce sumTotal for current groupData
         for (let x = 0; x < groupData.length; x += 1) {
@@ -221,16 +264,19 @@ export function processFormData(formData, layerObj) {
         sumTotal += prevSumTotal;
       }
 
-      const matchingRowsCount = (matchingRows.length || matchingRows) + prevRowsCount;
+      const matchingRowsCount =
+        (matchingRows.length || matchingRows) + prevRowsCount;
       // Get the total number of rows for the group
       const groupTotal = groupData.length + prevTotal;
       // calculate the percentage of matching rows using group total
       const percentage = ((matchingRowsCount / groupTotal) * 100).toFixed(0);
       // Final aggregated indicator value for  group
-      const indicatorValue = aggregateOptions.type === 'count'
-        ? percentage
-        : (Number.isNaN(sumTotal) && (sumTotal.length && sumTotal.replace(/,/g, '')))
-        || sumTotal;
+      const indicatorValue =
+        aggregateOptions.type === 'count'
+          ? percentage
+          : (Number.isNaN(sumTotal) &&
+              (sumTotal.length && sumTotal.replace(/,/g, ''))) ||
+            sumTotal;
 
       const currentPeriodaggregatedDataObj = {
         [groupByField]: availableGroups[j],
@@ -246,8 +292,10 @@ export function processFormData(formData, layerObj) {
 
       if (isGeoJson) {
         const { coordinates } = groupProps[availableGroups[j]];
-        [currentPeriodaggregatedDataObj[latProp],
-          currentPeriodaggregatedDataObj[longProp]] = coordinates;
+        [
+          currentPeriodaggregatedDataObj[latProp],
+          currentPeriodaggregatedDataObj[longProp],
+        ] = coordinates;
       }
 
       // Push new aggregated period datum while preserving disaggregated data
@@ -276,13 +324,16 @@ export function processFormData(formData, layerObj) {
     // Add aggregated data from previous group if cumulative
     if (isCumulative) {
       const currentGroupValues = currentPeriodaggregatedData.map(d => d[groupByField]);
-      previousGroups =
-        previousPeriodaggregatedData.filter(d => !currentGroupValues.includes(d[groupByField]));
+      previousGroups = previousPeriodaggregatedData
+        .filter(d => !currentGroupValues.includes(d[groupByField]));
       previousGroups = previousGroups.map(replacePeriod(currentPeriod, availablePeriods[i]));
     }
 
     // Updadate previous / aggregateted arrays
-    previousPeriodaggregatedData = [...currentPeriodaggregatedData, ...previousGroups];
+    previousPeriodaggregatedData = [
+      ...currentPeriodaggregatedData,
+      ...previousGroups,
+    ];
     aggregatedData = aggregatedData.concat(previousPeriodaggregatedData);
   }
 
@@ -297,12 +348,12 @@ function assignLocationIDs(data, locations) {
     const row = datum;
     if (!datum.district_id) {
       // add district_id if not defined
-      row.district_id = locations[datum.District];
-      if (!(datum.district_id)) {
+      row.district_id = locations[datum.District] || locations[datum.location];
+      if (!datum.district_id) {
         // Use alternative district field
         row.district_id = locations[datum['survey_intro/District_miss']];
       }
-      if (!(datum.district_id)) {
+      if (!datum.district_id) {
         // Use alternative region miss field
         row.district_id = locations[datum['survey_intro/Region_miss']];
       }
@@ -313,7 +364,12 @@ function assignLocationIDs(data, locations) {
   return dataWithLocationID;
 }
 
-export default function aggregateFormData(layerData, locations, filterOptions, isOr) {
+export default function aggregateFormData(
+  layerData,
+  locations,
+  filterOptions,
+  isOr,
+) {
   const layer = layerData;
   let data = layerData.mergedData;
   let aggregatedData = [];
@@ -327,13 +383,18 @@ export default function aggregateFormData(layerData, locations, filterOptions, i
   data = processFilters(layer, filterOptions, isOr);
 
   // Process data
-  aggregatedData = processFormData(data, layer);
+  aggregatedData =
+    layerData.aggregate && layerData.aggregate.type !== 'none'
+      ? processFormData(data, layer)
+      : data;
   if (layerData.aggregate && layerData.aggregate.customAggregation) {
     aggregatedData = aggregatedData.map((d) => {
       const Data = d;
-      Data.disaggregatedData[0].period = Data.disaggregatedData[0][layerData.aggregate['date-by']];
+      Data.disaggregatedData[0].period =
+        Data.disaggregatedData[0][layerData.aggregate['date-by']];
       return Data.disaggregatedData[0];
     });
   }
+  
   return aggregatedData;
 }
