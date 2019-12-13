@@ -23,6 +23,7 @@ import primaryLayerReducer from './primaryLayerReducer';
 import primarySubLayerReducer from './primarySubLayerReducer';
 import reloadLayerIdReducer from './reloadLayerIdReducer';
 import groupsReducer from './groupsReducer';
+import menuScrollReducer from './menuScrollReducer';
 
 function mapRendered(state, action) {
   return {
@@ -300,6 +301,13 @@ function toggleGroups(state, action) {
   };
 }
 
+function setMenuScroll(state, action) {
+  return {
+    ...state,
+    menuScroll: menuScrollReducer(state.menuScroll, action),
+  };
+}
+
 function detailView(state, action) {
   return {
     ...state,
@@ -436,6 +444,10 @@ export function createMapReducer(mapId) {
 
         case types.TOGGLE_GROUPS: {
           return toggleGroups(state, action);
+        }
+
+        case types.SET_MENU_SCROLL: {
+          return setMenuScroll(state, action);
         }
 
         case types.DETAIL_VIEW: {
