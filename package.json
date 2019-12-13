@@ -20,7 +20,8 @@
     "develop": "webpack --progress --watch --env.production=false",
     "fix": "eslint src --ext=jsx --ext=js --fix",
     "lint": "eslint src --ext=jsx --ext=js",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage --coverageDirectory=coverage/jest"
   },
   "husky": {
     "hooks": {
@@ -46,7 +47,20 @@
   },
   "jest": {
     "verbose": true,
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost/",
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx,ts,tsx}",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!**/serviceWorker.js",
+      "!**/index.js",
+      "!**/test/**",
+      "!**/build/**"
+    ]
   },
   "dependencies": {
     "@babel/runtime": "^7.4.3",

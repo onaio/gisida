@@ -12,7 +12,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   let content;
 
   // Add mousemove event to map
-  map.on('mousemove', (e) => {
+  map.on('mousemove', e => {
     content = null;
     popup.remove();
     // Get layers from current state
@@ -21,7 +21,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Generate list of active layers excluding chart layers
     const activeLayers = [];
-    Object.keys(layers).forEach((key) => {
+    Object.keys(layers).forEach(key => {
       const layer = layers[key];
       if (layer.visible && layer.type !== 'chart') {
         activeLayers.push(key);
@@ -33,11 +33,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       .queryRenderedFeatures(e.point, {
         layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
       })
-      .filter(f =>
-        f.layer &&
-          layers[f.layer.id] &&
-          !layers[f.layer.id].layers &&
-          layers[f.layer.id].popup);
+      .filter(
+        f => f.layer && layers[f.layer.id] && !layers[f.layer.id].layers && layers[f.layer.id].popup
+      );
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 
@@ -77,11 +75,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             // if row matches property
             if (
               (layer.popup.join &&
-                row[layer.popup.join[0]] ===
-                  feature.properties[layer.popup.join[1]]) ||
+                row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]]) ||
               (!layer.popup.join &&
-                row[layer.source.join[1]] ===
-                  feature.properties[layer.source.join[0]])
+                row[layer.source.join[1]] === feature.properties[layer.source.join[0]])
             ) {
               const found = [];
               const rxp = /{{([^}]+)}/g;
@@ -92,24 +88,30 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               // while (curMatch = rxp.exec(str)) {
               //   found.push(curMatch[1]);
               // }
-              found.forEach((i) => {
-                rowItem[`${i}`] = rowItem[`${i}`]
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              found.forEach(i => {
+                rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
               });
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
+                const bodyProperties = layer.popup.body
+                  .match(/{{(.*?)\}}/g)
+                  .map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
+                bodyProperties.forEach(val => {
+                  const contentArr = rowItem[val.trim()] ? rowItem[val.trim()].split(',') : [];
+                  if (contentArr.length > 1) {
+                    rowItem[val] = contentArr.join(', ');
+                  }
+                });
                 content =
+                  `<div>` +
                   `<div><b>${row[layer.popup.header]}</b></div>` +
                   `<div><center>${Mustache.render(
                     layer.popup.body,
-                    commaFormatting(layer, rowItem, true),
-                  )}</center></div>`;
+                    commaFormatting(layer, rowItem, true)
+                  )}</center></div>` +
+                  `</div>`;
               } else {
-                content = Mustache.render(
-                  layer.popup.body,
-                  commaFormatting(layer, rowItem, true),
-                );
+                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
               }
               break;
             }
@@ -118,19 +120,17 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           // if no data, use feature.properties to populate popup
           // eslint-disable-next-line no-lonely-if
           if (feature.properties[layer.popup.header]) {
-            content = `<div><b>${
-              feature.properties[layer.popup.header]
-            }</b></div>`;
+            content = `<div><b>${feature.properties[layer.popup.header]}</b></div>`;
             if (layer.popup.body) {
               content += `<div><center>${Mustache.render(
                 layer.popup.body,
-                commaFormatting(layer, feature.properties, true),
+                commaFormatting(layer, feature.properties, true)
               )}</center></div>`;
             }
           } else {
             content = Mustache.render(
               layer.popup.body,
-              commaFormatting(layer, feature.properties, true),
+              commaFormatting(layer, feature.properties, true)
             );
           }
         }
@@ -159,7 +159,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
   });
 
   // add popups for marker charts
-  $(document).on('mousemove', '.marker-chart', (e) => {
+  $(document).on('mousemove', '.marker-chart', e => {
     const mapid = $(e.currentTarget).data('map');
     const lng = $(e.currentTarget).data('lng');
     const lat = $(e.currentTarget).data('lat');

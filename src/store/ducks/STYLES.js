@@ -1,4 +1,4 @@
-import { STYLES } from '../reducers/reducers';
+import { STYLES } from '../reducers';
 
 export { INIT_STYLES, CHANGE_STYLE } from '../constants/actionTypes';
 export { initStyles, changeStyle } from '../actions/actions';
