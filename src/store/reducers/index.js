@@ -7,3 +7,4 @@ export { default as REGIONS } from './regions';
 export { default as STYLES } from './styles';
 export { default as SUPERSET_CONFIGS } from './superset-config';
 export { default as MAP } from './createMapReducer/createMapReducer';
+export { default as AUTH } from './auth';

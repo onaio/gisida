@@ -11,6 +11,7 @@ import {
   LOC,
   LAYERS,
   MAP,
+  AUTH,
 } from './reducers';
 
 import { loadJSON } from '../utils/files';
@@ -26,6 +27,7 @@ const defaultReducers = {
   LAYERS,
   FILTER,
   APP,
+  AUTH,
   'map-1': MAP,
 };
 export function loadLayers(mapId, dispatch, layers) {
