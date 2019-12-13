@@ -17,7 +17,7 @@ gisida.version = require('../package.json').version;
 gisida.initStore = require('./store/initStore').default;
 gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
-gisida.createMapReducer = require('./store/reducers/createMapReducer').createMapReducer;
+gisida.createMapReducer = require('./store/reducers/createMapReducer/createMapReducer').default;
 
 gisida.reducers = {
   ...app,
