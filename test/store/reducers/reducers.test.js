@@ -57,6 +57,10 @@ describe('reducers.APP', () => {
         showProfile: false,
         timeseries: {},
         visibleLayerId: '',
+        openGroups: [],
+        menuScroll: {
+          scrollTop: 0,
+        },
       },
       REGIONS: [],
       STYLES: [
@@ -89,6 +93,10 @@ describe('reducers.APP', () => {
         doUpdateMap: false,
         location: null,
         locations: null,
+      },
+      AUTH: {
+        isFetching: false,
+        isAuthenticated: !!localStorage.getItem('access_token'),
       },
     };
     expect(APP(defaultState, action)).toEqual(state);
