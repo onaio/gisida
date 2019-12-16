@@ -10,7 +10,7 @@ function setMenuScroll(state, action) {
   };
 }
 
-export default function menuReducer(state = defaultState.MAP.menuScroll, action) {
+export default function menuIsOpenReducer(state = defaultState.MAP.menuScroll, action) {
   switch (action.type) {
     case SET_MENU_SCROLL: {
       return setMenuScroll(state, action);

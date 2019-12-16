@@ -12,7 +12,7 @@ function toggleCategories(categoriesState, action) {
   return isRefresh ? [] : [...openCategories];
 }
 
-export default function categoriesReducer(
+export default function openCategoriesReducer(
   categoriesState = defaultState.MAP.openCategories,
   action
 ) {
