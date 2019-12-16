@@ -68,7 +68,7 @@ export class API {
     this.fetch = async (config, callback, n = 15) =>
       fetchAPI(config).then(async res => {
         // TODO: Logout user if request if token is expired
-        if (res.status === 401 || res.status === 404 && n > 0) {
+        if (res.status === 401 && n > 0) {
           await sleep(2000);
           return this.fetch(config, callback, n - 1);
         }
