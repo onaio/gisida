@@ -70,11 +70,11 @@ describe('layersReducer', () => {
       },
     });
     // Case 2.2.2: state[action.layerId].layers is defined
-    expect(layersReducer(stateLayers, action)).toEqual({
+    expect(layersReducer(stateLayers, actionIsInitFalse)).toEqual({
       ...stateLayers,
       [layerId]: {
         ...stateLayers[layerId],
-        visible: stateLayers[layerId].visible,
+        visible: !stateLayers[layerId].visible,
       },
       [layerId2]: {
         ...stateLayers[layerId2],
