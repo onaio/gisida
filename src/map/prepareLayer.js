@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
 import Mustache from 'mustache';
 import cloneDeep from 'lodash.clonedeep';
@@ -314,6 +315,27 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       .then((data) => {
         const processedData = superset.processData(data);
         let parsedData;
+        const uniqueFacilities = [...new Set(processedData.map(facility => facility.facility_id))];
+        /**
+         * Build custom filter
+         * The custom filter introduces an extra field 'no_of_reports'.
+         * we depend on the field building the quant chart on the filter
+        */
+        if (layerObj.aggregate.hasCustomFilter) {
+          const reportsPerFacility = {};
+          uniqueFacilities.forEach((facility) => {
+            reportsPerFacility[facility] = processedData.filter(facilityData => facilityData.facility_id === facility)
+              .map(d => d.reporting_period);
+          });
+          processedData.forEach((pdata) => {
+            if (reportsPerFacility[pdata.facility_id] &&
+               reportsPerFacility[pdata.facility_id].length) {
+              pdata.no_of_reports = reportsPerFacility[pdata.facility_id].length;
+            } else {
+              pdata.no_of_reports = '0';
+            }
+          });
+        }
         if (layerObj.source.type === 'geojson') {
           parsedData = csvToGEOjson(layerObj, processedData);
           if (layerObj.hideZeroVals) {
@@ -642,7 +664,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
     }
-
     layerObj.mergedData = Array.isArray(mergedData)
       ? [...mergedData]
       : { ...mergedData };

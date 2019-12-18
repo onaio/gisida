@@ -97,7 +97,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   .match(/{{(.*?)\}}/g)
                   .map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
                 bodyProperties.forEach(val => {
-                  const contentArr = rowItem[val.trim()] ? rowItem[val.trim()].split(',') : [];
+                  // Check if rowItem[val] is a string and if it has ,
+                  const contentArr = typeof rowItem[val.trim()] !== 'number' &&
+                   rowItem[val.trim()].includes(',') ? rowItem[val.trim()].split(',') : [];
                   if (contentArr.length > 1) {
                     rowItem[val] = contentArr.join(', ');
                   }
