@@ -17,7 +17,6 @@ export function processFilters(layerData, filterOptions, isOr) {
     }
     return f;
   }
-
   const acceptedFilterValues = layerData.aggregate.filterIsPrev
     ? layerData.aggregate['accepted-filter-values'].map(parseFilterVals)
     : layerData.aggregate['accepted-filter-values'];
@@ -163,7 +162,7 @@ export function generateFilterOptions(layerData) {
       layerData.layerObj.aggregate.filter) ||
     (layerData.aggregate && layerData.aggregate.filter);
 
-  // loop through all filters
+  // loop through all filter
   for (let f = 0; f < layerFilter.length; f += 1) {
     // define filter, subFilter, and filter label
     filter = layerFilter[f];
@@ -210,8 +209,8 @@ export function generateFilterOptions(layerData) {
       ', ';
     const sourceData =
       lo.data || lo.mergedData || (lo.source.data.features || lo.source.data);
-    if (!sourceData.length) return uniqueVals;
-    const Data = [...sourceData];
+    if (!(sourceData.features || sourceData).length) return uniqueVals;
+    const Data = [...(sourceData.features || sourceData)];
     let vals;
     let activeData;
     for (let i = 0; i < Data.length; i += 1) {
@@ -304,7 +303,6 @@ export function generateFilterOptions(layerData) {
               layerData['data-parse'][filter].key &&
               Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap)) ||
             multiFilterVaulesGen(layerData, filter);
-
           for (let m = 0; m < multiFilterVaules.length; m += 1) {
             filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
           }
