@@ -6,6 +6,7 @@ import {
   REQUEST_DATA,
   SET_LAYER_FILTERS,
   ADD_LAYER,
+  UPDATE_TIMESERIES,
 } from './../../../constants/actionTypes';
 import { layerId, mapId, layer2, layerId2, layer, timeseries } from './common';
 
@@ -202,6 +203,60 @@ describe('layersReducer', () => {
       ...state,
       [action.layer.id]: {
         ...action.layer,
+      },
+    });
+  });
+
+  it('should handle UPDATE_TIMESERIES', () => {
+    const action = {
+      type: UPDATE_TIMESERIES,
+      timeseries,
+      mapId,
+      layerId,
+    };
+    // Case 1: State is empty
+    expect(layersReducer({}, action)).toEqual({});
+
+    // Case 2: State is NOT empty
+    // Case 2.1: state.layers[action.layerId].filters.admin is undefined
+    expect(layersReducer(state, action)).toEqual(state);
+    // Case 2.2: state.layers[action.layerId].filters.admin is defined
+    // Case 2.2.1: action.timeseries[action.layerId].adminFilter is defined
+    const stateLayerFilterAdmin = {
+      ...state,
+      [layerId]: {
+        ...state[layerId],
+        filters: {
+          ...state[layerId].filters,
+          admin: ['item', 'item2'],
+        },
+      },
+    };
+    expect(layersReducer(stateLayerFilterAdmin, action)).toEqual({
+      ...state,
+      [action.layerId]: {
+        ...state[action.layerId],
+        filters: {
+          ...state[action.layerId].filters,
+          admin: [...action.timeseries[action.layerId].adminFilter],
+        },
+      },
+    });
+    // Case 2.2.2: action.timeseries[action.layerId].adminFilter is undefined
+    const actionTimeSeriesAminFilterUndefined = {
+      ...action,
+      timeseries: {
+        [layerId]: {},
+      },
+    };
+    expect(layersReducer(stateLayerFilterAdmin, actionTimeSeriesAminFilterUndefined)).toEqual({
+      ...state,
+      [action.layerId]: {
+        ...state[action.layerId],
+        filters: {
+          ...state[action.layerId].filters,
+          admin: undefined,
+        },
       },
     });
   });
