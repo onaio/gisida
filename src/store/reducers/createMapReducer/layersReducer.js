@@ -38,7 +38,6 @@ export function receiveData(layersState, action) {
     [layer.id]: {
       ...oldLayer,
       ...layer,
-      labels: layer.labels,
       isLoading: false,
       loaded: true,
     },
@@ -65,13 +64,12 @@ export function requestData(layersState, action) {
 function setLayerFilters(layersState, action) {
   const { layerId, layerFilters, name } = action;
   const layer = layersState[layerId];
-  const filters = layer.filters ? { ...layer.filters } : {};
   const updatedLayers = {
     ...layersState,
     [layerId]: {
       ...layer,
       filters: {
-        ...filters,
+        ...layer.filters,
         [name || 'layerFilters']: layerFilters,
       },
     },
