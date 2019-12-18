@@ -12,7 +12,7 @@ function toggleGroups(groupState, action) {
   return isRefresh ? [] : [...openGroups];
 }
 
-export default function groupsReducer(groupState = defaultState.MAP.openGroups, action) {
+export default function openGroupsReducer(groupState = defaultState.MAP.openGroups, action) {
   switch (action.type) {
     case TOGGLE_GROUPS: {
       return toggleGroups(groupState, action);
