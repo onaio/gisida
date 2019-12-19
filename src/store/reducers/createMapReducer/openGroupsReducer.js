@@ -3,13 +3,20 @@ import defaultState from '../../defaultState';
 
 function toggleGroups(groupState, action) {
   const { group, index, isRefresh } = action;
+
+  if (isRefresh) {
+    return [];
+  }
+
   const openGroups = [...groupState];
+
   if (index > -1) {
     openGroups.splice(index, 1);
   } else {
     openGroups.push(group);
   }
-  return isRefresh ? [] : [...openGroups];
+
+  return openGroups;
 }
 
 export default function openGroupsReducer(groupState = defaultState.MAP.openGroups, action) {

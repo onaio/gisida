@@ -3,13 +3,19 @@ import defaultState from '../../defaultState';
 
 function toggleCategories(categoriesState, action) {
   const { category, index, isRefresh } = action;
+
+  if (isRefresh) {
+    return [];
+  }
+
   const openCategories = [...categoriesState];
+
   if (index > -1) {
     openCategories.splice(index, 1);
   } else {
     openCategories.push(category);
   }
-  return isRefresh ? [] : [...openCategories];
+  return openCategories;
 }
 
 export default function openCategoriesReducer(
