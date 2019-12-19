@@ -1,11 +1,10 @@
 import openCategoriesReducer from './../openCategoriesReducer';
-import defaultState from '../../../defaultState';
 import { TOGGLE_CATEGORIES } from '../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('openCategoriesReducer', () => {
   it('should return the initial state', () => {
-    expect(openCategoriesReducer(undefined, {})).toEqual(defaultState.MAP.openCategories);
+    expect(openCategoriesReducer(undefined, {})).toEqual([]);
   });
 
   it('it should handle TOGGLE_CATEGORIES', () => {

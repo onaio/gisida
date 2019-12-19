@@ -1,11 +1,10 @@
 import layerVisibilityReducer from './../layerVisibilityReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_LAYER, RECEIVE_DATA } from './../../../constants/actionTypes';
 import { layerId, mapId, layer2, layerId2, layer, timeseries } from './common';
 
 describe('layerVisiblityReducer', () => {
   it('should handle the initial state', () => {
-    expect(layerVisibilityReducer(undefined, {})).toEqual(defaultState.MAP.visibleLayerId);
+    expect(layerVisibilityReducer(undefined, {})).toEqual('');
   });
   const state = {
     visibleLayerId: layerId,

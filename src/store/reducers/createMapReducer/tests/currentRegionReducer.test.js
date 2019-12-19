@@ -1,5 +1,5 @@
 import currentRegionReducer from './../currentRegionReducer';
-import defaultState from './../../../../../src/store/defaultState';
+
 import { MAP_LOADED, CHANGE_REGION } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
@@ -7,7 +7,7 @@ describe('currentRegionReducer', () => {
   const stateOld = 'region';
 
   it('should handle the initial state', () => {
-    expect(currentRegionReducer(undefined, {})).toEqual(defaultState.MAP.currentRegion);
+    expect(currentRegionReducer(undefined, {})).toEqual('');
   });
 
   it('should handle MAP_LOADED', () => {

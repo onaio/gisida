@@ -1,11 +1,12 @@
 import menuScrollReducer from './../menuScrollReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { SET_MENU_SCROLL } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('menuScrollReducer', () => {
   it('should handle the initial state', () => {
-    expect(menuScrollReducer(undefined, {})).toEqual(defaultState.MAP.menuScroll);
+    expect(menuScrollReducer(undefined, {})).toEqual({
+      scrollTop: 0,
+    });
   });
 
   it('should handle SET_MENU_SCROLL', () => {

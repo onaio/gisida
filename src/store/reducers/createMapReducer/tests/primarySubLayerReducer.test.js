@@ -1,11 +1,10 @@
 import primarySubLayerReducer from './../primarySubLayerReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_LAYER } from './../../../constants/actionTypes';
 import { layerId, mapId, layer2, layerId2, layer } from './common';
 
 describe('primarySubLayerReducer', () => {
   it('should handle the initial state', () => {
-    expect(primarySubLayerReducer(undefined, {})).toEqual(defaultState.MAP.primarySubLayer);
+    expect(primarySubLayerReducer(undefined, {})).toEqual('');
   });
 
   it('should handle TOGGLE_LAYER', () => {

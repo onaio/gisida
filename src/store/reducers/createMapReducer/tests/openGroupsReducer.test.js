@@ -1,11 +1,10 @@
 import openGroupsReducer from './../openGroupsReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_GROUPS } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('openGroupsReducer', () => {
   it('should handle the initial state', () => {
-    expect(openGroupsReducer(undefined, {})).toEqual(defaultState.MAP.openGroups);
+    expect(openGroupsReducer(undefined, {})).toEqual([]);
   });
 
   it('should handle TOGGLE_GROUPS', () => {

@@ -1,11 +1,10 @@
 import mapRenderedReducer from './../mapRenderedReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { MAP_RENDERED } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('mapLoadedReducer', () => {
   it('should handle the initial state', () => {
-    expect(mapRenderedReducer(undefined, {})).toEqual(defaultState.MAP.isRendered);
+    expect(mapRenderedReducer(undefined, {})).toEqual(false);
   });
 
   it('should handle MAP_LOADED', () => {

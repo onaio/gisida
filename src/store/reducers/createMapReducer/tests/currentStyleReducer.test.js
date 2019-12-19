@@ -1,11 +1,10 @@
 import currentStyleReducer from './../currentStyleReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { CHANGE_STYLE } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('currentStyleReducer', () => {
   it('should handle the initial state', () => {
-    expect(currentStyleReducer(undefined, {})).toEqual(defaultState.MAP.currentStyle);
+    expect(currentStyleReducer(undefined, {})).toEqual('');
   });
 
   it('should handle CHANGE_STYLE', () => {

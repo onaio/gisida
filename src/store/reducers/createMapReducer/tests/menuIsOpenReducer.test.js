@@ -1,11 +1,10 @@
 import menuIsOpenReducer from './../menuIsOpenReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_MENU } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('menuIsOpenReducer', () => {
   it('should handle the initial state', () => {
-    expect(menuIsOpenReducer(undefined, {})).toEqual(defaultState.MAP.menuIsOpen);
+    expect(menuIsOpenReducer(undefined, {})).toEqual(true);
   });
 
   it('should handle TOGGLE_MENU', () => {

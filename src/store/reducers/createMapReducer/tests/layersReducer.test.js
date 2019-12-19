@@ -1,5 +1,4 @@
 import layersReducer from './../layersReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import {
   TOGGLE_LAYER,
   RECEIVE_DATA,
@@ -12,7 +11,7 @@ import { layerId, mapId, layer2, layerId2, layer, timeseries } from './common';
 
 describe('layersReducer', () => {
   it('should handle the initial state', () => {
-    expect(layersReducer(undefined, {})).toEqual(defaultState.MAP.layers);
+    expect(layersReducer(undefined, {})).toEqual({});
   });
 
   const state = {

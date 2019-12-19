@@ -1,11 +1,10 @@
 import reloadLayerIdReducer from './../reloadLayerIdReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { ADD_LAYER, RELOAD_LAYER, LAYER_RELOADED } from './../../../constants/actionTypes';
 import { layer, mapId, layerId, layerId2, layer2 } from './common';
 
 describe('reloadIdReducer', () => {
   it('should handle the initial state', () => {
-    expect(reloadLayerIdReducer(undefined, {})).toEqual(defaultState.MAP.reloadLayerId);
+    expect(reloadLayerIdReducer(undefined, {})).toEqual(null);
   });
   const state = {
     reloadLayerId: null,

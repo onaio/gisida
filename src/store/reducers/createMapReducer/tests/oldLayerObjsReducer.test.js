@@ -1,11 +1,10 @@
 import oldLayerObjsReducer from './../oldLayerObjsReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { RESET_FILTERED_LAYER } from './../../../constants/actionTypes';
 import { mapId, layer, layer2, layerId2, layerId } from './common';
 
 describe('oldLayerObjsReducer', () => {
   it('should handle the initial state', () => {
-    expect(oldLayerObjsReducer(undefined, {})).toEqual(defaultState.MAP.oldLayerObjs);
+    expect(oldLayerObjsReducer(undefined, {})).toEqual({});
   });
 
   it('should handle RESET_FILTERED_LAYER', () => {
