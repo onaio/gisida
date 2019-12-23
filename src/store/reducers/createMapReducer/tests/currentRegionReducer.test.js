@@ -1,5 +1,4 @@
 import currentRegionReducer from './../currentRegionReducer';
-
 import { MAP_LOADED, CHANGE_REGION } from './../../../constants/actionTypes';
 import { mapId } from './common';
 
