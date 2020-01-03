@@ -5,7 +5,7 @@ function toggleMenu(menuState) {
   return !menuState;
 }
 
-export default function menuReducer(menuState = defaultState.MAP.menuIsOpen, action) {
+export default function menuIsOpenReducer(menuState = defaultState.MAP.menuIsOpen, action) {
   switch (action.type) {
     case TOGGLE_MENU: {
       return toggleMenu(menuState);
