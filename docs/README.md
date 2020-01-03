@@ -2,6 +2,8 @@
 
 This directory contains documentation on Gisida, Gisida React, and Gisida Clients best practices, protocols, and procedures.
 
+[Getting Started with Gisida](gettingStarted.md)
+
 ## Contributing
 
 Gisida and Gisida React repositories use the following branches:
