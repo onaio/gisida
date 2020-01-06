@@ -19,7 +19,7 @@ declare module 'gisida' {
         function register(name:string, reducer:object):any;
         function setChangeListener(listener:any):any;
     }
-    function createMapReducer(mapId:string):object
+    function createMapReducer(mapId?:string):any;
 
     namespace reducers {
         function APP(state:object, action:object):object;
@@ -30,7 +30,6 @@ declare module 'gisida' {
         function LAYERS(state:object, action:object):object;
         function LOC(state:object, action:object):object;
         function STYLES(state:object, action:object):object;
-        function AUTH(state:object, action:object):object;
     }
 
     namespace Actions {
@@ -83,30 +82,30 @@ declare module 'gisida' {
         
     }
 
-    function prepareLayer(mapId:string, layer:object, dispatch:generalFunc, filterOptions:boolean, doUpdateTsLayer:boolean):any;
-    function addPopUp(mapId:string, mapboxGLdetailViewMap:any, dispatch:generalFunc):boolean;
+    function prepareLayer(mapId:string, layer:object, dispatch:generalFunc, filterOptions?:boolean, doUpdateTsLayer?:boolean):any;
+    function addPopUp(mapId:string, mapboxGLdetailViewMap:object, dispatch:generalFunc):boolean;
     function sortLayers(map:object, layers:object, nextLayerId:string):any;
-    function getSliderLayers(layers:object):Array<any>;
+    function getSliderLayers(layers:object):Array<string>;
     function buildFilters(filters:object,layerFilters:Array<any>, prevFilters:object):object;
     function mergeFilters(originalFilters:object, filteredFilters:object, clickedFilterKey:string):object;
-    function generateFilterOptions(layerData:object):any
-    function processFilters(layerData:object, filterOptions:object, isOr:boolean):any;
-    function generateStops(layer:object, timefield:Date, dispatch:generalFunc, nextIndex:any):any;
-    function formatNum(num:any, decimal:number):string;
-    function hexToRgbA(hex:any, alpha:any):any;
-    function parseMustache(spec:any, datun:any):any;
+    function generateFilterOptions(layerData:object):Array<any>;
+    function processFilters(layerData:object, filterOptions:object, isOr?:boolean):any;
+    function generateStops(layer:object, timefield:string, dispatch:generalFunc, nextIndex?:string):any;
+    function formatNum(num:number, decimal:number):number;
+    function hexToRgbA(hex:string, alpha?:number):any;
+    function parseMustache(spec:string, datun:object):string;
 
     namespace SupAuth {
         function defaultOauthC():any;
-        function defaultSupAuthC(User:generalObjects, AuthConfig:object):any
+        function defaultSupAuthC(User:generalObjects, AuthConfig:object):boolean;
         function defaultUnSupAuthZ():any;
-        function authorizeUser(APP:object, AUTH:object, accessToken:string, willAuthorize?:boolean):any;
-        function getUser():any;
-        function getAuthConfig(pk:any):any;
-        function getLocalAuthConfig(path:string):any;
-        function getMediaAuthConfig(pk:any, token:string):any;
+        function authorizeUser(APP:object, AUTH:object, accessToken:string, willAuthorize?:generalFunc):any;
+        function getUser():Promise<any>;
+        function getAuthConfig(pk:any):Promise<any>;
+        function getLocalAuthConfig(path:string):Promise<any>;
+        function getMediaAuthConfig(pk:any, token:string):Promise<any>;
         function parseCSVauth(res:Array<object>):object;
-        function defaultSupViewAuthC(path:any):any;
+        function defaultSupViewAuthC(path:string):boolean;
     }
 
     const ONA: {
@@ -114,17 +113,17 @@ declare module 'gisida' {
         Oauth2:any;
     }
 
-    function onaApi(config:object, callback:generalFunc):any;
+    function onaApi(config:object, callback?:generalFunc):any;
 
     namespace onaAuth {
         function oauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
-        function ONAoauth(reqConfig:any, token:string, dispatch:generalFunc):any;
+        function ONAoauth(reqConfig:object, token:string, dispatch:generalFunc):any;
     }
 
-    function getData(formID:number, properties:Array<any>, state:object, callback:generalFunc):any;
+    function getData(formID:number, properties:any, state:object, callback:generalFunc):any;
     function aggregateFormData(layerData:object, locations:object, filterOptions:object, isOr:boolean):Array<any>;
-    function parseData(spec:object,datum:Array<any>):Array<any>
-    namespace history {}
+    function parseData(spec:object,datum:Array<any>):any;
+    // namespace history {}
 
     function oauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
     function buildParsedBasicDetailItem(detail:object, properties:object):object;
