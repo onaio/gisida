@@ -1,6 +1,7 @@
-declare module 'gisida' {
+declare type actionsInterface = import('./actionsInterface').Actions;
+declare type actionTypesInterface = import('./actionTypesInterface').actionTypes;
 
-    import { AnyAction } from 'redux';
+declare module 'gisida' {
 
     interface generalFunc {
         (...args: any[]):any
@@ -32,55 +33,7 @@ declare module 'gisida' {
         function STYLES(state:object, action:object):object;
     }
 
-    namespace Actions {
-        function initApp(config:object):AnyAction;
-        function initLoc(config:object):AnyAction;
-        function initStyles(styles:Array<object>, mapConfig:object):AnyAction;
-        function initRegions(regions:any, mapConfig:object):AnyAction;
-        function initLocations(locations:object):AnyAction;
-        function initSuperset(config:object):AnyAction;
-        function addLayersList(layers:object):AnyAction;
-        function addLayer(mapId:string, layer:object):AnyAction;
-        function addLayerGroup(mapId:string, groupId:string, group:any):AnyAction;
-        function changeRegion(mapId:string, region:any):AnyAction;
-        function changeStyle(mapId:string, style:object):AnyAction;
-        function toggleLayer(mapId:string, layerId:string, isInit?:boolean):AnyAction;
-        function toggleFilter(mapId:string, layerId:string, showFilterPanel:boolean):AnyAction;
-        function setLayerFilter(mapId:string, layerId:string, layerFilters:object):AnyAction;
-        function filtersUpdated(mapId:string, layerId:string):AnyAction;
-        function saveFilterState(mapId:string, layerId:string, filterState:object, isClear:boolean):AnyAction;
-        function updatePrimaryLayer(mapId:string, primaryLayer:object):AnyAction;
-        function requestData(mapId:string, layerId:string):AnyAction;
-        function toggleMenu(mapId:string, menuIsOpen:boolean):AnyAction;
-        function toggleCategories(maId:string, category:any, index:number, isRefresh:boolean):AnyAction;
-        function receiveData(mapId:string, layer:object, timeseries:any):AnyAction;
-        function mapRendered(mapId:string, isRendered:boolean):AnyAction;
-        function mapLoaded(mapId:string, isLoaded:boolean):AnyAction;
-        function reloadLayer(mapid:string, layerId:string):AnyAction;
-        function reloadLayers(mapid:string, reload:any):AnyAction;
-        function layerReloaded(mapId:string):AnyAction;
-        function updateTimeseries(mapid:string, timeseries:any, layerId:string):AnyAction;
-        function detailView(mapid:string, payload:any):AnyAction;
-        function resetFilteredLayer(mapid:string, oldLayer:any):AnyAction;
-        function triggerSpinner(mapid:string, isLoaded?:boolean):AnyAction;
-        function loginRequest(credentials:object):AnyAction;
-        function loginSuccess(user:generalObjects):AnyAction;
-        function loginFailure(errorMessage:any):AnyAction;
-        function getCurrentState():any;
-        function initAuth(config:object):AnyAction;
-        function receiveLogin(user:generalObjects):AnyAction;
-        function loginError(message:any):AnyAction;
-        function receiveToken(token:string):AnyAction;
-        function getAuthConfigs(config:object):AnyAction;
-        function receiveForms(forms:any):AnyAction;
-        function fetchFormsError(message:any):AnyAction;
-        function loginUser(token:string):AnyAction;
-        function logoutUser():AnyAction;
-        function locationUpdated(MapId:string):AnyAction;
-        function setLocation(mapId:string, loc:any):AnyAction;
-        function toggleMapLocation(loc:any):AnyAction;
-        
-    }
+    const Actions: actionsInterface;
 
     function prepareLayer(mapId:string, layer:object, dispatch:generalFunc, filterOptions?:boolean, doUpdateTsLayer?:boolean):any;
     function addPopUp(mapId:string, mapboxGLdetailViewMap:object, dispatch:generalFunc):boolean;
@@ -108,9 +61,21 @@ declare module 'gisida' {
         function defaultSupViewAuthC(path:string):boolean;
     }
 
+    interface API {
+        apiHeaders(config:object):object;
+        apiRequest(config:object, headers:object):object;
+        fetch(config:object, callback?:generalFunc, n?:number):Promise<any>;
+        fetchAPI(config:object):Promise<any>
+    }
+
+    interface Oauth2 {
+        getOauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
+        getUser(reqConfig:object, token:string, dispatch:generalFunc):any;
+    }
+
     const ONA: {
-        API: any;
-        Oauth2:any;
+        API: API;
+        Oauth2:Oauth2;
     }
 
     function onaApi(config:object, callback?:generalFunc):any;
@@ -126,28 +91,49 @@ declare module 'gisida' {
     // namespace history {}
 
     function oauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
-    function buildParsedBasicDetailItem(detail:object, properties:object):object;
+    function buildParsedBasicDetailItem(detail:object, properties:object):any;
     function processFormData(formData:any, layerObj:object):any;
     function lngLat(LOC:object, APP:Object):object;
 
     namespace defaultReducers{
         function app(state:object, action:object):object;
-        function STYLES(state:object, action:object):object;
+        function STYLES(state:object, action:object):any;
     }
 
     namespace files {
-        function loadJSON(path:string, callback:generalFunc, id:any):any
+        function loadJSON(path:string, callback:generalFunc, id:string):any
         function loadCSV(path:string, callback:generalFunc):any;
+        
     }
 
     function addChart(layer:object, data:Array<any>, map:any, mapId:string):any;
     function buildDetailView(mapId:string, LayerObj:object, FeatureProperties:object, dispatch:generalFunc, timeSeriesObj:object):boolean;
+    // function buildParsedBasicDetailItem(affix:any, props:object):string;
     function buildFilterState(mapId:string, filterOptions:object, filters:object, layerObj:object, dispatch:generalFunc, regenStops:object, isOr:boolean):object;
     function clearFilterState(mapId:string, filterState:any, layerId:string, dispatch:generalFunc, isClear:boolean):any;
+
+    interface ducksApp {
+        INIT_APP: string;
+        reducerName:string;
+        default(state:object, action:object):object;
+        initApp(config: object):object;
+    }
+
+    interface ducksMap extends actionsInterface, actionTypesInterface {
+        reducerName: string;
+     }
+
+    const ducks: {
+        APP: ducksApp;
+        MAP: ducksMap;
+        STYLES: ducksMap
+    }
 
     namespace localStorage {
         function loadState():any;
         function saveState(state:object, isLoggedIn:boolean):any
     }
+
+    function isTokenExpired():boolean;
     
 }
