@@ -130,8 +130,7 @@ export const aggregateLayerOutput1 = {
               "total_screened_muac_oedema": "3701",
               "submission/reporting_period": "September 6 to September 19",
               "total_boysscreened_muac_oedema": "1888",
-              "total_girlsscreened_muac_oedema": "1813",
-              "period-date": new Date("2001-09-05T21:00:00.000Z")
+              "total_girlsscreened_muac_oedema": "1813"
             }
           ]
         },

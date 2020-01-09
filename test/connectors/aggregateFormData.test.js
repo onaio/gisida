@@ -5,13 +5,17 @@ import { aggregateLayerOutput1, aggregateLayerOutput2 } from '../fixtures/output
 
 describe('aggregateFormData', () => {
     test('should return correct aggregated data', () => {
-        expect(aggregateFormData(aggregateLayerInput, {}, undefined, undefined)).toEqual(aggregateLayerOutput1)
+        const output = aggregateFormData(aggregateLayerInput, {}, undefined, undefined);
+        delete output.features[0].properties.disaggregatedData[0]["period-date"];
+        expect(output).toEqual(aggregateLayerOutput1)
     })
 })
 
 describe('processFormData', () => {
     test('should return correct processed data', () => {
-        expect(processFormData(aggregateLayerInput.mergedData, aggregateLayerInput)).toEqual(aggregateLayerOutput1)
+        const output = processFormData(aggregateLayerInput.mergedData, aggregateLayerInput)
+        delete output.features[0].properties.disaggregatedData[0]["period-date"]
+        expect(output).toEqual(aggregateLayerOutput1)
     })
 
     test('should return correct processed data if aggragation has isUsingaday parameter', () => {
