@@ -1,4 +1,4 @@
-import reducers from '../../../src/store/reducers/reducers';
+import { APP } from '../../../src/store/reducers/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
@@ -9,51 +9,59 @@ describe('reducers.APP', () => {
       config: defaultState.APP,
     };
     const state = {
-      APP:
-        {
-          accessToken: false,
-          appName: 'React Gisida',
-          loaded: false,
-          mapConfig: {
-            center: [0, 0],
-            container: 'map',
-            style: '',
-            zoom: 5,
-          },
+      APP: {
+        accessToken: false,
+        appName: 'React Gisida',
+        loaded: false,
+        mapConfig: {
+          center: [0, 0],
+          container: 'map',
+          style: '',
+          zoom: 5,
         },
-      MAP:
-        {
-          activeLayerId: '',
-          lastLayerSelected: '',
-          currentRegion: '',
-          currentStyle: '',
-          detailView: null,
-          filter: {
-            filterOptions: {},
-            filters: {},
-            globalSearchField: false,
-            isFiltered: false,
-            isLinux: false,
-            isMac: false,
-            isOpen: false,
-            layerId: '',
-            prevFilters: null,
-          },
-          isLoaded: false,
-          isRendered: false,
-          layers: {},
-          defaultLayers: [],
-          showSpinner: false,
-          mapId: 'map-1',
-          menuIsOpen: true,
-          openCategories: [],
-          primaryLayer: '',
-          reloadLayers: false,
-          showFilterPanel: false,
-          showProfile: false,
-          timeseries: { visibility: false },
-          visibleLayerId: '',
+      },
+      MAP: {
+        activeLayerId: '',
+        lastLayerSelected: '',
+        activeLayerObjs: [],
+        currentRegion: '',
+        currentStyle: '',
+        detailView: null,
+        filter: {
+          filterOptions: {},
+          filterOptionsPrev: {},
+          filters: {},
+          globalSearchField: false,
+          isFiltered: false,
+          isLinux: false,
+          isMac: false,
+          isOpen: false,
+          layerId: '',
+          prevFilters: null,
         },
+        isLoaded: false,
+        isRendered: false,
+        layers: {},
+        defaultLayers: [],
+        showSpinner: false,
+        mapId: 'map-1',
+        menuIsOpen: true,
+        oldLayerObjs: {},
+        openCategories: [],
+        primaryLayer: '',
+        primarySubLayer: '',
+        reloadLayerId: null,
+        reloadLayers: false,
+        showFilterPanel: false,
+        activeLayerIds: [],
+        showProfile: false,
+        timeseries: {},
+        visibleLayerId: '',
+        openGroups: [],
+        menuScroll: {
+          scrollTop: 0,
+        },
+      },
       REGIONS: [],
       STYLES: [
         {
@@ -63,7 +71,7 @@ describe('reducers.APP', () => {
         {
           label: 'Satelitte Streets',
           url: 'mapbox://styles/mapbox/satellite-streets-v9',
-        }
+        },
       ],
       FILTER: {},
       accessToken: false,
@@ -79,7 +87,18 @@ describe('reducers.APP', () => {
         layers: [],
         groups: {},
       },
+      LOC: {
+        active: null,
+        default: null,
+        doUpdateMap: false,
+        location: null,
+        locations: null,
+      },
+      AUTH: {
+        isFetching: false,
+        isAuthenticated: !!localStorage.getItem('access_token'),
+      },
     };
-    expect(reducers.APP(defaultState, action)).toEqual(state);
+    expect(APP(defaultState, action)).toEqual(state);
   });
 });

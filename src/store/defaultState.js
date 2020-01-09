@@ -1,18 +1,21 @@
-
 const defaultState = {
   APP: {
     mapConfig: {
       container: 'map',
       style: '',
-      center: [
-        0,
-        0,
-      ],
+      center: [0, 0],
       zoom: 5,
     },
     accessToken: false,
     appName: 'React Gisida',
     loaded: false,
+  },
+  LOC: {
+    default: null,
+    active: null,
+    doUpdateMap: false,
+    location: null,
+    locations: null,
   },
   STYLES: [
     {
@@ -24,8 +27,7 @@ const defaultState = {
       url: 'mapbox://styles/mapbox/satellite-streets-v9',
     },
   ],
-  REGIONS: [
-  ],
+  REGIONS: [],
   MAP: {
     isRendered: false,
     isLoaded: false,
@@ -34,12 +36,11 @@ const defaultState = {
     currentRegion: '',
     layers: {},
     defaultLayers: [],
+    oldLayerObjs: {},
     showSpinner: false,
     menuIsOpen: true,
     openCategories: [],
-    timeseries: {
-      visibility: false,
-    },
+    timeseries: {},
     visibleLayerId: '',
     filter: {
       isFiltered: false,
@@ -47,17 +48,30 @@ const defaultState = {
       layerId: '',
       filters: {},
       filterOptions: {},
+      filterOptionsPrev: {},
       isOpen: false,
-      isMac: (window.navigator.platform.indexOf('Mac') !== -1),
-      isLinux: (window.navigator.platform.indexOf('Linux') !== -1),
+      isMac: window.navigator.platform.indexOf('Mac') !== -1,
+      isLinux: window.navigator.platform.indexOf('Linux') !== -1,
       globalSearchField: false,
     },
     detailView: null,
     showProfile: false,
     showFilterPanel: false,
+    activeLayerIds: [],
+    activeLayerObjs: [],
     activeLayerId: '',
     lastLayerSelected: '',
     primaryLayer: '',
+    primarySubLayer: '',
+    reloadLayerId: null,
+    openGroups: [],
+    menuScroll: {
+      scrollTop: 0,
+    },
+  },
+  AUTH: {
+    isFetching: false,
+    isAuthenticated: !!localStorage.getItem('access_token'),
   },
   FILTER: {},
   LAYERS: {
