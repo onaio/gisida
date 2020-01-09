@@ -146,7 +146,7 @@ export const aggregateLayerOutput1 = {
     ]
   }
 
-// get dynamic time
+// get  current year, month and weeek
 const period = moment(new Date());
 const year = period.year();
 const week = period.week();
