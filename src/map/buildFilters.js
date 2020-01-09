@@ -1,4 +1,4 @@
-export default function buildFilters(filters, layerFilters, prevFilters) {
+export default function buildFiltersMap(filters, layerFilters, prevFilters) {
   const filterMap = {};
   const filterKeys = Object.keys(filters);
   let filterKey;
@@ -29,47 +29,65 @@ export default function buildFilters(filters, layerFilters, prevFilters) {
   //   return 0;
   // };
 
-  // loop over all filters
+  // loop over all filters and build filter state from prevFilters or clean
   for (f = 0; f < filterKeys.length; f += 1) {
     filterKey = filterKeys[f];
     filter = {
       label: filters[filterKey].label,
       toggleAllOn: prevFilters
-        ? prevFilters[filterKey].toggleAllOn : true, // controls toggle all functionality and text
+        ? prevFilters[filterKey].toggleAllOn
+        : true, // controls toggle all functionality and text
       isFiltered: prevFilters
-        ? prevFilters[filterKey].isFiltered : false, // whether any options have been modified
+        ? prevFilters[filterKey].isFiltered
+        : false, // whether any options have been modified
       isOriginal: true, // whether the filter has been filtered
+      // eslint-disable-next-line
+      dataType: prevFilters ? prevFilters[filterKey].dataType
+        : !filters[filterKey].quantitativeValues ? 'ordinal' : 'quantitative',
+      filterType: prevFilters ? prevFilters[filterKey].filterType
+        : filters[filterKey].filterType,
       options: {}, // actual filter options map
       isOpen: prevFilters ? prevFilters[filterKey].isOpen : false,
+      doAdvFiltering: prevFilters ? prevFilters[filterKey].doAdvFiltering : false,
+      queries: prevFilters ? prevFilters[filterKey].queries : [],
     };
 
-    options = filters[filterKey].filterValues;
-    optionKeys = Object.keys(options);
-    // loop over all options
-    for (o = 0; o < optionKeys.length; o += 1) {
-      optionKey = optionKeys[o];
-      // set filter option to true
-      filter.options[optionKey] = {
-        enabled: false,
-        count: options[optionKey],
-      };
+    if (filter.dataType === 'quantitative') {
+      filter.options = [...filters[filterKey].quantitativeValues];
+    } else {
+      options = filters[filterKey].filterValues;
+      optionKeys = Object.keys(options)
+        .filter(opt => opt.length > 0 && opt !== 'undefined');
+      // loop over all options
+      for (o = 0; o < optionKeys.length; o += 1) {
+        optionKey = optionKeys[o];
+        // set filter option to true
+        filter.options[optionKey] = {
+          enabled: false,
+          count: options[optionKey],
+        };
+      }
     }
 
     // add filter to the filterMap
     filterMap[filterKey] = filter;
   }
 
+  // this might be deprecated?? :-/
   if (layerFilters) {
     for (f = 0; f < layerFilters.length; f += 1) {
       if (layerFilters[f] instanceof Array) {
         for (o = 0; o < layerFilters[f].length; o += 1) {
           if (layerFilters[f][o] instanceof Array) {
-            const [first, second] = layerFilters[f][o];
-            filterKey = first;
-            optionKey = second;
-            filterMap[filterKey].options[optionKey].enabled = true;
-            filterMap[filterKey].options[optionKey].hidden = false;
-            if (!filterMap[filterKey]) filterMap[filterKey].isFiltered = true;
+            if (layerFilters[f][o][0] === '==') {
+              filterKey = layerFilters[f][o][1];  // eslint-disable-line
+              optionKey = layerFilters[f][o][2];  // eslint-disable-line
+              filterMap[filterKey].options[optionKey].enabled = true;
+              filterMap[filterKey].options[optionKey].hidden = false;
+              if (!filterMap[filterKey]) filterMap[filterKey].isFiltered = true;
+            } else {
+              // To DO: handle quant filter expressions
+            }
           }
         }
       }
