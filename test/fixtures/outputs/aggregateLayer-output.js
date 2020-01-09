@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const aggregateLayerOutput1 = {
     "type": "FeatureCollection",
     "features": [
@@ -144,6 +146,15 @@ export const aggregateLayerOutput1 = {
     ]
   }
 
+// get dynamic time
+const period = moment(new Date());
+const year = period.year();
+const week = period.week();
+const month = period.month();
+const m = moment().week(week);
+const weekMonth = (m.week() - moment(m).startOf('month').week()) + 1;
+const currMonthName  = moment().format('MMM');
+
 export const aggregateLayerOutput2 = {
   "features": [
     {
@@ -169,9 +180,9 @@ export const aggregateLayerOutput2 = {
               "type": "Point"
             },
             "period": [
-              2019,
-              10,
-              5
+              year,
+              month,
+              weekMonth
             ],
             "properties": {
               "_attachments": [],
@@ -291,14 +302,14 @@ export const aggregateLayerOutput2 = {
         "latitude": undefined,
         "longitude": undefined,
         "parsedUID": undefined,
-        "period": "Nov w 5 2019",
+        "period": `${currMonthName} w ${weekMonth} ${year}`,
         "reporter/reporter_org": undefined,
         "submission/hc_loc": "undefined",
         "submission/location_type": undefined,
        "submission/reporting_period": undefined,
         "total": 1,
         "value-count": 0,
-        "weekYear": "2019,10,5"
+        "weekYear": `${year},${month},${weekMonth}`
       },
       "type": "Feature"
     }
