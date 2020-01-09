@@ -127,7 +127,6 @@ export function processFilters(layerData, filterOptions, isOr) {
   if (Array.isArray(Data)) {
     return data;
   }
-
   // handle geojson schema
   return {
     ...Data,
@@ -142,10 +141,6 @@ export function generateFilterOptionsPrev(layerData) {
   const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
   return [...new Set(filters)];
 }
-
-// export function filterData(layerData) {
-
-// }
 
 export function generateFilterOptions(layerData) {
   const data =
