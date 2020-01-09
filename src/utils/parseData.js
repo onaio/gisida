@@ -3,7 +3,7 @@
  * @param ({}) spec - this is the layerObj['data-parse'] object
  * @param ([]) datum - arrays are looped through one level of recursion
  * @param ({}) datum - objects are treated as actual datum to be parsed
-* */
+ * */
 
 export default function parseData(spec, datum) {
   if (!datum || !spec) return null;
@@ -43,18 +43,26 @@ export default function parseData(spec, datum) {
 
       // check for propSpec.split occurences in parsed value,
       // even if there is one prop value, put it into an array to handle multiple prop values
-      const splitVal = typeof propSpec.key[itemProp] === 'string'
-        ? [propSpec.key[itemProp].split((propSpec.split || ' '))]
-        : propSpec.key[itemProp].map(dv => dv.split((propSpec.split || ' ')));
+      const splitVal =
+        typeof propSpec.key[itemProp] === 'string'
+          ? [propSpec.key[itemProp].split(propSpec.split || ' ')]
+          : propSpec.key[itemProp].map(dv => dv.split(propSpec.split || ' '));
 
       for (let v = 0; v < splitVal.length; v += 1) {
         // if the prop value contains the value of propSpec.join,
         // compare against next n items in splitStr for matches
         if (splitVal[v].length > 1) {
-          for (let s = 0; s < splitVal[v].length - (splitStr.length - 1); s += 1) {
+          for (
+            let s = 0;
+            s < splitVal[v].length - (splitStr.length - 1);
+            s += 1
+          ) {
             // there's a mismatch, stop checking n items and reset parseValMatch
-            if (splitStr[i + s + 1]
-              && (splitStr[i + s + 1]).toLowerCase() !== (splitVal[v][s + 1]).toLowerCase()) {
+            if (
+              splitStr[i + s + 1] &&
+              splitStr[i + s + 1].toLowerCase() !==
+                splitVal[v][s + 1].toLowerCase()
+            ) {
               parseValMatch = null;
               break;
             }
@@ -65,10 +73,10 @@ export default function parseData(spec, datum) {
           // splice n items from splitStr and return parsed value
           if (parseValMatch) {
             // eslint-disable-next-line no-param-reassign
-            splitStr = splitStr.splice((i + 1), (splitVal[v].length - 1));
-            return parseValMatch.join((propSpec.split || ' '));
+            splitStr = splitStr.splice(i + 1, splitVal[v].length - 1);
+            return parseValMatch.join(propSpec.split || ' ');
           }
-        // if prop val does not contain join value, check the key for the prop
+          // if prop val does not contain join value, check the key for the prop
         } else if (propSpec.key[splitVal[v]]) {
           return propSpec.key[splitVal[v]];
         }
@@ -94,32 +102,39 @@ export default function parseData(spec, datum) {
     // add it to parsedDatum as is
     if (!propSpec || (propSpec.type !== 'multiple' && !propVal)) {
       parseVal = datumVal;
-    } else {
+    } else if (datumVal !== null) {
       // define the value of 'other'
-      otherVal = propSpec['other-prop'] && propSpec['other-val']
-        ? datum[propSpec['other-val']]
-        : false;
+      otherVal =
+        propSpec['other-prop'] && propSpec['other-val']
+          ? datum[propSpec['other-val']]
+          : false;
 
       // if property needs parsing and has a type, parse it accordingly
       if (propSpec.type === 'multiple') {
         // if select-multiple value is a string then split it
         // split it and loop through as an array (eg "1 3 6 2"),
         // otherwise it must already an array (eg [1, 3, 6, 2])
-        splitPropVal = typeof datumVal === 'string'
-          ? datumVal.split((propSpec.split || ' '))
-          : datumVal;
+        splitPropVal =
+          typeof datumVal === 'string'
+            ? datumVal.split(propSpec.split || ' ')
+            : datumVal;
 
         // loop through each value, checking for matches in propSpec.key and propSpec['other-prop']
-        parseVal = splitPropVal.map(parseSelectMultipleString).filter(sp => typeof sp !== 'undefined');
+        if (Array.isArray(splitPropVal)) {
+          parseVal = splitPropVal
+            .map(parseSelectMultipleString)
+            .filter(sp => typeof sp !== 'undefined');
 
-        if (propSpec.join) parseVal = parseVal.join(propSpec.join);
-
-      // if select-one value matches the 'other-prop', use otherVal
+          if (propSpec.join) { parseVal = parseVal.join(propSpec.join).replace(/,,/g, ','); }
+        }
+        // if select-one value matches the 'other-prop', use otherVal
       } else if (otherVal && datumVal === propSpec['other-prop']) {
         parseVal = otherVal;
       } else {
         parseVal = propVal || datumVal;
       }
+    } else {
+      parseVal = null;
     }
 
     // assign the parsed value into the parsedDatum object
@@ -130,7 +145,5 @@ export default function parseData(spec, datum) {
       parsedDatum[datumProps[p]] = parseVal;
     }
   }
-
-  parsedDatum.unparsedDatum = { ...datum };
-  return parsedDatum;
+  return { ...parsedDatum };
 }
