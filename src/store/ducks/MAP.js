@@ -1,4 +1,4 @@
-import reducers from '../reducers/app';
+import reducers from '../reducers/reducers';
 
 export {
   MAP_RENDERED,

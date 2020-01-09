@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
-import * as types from '../constants/actionTypes';
 import defaultState from '../defaultState';
+import * as types from '../constants/actionTypes';
+import actions from '../actions/actions';
 
 
 export function APP(state = defaultState.APP, action) {
@@ -11,6 +12,198 @@ export function APP(state = defaultState.APP, action) {
         ...action.config,
         loaded: true,
       };
+    default:
+      return state;
+  }
+}
+
+function LOC(state = defaultState.LOC, action) {
+  switch (action.type) {
+    case types.INIT_LOC:
+      return {
+        ...state,
+        locations: { ...action.config },
+        location: {
+          ...Object.keys(action.config).map(d => action.config[d]).find(d => d.default === true),
+          doUpdateLOC: false,
+        },
+        doUpdateMap: state.doUpdateMap,
+        default: Object.keys(action.config).find(d => action.config[d].default === true),
+        active: Object.keys(action.config).find(d => action.config[d].default === true),
+      };
+    case types.SET_LOCATION: {
+      const { loc, mapId } = action;
+      const { active, locations } = state;
+      return {
+        ...state,
+        doUpdateMap: mapId,
+        active: typeof locations[loc] !== 'undefined' ? loc : active,
+        location: typeof locations[loc] !== 'undefined'
+          ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+          : { ...state.location, doUpdateLOC: false },
+      };
+    }
+    case types.TOGGLE_MAP_LOCATION: {
+      const { loc } = actions;
+      const { locations } = state;
+      return {
+        ...state,
+        location: typeof locations[loc] !== 'undefined' ?
+          { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC } :
+          { ...state.location, doUpdateLOC: false },
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+export function STYLES(state = defaultState.STYLES, action) {
+  switch (action.type) {
+    case types.INIT_STYLES: {
+      const styles = action.styles.map((s) => {
+        const style = s;
+        if (style.url === action.mapConfig.style) style.current = true;
+        return style;
+      });
+      return styles;
+    }
+    case types.CHANGE_STYLE: {
+      const updatedStyles = state.map((s) => {
+        const style = s;
+        if (action.style === style.url) {
+          if (action.mapId) {
+            style[action.mapId] = { current: true };
+          } else style.current = true;
+        } else if (action.mapId) {
+          style[action.mapId] = { current: false };
+        } else style.current = false;
+        return style;
+      });
+      return updatedStyles;
+    }
+    default:
+      return state;
+  }
+}
+
+function REGIONS(state = defaultState.REGIONS, action) {
+  switch (action.type) {
+    case types.INIT_REGIONS: {
+      const regions = action.regions ? action.regions.map((r) => {
+        const region = r;
+        // check if mapconfig center matches region center to set current region
+        if (
+          region.center[0] === action.mapConfig.center[0] &&
+          region.center[1] === action.mapConfig.center[1]) {
+          region.current = true;
+        }
+        return region;
+      }) : [];
+      return regions;
+    }
+    case types.CHANGE_REGION: {
+      const updatedRegions = state.map((r) => {
+        const region = r;
+        if (action.region === region.name) {
+          region.current = true;
+        } else region.current = false;
+        return region;
+      });
+      return updatedRegions;
+    }
+    default:
+      return state;
+  }
+}
+
+function FILTER(state = defaultState.FILTER, action) {
+  switch (action.type) {
+    case types.SAVE_FILTER_STATE: {
+      return {
+        ...state,
+        [action.layerId]: {
+          ...action.filterState,
+          doUpdate: true,
+          isClear: action.isClear || false,
+        },
+      };
+    }
+    case types.FILTERS_UPDATED: {
+      if (!action.layerId) {
+        return {
+          ...state,
+        };
+      }
+      return {
+        ...state,
+        [action.layerId]: {
+          ...state[action.layerId],
+          doUpdate: false,
+        },
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+function LOCATIONS(state = {}, action) {
+  switch (action.type) {
+    case types.INIT_LOCATIONS: {
+      return { ...state, ...action.locations };
+    }
+    default:
+      return state;
+  }
+}
+
+function SUPERSET_CONFIGS(state = {}, action) {
+  switch (action.type) {
+    case types.INIT_SUPERSET: {
+      return {
+        ...state,
+        ...action.config,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+function LAYERS(state = defaultState.LAYERS, action) {
+  switch (action.type) {
+    case types.ADD_LAYERS_LIST: {
+      return {
+        ...state,
+        layers: [...state.layers, ...action.layers],
+      };
+    }
+    case types.ADD_LAYER_GROUP: {
+      // parse action.group for urls
+      const groupMapper = (layer) => {
+        if (typeof layer === 'string') {
+          if (layer.indexOf('http') === -1) {
+            return layer;
+          }
+          const pathSplit = layer.split('/');
+          return pathSplit[pathSplit.length - 1];
+        }
+        const subGroup = {};
+        Object.keys(layer).forEach((key) => {
+          subGroup[key] = layer[key].map(groupMapper);
+        });
+        return subGroup;
+      };
+      const group = action.group.map(groupMapper);
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          [action.groupId]: group,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -374,7 +567,6 @@ export function createMapReducer(mapId) {
     return state;
   };
 }
-
 export default {
-  'map-1': createMapReducer('map-1'), APP,
+  APP, LOC, SUPERSET_CONFIGS, STYLES, REGIONS, LOCATIONS, LAYERS, FILTER, 'map-1': createMapReducer('map-1'),
 };

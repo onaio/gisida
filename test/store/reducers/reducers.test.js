@@ -1,5 +1,4 @@
-import { APP } from '../../../src/store/reducers/app';
-
+import reducers from '../../../src/store/reducers/reducers';
 import * as types from '../../../src/store/constants/actionTypes';
 import defaultState from '../../../src/store/defaultState';
 
@@ -93,7 +92,6 @@ describe('reducers.APP', () => {
         locations: null,
       },
     };
-
-    expect(APP(defaultState, action)).toEqual(state);
+    expect(reducers.APP(defaultState, action)).toEqual(state);
   });
 });

@@ -1,29 +1,12 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import * as actions from './actions/actions';
-import app from './reducers/app';
-import filter from './reducers/filter';
-import layersReducer from './reducers/layers';
-import loc from './reducers/loc';
-import locationsReducer from './reducers/locations';
-import regions from './reducers/regions';
-import styles from './reducers/styles';
-import supersetConfig from './reducers/superset-config';
-
+import defaultReducers from './reducers/reducers';
 import { loadJSON } from '../utils/files';
 import prepareLayer from '../map/prepareLayer';
 import reducerRegistry from './reducerRegistry';
 
-const defaultReducers = {
-  supersetConfig,
-  styles,
-  regions,
-  locationsReducer,
-  loc,
-  layersReducer,
-  filter,
-  ...app,
-};
+
 export function loadLayers(mapId, dispatch, layers) {
   // Check if config has list of layers and add them to store
   if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
@@ -57,7 +40,7 @@ export function loadLayers(mapId, dispatch, layers) {
         // load local or remote layer spec
         return loadJSON(path, addLayerToStore);
       } else if (layer instanceof Object && layer.type) {
-        // use existing layer spec object
+      // use existing layer spec object
         layer.loaded = false;
         if (layer.visible && !layer.loaded) {
           prepareLayer(mapId, layer, dispatch);
