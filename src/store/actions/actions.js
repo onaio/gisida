@@ -1,4 +1,6 @@
+/* eslint-disable arrow-parens */
 import * as types from '../constants/actionTypes';
+import { ONAoauth } from '../../connectors/ona-api/auth';
 
 export const initApp = config => ({
   type: types.INIT_APP,
@@ -25,6 +27,11 @@ export const initRegions = (regions, mapConfig) => ({
 export const initLocations = locations => ({
   type: types.INIT_LOCATIONS,
   locations,
+});
+
+export const initSuperset = config => ({
+  type: types.INIT_SUPERSET,
+  config,
 });
 
 export const addLayersList = layers => ({
@@ -119,6 +126,14 @@ export const toggleCategories = (mapId, category, index, isRefresh) => ({
   mapId,
 });
 
+export const toggleGroups = (mapId, group, index, isRefresh) => ({
+  type: types.TOGGLE_GROUPS,
+  group,
+  index,
+  isRefresh,
+  mapId,
+});
+
 export const receiveData = (mapId, layer, timeseries) => ({
   type: types.RECEIVE_DATA,
   layer,
@@ -155,6 +170,12 @@ export const layerReloaded = mapId => ({
   type: types.LAYER_RELOADED,
 });
 
+export const saveFilterOptions = (mapId, filterOptions) => ({
+  type: types.SAVE_FILTER_OPTIONS,
+  mapId,
+  filterOptions,
+});
+
 export const updateTimeseries = (mapId, timeseries, layerId) => ({
   type: types.UPDATE_TIMESERIES,
   timeseries,
@@ -184,8 +205,108 @@ export function returnState(dispatch, getState) {
   return getState();
 }
 
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const loginRequest = credentials => ({
+  type: types.LOGIN_REQUEST,
+  isAuthenticated: false,
+  credentials,
+});
+
+// eslint-disable-next-line
+export const loginSuccess = user => ({
+  type: types.LOGIN_SUCCESS,
+  isAuthenticated: true,
+});
+
+export const loginFailure = errorMessage => ({
+  types: types.LOGIN_FAILURE,
+  isAuthenticated: false,
+  errorMessage,
+});
+
 export const getCurrentState = () => returnState;
 
+// Auth actions
+
+// when login request is dispatched ie to fetch user token or client id etc
+// if reponse is 200/OK we dispatch loginSuccess
+// else we dispatch loginError
+
+export const initAuth = config => ({
+  type: types.INIT_AUTH,
+  config,
+});
+
+export const requestLogin = creds => ({
+  type: types.LOGIN_REQUEST,
+  isFetching: true,
+  isAuthenticated: false,
+  creds,
+});
+
+export const receiveLogin = user => ({
+  type: types.LOGIN_SUCCESS,
+  isFetching: false,
+  isAuthenticated: true,
+  user,
+});
+
+export const loginError = message => ({
+  type: types.LOGIN_FAILURE,
+  isFetching: false,
+  isAuthenticated: false,
+  message,
+});
+
+export const receiveLogout = () => ({
+  type: types.LOGOUT_SUCCESS,
+  isFetching: false,
+  isAuthenticated: false,
+});
+
+export const receiveToken = token => ({
+  type: types.RECEIVE_TOKEN,
+  token,
+});
+
+export const getAuthConfigs = config => ({
+  type: types.GET_AUTH_CONFIGS,
+  config,
+});
+
+export const receiveForms = forms => ({
+  type: types.RECEIVE_FORMS,
+  forms,
+});
+
+export const fetchFormsError = message => ({
+  type: types.FETCH_FORMS_ERROR,
+  message,
+});
+
+// todo - Migrate to ONA Connector?
+export const loginUser = token => {
+  const reqConfig = {
+    token,
+    endpoint: 'user',
+  };
+
+  return dispatch => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin(token));
+    return ONAoauth(reqConfig, token, dispatch);
+  };
+};
+
+export const logoutUser = () => dispatch => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('state');
+  dispatch(receiveLogout());
+  window.location.reload();
+};
 export const locationUpdated = mapId => ({
   type: types.LOCATION_UPDATED,
   mapId,
@@ -202,10 +323,17 @@ export const toggleMapLocation = loc => ({
   loc,
 });
 
+export const setMenuScroll = (mapId, scrollTop) => ({
+  type: types.SET_MENU_SCROLL,
+  mapId,
+  scrollTop,
+});
+
 export default {
   initApp,
   initStyles,
   initRegions,
+  initSuperset,
   mapRendered,
   mapLoaded,
   addLayer,
@@ -229,9 +357,17 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
+  loginUser,
+  receiveToken,
+  receiveLogin,
   toggleCategories,
+  initAuth,
+  saveFilterOptions,
   locationUpdated,
   setLocation,
   initLoc,
   toggleMapLocation,
+  getAuthConfigs,
+  toggleGroups,
+  setMenuScroll,
 };

@@ -2,6 +2,7 @@ export const INIT_APP = 'INIT_APP';
 export const INIT_STYLES = 'INIT_STYLES';
 export const INIT_REGIONS = 'INIT_REGIONS';
 export const INIT_LOC = 'INIT_LOC';
+export const INIT_SUPERSET = 'INIT_SUPERSET';
 export const ADD_LAYER = 'ADD_LAYER';
 export const CHANGE_REGION = 'CHANGE_REGION';
 export const CHANGE_STYLE = 'CHANGE_STYLE';
@@ -27,6 +28,21 @@ export const TRIGGER_SPINNER = 'TRIGGER_SPINNER';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 export const TOGGLE_CATEGORIES = 'TOGGLE_CATEGORIES';
+
+// Auth action types
+export const INIT_AUTH = 'INIT_AUTH';
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const GET_AUTH_CONFIGS = 'GET_AUTH_CONFIGS';
+export const RECEIVE_TOKEN = 'RECEIVE_TOKEN';
+export const RECEIVE_FORMS = 'RECEIVE_FORMS';
+export const FETCH_FORMS_ERROR = 'FETCH_FORMS_ERROR';
 export const LOCATION_UPDATED = 'LOCATION_UPDATED';
 export const SET_LOCATION = 'SET_LOCATION';
 export const TOGGLE_MAP_LOCATION = 'TOGGLE_MAP_LOCATION';
+export const SAVE_FILTER_OPTIONS = 'SAVE_FILTER_OPTIONS';
+
+export const TOGGLE_GROUPS = 'TOGGLE_GROUPS';
+export const SET_MENU_SCROLL = 'SAVE_MENU_SCROLL';

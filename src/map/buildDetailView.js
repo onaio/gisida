@@ -6,9 +6,10 @@ const parseDetailValue = (spec, datum) => {
   if (!spec) return false;
 
   // 2) if single property then just get it from the datum
-  if (typeof spec === 'string' && datum[spec]) {
+  if (typeof spec === 'string' && datum[spec] === 0 ?
+    true : typeof spec === 'string' && datum[spec]) {
     return datum[spec];
-  // 3) if single property but it's undefined as datum prop, return false
+    // 3) if single property but it's undefined as datum prop, return false
   } else if (typeof spec === 'string' && !datum[spec]) {
     return false;
   }
@@ -22,9 +23,10 @@ const parseDetailValue = (spec, datum) => {
   if (Array.isArray(spec.prop) && spec.join) {
     const value = [];
     spec.prop.forEach((s) => {
-      const d = (typeof s === 'string' && datum[s])
-        ? datum[s]
-        : parseDetailValue(s, datum);
+      const d =
+        typeof s === 'string' && datum[s]
+          ? datum[s]
+          : parseDetailValue(s, datum);
       if (d) value.push(d);
     });
     return value.length ? value.join(spec.join) : false;
@@ -59,10 +61,11 @@ const parseDetailAlt = (spec, datum) => {
 };
 
 const parseDetailIconClassName = (spec) => {
-  const iconClassName = (spec.glyph && `glyphicon glyphicon-${spec.glyph}`)
-    || (spec.FA && `fas fa-${spec.FA}`)
-    || spec.className
-    || false;
+  const iconClassName =
+    (spec.glyph && `glyphicon glyphicon-${spec.glyph}`) ||
+    (spec.FA && `fas fa-${spec.FA}`) ||
+    spec.className ||
+    false;
 
   return `${spec.classPrefix || ''}${iconClassName}${spec.classSuffix || ''}`;
 };
@@ -118,7 +121,9 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
 
   // 1) Parse list item innerHTML (text) from prop(s)
   const value = parseDetailValue(detail.value, properties);
-  if (!value) return false;
+  if (!value && value !== 0) {
+    return false;
+  }
 
   // 2) Parse glyphicon from icon (options); Note: this doesn't work with multiple props
   if (detail.icon) {
@@ -149,11 +154,23 @@ export const buildParsedBasicDetailItem = (detail, properties) => {
   }
 
   return {
-    value, icon, iconColor, alt, prefix: valPrefix, suffix: valSuffix, useAltAsPrefix,
+    value,
+    icon,
+    iconColor,
+    alt,
+    prefix: valPrefix,
+    suffix: valSuffix,
+    useAltAsPrefix,
   };
 };
 
-export default (mapId, LayerObj, FeatureProperties, dispatch) => {
+export default (
+  mapId,
+  LayerObj,
+  FeatureProperties,
+  dispatch,
+  timeSeriesObj,
+) => {
   if (!LayerObj && !FeatureProperties) {
     dispatch(detailView(mapId, null));
     return false;
@@ -162,15 +179,29 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   const layerObj = { ...LayerObj };
   let featureProperties = { ...FeatureProperties };
   const {
-    UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
+    UID,
+    title,
+    'sub-title': subTitle,
+    'basic-info': basicInfo,
+    'image-url': imageURL,
   } = layerObj['detail-view'];
 
   if (!UID) return false;
   const join = layerObj['detail-view'].join || layerObj.source.join;
-  const layerObjData = (layerObj && layerObj.Data) || (layerObj &&
-    layerObj.mergedData && layerObj.mergedData.features);
-  const layerObjDatum = layerObjData.find(d =>
-    (d.properties || d)[join[1]] === featureProperties[join[0]]);
+  let activeData = null;
+  if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
+    activeData = [...timeSeriesObj.data];
+  } else {
+    activeData =
+      layerObj &&
+      (layerObj.Data ||
+        ((layerObj.source.data && layerObj.source.data.features) ||
+          layerObj.source.data));
+  }
+  const layerObjDatum =
+    activeData &&
+    activeData.length &&
+    activeData.find(d => (d.properties || d)[join[1]] === featureProperties[join[0]]);
 
   if (layerObjDatum) {
     featureProperties = {
@@ -183,6 +214,7 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
     UID: featureProperties[UID] || featureProperties['Fixed Site Unique ID'],
     title: featureProperties[title.prop], // todo - add mustache support
     subTitle: featureProperties[subTitle.prop], // todo - add mustache support
+    'image-url': featureProperties[imageURL],
     basicInfo,
     parsedBasicInfo: [],
   };
@@ -190,7 +222,10 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   let parsedDetail;
   if (basicInfo) {
     for (let i = 0; i < basicInfo.length; i += 1) {
-      parsedDetail = buildParsedBasicDetailItem(basicInfo[i], featureProperties);
+      parsedDetail = buildParsedBasicDetailItem(
+        basicInfo[i],
+        featureProperties,
+      );
       if (parsedDetail) detailViewModel.parsedBasicInfo.push(parsedDetail);
     }
   }

@@ -27,12 +27,11 @@ $ npm install gisida
 <script src="http://demo.gisida.onalabs.org/assets/js/gisida.js"> </script>
 ```
 
-
 ## Getting Started
 
 ### 1.Create config file
 
-- Create a `config.json` and save it in the application's root path. An example `config.json` file is provided below: 
+- Create a `config.json` and save it in the application's root path. An example `config.json` file is provided below:
 
 ```json
 {
@@ -81,9 +80,10 @@ const store = initStore();
 ```
 
 ### 3. Adding Layers
-- The `layersPath` propery under `APP.mapConfig` is used to define the folder that contains the layers files. 
 
-- The `LAYERS` propery is a list that contains the filenames of the layers that should be loaded into state. 
+- The `layersPath` propery under `APP.mapConfig` is used to define the folder that contains the layers files.
+
+- The `LAYERS` propery is a list that contains the filenames of the layers that should be loaded into state.
 
 **NOTE:** The filename is added withouth the `.json` extension in the config file.
 
@@ -106,7 +106,7 @@ An example layer file in the path `/layers/ken-health-sites.json`
   },
   "layout": {
     "text-field": "{name} ({type})",
-    "text-offset": [0,2],
+    "text-offset": [0, 2],
     "icon-image": "hospital-11",
     "icon-allow-overlap": true,
     "text-transform": "uppercase"
@@ -114,12 +114,11 @@ An example layer file in the path `/layers/ken-health-sites.json`
   "visible": false,
   "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
 }
-
 ```
 
-Ensure that the data file for the layer is located in the specified source path `data/ken_health_sites.geojson`. 
+Ensure that the data file for the layer is located in the specified source path `data/ken_health_sites.geojson`.
 
-### 3. Actions 
+### 3. Actions
 
 Gisida provides in-build functions that trigger to process and managed data in the store;
 
@@ -130,20 +129,21 @@ Gisida provides in-build functions that trigger to process and managed data in t
 - addLegend
 - buildTimeSeriesData
 
-
 TODO: add documentation for Gisida API
 
-
 ## Development
-To locally develop and make changes to gisida: 
+
+To locally develop and make changes to gisida:
 
 ### Local development
+
 - Clone repo:
+
 ```
 $ git clone git@github.com:onaio/gisida.git
 ```
 
-- Link the project folder as local module within your project using [`npm link`](https://docs.npmjs.com/cli/link) or [`yarn link`](https://yarnpkg.com/lang/en/docs/cli/link/) if you use yarn as your preferred node package manager. 
+- Link the project folder as local module within your project using [`npm link`](https://docs.npmjs.com/cli/link) or [`yarn link`](https://yarnpkg.com/lang/en/docs/cli/link/) if you use yarn as your preferred node package manager.
 
 - Run development build:
 
@@ -151,37 +151,28 @@ $ git clone git@github.com:onaio/gisida.git
 $ npm develop
 ```
 
-### Production build 
+- Run tests
+
+```
+$ npm test
+```
+
+- Run tests and generate coverage report
+
+```
+$ npm run test:coverage
+```
+
+### Production build
 
 - Build production distribution
+
 ```
 $ npm build
 ```
 
 - Publish to npm
+
 ```
 $ npm publish
 ```
-
-
-### Releases
-
-1. Check https://github.com/onaio/gisida/releases to see what the next release version number should be, i.e. if  the last release is `0.0.7` the next should be `0.0.8` depending on the Semantic Versioning guide, refer to (https://semver.org/).
-
-2. Create branch for new version being released, `git checkout -b <version-number>` 
-
-```
-$ git checkout -b 0.0.8
-```
-
-3. Run `npm version <version-number>`. This creates a commit and updates version number in package.json.
-```
-$ npm version 0.0.8
-```
-
-4. Push release branch to Github and tag `git push -u --follow-tags origin <version-number>` e.g
-```
-$ git push -u --follow-tags origin 0.0.8
-```
-
-5. Merge release to master once it passes review

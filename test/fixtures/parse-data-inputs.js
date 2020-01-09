@@ -153,7 +153,7 @@ export const parseInputSpecDataCmplx = [
   'partner_details/organisation': 'SRCS_Puntland'
 },
 {
-  'site_activity': 'OTP SC ',
+  'site_activity': 'OTP SC',
   //'mobile_site_activity': ''
   'NU_indicators/site_type': '1',
   'NU_indicators/facility_type': 'sc',
