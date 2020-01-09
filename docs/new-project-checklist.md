@@ -7,6 +7,7 @@ Before starting a new Gisida project there are a few requirements to have in min
 4. Geometries
 5. Data
 6. Layers and Sections
+7. Security and Passwords (optional)
 
 ### Project name
 This should be a simple yet descriptive name for the project. This will be used as the name of your new repository so it should be all lowercase letters and no spaces.
@@ -25,3 +26,6 @@ Data can come in many formats from many sources and is required to encode / visu
 
 ### Layers and Sections
 Knowing which geometries and which data need to be displayed is the first step in configuring layers and rendering a menu with nestable groups of layers.
+
+### Security and Passwords
+Gisida supports a basic password configuration, as well as an oAuth2 option for authorizing Ona Data and Canopy (Superset) integrations.
