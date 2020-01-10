@@ -15,4 +15,4 @@ export const layer2 = {
   loaded: false,
   credit: 'credit',
 };
-export const timeseries = { [layerId]: { adminFilter: false } };
+export const timeseries = { [layerId]: { adminFilter: ['item'] } };
