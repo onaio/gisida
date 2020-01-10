@@ -1,9 +1,5 @@
 import { AnyAction } from 'redux';
 
-interface generalObjects {
-    [key: string]: any
-}
-
 export interface Actions {
     initApp(config:object):AnyAction;
     initLoc(config:object):AnyAction;
@@ -36,11 +32,11 @@ export interface Actions {
     resetFilteredLayer(mapid:string, oldLayer:any):AnyAction;
     triggerSpinner(mapid:string, isLoaded?:boolean):AnyAction;
     loginRequest(credentials:object):AnyAction;
-    loginSuccess(user:generalObjects):AnyAction;
+    loginSuccess(user:object):AnyAction;
     loginFailure(errorMessage:any):AnyAction;
     getCurrentState():any;
     initAuth(config:object):AnyAction;
-    receiveLogin(user:generalObjects):AnyAction;
+    receiveLogin(user:object):AnyAction;
     loginError(message:any):AnyAction;
     receiveToken(token:string):AnyAction;
     getAuthConfigs(config:object):AnyAction;

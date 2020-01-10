@@ -2,18 +2,15 @@ declare type actionsInterface = import('./actionsInterface').Actions;
 declare type actionTypesInterface = import('./actionTypesInterface').actionTypes;
 
 declare module 'gisida' {
-
-    interface generalFunc {
+    import { AnyAction } from 'redux';
+    
+    interface FlexFunc {
         (...args: any[]):any
-    }
-
-    interface generalObjects {
-        [key: string]: any
     }
 
     const version:string;
     function initStore(customReducers:object, loadState:any, siteConfigUrl?:string): any;
-    function loadLayers(mapId:string, dispatch:generalFunc, layers:object):any
+    function loadLayers(mapId:string, dispatch:FlexFunc, layers:object):any
     
     namespace reducerRegistry {
         function getReducers():object;
@@ -35,24 +32,24 @@ declare module 'gisida' {
 
     const Actions: actionsInterface;
 
-    function prepareLayer(mapId:string, layer:object, dispatch:generalFunc, filterOptions?:boolean, doUpdateTsLayer?:boolean):any;
-    function addPopUp(mapId:string, mapboxGLdetailViewMap:object, dispatch:generalFunc):boolean;
+    function prepareLayer(mapId:string, layer:object, dispatch:FlexFunc, filterOptions?:boolean, doUpdateTsLayer?:boolean):any;
+    function addPopUp(mapId:string, mapboxGLdetailViewMap:object, dispatch:FlexFunc):boolean;
     function sortLayers(map:object, layers:object, nextLayerId:string):any;
     function getSliderLayers(layers:object):Array<string>;
     function buildFilters(filters:object,layerFilters:Array<any>, prevFilters:object):object;
     function mergeFilters(originalFilters:object, filteredFilters:object, clickedFilterKey:string):object;
     function generateFilterOptions(layerData:object):Array<any>;
     function processFilters(layerData:object, filterOptions:object, isOr?:boolean):any;
-    function generateStops(layer:object, timefield:string, dispatch:generalFunc, nextIndex?:string):any;
+    function generateStops(layer:object, timefield:string, dispatch:FlexFunc, nextIndex?:string):any;
     function formatNum(num:number, decimal:number):number;
     function hexToRgbA(hex:string, alpha?:number):any;
     function parseMustache(spec:string, datun:object):string;
 
     namespace SupAuth {
         function defaultOauthC():any;
-        function defaultSupAuthC(User:generalObjects, AuthConfig:object):boolean;
+        function defaultSupAuthC(User:object, AuthConfig:object):boolean;
         function defaultUnSupAuthZ():any;
-        function authorizeUser(APP:object, AUTH:object, accessToken:string, willAuthorize?:generalFunc):any;
+        function authorizeUser(APP:object, AUTH:object, accessToken:string, willAuthorize?:FlexFunc):any;
         function getUser():Promise<any>;
         function getAuthConfig(pk:any):Promise<any>;
         function getLocalAuthConfig(path:string):Promise<any>;
@@ -64,13 +61,13 @@ declare module 'gisida' {
     interface API {
         apiHeaders(config:object):object;
         apiRequest(config:object, headers:object):object;
-        fetch(config:object, callback?:generalFunc, n?:number):Promise<any>;
+        fetch(config:object, callback?:FlexFunc, n?:number):Promise<any>;
         fetchAPI(config:object):Promise<any>
     }
 
     interface Oauth2 {
-        getOauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
-        getUser(reqConfig:object, token:string, dispatch:generalFunc):any;
+        getOauthURL(clientID:string, callback:FlexFunc, baseURL:string):string;
+        getUser(reqConfig:object, token:string, dispatch:FlexFunc):any;
     }
 
     const ONA: {
@@ -78,19 +75,19 @@ declare module 'gisida' {
         Oauth2:Oauth2;
     }
 
-    function onaApi(config:object, callback?:generalFunc):any;
+    function onaApi(config:object, callback?:FlexFunc):any;
 
     namespace onaAuth {
-        function oauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
-        function ONAoauth(reqConfig:object, token:string, dispatch:generalFunc):any;
+        function oauthURL(clientID:string, callback:FlexFunc, baseURL:string):string;
+        function ONAoauth(reqConfig:object, token:string, dispatch:FlexFunc):any;
     }
 
-    function getData(formID:number, properties:any, state:object, callback:generalFunc):any;
+    function getData(formID:number, properties:any, state:object, callback:FlexFunc):any;
     function aggregateFormData(layerData:object, locations:object, filterOptions:object, isOr:boolean):Array<any>;
     function parseData(spec:object,datum:Array<any>):any;
     // namespace history {}
 
-    function oauthURL(clientID:string, callback:generalFunc, baseURL:string):string;
+    function oauthURL(clientID:string, callback:FlexFunc, baseURL:string):string;
     function buildParsedBasicDetailItem(detail:object, properties:object):any;
     function processFormData(formData:any, layerObj:object):any;
     function lngLat(LOC:object, APP:Object):object;
@@ -101,16 +98,16 @@ declare module 'gisida' {
     }
 
     namespace files {
-        function loadJSON(path:string, callback:generalFunc, id:string):any
-        function loadCSV(path:string, callback:generalFunc):any;
+        function loadJSON(path:string, callback:FlexFunc, id:string):any
+        function loadCSV(path:string, callback:FlexFunc):any;
         
     }
 
     function addChart(layer:object, data:Array<any>, map:any, mapId:string):any;
-    function buildDetailView(mapId:string, LayerObj:object, FeatureProperties:object, dispatch:generalFunc, timeSeriesObj:object):boolean;
+    function buildDetailView(mapId:string, LayerObj:object, FeatureProperties:object, dispatch:FlexFunc, timeSeriesObj:object):boolean;
     // function buildParsedBasicDetailItem(affix:any, props:object):string;
-    function buildFilterState(mapId:string, filterOptions:object, filters:object, layerObj:object, dispatch:generalFunc, regenStops:object, isOr:boolean):object;
-    function clearFilterState(mapId:string, filterState:any, layerId:string, dispatch:generalFunc, isClear:boolean):any;
+    function buildFilterState(mapId:string, filterOptions:object, filters:object, layerObj:object, dispatch:FlexFunc, regenStops:object, isOr:boolean):object;
+    function clearFilterState(mapId:string, filterState:any, layerId:string, dispatch:FlexFunc, isClear:boolean):any;
 
     interface ducksApp {
         INIT_APP: string;
