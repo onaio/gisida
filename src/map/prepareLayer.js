@@ -1,5 +1,4 @@
-/* eslint-disable no-param-reassign */
-import * as d3 from 'd3';
+
 import Mustache from 'mustache';
 import cloneDeep from 'lodash.clonedeep';
 import superset from '@onaio/superset-connector';
