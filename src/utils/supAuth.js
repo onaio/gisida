@@ -171,12 +171,21 @@ class SupAuthZ {
         } else if (Prop.indexOf('VIEW.') === 0 && user[Prop] === 'OK') {
           // Define actual View name
           [, propName] = Prop.split('.');
-          // Reference site config to match VIEWS to URI Paths
-          prop = this.config['private-views'] && this.config['private-views'][propName];
-          // Check View exists in authConfig, if not add it
-          if (prop && !authConfig.VIEWS[prop]) authConfig.VIEWS[prop] = [];
-          // Add username to list of authorized users
-          if (prop) authConfig.VIEWS[prop].push(user.username);
+
+          if (propName === 'Iframe') {
+            if (!authConfig.VIEWS[propName]) {
+              authConfig.VIEWS[propName] = [];
+            }
+            // Add username to list of authorized users
+            authConfig.VIEWS[propName].push(user.username);
+          } else {
+            // Reference site config to match VIEWS to URI Paths
+            prop = this.config['private-views'] && this.config['private-views'][propName];
+            // Check View exists in authConfig, if not add it
+            if (prop && !authConfig.VIEWS[prop]) authConfig.VIEWS[prop] = [];
+            // Add username to list of authorized users
+            if (prop) authConfig.VIEWS[prop].push(user.username);
+          }
 
           // Check User Auth Prop for Layer specific Auth (exclude Public Layers)
         } else if (Prop.indexOf('LAYER.') === 0 && user[Prop] === 'OK') {
