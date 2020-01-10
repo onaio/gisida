@@ -1,11 +1,10 @@
 import lastLayerSelected from './../lastLayerSelectedReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_LAYER } from './../../../constants/actionTypes';
 import { layerId, mapId, layer2, layerId2, layer } from './common';
 
 describe('lastLayerSelectedReducer', () => {
   it('should handle the initial state', () => {
-    expect(lastLayerSelected(undefined, {})).toEqual(defaultState.MAP.lastLayerSelected);
+    expect(lastLayerSelected(undefined, {})).toEqual('');
   });
 
   const state = {
