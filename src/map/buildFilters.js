@@ -41,7 +41,7 @@ export default function buildFiltersMap(filters, layerFilters, prevFilters) {
         ? prevFilters[filterKey].isFiltered
         : false, // whether any options have been modified
       isOriginal: true, // whether the filter has been filtered
-      // eslint-disable-next-line
+      // eslint-disable-next-line no-nested-ternary
       dataType: prevFilters ? prevFilters[filterKey].dataType
         : !filters[filterKey].quantitativeValues ? 'ordinal' : 'quantitative',
       filterType: prevFilters ? prevFilters[filterKey].filterType
@@ -80,8 +80,8 @@ export default function buildFiltersMap(filters, layerFilters, prevFilters) {
         for (o = 0; o < layerFilters[f].length; o += 1) {
           if (layerFilters[f][o] instanceof Array) {
             if (layerFilters[f][o][0] === '==') {
-              filterKey = layerFilters[f][o][1];  // eslint-disable-line
-              optionKey = layerFilters[f][o][2];  // eslint-disable-line
+              filterKey = layerFilters[f][o][1];  // eslint-disable-line prefer-destructuring
+              optionKey = layerFilters[f][o][2];  // eslint-disable-line prefer-destructuring
               filterMap[filterKey].options[optionKey].enabled = true;
               filterMap[filterKey].options[optionKey].hidden = false;
               if (!filterMap[filterKey]) filterMap[filterKey].isFiltered = true;
