@@ -7,9 +7,7 @@ const aggregate = {
   ],
   "accepted-filter-values": [
     "all",
-    [
-      "Teknaf"
-    ]
+    "all"
   ],
   "filter-label": [
     "Partner",

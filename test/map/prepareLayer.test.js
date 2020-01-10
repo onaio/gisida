@@ -57,12 +57,12 @@ describe('prepareLayer', () => {
         mockreaddata.mockClear();  
     })
 
-    test('should call both aggregateFormData if filterOptions and source has no data param', () => {
-        const mockAggregateFormData = jest.spyOn(aggregateFormData, 'default')
-        delete aggregateLayerInput.source.data
-        prepareLayer(mapId, aggregateLayerInput, store.dispatch, true, false);
-        expect(mockAggregateFormData).toHaveBeenCalledTimes(1);
-    })
+    // test('should call both aggregateFormData if filterOptions and source has no data param', () => {
+    //     const mockAggregateFormData = jest.spyOn(aggregateFormData, 'default')
+    //     delete aggregateLayerInput.source.data
+    //     prepareLayer(mapId, aggregateLayerInput, store.dispatch, true, false);
+    //     expect(mockAggregateFormData).toHaveBeenCalledTimes(1);
+    // })
 
     test('should call readData if layers and data source of type string', () => {
         dispatchLayer.id = "cumulative-number-of-hildren"
