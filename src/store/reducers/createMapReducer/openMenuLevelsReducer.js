@@ -7,8 +7,7 @@ import { TOGGLE_CATEGORIES, TOGGLE_GROUPS } from '../../constants/actionTypes';
  * @returns {array} - Updated state
  */
 function toggleLevel(state, action) {
-  const { category, group, index, isRefresh } = action;
-  const level = category || group;
+  const { category, group, index, isRefresh, count } = action;
 
   if (isRefresh) {
     return [];
@@ -18,8 +17,13 @@ function toggleLevel(state, action) {
 
   if (index > -1) {
     openLevels.splice(index, 1);
-  } else {
-    openLevels.push(level);
+  } else if (group) {
+    openLevels.push({
+      count,
+      group,
+    });
+  } else if (category) {
+    openLevels.push(category);
   }
   return openLevels;
 }

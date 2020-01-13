@@ -417,13 +417,15 @@ describe('actions', () => {
     const group = 'group-id';
     const index = 0;
     const isRefresh = false;
+    const count = 0;
     const expectedAction = {
       type: types.TOGGLE_GROUPS,
       group,
       index,
       isRefresh,
       mapId,
+      count,
     };
-    expect(actions.toggleGroups(mapId, group, index, isRefresh)).toEqual(expectedAction);
+    expect(actions.toggleGroups(mapId, group, index, isRefresh, count)).toEqual(expectedAction);
   });
 });
