@@ -402,4 +402,30 @@ describe('actions', () => {
     };
     expect(actions.addLayersList(layers)).toEqual(expectedAction);
   });
+
+  test('should create an action to set menu scroll', () => {
+    const scrollTop = 57;
+    const expectedAction = {
+      type: types.SET_MENU_SCROLL,
+      mapId,
+      scrollTop,
+    };
+    expect(actions.setMenuScroll(mapId, scrollTop)).toEqual(expectedAction);
+  });
+
+  test('should create an action to toggle groups', () => {
+    const group = 'group-id';
+    const index = 0;
+    const isRefresh = false;
+    const count = 0;
+    const expectedAction = {
+      type: types.TOGGLE_GROUPS,
+      group,
+      index,
+      isRefresh,
+      mapId,
+      count,
+    };
+    expect(actions.toggleGroups(mapId, group, index, isRefresh, count)).toEqual(expectedAction);
+  });
 });

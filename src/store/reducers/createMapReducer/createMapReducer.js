@@ -10,7 +10,7 @@ import defaultLayersReducer from './defaultLayersReducer';
 import oldLayerObjsReducer from './oldLayerObjsReducer';
 import showSpinnerReducer from './showSpinnerReducer';
 import menuIsOpenReducer from './menuIsOpenReducer';
-import openCategoriesReducer from './openCategoriesReducer';
+import openMenuLevelsReducer from './openMenuLevelsReducer';
 import timeseriesReducer from './timeSeriesReducer';
 import layerVisibilityReducer from './layerVisibilityReducer';
 import filterReducer from './filterReducer';
@@ -22,7 +22,6 @@ import lastLayerSelectedReducer from './lastLayerSelectedReducer';
 import primaryLayerReducer from './primaryLayerReducer';
 import primarySubLayerReducer from './primarySubLayerReducer';
 import reloadLayerIdReducer from './reloadLayerIdReducer';
-import openGroupsReducer from './openGroupsReducer';
 import menuScrollReducer from './menuScrollReducer';
 
 function mapRendered(state, action) {
@@ -290,14 +289,14 @@ function resetFilteredLayer(state, action) {
 function toggleCategories(state, action) {
   return {
     ...state,
-    openCategories: openCategoriesReducer(state.openCategories, action),
+    openCategories: openMenuLevelsReducer(state.openCategories, action),
   };
 }
 
 function toggleGroups(state, action) {
   return {
     ...state,
-    openGroups: openGroupsReducer(state.openGroups, action),
+    openGroups: openMenuLevelsReducer(state.openGroups, action),
   };
 }
 

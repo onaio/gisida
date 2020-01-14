@@ -1,11 +1,21 @@
 import filterReducer from './../filterReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_LAYER } from './../../../constants/actionTypes';
 import { layerId, mapId, layer2, layerId2, layer } from './common';
 
 describe('filterReducer', () => {
   it('should handle the initial state', () => {
-    expect(filterReducer(undefined, {})).toEqual(defaultState.MAP.filter);
+    expect(filterReducer(undefined, {})).toEqual({
+      isFiltered: false,
+      prevFilters: null,
+      layerId: '',
+      filters: {},
+      filterOptions: {},
+      filterOptionsPrev: {},
+      isOpen: false,
+      isMac: window.navigator.platform.indexOf('Mac') !== -1,
+      isLinux: window.navigator.platform.indexOf('Linux') !== -1,
+      globalSearchField: false,
+    });
   });
   const state = {
     filter: {
