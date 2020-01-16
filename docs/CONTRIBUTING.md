@@ -8,7 +8,7 @@ The following is a set of guidelines for contributing to Gisida. Changes to this
 
 [Creating an issue](#creating-an-issue)
 
-[Don't](#don't)
+[Don't](#dont)
 
 ## Branch naming
 
