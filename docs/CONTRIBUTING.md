@@ -16,6 +16,8 @@ A branch is named by separating various parts with a forward slash. The structur
 
 `group-token/issue-number_awesome-branch-name`
 
+e.g **feature/300_layer-builder**
+
 The following are tokens that can be used and their meaning:
 
 **bug**: Malfunctions that should be fixed to comply with the expected behaviour
