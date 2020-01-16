@@ -44,7 +44,7 @@ The following are tokens that can be used and their meaning:
 
 - In case of a bug, give as details as possible of how to reproduce the bug and the expected behaviour.
 
-# Dont't
+# Don't
 
 Create a merge request if your source branch has commented out code.
 
