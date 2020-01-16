@@ -8,8 +8,6 @@ The following is a set of guidelines for contributing to Gisida. Changes to this
 
 [Creating an issue](#creating-an-issue)
 
-[Creating a pull request](#creating-a-pull-request)
-
 [Don't](#don't)
 
 ## Branch naming
