@@ -7,16 +7,8 @@ import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
 import { loadJSON, loadCSV } from '../utils/files';
-import {
-  generateFilterOptions,
-  processFilters,
-  generateFilterOptionsPrev,
-} from '../utils/filters';
-import {
-  requestData,
-  receiveData,
-  getCurrentState,
-} from '../store/actions/actions';
+import { generateFilterOptions, processFilters, generateFilterOptionsPrev } from '../utils/filters';
+import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
 import parseData from './../utils/parseData';
 import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
@@ -34,9 +26,7 @@ export function buildLabels(layerObj, tsLayerObj, period) {
     typeof tsLayerObj !== 'undefined'
       ? [...tsLayerObj.periodData[period].data]
       : [...layerObj.source.data];
-  const {
-    coordinates, join, label, labelData,
-  } = layerObj.labels;
+  const { coordinates, join, label, labelData } = layerObj.labels;
   let activeLayerData;
 
   // loop through all labels
@@ -47,18 +37,19 @@ export function buildLabels(layerObj, tsLayerObj, period) {
       activeLayerData = layerData[d].properties || layerData[d];
       if (labelData[l][join[0]] === activeLayerData[join[1]]) {
         const dataItem = commaFormatting(layerObj, activeLayerData, false);
-        // stash datum and coordi ates in label, push to labels array
-        labels.push({
-          ...labelData[l],
-          data: { ...dataItem },
-          label: Mustache.render(label, dataItem),
-          coordinates: [
-            labelData[l][coordinates[0]],
-            labelData[l][coordinates[1]],
-          ],
-        });
-        // remove datum from layerData for faster looping
-        layerData.splice(d, 1);
+
+        if (dataItem) {
+          // stash datum and coordi ates in label, push to labels array
+          labels.push({
+            ...labelData[l],
+            data: { ...dataItem },
+            label: Mustache.render(label, dataItem),
+            coordinates: [labelData[l][coordinates[0]], labelData[l][coordinates[1]]],
+          });
+          // remove datum from layerData for faster looping
+          layerData.splice(d, 1);
+        }
+
         // stop looping throuh layerData for this label
         break;
       }
@@ -84,8 +75,9 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   if (layerObj.fillGaps) {
     const data = [];
     const mapCodes = [
-      ...new Set((layerObj.source.data.features || layerObj.source.data)
-        .map(d => d[layerObj.source.join[1]])),
+      ...new Set(
+        (layerObj.source.data.features || layerObj.source.data).map(d => d[layerObj.source.join[1]])
+      ),
     ];
     const periods = [
       ...new Set(layerObj.source.data.map(p => p[layerObj.aggregate.timeseries.field])),
@@ -135,7 +127,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layers,
     doUpdateTsLayer,
     dispatch,
-    mapId,
+    mapId
   );
 
   // if (timeseriesMap && timeseriesMap[layerObj.id] &&
@@ -178,7 +170,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch(receiveData(mapId, layerObj, newTimeSeries));
   } else if (!layerObj.labels.labelData) {
     // Load labels from CSV
-    loadCSV(layerObj.labels.data, (labelData) => {
+    loadCSV(layerObj.labels.data, labelData => {
       layerObj.labels.labelData = labelData;
 
       // if no timeseries, build one set of labels
@@ -187,11 +179,11 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
         // if timeseries, build labels for every timeperiod
       } else {
         layerObj.labels.labels = {};
-        newTimeSeries[layerObj.id].period.forEach((period) => {
+        newTimeSeries[layerObj.id].period.forEach(period => {
           layerObj.labels.labels[period] = buildLabels(
             layerObj,
             newTimeSeries[layerObj.id],
-            period,
+            period
           );
         });
       }
@@ -200,7 +192,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   } else {
     const newLabels = {};
     if (doUpdateTsLayer) {
-      newTimeSeries[layerObj.id].period.forEach((p) => {
+      newTimeSeries[layerObj.id].period.forEach(p => {
         newLabels[p] = buildLabels(layerObj, newTimeSeries[layerObj.id], p);
       });
       layerObj.labels.labels = {
@@ -224,7 +216,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       ? sourceURL.split('.').pop()
       : typeof sourceURL === 'object' && sourceURL !== null && sourceURL.type;
   if (fileType === 'csv') {
-    loadCSV(layerObj.source.data, (data) => {
+    loadCSV(layerObj.source.data, data => {
       let parsedData;
       if (layerObj.source.type === 'geojson') {
         parsedData = csvToGEOjson(layerObj, data);
@@ -258,10 +250,8 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   }
   if (fileType === 'geojson') {
     const path =
-      typeof layerObj.source.data === 'string'
-        ? layerObj.source.data
-        : layerObj.source.data.url;
-    loadJSON(path, (data) => {
+      typeof layerObj.source.data === 'string' ? layerObj.source.data : layerObj.source.data.url;
+    loadJSON(path, data => {
       if (layerObj['data-parse']) {
         layerObj.source.data = {
           ...data,
@@ -283,10 +273,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     if (layerObj['data-parse']) {
       layerObj.source.data = {
         ...JSON.parse(sourceURL.data),
-        features: parseData(
-          layerObj['data-parse'],
-          JSON.parse(sourceURL.data).features,
-        ),
+        features: parseData(layerObj['data-parse'], JSON.parse(sourceURL.data).features),
       };
     } else {
       layerObj.source.data = JSON.parse(sourceURL.data);
@@ -310,9 +297,9 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     superset.api
       .doFetch(
         config, // fetch with config
-        res => res,
+        res => res
       ) // pass in callback func to process response
-      .then((data) => {
+      .then(data => {
         const processedData = superset.processData(data);
         let parsedData;
         const uniqueFacilities = [...new Set(processedData.map(facility => facility.facility_id))];
@@ -320,16 +307,19 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
          * Build custom filter
          * The custom filter introduces an extra field 'no_of_reports'.
          * we depend on the field building the quant chart on the filter
-        */
+         */
         if (layerObj.aggregate.hasCustomFilter) {
           const reportsPerFacility = {};
-          uniqueFacilities.forEach((facility) => {
-            reportsPerFacility[facility] = processedData.filter(facilityData => facilityData.facility_id === facility)
+          uniqueFacilities.forEach(facility => {
+            reportsPerFacility[facility] = processedData
+              .filter(facilityData => facilityData.facility_id === facility)
               .map(d => d.reporting_period);
           });
-          processedData.forEach((pdata) => {
-            if (reportsPerFacility[pdata.facility_id] &&
-               reportsPerFacility[pdata.facility_id].length) {
+          processedData.forEach(pdata => {
+            if (
+              reportsPerFacility[pdata.facility_id] &&
+              reportsPerFacility[pdata.facility_id].length
+            ) {
               pdata.no_of_reports = reportsPerFacility[pdata.facility_id].length;
             } else {
               pdata.no_of_reports = '0';
@@ -348,17 +338,12 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
           parsedData = [...processedData];
         }
 
-        layerObj.source.data = Array.isArray(parsedData)
-          ? [...parsedData]
-          : { ...parsedData };
+        layerObj.source.data = Array.isArray(parsedData) ? [...parsedData] : { ...parsedData };
 
         layerObj.mergedData = layerObj.source.data;
 
         if (layerObj.aggregate && layerObj.aggregate.type) {
-          layerObj.source.data = aggregateFormData(
-            layerObj,
-            currentState.LOCATIONS,
-          );
+          layerObj.source.data = aggregateFormData(layerObj, currentState.LOCATIONS);
         }
         if (layerObj.aggregate && layerObj.aggregate.filter) {
           layerObj.filterOptions = generateFilterOptions(layerObj);
@@ -380,14 +365,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   let q = d3.queue();
 
   const filePaths = layerObj.source.data;
-  filePaths.forEach((filePath) => {
+  filePaths.forEach(filePath => {
     if (Number.isInteger(filePath)) {
       q = q.defer(getData, filePath, layerObj.properties, APP);
-    } else if (
-      typeof filePath === 'object' &&
-      filePath !== null &&
-      filePath.type
-    ) {
+    } else if (typeof filePath === 'object' && filePath !== null && filePath.type) {
       // add in SUPERSET.API promise to q.defer
       switch (filePath.type) {
         case 'superset': {
@@ -419,15 +400,15 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // parse all data if layer has data parsing spec
     const data = !layerObj['data-parse']
       ? [...Data]
-      : Data.map((D) => {
-        if (Array.isArray(D.features)) {
-          return {
-            ...D,
-            features: parseData(layerObj['data-parse'], D.features),
-          };
-        }
-        return parseData(layerObj['data-parse'], D);
-      });
+      : Data.map(D => {
+          if (Array.isArray(D.features)) {
+            return {
+              ...D,
+              features: parseData(layerObj['data-parse'], D.features),
+            };
+          }
+          return parseData(layerObj['data-parse'], D);
+        });
     const { join, relation, type } = layerObj.source;
     const isManyToOne = relation && relation.type === 'many-to-one';
     const isOneToMany = relation && relation.type === 'one-to-many';
@@ -443,20 +424,20 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     }
 
     // Filter base data for missing join properties
-    const intialFilter = (d) => {
+    const intialFilter = d => {
       if (!Array.isArray(join[isVectorLayer ? 1 : 0])) {
         return typeof d[join[isVectorLayer ? 1 : 0]] !== 'undefined';
       }
       for (let j = 0; j < join[isVectorLayer ? 1 : 0].length; j += 1) {
-        if (typeof d[join[isVectorLayer ? 1 : 0][j]] !== 'undefined') { return true; }
+        if (typeof d[join[isVectorLayer ? 1 : 0][j]] !== 'undefined') {
+          return true;
+        }
       }
       return false;
     };
 
     if (Array.isArray(mergedData) && !layerObj['merge-locations']) {
-      mergedData = mergedData
-        .filter(d => d[layerObj.property] !== null)
-        .filter(intialFilter);
+      mergedData = mergedData.filter(d => d[layerObj.property] !== null).filter(intialFilter);
     } else if (Array.isArray(mergedData.features)) {
       mergedData.features = mergedData.features
         .filter(d => d[layerObj.property] !== undefined)
@@ -466,7 +447,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     // Helper func for combining arrays of data
     function basicMerge(i, prevData, nextData) {
       // Helper func to check nextData datum for single or multiple join props
-      const basicMergeFilter = (d) => {
+      const basicMergeFilter = d => {
         if (!Array.isArray(join[i])) return typeof d[join[i]] !== 'undefined';
         for (let j = 0; j < join[i].length; j += 1) {
           if (typeof d[join[i][j]] !== 'undefined') return true;
@@ -502,19 +483,14 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         datum = nextData[d].properties || nextData[d];
         if (Array.isArray(join[i])) {
           for (let j = 0; j < join[i].length; j += 1) {
-            joinProp =
-              typeof datum[join[i][j]] !== 'undefined' ? join[i][j] : null;
+            joinProp = typeof datum[join[i][j]] !== 'undefined' ? join[i][j] : null;
             if (joinProp) break;
           }
         } else {
           joinProp = join[i];
         }
 
-        if (
-          relation.key[i] === 'one' &&
-          datum[joinProp] &&
-          prevData[datum[joinProp]]
-        ) {
+        if (relation.key[i] === 'one' && datum[joinProp] && prevData[datum[joinProp]]) {
           // Merge unique "one" properties from and datum onto prevData[oneId]
           prevData[datum[joinProp]] = {
             ...prevData[datum[joinProp]],
@@ -555,11 +531,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       // 2) map() through prevData once and reference {map}
       // 3) reorder everything up front to make sure that all manys exist before mapping ones
 
-      const prevDataMap = (pd) => {
+      const prevDataMap = pd => {
         if (Array.isArray(join[j])) {
           for (let k = 0; k < join[j].length; k += 1) {
-            pJoinProp =
-              typeof pd[join[j][k]] !== 'undefined' ? join[j][k] : null;
+            pJoinProp = typeof pd[join[j][k]] !== 'undefined' ? join[j][k] : null;
             if (pJoinProp) break;
           }
         } else {
@@ -572,8 +547,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         datum = nextData[d].properties || nextData[d];
         if (Array.isArray(join[i])) {
           for (let k = 0; k < join[i].length; k += 1) {
-            nJoinProp =
-              typeof datum[join[i][k]] !== 'undefined' ? join[i][k] : null;
+            nJoinProp = typeof datum[join[i][k]] !== 'undefined' ? join[i][k] : null;
             if (nJoinProp) break;
           }
         } else {
@@ -581,18 +555,10 @@ function fetchMultipleSources(mapId, layer, dispatch) {
         }
 
         // if nextData is another many, add it to the prev data array
-        if (
-          relation.key[i] === 'many' &&
-          datum[nJoinProp] &&
-          Array.isArray(prevData)
-        ) {
+        if (relation.key[i] === 'many' && datum[nJoinProp] && Array.isArray(prevData)) {
           prevData = [...prevData, ...(nextData.features || nextData)];
           // if nextData is one, map it to existing manys in prevData
-        } else if (
-          relation.key[i] === 'one' &&
-          datum[nJoinProp] &&
-          Array.isArray(prevData)
-        ) {
+        } else if (relation.key[i] === 'one' && datum[nJoinProp] && Array.isArray(prevData)) {
           prevData = j !== -1 ? prevData.map(prevDataMap) : prevData;
         }
       }
@@ -629,21 +595,16 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        const hasCustomFilter =
-          layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+        const hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
 
         mergedData = manyToOneMerge(
           isVectorLayer ? i + 1 : i,
           mergedData,
           data[i],
-          hasCustomFilter,
+          hasCustomFilter
         );
       } else if (isOneToMany) {
-        mergedData = oneToManyMerge(
-          isVectorLayer ? i + 1 : i,
-          mergedData,
-          data[i],
-        );
+        mergedData = oneToManyMerge(isVectorLayer ? i + 1 : i, mergedData, data[i]);
       } else if (isOneToOne) {
         mergedData = oneToOneMerge(i, mergedData, data[i]);
       }
@@ -664,9 +625,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     if (layerObj.source.type === 'geojson' && !mergedData.features) {
       mergedData = csvToGEOjson(layerObj, mergedData);
     }
-    layerObj.mergedData = Array.isArray(mergedData)
-      ? [...mergedData]
-      : { ...mergedData };
+    layerObj.mergedData = Array.isArray(mergedData) ? [...mergedData] : { ...mergedData };
 
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = layerObj.aggregate.filterIsPrev
@@ -675,11 +634,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
     }
     layerObj.source.data =
       layerObj.aggregate && layerObj.aggregate.type
-        ? aggregateFormData(
-          layerObj,
-          currentState.LOCATIONS,
-          layerObj.filterOptions || false,
-        )
+        ? aggregateFormData(layerObj, currentState.LOCATIONS, layerObj.filterOptions || false)
         : mergedData;
     layerObj.loaded = true;
     renderData(mapId, layerObj, dispatch);
@@ -697,7 +652,7 @@ export default function prepareLayer(
   layer,
   dispatch,
   filterOptions = false,
-  doUpdateTsLayer,
+  doUpdateTsLayer
 ) {
   const layerObj = { ...layer };
   // Sets state to loading;
@@ -754,7 +709,7 @@ export default function prepareLayer(
   } else if (layerObj.layers) {
     const currentState = dispatch(getCurrentState());
 
-    layerObj.layers.forEach((sublayer) => {
+    layerObj.layers.forEach(sublayer => {
       const subLayer = currentState[mapId].layers[sublayer];
 
       if (layerObj.aggregate) {
