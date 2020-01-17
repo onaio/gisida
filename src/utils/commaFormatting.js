@@ -6,7 +6,7 @@ export default function commaFormatting(layerObj, data, popup) {
   const found = [];
   const rxp = /{{([^}]+)}/g;
   let foundZero = false;
-  const showZeros = layerObj.labels.showZeros || true;
+  const showZeros = layerObj.labels.showZeros !== undefined ? layerObj.labels.showZeros : true;
 
   for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
     found.push(c[1]);
