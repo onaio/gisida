@@ -78,10 +78,11 @@ export const toggleFilter = (mapId, layerId, showFilterPanel) => ({
   layerId,
 });
 
-export const setLayerFilter = (mapId, layerId, layerFilters) => ({
+export const setLayerFilter = (mapId, layerId, layerFilters, name) => ({
   type: types.SET_LAYER_FILTERS,
   layerId,
   layerFilters,
+  name,
   mapId,
 });
 
