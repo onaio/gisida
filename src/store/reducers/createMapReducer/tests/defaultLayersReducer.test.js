@@ -1,11 +1,10 @@
 import defaultLayersReducer from './../defaultLayersReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { ADD_LAYER } from './../../../constants/actionTypes';
 import { layer, mapId, layerId, layerId2, layer2 } from './common';
 
 describe('defaultLayersReducer', () => {
   it('should handle initial state', () => {
-    expect(defaultLayersReducer(undefined, {})).toEqual(defaultState.MAP.defaultLayers);
+    expect(defaultLayersReducer(undefined, {})).toEqual([]);
   });
 
   it('it should handle ADD_LAYER', () => {

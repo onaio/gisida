@@ -23,6 +23,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage --coverageDirectory=coverage/jest"
   },
+  "types": "./src/types/index.d.ts",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

@@ -49,7 +49,7 @@ export const ONAoauth = (reqConfig, token, dispatch) => api(reqConfig).then(({ u
     dispatch(receiveLogin(user));
     history.replace('/');
   }
-}).catch(err => console.log('Error: ', err));
+}).catch(err => console.log('Error: ', err));    // eslint-disable-line no-console
 
 export class Oauth2 {
   constructor() {

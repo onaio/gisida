@@ -1,5 +1,4 @@
 import activeLayerIdReducer from './../activeLayerIdReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import { TOGGLE_LAYER, UPDATE_PRIMARY_LAYER, ADD_LAYER } from './../../../constants/actionTypes';
 import { mapId, layerId, layer, layerId2, layer2 } from './common';
 
@@ -14,7 +13,7 @@ describe('activeLayerIdReducer', () => {
   };
 
   it('should return the initial state', () => {
-    expect(activeLayerIdReducer(undefined, {})).toEqual(defaultState.MAP.activeLayerId);
+    expect(activeLayerIdReducer(undefined, {})).toEqual('');
   });
 
   it('should handle TOGGLE_LAYER', () => {
