@@ -201,7 +201,7 @@ export default (
   const layerObjDatum =
     activeData &&
     activeData.length &&
-    activeData.find(d => (d.properties || d)[join[1]] === featureProperties[join[0]]);
+    activeData.find(d => (d.properties || d)[join && join[1]] === featureProperties[join && join[0]]);
 
   if (layerObjDatum) {
     featureProperties = {
