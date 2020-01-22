@@ -1,5 +1,4 @@
 import detailViewReducer from './../detailViewReducer';
-import defaultState from './../../../../../src/store/defaultState';
 import {
   TOGGLE_LAYER,
   UPDATE_PRIMARY_LAYER,
@@ -17,7 +16,7 @@ describe('detailViewReducer', () => {
     },
   };
   it('should handle the initial state', () => {
-    expect(detailViewReducer(undefined, {})).toEqual(defaultState.MAP.detailView);
+    expect(detailViewReducer(undefined, {})).toEqual(null);
   });
 
   it('should handle TOGGLE_LAYER', () => {
