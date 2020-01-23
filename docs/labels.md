@@ -2,7 +2,7 @@
 
 ## Show zeros
 
-Some situations may require that 0 values be shown on the map and others may require the 0 values to hidden.
+Some situations may require that 0 values be rendered on the map and others may require the 0 values to be omitted.
 The default behaviour is that 0s are rendered. If you do not want 0 values to render for a certain layer, update the layer configuration as
 
 ```
