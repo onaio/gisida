@@ -37,11 +37,8 @@ export function processFilters(layerData, filterOptions, isOr) {
       layerData['data-parse'][layerData.aggregate.filter[f]].type &&
       layerData['data-parse'][layerData.aggregate.filter[f]].type === 'multiple'
     ) {
-      const splitBy =
-        layerData['data-parse'][layerData.aggregate.filter[f]].split || ', ';
-      const vals = datum[layerData.aggregate.filter[f]]
-        .toString()
-        .split(splitBy);
+      const splitBy = layerData['data-parse'][layerData.aggregate.filter[f]].split || ', ';
+      const vals = datum[layerData.aggregate.filter[f]].toString().split(splitBy);
       let hasMatches = false;
       for (let x = 0; x < vals.length; x += 1) {
         if (acceptedFilterValues[f].includes(vals[x])) {
@@ -56,7 +53,7 @@ export function processFilters(layerData, filterOptions, isOr) {
 
   if (layerData.aggregate.filter && filterOptions) {
     // Get array of disabled filters
-    Object.keys(filterOptions).forEach((opt) => {
+    Object.keys(filterOptions).forEach(opt => {
       if (filterOptions[opt] === false) {
         filters.push(opt.trim().toLowerCase());
       }
@@ -66,11 +63,10 @@ export function processFilters(layerData, filterOptions, isOr) {
     let subFilterVal;
 
     // apply filters
-    data = (data.features || data).filter((d) => {
+    data = (data.features || data).filter(d => {
       datum = d.properties || d;
       filterVal =
-        datum[layerData.aggregate.filter] &&
-        datum[layerData.aggregate.filter].trim().toLowerCase();
+        datum[layerData.aggregate.filter] && datum[layerData.aggregate.filter].trim().toLowerCase();
       subFilterVal =
         datum[layerData.aggregate['sub-filter']] &&
         datum[layerData.aggregate['sub-filter']].trim().toLowerCase();
@@ -107,14 +103,8 @@ export function processFilters(layerData, filterOptions, isOr) {
         acceptedFilterValues[f] !== 'quant' &&
         acceptedFilterValues[f] !== 'multi'
       ) {
-        if (
-          acceptedFilterValues.filter(a => Array.isArray(a) && a.length)
-            .length > 1 &&
-          isOr
-        ) {
-          (Data.features || Data)
-            .filter(filterProcessor)
-            .map(d => combinedData.push(d));
+        if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
+          (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
           data = data.filter(filterProcessor);
         }
@@ -136,17 +126,14 @@ export function processFilters(layerData, filterOptions, isOr) {
 
 export function generateFilterOptionsPrev(layerData) {
   const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues =
-    layerData.aggregate['accepted-sub-filter-values'];
+  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
   const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
   return [...new Set(filters)];
 }
 
 export function generateFilterOptions(layerData) {
   const data =
-    layerData.data ||
-    layerData.mergedData ||
-    (layerData.source && layerData.source.data);
+    layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
 
   const filterOptions = {};
   let filter;
@@ -157,36 +144,46 @@ export function generateFilterOptions(layerData) {
   let datum;
 
   const layerFilter =
-    (layerData.layerObj &&
-      layerData.layerObj.aggregate &&
-      layerData.layerObj.aggregate.filter) ||
+    (layerData.layerObj && layerData.layerObj.aggregate && layerData.layerObj.aggregate.filter) ||
     (layerData.aggregate && layerData.aggregate.filter);
+
+  if (!layerFilter) {
+    return {};
+  }
 
   // loop through all filter
   for (let f = 0; f < layerFilter.length; f += 1) {
     // define filter, subFilter, and filter label
     filter = layerFilter[f];
     filterLabel =
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-label'] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-label'][f] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-label'][f].length
-        ? ((layerData.layerObj && layerData.layerObj.aggregate) ||
-            layerData.aggregate)['filter-label'][f]
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+        'filter-label'
+      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][
+        f
+      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][
+        f
+      ].length
+        ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+            'filter-label'
+          ][f]
         : filter;
 
     // define which type of filter it should be (vector or stops, default to vector)
     filterType =
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-type'] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-type'][f] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) ||
-        layerData.aggregate)['filter-type'][f].length
-        ? ((layerData.layerObj && layerData.layerObj.aggregate) ||
-            layerData.aggregate)['filter-type'][f]
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+        'filter-type'
+      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][
+        f
+      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][
+        f
+      ].length
+        ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+            'filter-type'
+          ][f]
         : 'vector';
 
     // define unique filter and sub-filter values on filterOptions object
@@ -207,8 +204,7 @@ export function generateFilterOptions(layerData) {
         lo.layerObj['data-parse'][f] &&
         lo.layerObj['data-parse'][f].split) ||
       ', ';
-    const sourceData =
-      lo.data || lo.mergedData || (lo.source.data.features || lo.source.data);
+    const sourceData = lo.data || lo.mergedData || lo.source.data.features || lo.source.data;
     if (!(sourceData.features || sourceData).length) return uniqueVals;
     const Data = [...(sourceData.features || sourceData)];
     let vals;
@@ -239,20 +235,19 @@ export function generateFilterOptions(layerData) {
     for (let f = 0; f < layerFilter.length; f += 1) {
       filter = layerFilter[f];
       acceptedFilterValues =
-        ((layerData.layerObj && layerData.layerObj.aggregate) ||
-          layerData.aggregate)['accepted-filter-values'] &&
-        ((layerData.layerObj && layerData.layerObj.aggregate) ||
-          layerData.aggregate)['accepted-filter-values'][f];
+        ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+          'accepted-filter-values'
+        ] &&
+        ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+          'accepted-filter-values'
+        ][f];
 
       if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string') {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
           doPushDatum = false;
           break;
         }
-      } else if (
-        acceptedFilterValues === 'quant' &&
-        Number.isNaN(Number(datum[filter]))
-      ) {
+      } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
         // check datum[filter] value against quantitative condition
         doPushDatum = false;
       }
@@ -264,10 +259,12 @@ export function generateFilterOptions(layerData) {
       for (let f = 0; f < layerFilter.length; f += 1) {
         filter = layerFilter[f];
         acceptedFilterValues =
-          ((layerData.layerObj && layerData.layerObj.aggregate) ||
-            layerData.aggregate)['accepted-filter-values'] &&
-          ((layerData.layerObj && layerData.layerObj.aggregate) ||
-            layerData.aggregate)['accepted-filter-values'][f];
+          ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+            'accepted-filter-values'
+          ] &&
+          ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
+            'accepted-filter-values'
+          ][f];
 
         // If filters aren't filterd and filterType is multi
         filterIsMultiSelect = acceptedFilterValues === 'multi';
@@ -288,7 +285,9 @@ export function generateFilterOptions(layerData) {
         }
 
         // define if the filter is type 'multi'
-        if (filterOptions[filter] && filterIsMultiSelect) { filterOptions[filter].filterType = 'multi'; }
+        if (filterOptions[filter] && filterIsMultiSelect) {
+          filterOptions[filter].filterType = 'multi';
+        }
 
         // if filter type is 'multi'
         if (
@@ -325,12 +324,13 @@ export function generateFilterOptions(layerData) {
           }
         }
 
-        if (!filterIsMultiSelect) { filterOptions[filter].filterValues[datum[filter]] += 1; }
+        if (!filterIsMultiSelect) {
+          filterOptions[filter].filterValues[datum[filter]] += 1;
+        }
 
         if (
           acceptedFilterValues === 'quant' ||
-          (Array.isArray(acceptedFilterValues) &&
-            !Number.isNaN(Number(acceptedFilterValues[0])))
+          (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0])))
         ) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {
@@ -352,9 +352,7 @@ export function generateFilterOptions(layerData) {
           for (let v = 0; v < selectMultipleValues.length; v += 1) {
             // if the current value is not '' is specified in the data-pars key
             if (
-              typeof filterOptions[filter].filterValues[
-                selectMultipleValues[v]
-              ] !== 'undefined'
+              typeof filterOptions[filter].filterValues[selectMultipleValues[v]] !== 'undefined'
             ) {
               filterOptions[filter].filterValues[selectMultipleValues[v]] += 1;
             }
