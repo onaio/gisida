@@ -2,7 +2,7 @@ const protocol = 'https';
 const host = 'api.ona.io';
 const endpoint = 'api/v1/data';
 
-function formatParams(params) {
+export function formatParams(params) {
   if (!params) {
     return '';
   }
@@ -14,12 +14,12 @@ function formatParams(params) {
  * formID - the form id to pull data from.
  *
  */
-export default async function getData(formID, properties, state, callback) {
+export default function getData(formID, properties, state, callback) {
   const { apiAccessToken, apiHost } = state;
   const fields =
     properties && Array.isArray(properties)
-      ? properties.map(p => `"${p}"`).join()
-      : (properties && properties[formID].map(p => `"${p}"`).join()) || null;
+      ? properties.map(property => `"${property}"`).join()
+      : (properties && properties[formID].map(property => `"${property}"`).join()) || null;
   const queryParams = fields && { fields: `[${fields}]` };
   const mimeType = 'application/json';
   const activeHost = apiHost || host;
