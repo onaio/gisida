@@ -21,7 +21,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yarn install
+          command: yarn install --ignore-engines
       - run:
           name: Run eslint
           command: npm run lint
@@ -35,7 +35,7 @@ jobs:
       - early_return_for_forked_pull_requests
       - checkout
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: yarn install
+      - run: yarn install --ignore-engines
       - run: yarn build
       - run: npm publish
 workflows:
