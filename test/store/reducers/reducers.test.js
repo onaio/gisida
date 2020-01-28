@@ -22,6 +22,11 @@ describe('reducers.APP', () => {
             zoom: 5,
           },
         },
+      AUTH:
+       {
+        isAuthenticated: false,
+        isFetching: false,
+       },
       MAP:
         {
           activeLayerId: '',
@@ -32,6 +37,7 @@ describe('reducers.APP', () => {
           detailView: null,
           filter: {
             filterOptions: {},
+            filterOptionsPrev: {},
             filters: {},
             globalSearchField: false,
             isFiltered: false,
@@ -48,8 +54,12 @@ describe('reducers.APP', () => {
           showSpinner: false,
           mapId: 'map-1',
           menuIsOpen: true,
+          menuScroll:  {
+            scrollTop: 0,
+          },
           oldLayerObjs: {},
           openCategories: [],
+          openGroups: [],
           primaryLayer: '',
           primarySubLayer: '',
           reloadLayerId: null,
