@@ -11,7 +11,7 @@ export default function LAYERS(state = defaultState.LAYERS, action) {
     }
     case ADD_LAYER_GROUP: {
       // parse action.group for urls
-      const groupMapper = layer => {
+      const groupMapper = (layer) => {
         if (typeof layer === 'string') {
           if (layer.indexOf('http') === -1) {
             return layer;
@@ -20,7 +20,7 @@ export default function LAYERS(state = defaultState.LAYERS, action) {
           return pathSplit[pathSplit.length - 1];
         }
         const subGroup = {};
-        Object.keys(layer).forEach(key => {
+        Object.keys(layer).forEach((key) => {
           subGroup[key] = layer[key].map(groupMapper);
         });
         return subGroup;
