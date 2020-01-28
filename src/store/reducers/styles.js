@@ -1,11 +1,9 @@
-
 import defaultState from '../defaultState';
-import * as types from '../constants/actionTypes';
-
+import { INIT_STYLES, CHANGE_STYLE } from '../constants/actionTypes';
 
 export default function STYLES(state = defaultState.STYLES, action) {
   switch (action.type) {
-    case types.INIT_STYLES: {
+    case INIT_STYLES: {
       const styles = action.styles.map((s) => {
         const style = s;
         if (style.url === action.mapConfig.style) style.current = true;
@@ -13,7 +11,7 @@ export default function STYLES(state = defaultState.STYLES, action) {
       });
       return styles;
     }
-    case types.CHANGE_STYLE: {
+    case CHANGE_STYLE: {
       const updatedStyles = state.map((s) => {
         const style = s;
         if (action.style === style.url) {
@@ -31,4 +29,3 @@ export default function STYLES(state = defaultState.STYLES, action) {
       return state;
   }
 }
-

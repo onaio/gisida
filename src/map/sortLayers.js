@@ -1,4 +1,3 @@
-
 export default function sortLayers(map, layers, nextLayerId) {
   /* Sort layers in the following order circle, symbol and detailview inclusive of primarylayer
    -primary layer should always move on top for all layers in the respective categories
@@ -14,7 +13,9 @@ export default function sortLayers(map, layers, nextLayerId) {
         9. fill layers
   */
   if (Object.keys(layers).length) {
-    const fill = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'fill');
+    const fill = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.type === 'fill');
     if (fill.length) {
       Object.keys(fill).forEach((key) => {
         if (fill[key].id !== nextLayerId) {
@@ -27,7 +28,9 @@ export default function sortLayers(map, layers, nextLayerId) {
         map.moveLayer(nextLayerId);
       }
     }
-    const circles = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'circle');
+    const circles = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.type === 'circle');
     if (circles.length) {
       Object.keys(circles).forEach((key) => {
         if (circles[key].id !== nextLayerId) {
@@ -36,11 +39,16 @@ export default function sortLayers(map, layers, nextLayerId) {
           }
         }
       });
-      if (circles.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (
+        circles.find(c => c.id === nextLayerId) &&
+        map.getLayer(nextLayerId)
+      ) {
         map.moveLayer(nextLayerId);
       }
     }
-    const symbols = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'symbol');
+    const symbols = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.type === 'symbol');
 
     if (symbols.length) {
       Object.keys(symbols).forEach((key) => {
@@ -48,11 +56,16 @@ export default function sortLayers(map, layers, nextLayerId) {
           map.moveLayer(symbols[key].id);
         }
       });
-      if (symbols.find(s => s.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (
+        symbols.find(s => s.id === nextLayerId) &&
+        map.getLayer(nextLayerId)
+      ) {
         map.moveLayer(nextLayerId);
       }
     }
-    const lines = Object.keys(layers).map(d => layers[d]).filter(d => d.type === 'line');
+    const lines = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.type === 'line');
     if (lines.length) {
       Object.keys(lines).forEach((key) => {
         if (lines[key].id !== nextLayerId) {
@@ -65,8 +78,9 @@ export default function sortLayers(map, layers, nextLayerId) {
         map.moveLayer(nextLayerId);
       }
     }
-    const detailViewActive = Object.keys(layers).map(d =>
-      layers[d]).filter(d => d['detail-view']);
+    const detailViewActive = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d['detail-view']);
 
     if (detailViewActive.length) {
       Object.keys(detailViewActive).forEach((key) => {
@@ -74,13 +88,17 @@ export default function sortLayers(map, layers, nextLayerId) {
           map.moveLayer(detailViewActive[key].id);
         }
       });
-      if (detailViewActive.find(d => d.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (
+        detailViewActive.find(d => d.id === nextLayerId) &&
+        map.getLayer(nextLayerId)
+      ) {
         map.moveLayer(nextLayerId);
       }
     }
 
-    const isLabelActive = Object.keys(layers).map(d =>
-      layers[d]).filter(d => d.isLabel);
+    const isLabelActive = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.isLabel);
 
     if (isLabelActive.length) {
       Object.keys(isLabelActive).forEach((key) => {
@@ -88,7 +106,10 @@ export default function sortLayers(map, layers, nextLayerId) {
           map.moveLayer(isLabelActive[key].id);
         }
       });
-      if (isLabelActive.find(d => d.id === nextLayerId) && map.getLayer(nextLayerId)) {
+      if (
+        isLabelActive.find(d => d.id === nextLayerId) &&
+        map.getLayer(nextLayerId)
+      ) {
         map.moveLayer(nextLayerId);
       }
     }

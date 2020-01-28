@@ -1,4 +1,4 @@
-import { APP } from '../../store/reducers/app';
+import { APP } from '../../store/reducers';
 
 export { INIT_APP } from '../constants/actionTypes';
 export { initApp } from '../actions/actions';

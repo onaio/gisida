@@ -1,4 +1,4 @@
-import reducers from '../reducers/app';
+import { MAP } from '../reducers';
 
 export {
   MAP_RENDERED,
@@ -48,4 +48,4 @@ export {
   triggerSpinner,
 } from '../actions/actions';
 export const reducerName = 'map-1';
-export default reducers['map-1'];
+export default MAP;
