@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable global-require */
 import app from './store/reducers/app';
 import filter from './store/reducers/filter';
 import layersReducer from './store/reducers/layers';
@@ -9,25 +7,16 @@ import regions from './store/reducers/regions';
 import styles from './store/reducers/styles';
 import supersetConfig from './store/reducers/superset-config';
 
-if (!global._babelPolyfill) require('babel-polyfill');
-
 const gisida = {};
 
 gisida.version = require('../package.json').version;
 gisida.initStore = require('./store/initStore').default;
 gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
-gisida.createMapReducer = require('./store/reducers/createMapReducer/createMapReducer').createMapReducer;
+gisida.createMapReducer = require('./store/reducers/app').createMapReducer;
 
 gisida.reducers = {
-    ...app,
-    filter,
-    layersReducer,
-    loc,
-    locationsReducer,
-    regions,
-    styles,
-    supersetConfig,
+  ...app, filter, layersReducer, loc, locationsReducer, regions, styles, supersetConfig,
 };
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
