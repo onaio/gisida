@@ -7,6 +7,9 @@ import regions from './store/reducers/regions';
 import styles from './store/reducers/styles';
 import supersetConfig from './store/reducers/superset-config';
 
+// eslint-disable-next-line no-underscore-dangle, global-require
+if (!global._babelPolyfill) require('babel-polyfill');
+
 const gisida = {};
 
 gisida.version = require('../package.json').version;
