@@ -313,15 +313,18 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         res => res,
       ) // pass in callback func to process response
       .then((data) => {
-        const processedData = superset.processData(data);
+        let processedData = superset.processData(data);
         let parsedData;
-        const uniqueFacilities = [...new Set(processedData.map(facility => facility.facility_id))];
+        if (layerObj['data-parse']) {
+          processedData = parseData(layerObj['data-parse'], processedData);
+        }
         /**
          * Build custom filter
          * The custom filter introduces an extra field 'no_of_reports'.
          * we depend on the field building the quant chart on the filter
         */
         if (layerObj.aggregate.hasCustomFilter) {
+          const uniqueFacilities = [...new Set(processedData.map(facility => facility.facility_id))];
           const reportsPerFacility = {};
           uniqueFacilities.forEach((facility) => {
             reportsPerFacility[facility] = processedData.filter(facilityData => facilityData.facility_id === facility)

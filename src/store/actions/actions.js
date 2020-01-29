@@ -78,10 +78,11 @@ export const toggleFilter = (mapId, layerId, showFilterPanel) => ({
   layerId,
 });
 
-export const setLayerFilter = (mapId, layerId, layerFilters) => ({
+export const setLayerFilter = (mapId, layerId, layerFilters, name) => ({
   type: types.SET_LAYER_FILTERS,
   layerId,
   layerFilters,
+  name,
   mapId,
 });
 
@@ -125,12 +126,13 @@ export const toggleCategories = (mapId, category, index, isRefresh) => ({
   mapId,
 });
 
-export const toggleGroups = (mapId, group, index, isRefresh) => ({
+export const toggleGroups = (mapId, group, index, isRefresh, count) => ({
   type: types.TOGGLE_GROUPS,
   group,
   index,
   isRefresh,
   mapId,
+  count,
 });
 
 export const receiveData = (mapId, layer, timeseries) => ({
@@ -276,11 +278,6 @@ export const getAuthConfigs = config => ({
   config,
 });
 
-export const receiveForms = forms => ({
-  type: types.RECEIVE_FORMS,
-  forms,
-});
-
 export const fetchFormsError = message => ({
   type: types.FETCH_FORMS_ERROR,
   message,
@@ -300,12 +297,22 @@ export const loginUser = token => {
   };
 };
 
-export const logoutUser = () => dispatch => {
+export const getUserForms = (token) => {
+  const reqConfig = {
+    token,
+    endpoint: 'forms',
+  };
+  // eslint-disable-next-line
+  return dispatch => fetchAPIForms(reqConfig, dispatch);
+};
+
+export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('state');
   dispatch(receiveLogout());
   window.location.reload();
 };
+
 export const locationUpdated = mapId => ({
   type: types.LOCATION_UPDATED,
   mapId,
@@ -369,4 +376,11 @@ export default {
   getAuthConfigs,
   toggleGroups,
   setMenuScroll,
+  addLayersList,
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  loginError,
+  fetchFormsError,
+  logoutUser,
 };

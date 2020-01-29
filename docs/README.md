@@ -2,8 +2,8 @@
 
 This directory contains documentation on Gisida, Gisida React, and Gisida Clients best practices, protocols, and procedures.
 
-* [New Project Checklist](new-project-checklist.md)
-* [Getting Started with Gisida](getting-started.md)
+- [New Project Checklist](new-project-checklist.md)
+- [Getting Started with Gisida](getting-started.md)
 
 ## Contributing
 

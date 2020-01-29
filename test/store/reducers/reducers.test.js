@@ -1,15 +1,16 @@
-import { APP } from '../../../src/store/reducers/reducers';
-import * as types from '../../../src/store/constants/actionTypes';
+import { APP } from '../../../src/store/reducers';
 import defaultState from '../../../src/store/defaultState';
+import { INIT_APP } from '../../../src/store/constants/actionTypes';
 
-describe('reducers.APP', () => {
+describe('APP', () => {
   it('should return the initial state', () => {
+    expect(APP(undefined, {})).toEqual(defaultState.APP);
+  });
+
+  it('should handle INIT_APP', () => {
     const action = {
-      type: types.INIT_APP,
-      config: defaultState.APP,
-    };
-    const state = {
-      APP: {
+      type: INIT_APP,
+      config: {
         accessToken: false,
         appName: 'React Gisida',
         loaded: false,
@@ -17,88 +18,35 @@ describe('reducers.APP', () => {
           center: [0, 0],
           container: 'map',
           style: '',
-          zoom: 5,
+          zoom: 10,
         },
       },
-      MAP: {
-        activeLayerId: '',
-        lastLayerSelected: '',
-        activeLayerObjs: [],
-        currentRegion: '',
-        currentStyle: '',
-        detailView: null,
-        filter: {
-          filterOptions: {},
-          filterOptionsPrev: {},
-          filters: {},
-          globalSearchField: false,
-          isFiltered: false,
-          isLinux: false,
-          isMac: false,
-          isOpen: false,
-          layerId: '',
-          prevFilters: null,
-        },
-        isLoaded: false,
-        isRendered: false,
-        layers: {},
-        defaultLayers: [],
-        showSpinner: false,
-        mapId: 'map-1',
-        menuIsOpen: true,
-        oldLayerObjs: {},
-        openCategories: [],
-        primaryLayer: '',
-        primarySubLayer: '',
-        reloadLayerId: null,
-        reloadLayers: false,
-        showFilterPanel: false,
-        activeLayerIds: [],
-        showProfile: false,
-        timeseries: {},
-        visibleLayerId: '',
-        openGroups: [],
-        menuScroll: {
-          scrollTop: 0,
-        },
-      },
-      REGIONS: [],
-      STYLES: [
-        {
-          label: 'Satelitte',
-          url: 'mapbox://styles/mapbox/satellite-v9',
-        },
-        {
-          label: 'Satelitte Streets',
-          url: 'mapbox://styles/mapbox/satellite-streets-v9',
-        },
-      ],
-      FILTER: {},
+    };
+    // Case 1: The state obj is empty
+    const stateEmpty = {};
+    expect(APP(stateEmpty, action)).toEqual({
+      ...stateEmpty,
+      ...action.config,
+      loaded: true,
+    });
+
+    // Case 2: The state obj is not empty
+    const stateOld = {
       accessToken: false,
-      appName: 'React Gisida',
+      appName: 'Old App Name',
       loaded: true,
       mapConfig: {
         center: [0, 0],
         container: 'map',
         style: '',
-        zoom: 5,
-      },
-      LAYERS: {
-        layers: [],
-        groups: {},
-      },
-      LOC: {
-        active: null,
-        default: null,
-        doUpdateMap: false,
-        location: null,
-        locations: null,
-      },
-      AUTH: {
-        isFetching: false,
-        isAuthenticated: !!localStorage.getItem('access_token'),
+        zoom: 10,
       },
     };
-    expect(APP(defaultState, action)).toEqual(state);
+
+    expect(APP(stateOld, action)).toEqual({
+      ...stateOld,
+      ...action.config,
+      loaded: true,
+    });
   });
 });
