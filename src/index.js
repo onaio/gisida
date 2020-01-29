@@ -20,15 +20,15 @@ gisida.reducerRegistry = require('./store/reducerRegistry').default;
 gisida.createMapReducer = require('./store/reducers/app').createMapReducer;
 
 gisida.defaultReducers = {
-  APP,
-  filter,
-  layersReducer,
-  loc,
-  locationsReducer,
-  regions,
-  styles,
-  supersetConfig,
-  'map-1': MAP,
+    APP,
+    filter,
+    layersReducer,
+    loc,
+    locationsReducer,
+    regions,
+    styles,
+    supersetConfig,
+    'map-1': MAP,
 };
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
@@ -58,6 +58,7 @@ gisida.oauthURL = require('./connectors/ona-api/auth').oauthURL;
 gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsedBasicDetailItem;
 gisida.processFormData = require('./connectors/ona-api/aggregateFormData').processFormData;
 gisida.lngLat = require('./utils/lngLat').default;
+
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
 gisida.files.loadCSV = require('./utils/files').loadCSV;
