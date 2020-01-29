@@ -309,6 +309,10 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 
     if (!geojsonErrors || !geojsonErrors.length) {
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+    } else {
+      /** Todo:Add growl notifications */
+      // eslint-disable-next-line no-console
+      console.warn('geojson hint errors',geojsonErrors);
     }
   }
   if (fileType === 'superset') {
