@@ -65,7 +65,6 @@ gisida.files.loadCSV = require('./utils/files').loadCSV;
 gisida.addChart = require('./map/addChart').default;
 gisida.buildDetailView = require('./map/buildDetailView').default;
 gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsedBasicDetailItem;
-
 gisida.buildFilterState = require('./filter/buildFilterState').default;
 gisida.clearFilterState = require('./filter/clearFilterState').default;
 

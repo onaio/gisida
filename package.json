@@ -66,6 +66,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.4.3",
+        "@mapbox/geojsonhint": "^3.0.0",
         "@onaio/superset-connector": "^0.0.13",
         "babel-core": "v6.25.0",
         "babel-loader": "^7.1.2",
@@ -109,5 +110,6 @@
         "mock-browser": "^0.92.14",
         "prettier": "^1.16.4",
         "webpack-cli": "^3.3.6"
+
     }
 }
