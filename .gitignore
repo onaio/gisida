@@ -6,5 +6,4 @@ npm-debug.log
 *.iml
 coverage/
 dist/
-build
 yarn-error.log

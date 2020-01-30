@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import Mustache from 'mustache';
 import cloneDeep from 'lodash.clonedeep';
 import superset from '@onaio/superset-connector';
+import { hint } from '@mapbox/geojsonhint';
 import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import getData from '../connectors/ona-api/data';
@@ -237,6 +238,13 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 
       layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
+        if (layerObj.layers) {
+          const currentState = dispatch(getCurrentState());
+          layerObj.layers.forEach(sublayer => {
+            const subLayer = currentState.MAP.layers[sublayer];
+            subLayer.filterOptions = generateFilterOptions(subLayer);
+          });
+        }
         layerObj.filterOptions = layerObj.aggregate.filterIsPrev
           ? generateFilterOptionsPrev(layerObj)
           : generateFilterOptions(layerObj);
@@ -284,7 +292,15 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
     if (layerObj.aggregate && layerObj.aggregate.filter) {
       layerObj.filterOptions = generateFilterOptions(layerObj);
     }
-    renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+    const geojsonErrors = hint(sourceURL.data).filter(e => e.level !== 'message');
+
+    if (!geojsonErrors || !geojsonErrors.length) {
+      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+    } else {
+      /** Todo:Add growl notifications */
+      // eslint-disable-next-line no-console
+      console.warn('geojson hint errors', geojsonErrors);
+    }
   }
   if (fileType === 'superset') {
     const currentState = dispatch(getCurrentState());
@@ -300,15 +316,20 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         res => res
       ) // pass in callback func to process response
       .then(data => {
-        const processedData = superset.processData(data);
+        let processedData = superset.processData(data);
         let parsedData;
-        const uniqueFacilities = [...new Set(processedData.map(facility => facility.facility_id))];
+        if (layerObj['data-parse']) {
+          processedData = parseData(layerObj['data-parse'], processedData);
+        }
         /**
          * Build custom filter
          * The custom filter introduces an extra field 'no_of_reports'.
          * we depend on the field building the quant chart on the filter
          */
         if (layerObj.aggregate.hasCustomFilter) {
+          const uniqueFacilities = [
+            ...new Set(processedData.map(facility => facility.facility_id)),
+          ];
           const reportsPerFacility = {};
           uniqueFacilities.forEach(facility => {
             reportsPerFacility[facility] = processedData

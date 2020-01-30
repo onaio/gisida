@@ -8,9 +8,7 @@ export default function LOC(state = defaultState.LOC, action) {
         ...state,
         locations: { ...action.config },
         location: {
-          ...Object.keys(action.config)
-            .map(d => action.config[d])
-            .find(d => d.default === true),
+          ...Object.keys(action.config).map(d => action.config[d]).find(d => d.default === true),
           doUpdateLOC: false,
         },
         doUpdateMap: state.doUpdateMap,
@@ -24,10 +22,9 @@ export default function LOC(state = defaultState.LOC, action) {
         ...state,
         doUpdateMap: mapId,
         active: typeof locations[loc] !== 'undefined' ? loc : active,
-        location:
-          typeof locations[loc] !== 'undefined'
-            ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
-            : { ...state.location, doUpdateLOC: false },
+        location: typeof locations[loc] !== 'undefined'
+          ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
+          : { ...state.location, doUpdateLOC: false },
       };
     }
     case TOGGLE_MAP_LOCATION: {
@@ -35,10 +32,9 @@ export default function LOC(state = defaultState.LOC, action) {
       const { locations } = state;
       return {
         ...state,
-        location:
-          typeof locations[loc] !== 'undefined'
-            ? { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC }
-            : { ...state.location, doUpdateLOC: false },
+        location: typeof locations[loc] !== 'undefined' ?
+          { ...locations[loc], doUpdateLOC: !state.location.doUpdateLOC } :
+          { ...state.location, doUpdateLOC: false },
       };
     }
     default:
