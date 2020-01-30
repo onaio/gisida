@@ -44,8 +44,8 @@ The following are tokens that can be used and their meaning:
 
 - In case of a bug, give as details as possible of how to reproduce the bug and the expected behaviour.
 
-# Don't
+## Don't Do
 
-Create a merge request if your source branch has commented out code.
+- Don't create a merge request if your source branch has commented out code.
 
-Avoid long and descriptive names when creating issues and pull requests.
+- Don't use long and descriptive names when creating issues and pull requests.
