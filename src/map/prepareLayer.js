@@ -245,13 +245,20 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 
       layerObj.mergedData = filteredData;
       if (layerObj.aggregate && layerObj.aggregate.filter) {
+        if (layerObj.layers) {
+          const currentState = dispatch(getCurrentState());
+          layerObj.layers.forEach((sublayer) => {
+            const subLayer = currentState.MAP.layers[sublayer];
+            subLayer.filterOptions = generateFilterOptions(subLayer);
+          });
+        }
         layerObj.filterOptions = layerObj.aggregate.filterIsPrev
           ? generateFilterOptionsPrev(layerObj)
           : generateFilterOptions(layerObj);
       }
 
       if (layerObj.aggregate && layerObj.aggregate.type) {
-        layerObj.source.data = aggregateFormData(layerObj);
+        layerObj.source.data = aggregateFormData(layerObj);        
       }
       renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
     });
