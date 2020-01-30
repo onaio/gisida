@@ -5,7 +5,7 @@ export default function REGIONS(state = defaultState.REGIONS, action) {
   switch (action.type) {
     case INIT_REGIONS: {
       const regions = action.regions
-        ? action.regions.map(r => {
+        ? action.regions.map((r) => {
             const region = r;
             // check if mapconfig center matches region center to set current region
             if (
@@ -20,7 +20,7 @@ export default function REGIONS(state = defaultState.REGIONS, action) {
       return regions;
     }
     case CHANGE_REGION: {
-      const updatedRegions = state.map(r => {
+      const updatedRegions = state.map((r) => {
         const region = r;
         if (action.region === region.name) {
           region.current = true;
