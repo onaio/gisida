@@ -28,6 +28,9 @@ jobs:
       - run:
           name: Run jest
           command: npm test
+      - run:
+          name: "Run Jest and Collect Coverage Reports"
+          command: jest --collectCoverage=true
   publish:
     docker:
       - image: circleci/node:6.11.5
