@@ -6,7 +6,9 @@
 <img src="http://gisida.onalabs.org/resources/img/gisida-logotype.png" width="100">
 </div>
 </h1>
-<a href='https://coveralls.io/github/onaio/gisida?branch=master'><img src='https://coveralls.io/repos/github/onaio/gisida/badge.svg?branch=master' alt='Coverage Status' /></a>
+[![Coverage Status](https://coveralls.io/repos/github/onaio/gisida/badge.svg?branch=coverage-badges)](https://coveralls.io/github/onaio/gisida?branch=coverage-badges)
+
+[![CircleCI](https://circleci.com/gh/onaio/gisida.svg?style=svg(https://circleci.com/gh/onaio/gisida)
 
 Gisida is a Javascript data pipeline library that generates map visualizations for [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js) using MapSpec.
 
