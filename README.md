@@ -6,9 +6,10 @@
 <img src="http://gisida.onalabs.org/resources/img/gisida-logotype.png" width="100">
 </div>
 </h1>
+
+[![CircleCI](https://circleci.com/gh/onaio/gisida.svg?style=svg)](https://circleci.com/gh/onaio/gisida)
 [![Coverage Status](https://coveralls.io/repos/github/onaio/gisida/badge.svg?branch=coverage-badges)](https://coveralls.io/github/onaio/gisida?branch=coverage-badges)
 
-# grp frontend [![CircleCI](https://circleci.com/gh/onaio/grp-frontend.svg?style=svg&circle-token=f8bbcab21f419336fbd9307d00365f4278bd0dc1)](https://circleci.com/gh/onaio/grp-frontend)
 
 [![CircleCI](https://circleci.com/gh/onaio/gisida.svg?style=svg(https://circleci.com/gh/onaio/gisida)
 
