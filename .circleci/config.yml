@@ -26,11 +26,13 @@ jobs:
           name: Run eslint
           command: npm run lint
       - run:
-          name: Run jest
-          command: npm test
+          name: Run test with coverage for the packages
+          command: yarn test --maxWorkers=2 --verbose --coverage=true --collectCoverage=true --forceExit --detectOpenHandles
       - run:
-          name: "Run Jest and Collect Coverage Reports"
-          command: jest --collectCoverage=true
+          name: upload coverage to coveralls
+          command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      - store_artifacts:
+          path: coverage
   publish:
     docker:
       - image: circleci/node:6.11.5
