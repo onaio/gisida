@@ -350,9 +350,11 @@ export default function (layer, mapConfig, dispatch) {
 
     if (layer.categories && layer.categories.shape) {
       const iconStops = [];
-      layer.categories.type.forEach((type, index) => {
+      
+      layer.categories.type.forEach((type, index) => {	
         iconStops.push([type, layer.categories.shape[index]]);
-      });
+      })
+
       styleSpec.layout['icon-image'].stops = iconStops;
     }
 

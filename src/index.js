@@ -1,4 +1,4 @@
-import app from './store/reducers/app';
+import APP from './store/reducers/app';
 import filter from './store/reducers/filter';
 import layersReducer from './store/reducers/layers';
 import loc from './store/reducers/loc';
@@ -6,6 +6,7 @@ import locationsReducer from './store/reducers/locations';
 import regions from './store/reducers/regions';
 import styles from './store/reducers/styles';
 import supersetConfig from './store/reducers/superset-config';
+import MAP from './store/reducers/createMapReducer/createMapReducer';
 
 // eslint-disable-next-line no-underscore-dangle, global-require
 if (!global._babelPolyfill) require('babel-polyfill');
@@ -18,8 +19,16 @@ gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
 gisida.createMapReducer = require('./store/reducers/app').createMapReducer;
 
-gisida.reducers = {
-  ...app, filter, layersReducer, loc, locationsReducer, regions, styles, supersetConfig,
+gisida.defaultReducers = {
+    APP,
+    filter,
+    layersReducer,
+    loc,
+    locationsReducer,
+    regions,
+    styles,
+    supersetConfig,
+    'map-1': MAP,
 };
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
@@ -50,17 +59,12 @@ gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsed
 gisida.processFormData = require('./connectors/ona-api/aggregateFormData').processFormData;
 gisida.lngLat = require('./utils/lngLat').default;
 
-gisida.defaultReducers = {};
-gisida.defaultReducers.APP = require('./store/reducers/app').APP;
-gisida.defaultReducers.STYLES = require('./store/reducers/styles');
-
 gisida.files = {};
 gisida.files.loadJSON = require('./utils/files').loadJSON;
 gisida.files.loadCSV = require('./utils/files').loadCSV;
 gisida.addChart = require('./map/addChart').default;
 gisida.buildDetailView = require('./map/buildDetailView').default;
 gisida.buildParsedBasicDetailItem = require('./map/buildDetailView').buildParsedBasicDetailItem;
-
 gisida.buildFilterState = require('./filter/buildFilterState').default;
 gisida.clearFilterState = require('./filter/clearFilterState').default;
 
