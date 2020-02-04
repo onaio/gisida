@@ -5,18 +5,33 @@ export default function commaFormatting(layerObj, data, popup) {
   const dataItem = data;
   const found = [];
   const rxp = /{{([^}]+)}/g;
+  let foundZero = false;
+  const showZeros = layerObj.labels && layerObj.labels.showZeros !== undefined ? layerObj.labels.showZeros : true;
 
   for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
     found.push(c[1]);
   }
 
-  found.forEach((f) => {
-    if (!Number.isNaN(dataItem[`${f}`])) {
-      const val = Number(dataItem[`${f}`]);
+  let i = 0;
+  while (!foundZero && i < found.length) {
+    if (!Number.isNaN(dataItem[`${found[i]}`])) {
+      const val = Number(dataItem[`${found[i]}`]);
       if (Number.isInteger(val)) {
-        dataItem[`${f}`] = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        if (!val && !showZeros) {
+          foundZero = true;
+        } else {
+          dataItem[`${found[i]}`] = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
       }
     }
-  });
+
+    i += 1;
+  }
+  // If value is a zero and the layer does not permit showing
+  // zero values, return null
+  if (foundZero) {
+    return null;
+  }
+
   return dataItem;
 }
