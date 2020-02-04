@@ -28,7 +28,7 @@ function buildRadiusAsDistanceExpression(layer) {
   ];
 }
 
-export default function (layer, mapConfig, dispatch) {
+export default function (layer, mapConfig, dispatch, map) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
   const timefield =
@@ -356,6 +356,77 @@ export default function (layer, mapConfig, dispatch) {
       })
 
       styleSpec.layout['icon-image'].stops = iconStops;
+    }
+
+    if (
+      layer['highlight-filter-property'] &&
+      (layer['highlight-layout'] || layer['highlight-paint'])
+    ) {
+      layerObj.filters.rHighlight = [
+        '!=',
+        layer['highlight-filter-property'],
+        '',
+      ];
+      layerObj.filters.highlight = [
+        '==',
+        layer['highlight-filter-property'],
+        '',
+      ];
+    }
+  }
+
+  /*
+   * heatmap ==========================================================
+   */
+  if (layer.type === 'heatmap') {
+    styleSpec = {
+      id: layer.id,
+      type: 'heatmap',
+      source: {
+        type: layer.source.type,
+      },
+      minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
+      maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
+      paint: layer.paint,
+    };
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
+
+    if (layer.source.type === 'geojson') {
+      if (
+        (layer.source.data && (layer.source.data.type === 'Point' || layer.source.data.type === 'FeatureCollection')) ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)
+      ) {
+        styleSpec.source.data = layer.source.data;
+      } else if (layer.properties && layer.properties.length) {
+        styleSpec.source.data = {
+          type: 'FeatureCollection',
+          features: layer.source.data.map((d) => {
+            const propertiesMap = {};
+            layer.properties.forEach((prop) => {
+              propertiesMap[prop] = isNumber(d[prop])
+                ? d[prop]
+                : Number(d[prop]);
+            });
+            return {
+              type: 'Feature',
+              properties: propertiesMap,
+              geometry: {
+                type: 'Point',
+                coordinates: [Number(d.Longitude), Number(d.Latitude)],
+              },
+            };
+          }),
+        };
+      }
+    } else {
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
 
     if (
