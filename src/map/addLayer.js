@@ -189,6 +189,25 @@ export default function (layer, mapConfig, dispatch) {
     }
   }
 
+  if (layer.type === 'raster') {
+    styleSpec = {
+      id: layer.id,
+      visible: layer.visible,
+      type: 'raster',
+      source: {
+        type: layer.source.type,
+      },
+      minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
+      maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
+      paint: layer.paint
+    };
+    if (layer.source.type === 'raster') {
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
+    }
+    console.log("stypespec??", styleSpec);
+  }
+
   /*
    * FILL ==========================================================
    */
