@@ -326,7 +326,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
          * The custom filter introduces an extra field 'no_of_reports'.
          * we depend on the field building the quant chart on the filter
          */
-        if (layerObj.aggregate.hasCustomFilter) {
+        if (layerObj && layerObj.aggregate && layerObj.aggregate.hasCustomFilter) {
           const uniqueFacilities = [
             ...new Set(processedData.map(facility => facility.facility_id)),
           ];
@@ -616,7 +616,7 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        const hasCustomFilter = layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+        const hasCustomFilter = layerObj && layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
 
         mergedData = manyToOneMerge(
           isVectorLayer ? i + 1 : i,
