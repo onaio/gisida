@@ -225,7 +225,6 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       ? sourceURL.split('.').pop()
       : typeof sourceURL === 'object' && sourceURL !== null && sourceURL.type;
   if (fileType === 'csv') {
-    console.log('<<<<==================>>>>')
     loadCSV(layerObj.source.data, (data) => {
       let parsedData;
       if (layerObj.source.type === 'geojson') {

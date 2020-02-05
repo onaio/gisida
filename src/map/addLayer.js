@@ -428,24 +428,9 @@ export default function (layer, mapConfig, dispatch, map) {
       styleSpec.source.url = layer.source.url;
       styleSpec['source-layer'] = layer.source.layer;
     }
-
-    if (
-      layer['highlight-filter-property'] &&
-      (layer['highlight-layout'] || layer['highlight-paint'])
-    ) {
-      layerObj.filters.rHighlight = [
-        '!=',
-        layer['highlight-filter-property'],
-        '',
-      ];
-      layerObj.filters.highlight = [
-        '==',
-        layer['highlight-filter-property'],
-        '',
-      ];
-    }
   }
   /*
+
    * CHART ==========================================================
    */
 
