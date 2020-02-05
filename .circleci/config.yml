@@ -28,9 +28,6 @@ jobs:
       - run:
           name: Run test with coverage for the packages
           command: yarn test  --verbose --coverage=true --forceExit
-      - run:
-          name: upload coverage to coveralls
-          command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
       - store_artifacts:
           path: coverage
   publish:
