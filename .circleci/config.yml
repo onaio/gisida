@@ -27,10 +27,10 @@ jobs:
           command: npm run lint
       - run:
           name: Run test with coverage for the packages
-          command: yarn test  --verbose --coverage=true  --coverageReporters=text-lcov > coverage/sample.cov --forceExit
+          command: touch sample.cov && yarn test  --verbose --coverage=true  --coverageReporters=text-lcov > sample.cov --forceExit
       - run:
           name: Upload coverage Report to Coveralls
-          command: cat coverage/sample.cov |  node_modules/coveralls/bin/coveralls.js
+          command: cat sample.cov |  node_modules/coveralls/bin/coveralls.js
       - store_artifacts:
           path: coverage
   publish:
