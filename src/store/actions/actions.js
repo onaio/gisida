@@ -1,6 +1,5 @@
 /* eslint-disable arrow-parens */
 import * as types from '../constants/actionTypes';
-import { ONAoauth } from '../../connectors/ona-api/auth';
 
 export const initApp = config => ({
   type: types.INIT_APP,
@@ -283,21 +282,7 @@ export const fetchFormsError = message => ({
   message,
 });
 
-// todo - Migrate to ONA Connector?
-export const loginUser = token => {
-  const reqConfig = {
-    token,
-    endpoint: 'user',
-  };
-
-  return dispatch => {
-    // We dispatch requestLogin to kickoff the call to the API
-    dispatch(requestLogin(token));
-    return ONAoauth(reqConfig, token, dispatch);
-  };
-};
-
-export const getUserForms = (token) => {
+export const getUserForms = token => {
   const reqConfig = {
     token,
     endpoint: 'forms',
@@ -306,7 +291,7 @@ export const getUserForms = (token) => {
   return dispatch => fetchAPIForms(reqConfig, dispatch);
 };
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = () => dispatch => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('state');
   dispatch(receiveLogout());
@@ -363,7 +348,6 @@ export default {
   filtersUpdated,
   saveFilterState,
   triggerSpinner,
-  loginUser,
   receiveToken,
   receiveLogin,
   toggleCategories,
