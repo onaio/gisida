@@ -28,7 +28,7 @@ function buildRadiusAsDistanceExpression(layer) {
   ];
 }
 
-export default function (layer, mapConfig, dispatch, map) {
+export default function (layer, mapConfig, dispatch) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
   const timefield =
