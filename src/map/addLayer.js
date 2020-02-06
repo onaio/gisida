@@ -387,7 +387,7 @@ export default function (layer, mapConfig, dispatch) {
       },
       minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
       maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
-      paint: layer.paint,
+      paint: layer.paint ? { ...layer.paint } : {},
     };
 
     // add filter
