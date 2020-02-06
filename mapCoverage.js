@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { createReporter } = require('istanbul-api');
-const istanbulCoverage = require('istanbul-lib-coverage');
+import { createReporter } from 'istanbul-api';
+import { istanbulCoverage } from 'istanbul-lib-coverage';
 
 const map = istanbulCoverage.createCoverageMap();
 const reporter = createReporter();
