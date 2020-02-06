@@ -27,7 +27,7 @@ jobs:
           command: npm run lint
       - run:
           name: Run test with coverage for the packages
-          command: yarn test packages --verbose --collectCoverage=true --forceExit --detectOpenHandles && cp ./coverage/coverage-final.json && node ./mapCoverage.js
+          command: yarn test packages --verbose --collectCoverage=true --forceExit && cp ./coverage/coverage-final.json && node ./mapCoverage.js
       - run:
           name: upload coverage to coveralls
           command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
