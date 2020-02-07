@@ -13,14 +13,14 @@ export default function sortLayers(map, layers, nextLayerId) {
         9. fill layers
   */
 
-  const moveLayers = layers => {
-    Object.keys(layers).forEach((key) => {
-      if (map.getLayer(layers[key].id)) {
-        map.moveLayer(layers[key].id);
+  const moveLayers = filteredLayers => {
+    Object.keys(filteredLayers).forEach((key) => {
+      if (map.getLayer(filteredLayers[key].id)) {
+        map.moveLayer(filteredLayers[key].id);
       }
     });
     if (
-      layers.find(d => d.id === nextLayerId) &&
+      filteredLayers.find(d => d.id === nextLayerId) &&
       map.getLayer(nextLayerId)
     ) {
       map.moveLayer(nextLayerId);
