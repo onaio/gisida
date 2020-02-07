@@ -12,121 +12,79 @@ export default function sortLayers(map, layers, nextLayerId) {
         8. line  (other line layers that aren't primary layers)
         9. fill layers
   */
+
+  const moveLayers = layers => {
+    Object.keys(layers).forEach((key) => {
+      if (map.getLayer(layers[key].id)) {
+        map.moveLayer(layers[key].id);
+      }
+    });
+    if (
+      layers.find(d => d.id === nextLayerId) &&
+      map.getLayer(nextLayerId)
+    ) {
+      map.moveLayer(nextLayerId);
+    }
+  }
+
   if (Object.keys(layers).length) {
     const fill = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'fill');
     if (fill.length) {
-      Object.keys(fill).forEach((key) => {
-        if (fill[key].id !== nextLayerId) {
-          if (map.getLayer(fill[key].id)) {
-            map.moveLayer(fill[key].id);
-          }
-        }
-      });
-      if (fill.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(fill);
     }
+
     const heatMap = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'heatmap');
     if (heatMap.length) {
-      Object.keys(heatMap).forEach((key) => {
-        if (heatMap[key].id !== nextLayerId) {
+      heatMap.sort((a,b) => b.priority - a.priority);
+      const checkPriority = Object.keys(heatMap).find(key => heatMap[key].priority)
+      if (checkPriority) {
+        Object.keys(heatMap).forEach((key) => {
           if (map.getLayer(heatMap[key].id)) {
             map.moveLayer(heatMap[key].id);
           }
-        }
-      });
-      if (heatMap.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
-        map.moveLayer(nextLayerId);
+        });
+      } else {
+        moveLayers(heatMap)
       }
     }
+
     const circles = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'circle');
     if (circles.length) {
-      Object.keys(circles).forEach((key) => {
-        if (circles[key].id !== nextLayerId) {
-          if (map.getLayer(circles[key].id)) {
-            map.moveLayer(circles[key].id);
-          }
-        }
-      });
-      if (
-        circles.find(c => c.id === nextLayerId) &&
-        map.getLayer(nextLayerId)
-      ) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(circles);
     }
+
     const symbols = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'symbol');
-
     if (symbols.length) {
-      Object.keys(symbols).forEach((key) => {
-        if (map.getLayer(symbols[key].id)) {
-          map.moveLayer(symbols[key].id);
-        }
-      });
-      if (
-        symbols.find(s => s.id === nextLayerId) &&
-        map.getLayer(nextLayerId)
-      ) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(symbols);
     }
+
     const lines = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'line');
     if (lines.length) {
-      Object.keys(lines).forEach((key) => {
-        if (lines[key].id !== nextLayerId) {
-          if (map.getLayer(lines[key].id)) {
-            map.moveLayer(lines[key].id);
-          }
-        }
-      });
-      if (lines.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(lines);
     }
+
     const detailViewActive = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d['detail-view']);
-
     if (detailViewActive.length) {
-      Object.keys(detailViewActive).forEach((key) => {
-        if (map.getLayer(detailViewActive[key].id)) {
-          map.moveLayer(detailViewActive[key].id);
-        }
-      });
-      if (
-        detailViewActive.find(d => d.id === nextLayerId) &&
-        map.getLayer(nextLayerId)
-      ) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(detailViewActive);
     }
 
     const isLabelActive = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.isLabel);
-
     if (isLabelActive.length) {
-      Object.keys(isLabelActive).forEach((key) => {
-        if (map.getLayer(isLabelActive[key].id)) {
-          map.moveLayer(isLabelActive[key].id);
-        }
-      });
-      if (
-        isLabelActive.find(d => d.id === nextLayerId) &&
-        map.getLayer(nextLayerId)
-      ) {
-        map.moveLayer(nextLayerId);
-      }
+      moveLayers(isLabelActive);
     }
   }
 }
