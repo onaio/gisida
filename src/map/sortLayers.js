@@ -28,6 +28,21 @@ export default function sortLayers(map, layers, nextLayerId) {
         map.moveLayer(nextLayerId);
       }
     }
+    const heatMap = Object.keys(layers)
+      .map(d => layers[d])
+      .filter(d => d.type === 'heatmap');
+    if (heatMap.length) {
+      Object.keys(heatMap).forEach((key) => {
+        if (heatMap[key].id !== nextLayerId) {
+          if (map.getLayer(heatMap[key].id)) {
+            map.moveLayer(heatMap[key].id);
+          }
+        }
+      });
+      if (heatMap.find(c => c.id === nextLayerId) && map.getLayer(nextLayerId)) {
+        map.moveLayer(nextLayerId);
+      }
+    }
     const circles = Object.keys(layers)
       .map(d => layers[d])
       .filter(d => d.type === 'circle');
