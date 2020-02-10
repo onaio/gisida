@@ -10,9 +10,14 @@ export default function sortLayers(map, layers, nextLayerId) {
         6. cirle (other circle layers that aren't primary layers)
         7  line  primary
         8. line  (other line layers that aren't primary layers)
-        9. fill layers
+        9. heat map layers
+        19. fill layers
   */
 
+  /**
+   * Rearranges rendered layers and puts selected layer on top. 
+   * @param {Object} filteredLayers - Mapbox layers
+   */
   const moveLayers = filteredLayers => {
     Object.keys(filteredLayers).forEach((key) => {
       if (map.getLayer(filteredLayers[key].id)) {
