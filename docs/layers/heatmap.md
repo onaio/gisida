@@ -1,7 +1,7 @@
 # HeatMaps
 
 This directory contains documentation on adding heatmap layers.
-For a full documentation follow this [link] (https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/)
+For a full documentation follow this [link](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/)
 
 ## Sample heatmap layer
 
@@ -21,7 +21,7 @@ For a full documentation follow this [link] (https://docs.mapbox.com/help/tutori
 ```
 ### paint properties
 
-For more details about the meaning and functions of each paint propery go to [Heatmap paint properties] (https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/#heatmap-paint-properties) on Mapbox.
+For more details about the meaning and functions of each paint propery go to [Heatmap paint properties](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/#heatmap-paint-properties) on Mapbox.
 
 
 ### priority property
