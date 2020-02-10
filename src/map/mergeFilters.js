@@ -26,28 +26,37 @@ export default function mergeFilters(originalFilters, filteredFilters, clickedFi
         {},
         filteredFilters[filterKey],
         {
+          label: originalFilters[filterKey].label,
           isOriginal: false,
           isFiltered: originalFilters[filterKey].isFiltered,
+          dataType: originalFilters[filterKey].dataType,
+          filterType: originalFilters[filterKey].filterType,
           toggleAllOn: originalFilters[filterKey].toggleAllOn,
           isOpen: filterIsOpen,
+          doAdvFiltering: originalFilters[filterKey].doAdvFiltering,
+          queries: originalFilters[filterKey].queries,
+          queriedOptionKeys: originalFilters[filterKey].queriedOptionKeys,
         },
       );
-      fOptions = filteredFilters[filterKey].options;
-      oOptions = originalFilters[filterKey].options;
-      ooKeys = Object.keys(oOptions);
+      if (nextFilter.dataType === 'ordinal') {
+        fOptions = filteredFilters[filterKey].options;
+        oOptions = originalFilters[filterKey].options;
+        ooKeys = Object.keys(oOptions);
 
-      // Loop through all of the original filter options
-      for (let o = 0; o < ooKeys.length; o += 1) {
-        ooKey = ooKeys[o];
-        // If the filtered filter doesn't have the option, add it
-        if (!fOptions[ooKey]) {
-          nextFilter.options[ooKey] = {
-            count: 0,
-            enabled: false,
-            hidden: false,
-          };
-        } else {
-          nextFilter.options[ooKey].enabled = oOptions[ooKey].enabled;
+        // Loop through all of the original filter options
+        
+        for (let o = 0; o < ooKeys.length; o += 1) {
+          ooKey = ooKeys[o];
+          // If the filtered filter doesn't have the option, add it
+          if (!fOptions[ooKey]) {
+            nextFilter.options[ooKey] = {
+              count: 0,
+              enabled: false,
+              hidden: false,
+            };
+          } else {
+            nextFilter.options[ooKey].enabled = oOptions[ooKey].enabled;
+          }
         }
       }
       nextFilters[filterKey] = nextFilter;

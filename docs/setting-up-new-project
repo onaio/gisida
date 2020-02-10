@@ -1,0 +1,18 @@
+# Setting Up Client Dashboard
+
+The following steps allow you to build a gisida dashboard that runs off [gisida](https://github.com/onaio/gisida) and [gisida-react](https://github.com/onaio/gisida-react):
+
+## Sourcing Geodata
+
+Gisida uses [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/api/), which expects a collection of gis data that form the background setting for a map called a basemap. We can use existing basemaps from mapbox or create a custom basemap, we should then add the URL to the client's repository so we can render a basic map.
+
+Once we have the basemap configured we will need to build basic boundaries and infrastructure layers. These layers can be gathered from various sources including but not limited to [hdx](https://data.humdata.org/)
+we can build these layers from the following sources:
+#### Shapefiles
+This file requires conversion into GeoJSON file. We can use [qgis](https://qgis.org/en/site/) to do this conversion or use online alternatives to achieve the same. 
+
+#### GeoJSON
+This file can be loaded locally or uploaded to mapbox. We encourage uploading these files to mapbox considering their sizes. Mapbox determines the zoom extents for the uploaded GeoJSON which may fail to meet our expectations. To determine zoom extents we use [tippecanoe](https://github.com/mapbox/tippecanoe) which makes it possible to set the zoom extents. This conversion outputs a [mbtile](https://docs.mapbox.com/help/glossary/mbtiles/) which can be uploaded to mapbox and loaded from the client's repository.
+
+## Setting Up Client Repository
+We encourage private repositories for clients since we have proprietary resources on these repositories. This repo should hold a bundle file that runs off latest versions of gisida and gisida-react respectively. This repository houses client site-config, data directory and custom components. A more detailed documentation on this can be found [here](https://github.com/onaio/gisida/blob/staging/docs/getting-started.md).
