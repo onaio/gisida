@@ -35,7 +35,6 @@ export default function (layer, mapConfig, dispatch) {
     layer.aggregate && layer.aggregate.timeseries
       ? layer.aggregate.timeseries.field
       : '';
-
   let stops;
   let styleSpec;
 
@@ -50,7 +49,6 @@ export default function (layer, mapConfig, dispatch) {
 
   if (layer.property && layer.stops !== false) {
     stops = generateStops(layer, timefield, dispatch);
-
   }
 
   if (stops) {
@@ -115,7 +113,6 @@ export default function (layer, mapConfig, dispatch) {
               default: 0,
             }
             : 1,
-
         'circle-stroke-opacity': 1,
       },
     };
