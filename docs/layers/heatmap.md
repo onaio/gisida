@@ -1,7 +1,7 @@
 # HeatMaps
 
-This directory contains documentation on adding heatmap layers.
-For a full documentation follow this [link](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/)
+This directory contains documentation on adding heatmap layers.\
+For full documentation follow this [link](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/).
 
 ## Sample heatmap layer
 
