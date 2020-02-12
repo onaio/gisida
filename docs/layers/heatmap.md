@@ -19,7 +19,7 @@ For full documentation follow this [link](https://docs.mapbox.com/help/tutorials
             <magnititude lowest point>,  0,
             <magnititude highest point>, 1
         ],
-        'heatmap-intensity': [
+        "heatmap-intensity": [
             'interpolate',
             ['linear'],
             ['zoom'],
@@ -44,18 +44,12 @@ For full documentation follow this [link](https://docs.mapbox.com/help/tutorials
             'interpolate',
             ['linear'],
             ['heatmap-density'],
-            0,
-            'rgba(33,102,172,0)',
-            0.2,
-            'rgb(103,169,207)',
-            0.4,
-            'rgb(209,229,240)',
-            0.6,
-            'rgb(253,219,199)',
-            0.8,
-            'rgb(239,138,98)',
-            1,
-            'rgb(178,24,43)'
+            0, 'rgba(33,102,172,0)',
+            0.2, 'rgb(103,169,207)',
+            0.4, 'rgb(209,229,240)',
+            0.6, 'rgb(253,219,199)',
+            0.8, 'rgb(239,138,98)',
+            1,  'rgb(178,24,43)'
         ]
     }
 }
@@ -63,6 +57,6 @@ For full documentation follow this [link](https://docs.mapbox.com/help/tutorials
 
 ### paint properties
 
-Note: The property `magnititude` in `heatmap-weight` can be any property from the dataset.\
+Note: The property `magnititude` in `heatmap-weight` can be any property from the dataset.
 
 For more details about the meaning and functions of each paint propery go to [Heatmap paint properties](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/#heatmap-paint-properties) on Mapbox.
