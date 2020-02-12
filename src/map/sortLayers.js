@@ -11,7 +11,7 @@ export default function sortLayers(map, layers, nextLayerId) {
           7  line  primary
           8. line  (other line layers that aren't primary layers)
           9. heat map layers
-          19. fill layers
+          10. fill layers
     */
 
     /**
@@ -44,17 +44,7 @@ export default function sortLayers(map, layers, nextLayerId) {
             .map(d => layers[d])
             .filter(d => d.type === 'heatmap');
         if (heatMap.length) {
-            heatMap.sort((a, b) => b.priority - a.priority);
-            const checkPriority = Object.keys(heatMap).find(key => heatMap[key].priority)
-            if (checkPriority) {
-                Object.keys(heatMap).forEach((key) => {
-                    if (map.getLayer(heatMap[key].id)) {
-                        map.moveLayer(heatMap[key].id);
-                    }
-                });
-            } else {
-                moveLayers(heatMap)
-            }
+            moveLayers(heatMap)
         }
 
         const circles = Object.keys(layers)
