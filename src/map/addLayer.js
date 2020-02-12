@@ -349,13 +349,13 @@ export default function (layer, mapConfig, dispatch) {
     }
 
     if (layer.categories && layer.categories.shape) {
-      const iconStops = [];
-      
-      layer.categories.type.forEach((type, index) => {	
-        iconStops.push([type, layer.categories.shape[index]]);
-      })
-
-      styleSpec.layout['icon-image'].stops = iconStops;
+      var iconStops = [];
+      if (layer.categories && layer.categories.type && typeof layer.layout["icon-image"] == "object") {
+        layer.categories.type.forEach((type, index) => {
+          iconStops.push([type, layer.categories.shape[index]]);
+        });
+        styleSpec.layout['icon-image'].stops = iconStops;
+      }
     }
 
     if (
