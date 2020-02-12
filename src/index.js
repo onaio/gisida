@@ -17,18 +17,18 @@ gisida.version = require('../package.json').version;
 gisida.initStore = require('./store/initStore').default;
 gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
-gisida.createMapReducer = require('./store/reducers/app').createMapReducer;
+gisida.createMapReducer = require('./store/reducers/createMapReducer/createMapReducer').createMapReducer;
 
 gisida.defaultReducers = {
-    APP,
-    filter,
-    layersReducer,
-    loc,
-    locationsReducer,
-    regions,
-    styles,
-    supersetConfig,
-    'map-1': MAP,
+  APP,
+  filter,
+  layersReducer,
+  loc,
+  locationsReducer,
+  regions,
+  styles,
+  supersetConfig,
+  'map-1': MAP,
 };
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
