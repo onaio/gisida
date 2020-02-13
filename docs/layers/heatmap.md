@@ -57,6 +57,6 @@ For full documentation follow this [link](https://docs.mapbox.com/help/tutorials
 
 ### paint properties
 
-Note: The property `magnititude` in `heatmap-weight` can be any property from the dataset.
+Note: The property `magnitude` in `heatmap-weight` can be any property from the dataset.
 
 For more details about the meaning and functions of each paint propery go to [Heatmap paint properties](https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/#heatmap-paint-properties) on Mapbox.
