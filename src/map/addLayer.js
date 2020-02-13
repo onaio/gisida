@@ -90,7 +90,7 @@ export default function (layer, mapConfig, dispatch) {
       layout: {},
       paint: {
         'circle-color':
-          layer.categories.color instanceof Array && !layer.paint
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
             ? {
               property: layer.source.join[0],
               stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
@@ -105,7 +105,7 @@ export default function (layer, mapConfig, dispatch) {
         'circle-opacity': 0.8,
         'circle-stroke-color': layer['radius-prop'] ? 'transparent' : '#fff',
         'circle-stroke-width':
-          layer.categories.color instanceof Array && !layer.paint
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
             ? {
               property: layer.source.join[0],
               stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
