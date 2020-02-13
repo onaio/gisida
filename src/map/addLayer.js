@@ -349,8 +349,8 @@ export default function (layer, mapConfig, dispatch) {
     }
 
     if (layer.categories && layer.categories.shape) {
-      var iconStops = [];
-      if (layer.categories && layer.categories.type && typeof layer.layout["icon-image"] == "object") {
+      const iconStops = [];
+      if (layer.categories && layer.categories.type && typeof layer.layout["icon-image"] === "object") {
         layer.categories.type.forEach((type, index) => {
           iconStops.push([type, layer.categories.shape[index]]);
         });
