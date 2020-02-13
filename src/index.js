@@ -6,7 +6,7 @@ import locationsReducer from './store/reducers/locations';
 import regions from './store/reducers/regions';
 import styles from './store/reducers/styles';
 import supersetConfig from './store/reducers/superset-config';
-import MAP from './store/reducers/createMapReducer/createMapReducer';
+import MAP from './store/reducers/createMapReducer';
 
 // eslint-disable-next-line no-underscore-dangle, global-require
 if (!global._babelPolyfill) require('babel-polyfill');
