@@ -371,6 +371,39 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         }
         return renderData(mapId, layerObj, dispatch, doUpdateTsLayer); // call renderData
       });
+  } else {
+    if(layerObj.dataSource === 'API') {
+      const url = layerObj.source.data;
+      fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        let parsedData;
+        if (layerObj.source.type === 'geojson') {
+          parsedData = csvToGEOjson(layerObj, data);
+          if (layerObj.hideZeroVals) {
+            parsedData = {
+              type: 'FeatureCollection',
+              features: parsedData.features.filter(d => d.properties[layerObj.property] !== 0),
+            };
+          }
+        } else {
+          parsedData = [...processedData];
+        }
+       const activeData = parsedData.features || parsedData;
+      const filteredData = activeData.filter(d => (d.properties || d)[layer.property] !== 'n/a');
+
+      if (Array.isArray(parsedData)) {
+        layerObj.source.data = [...filteredData];
+      } else {
+        parsedData.features = [...filteredData];
+        layerObj.source.data = { ...parsedData };
+      }
+        return renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    }
   }
 }
 
