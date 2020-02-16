@@ -10,19 +10,31 @@ function formatParams(params) {
   return `?${paramsList.join('&')}`;
 }
 
-export default function getData(formID, properties, state, callback) {
+export default function getData(formID, properties, state, callback, absPath) {
   const { apiAccessToken, apiHost } = state;
+  let path, mimeType, xobj;
+  /** If the formId value  in question is a number
+   * Build the query params and the path else in the case of a url
+   * Build the path from the url
+   */
+  if (typeof formID === 'number') {
   const fields =
     properties && Array.isArray(properties)
       ? properties.map(p => `"${p}"`).join()
       : (properties && properties[formID].map(p => `"${p}"`).join()) || null;
 
   const queryParams = fields && { fields: `[${fields}]` };
-  const xobj = new XMLHttpRequest();
-  const mimeType = 'application/json';
+  xobj = new XMLHttpRequest();
+  mimeType = 'application/json';
   const activeHost = apiHost || host;
-  const path = `${protocol}://${activeHost}/${endpoint}/${formID}.json${formatParams(queryParams)}`;
-
+  path = absPath || `${protocol}://${activeHost}/${endpoint}/${formID}.json${formatParams(queryParams)}`;
+} else {
+  xobj = new XMLHttpRequest();
+  mimeType = 'application/json';
+  path = formID;
+}
+    // console.log(path);
+    // console.log(apiAccessToken)
   try {
     xobj.overrideMimeType(mimeType);
     xobj.open('GET', path, true);

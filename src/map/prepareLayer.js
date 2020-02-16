@@ -15,6 +15,7 @@ import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
+import { merge } from 'd3';
 
 /**
  * Builds labels based on label spec and layer data
@@ -408,7 +409,7 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
 }
 
 /**
- * Loads layer data from multiple CSV or GeoJSON files
+ * Loads layer data from multiple Ona Forms, api urls and  CSV or GeoJSON files
  * @param {*} layer
  * @param {*} dispatch
  */
@@ -421,6 +422,9 @@ function fetchMultipleSources(mapId, layer, dispatch) {
   const filePaths = layerObj.source.data;
   filePaths.forEach(filePath => {
     if (Number.isInteger(filePath)) {
+      q = q.defer(getData, filePath, layerObj.properties, APP);
+    } else if (typeof filePath === 'string' && layerObj && layerObj['dataSource'] === 'API') {
+      // filepath at this point reps the url
       q = q.defer(getData, filePath, layerObj.properties, APP);
     } else if (typeof filePath === 'object' && filePath !== null && filePath.type) {
       // add in SUPERSET.API promise to q.defer
