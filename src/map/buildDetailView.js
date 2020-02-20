@@ -6,9 +6,10 @@ const parseDetailValue = (spec, datum) => {
   if (!spec) return false;
 
   // 2) if single property then just get it from the datum
-  if (typeof spec === 'string' && datum[spec]) {
+  if (typeof spec === 'string' && datum[spec] === 0 ?
+    true : typeof spec === 'string' && datum[spec]) {
     return datum[spec];
-  // 3) if single property but it's undefined as datum prop, return false
+    // 3) if single property but it's undefined as datum prop, return false
   } else if (typeof spec === 'string' && !datum[spec]) {
     return false;
   }
@@ -22,9 +23,10 @@ const parseDetailValue = (spec, datum) => {
   if (Array.isArray(spec.prop) && spec.join) {
     const value = [];
     spec.prop.forEach((s) => {
-      const d = (typeof s === 'string' && datum[s])
-        ? datum[s]
-        : parseDetailValue(s, datum);
+      const d =
+        typeof s === 'string' && datum[s]
+          ? datum[s]
+          : parseDetailValue(s, datum);
       if (d) value.push(d);
     });
     return value.length ? value.join(spec.join) : false;
@@ -58,16 +60,33 @@ const parseDetailAlt = (spec, datum) => {
   return false;
 };
 
+const parseDetailIconClassName = (spec) => {
+  const iconClassName =
+    (spec.glyph && `glyphicon glyphicon-${spec.glyph}`) ||
+    (spec.FA && `fas fa-${spec.FA}`) ||
+    spec.className ||
+    false;
+
+  return `${spec.classPrefix || ''}${iconClassName}${spec.classSuffix || ''}`;
+};
+
 const parseDetailIcon = (spec, datum) => {
   // 1) if icon is a simple string, return it
   if (typeof spec === 'string') {
-    return spec;
+    return `glyphicon glyphicon-${spec}`;
   }
 
-  // 2) if icon is an options object, parse and return
-  if (spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
+  // 2) if icon is an options object, but no prop then parse className
+  if (typeof spec === 'object' && !spec.prop) {
+    // Generate full icon className, checking glpyh, FA, and className spec props
+    return parseDetailIconClassName(spec);
+  }
+
+  // 3) if icon is an options object and prop, categorically parse and return
+
+  if (spec && spec.prop && datum[spec.prop] && spec[datum[spec.prop]]) {
     return {
-      icon: spec[datum[spec.prop]].glyph,
+      icon: parseDetailIconClassName(spec),
       color: spec[datum[spec.prop]].color || false,
       alt: spec[datum[spec.prop]].alt
         ? parseDetailAlt(spec[datum[spec.prop]].alt, datum)
@@ -75,58 +94,127 @@ const parseDetailIcon = (spec, datum) => {
     };
   }
 
-  // 3) if all else fails, return false
+  // 4) if all else fails, return false
   return false;
 };
 
-const buildParsedBasicDetailItem = (detail, properties) => {
+const buildValueAffix = (affix, props) => {
+  let affixStr;
+  if (!affix) {
+    return null;
+  }
+  if (typeof affix !== 'string') {
+    // if obj with prop field or mustache string, pass it into parseDetailview
+    // else get string as defined in detail view spec
+    affixStr = parseDetailValue(affix, props);
+  } else {
+    affixStr = affix;
+  }
+  return affixStr;
+};
+export const buildParsedBasicDetailItem = (detail, properties) => {
   let icon;
   let iconColor;
   let alt;
+  let valPrefix;
+  let valSuffix;
 
   // 1) Parse list item innerHTML (text) from prop(s)
   const value = parseDetailValue(detail.value, properties);
-  if (!value) return false;
+  if (!value && value !== 0) {
+    return false;
+  }
 
   // 2) Parse glyphicon from icon (options); Note: this doesn't work with multiple props
-  icon = parseDetailIcon(detail.icon, properties);
-  if (icon instanceof Object) {
-    // eslint-disable-next-line prefer-destructuring
-    alt = icon.alt;
-    iconColor = icon.color;
-    // eslint-disable-next-line prefer-destructuring
-    icon = icon.icon;
+  if (detail.icon) {
+    icon = parseDetailIcon(detail.icon, properties);
+    if (icon instanceof Object) {
+      // eslint-disable-next-line prefer-destructuring
+      alt = icon.alt;
+      iconColor = icon.color;
+      // eslint-disable-next-line prefer-destructuring
+      icon = icon.icon;
+    }
+    if (!icon) return false;
+  } else {
+    icon = null;
   }
-  if (!icon) return false;
-
   // 3) Parse text for databallon
   if (!alt && detail.alt) {
     alt = parseDetailAlt(detail.alt, properties);
   }
 
+  // 4) parse affixes (suffix and prefix) into HTML strings if defined in detail view spec
+  const { useAltAsPrefix } = detail;
+
+  if (detail.value.prefix || detail.value.suffix) {
+    const { suffix, prefix } = detail.value;
+    valPrefix = buildValueAffix(prefix, properties);
+    valSuffix = buildValueAffix(suffix, properties);
+  }
+
   return {
-    value, icon, iconColor, alt,
+    value,
+    icon,
+    iconColor,
+    alt,
+    prefix: valPrefix,
+    suffix: valSuffix,
+    useAltAsPrefix,
   };
 };
 
-export default (mapId, LayerObj, FeatureProperties, dispatch) => {
+export default (
+  mapId,
+  LayerObj,
+  FeatureProperties,
+  dispatch,
+  timeSeriesObj,
+) => {
   if (!LayerObj && !FeatureProperties) {
     dispatch(detailView(mapId, null));
     return false;
   }
 
   const layerObj = { ...LayerObj };
-  const featureProperties = { ...FeatureProperties };
+  let featureProperties = { ...FeatureProperties };
   const {
-    UID, title, 'sub-title': subTitle, 'basic-info': basicInfo,
+    UID,
+    title,
+    'sub-title': subTitle,
+    'basic-info': basicInfo,
+    'image-url': imageURL,
   } = layerObj['detail-view'];
 
   if (!UID) return false;
+  const join = layerObj['detail-view'].join || layerObj.source.join;
+  let activeData = null;
+  if (timeSeriesObj && timeSeriesObj.data && timeSeriesObj.data.length) {
+    activeData = [...timeSeriesObj.data];
+  } else {
+    activeData =
+      layerObj &&
+      (layerObj.Data ||
+        ((layerObj.source.data && layerObj.source.data.features) ||
+          layerObj.source.data));
+  }
+  const layerObjDatum =
+    activeData &&
+    activeData.length &&
+    activeData.find(d => (d.properties || d)[join && join[1]] === featureProperties[join && join[0]]);
+
+  if (layerObjDatum) {
+    featureProperties = {
+      ...featureProperties,
+      ...(layerObjDatum.properties || layerObjDatum),
+    };
+  }
 
   const detailViewModel = {
-    UID: featureProperties[UID],
+    UID: featureProperties[UID] || featureProperties['Fixed Site Unique ID'],
     title: featureProperties[title.prop], // todo - add mustache support
     subTitle: featureProperties[subTitle.prop], // todo - add mustache support
+    'image-url': featureProperties[imageURL],
     basicInfo,
     parsedBasicInfo: [],
   };
@@ -134,7 +222,10 @@ export default (mapId, LayerObj, FeatureProperties, dispatch) => {
   let parsedDetail;
   if (basicInfo) {
     for (let i = 0; i < basicInfo.length; i += 1) {
-      parsedDetail = buildParsedBasicDetailItem(basicInfo[i], featureProperties);
+      parsedDetail = buildParsedBasicDetailItem(
+        basicInfo[i],
+        featureProperties,
+      );
       if (parsedDetail) detailViewModel.parsedBasicInfo.push(parsedDetail);
     }
   }

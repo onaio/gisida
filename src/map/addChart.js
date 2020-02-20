@@ -83,7 +83,9 @@ export default function addChart(layer, data, map, mapId) {
     }
 
     if (layer.categories['total-label']) {
-      chartProp += `<div>${layer.categories['total-label']}: <b>${total}</b></div>`;
+      chartProp += `<div>${
+        layer.categories['total-label']
+      }: <b>${total}</b></div>`;
     }
 
     for (i = 0; i < layer.categories.property.length; i += 1) {
@@ -92,19 +94,25 @@ export default function addChart(layer, data, map, mapId) {
         y: parseInt((row[layer.categories.property[i]] / total) * 100, 10),
         label: layer.categories.label[i],
       });
-      propTotal += parseInt((row[layer.categories.property[i]] / total) * 100, 10);
-      chartProp += `<div><span class="swatch" style="background: ${layer.categories.color[i]};"></span>
+      propTotal += parseInt(
+        (row[layer.categories.property[i]] / total) * 100,
+        10,
+      );
+      chartProp += `<div><span class="swatch" style="background: ${
+        layer.categories.color[i]
+      };"></span>
         ${layer.categories.label[i]}:
         <b>${((row[layer.categories.property[i]] / total) * 100).toFixed(1)}%</b></div>`;
     }
 
     if (layer.categories.difference) {
-      chartProp +=
-        `<div><span class="swatch" style="background: ${layer.categories.difference[1]};"></span>
+      chartProp += `<div><span class="swatch" style="background: ${
+        layer.categories.difference[1]
+      };"></span>
           ${layer.categories.difference[0]}: <b>${(100 - propTotal).toFixed(1)}%</b></div>`;
       chartArr.splice(0, 0, {
         color: layer.categories.difference[1],
-        y: (100 - propTotal),
+        y: 100 - propTotal,
         label: layer.categories.difference[0],
       });
     }
@@ -115,13 +123,17 @@ export default function addChart(layer, data, map, mapId) {
       }
     }
 
-    const chartData = [{
-      data: chartArr,
-      size: layer.chart.size,
-      innerSize: layer.chart.innerSize,
-    }];
+    const chartData = [
+      {
+        data: chartArr,
+        size: layer.chart.size,
+        innerSize: layer.chart.innerSize,
+      },
+    ];
 
-    const content = `<div><b>${row[layer.source.join[1]]}</b></div>${chartProp}`;
+    const content = `<div><b>${
+      row[layer.source.join[1]]
+    }</b></div>${chartProp}`;
 
     const el = document.createElement('div');
     el.id = `chart-${row[layer.source.join[1]]}-${layer.id}-${mapId}`;
@@ -137,7 +149,10 @@ export default function addChart(layer, data, map, mapId) {
     new mapboxgl.Marker(el, {
       offset: layer.chart.offset,
     })
-      .setLngLat([row[layer.chart.coordinates[0]], row[layer.chart.coordinates[1]]])
+      .setLngLat([
+        row[layer.chart.coordinates[0]],
+        row[layer.chart.coordinates[1]],
+      ])
       .addTo(map);
 
     const container = $(`#chart-${row[layer.source.join[1]]}-${layer.id}-${mapId}`)[0];

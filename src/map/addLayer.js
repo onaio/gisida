@@ -10,38 +10,33 @@ function buildRadiusAsDistanceExpression(layer) {
   }
 
   // calculate radius in pixles at full 20 zoom (the biggest it can be)
-  const distanceExpression =
-    ['/',
-      ['/',
-        distanceInMeters,
-        0.075,
-      ],
-      ['cos',
-        ['/',
-          ['*',
-            ['number', ['get', 'latitude']],
-            ['pi'],
-          ],
-          180,
-        ],
-      ],
-    ];
+  const distanceExpression = [
+    '/',
+    ['/', distanceInMeters, 0.075],
+    ['cos', ['/', ['*', ['number', ['get', 'latitude']], ['pi']], 180]],
+  ];
 
   // create an exponential ramp based on the zoom
   return [
-    'interpolate', ['exponential', 2], ['zoom'],
-    0, 0,
-    20, distanceExpression,
+    'interpolate',
+    ['exponential', 2],
+    ['zoom'],
+    0,
+    0,
+    20,
+    distanceExpression,
   ];
 }
 
-export default function (layer, mapConfig) {
+export default function (layer, mapConfig, dispatch) {
   const layerObj = { ...layer };
   layerObj.filters = layerObj.filters || {};
-  const timefield = (layer.aggregate && layer.aggregate.timeseries) ? layer.aggregate.timeseries.field : '';
+  const timefield =
+    layer.aggregate && layer.aggregate.timeseries
+      ? layer.aggregate.timeseries.field
+      : '';
   let stops;
   let styleSpec;
-
 
   if (layer === undefined) {
     return null;
@@ -52,28 +47,25 @@ export default function (layer, mapConfig) {
     layerObj.legendBottom = 40;
   }
 
-  if (layer.property) {
-    stops = generateStops(layer, timefield);
+  if (layer.property && layer.stops !== false) {
+    stops = generateStops(layer, timefield, dispatch);
   }
 
   if (stops) {
     // newStops = { stops, id: layer.id };
     const colorStops = timefield ? stops[0][stops[0].length - 1] : stops[0][0];
-    const radiusStops = stops[1][0];
+    const radiusStops = timefield ? stops[1][stops[1].length - 1] : stops[1][0];
     const stopsData = layer.type === 'circle' ? radiusStops : colorStops;
     const breaks = stops[3];
     const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
-    const { features } = layer.source.data;
+    const layerData = layer.source.data.features || layer.source.data;
+    const activeData = layerData.map(d => d.properties || d);
     let Data;
     if (timefield) {
-      Data = features ?
-        features.filter(({ properties }) => properties[timefield] === currPeriod) :
-        layer.source.data.filter(data => data[timefield] === currPeriod);
+      Data = activeData.filter(d => d[timefield] === currPeriod);
     } else {
-      Data = features ?
-        layer.source.data.features.map(({ properties }) => properties) :
-        layer.source.data;
+      Data = activeData.filter(d => d[layer.property] !== undefined);
     }
 
     layerObj.stopsData = stopsData;
@@ -81,6 +73,7 @@ export default function (layer, mapConfig) {
     layerObj.colors = colors;
     layerObj.Data = Data;
     layerObj.stops = stops;
+    layerObj.colorStops = colorStops;
   }
 
   /*
@@ -96,30 +89,37 @@ export default function (layer, mapConfig) {
       },
       layout: {},
       paint: {
-        'circle-color': (layer.categories.color instanceof Array && !layer.paint) ?
-          {
-            property: layer.source.join[0],
-            stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
-            type: 'categorical',
-          } :
-          layer.categories.color,
+        'circle-color':
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
+            ? {
+              property: layer.source.join[0],
+              stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
+              type: 'categorical',
+            }
+            : (layerObj.colorStops && {
+              property: layer.source.join[0],
+              stops: layerObj.colorStops,
+              type: 'categorical',
+            }) ||
+              layer.categories.color,
         'circle-opacity': 0.8,
-        'circle-stroke-color': '#fff',
-        'circle-stroke-width': (layer.categories.color instanceof Array && !layer.paint)
-          ? {
-            property: layer.source.join[0],
-            stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
-            type: 'categorical',
-            default: 0,
-          }
-          : 1,
+        'circle-stroke-color': layer['radius-prop'] ? 'transparent' : '#fff',
+        'circle-stroke-width':
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
+            ? {
+              property: layer.source.join[0],
+              stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
+              type: 'categorical',
+              default: 0,
+            }
+            : 1,
         'circle-stroke-opacity': 1,
       },
     };
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
 
     if (layer.source.minzoom) {
@@ -161,15 +161,28 @@ export default function (layer, mapConfig) {
         if (layer['is-radius-distance']) {
           // handle radius as a distance on the map
           styleSpec.paint['circle-radius'] = buildRadiusAsDistanceExpression(layer);
-        } else if (stops) {
+        } else if (!layer['radius-prop'] && stops) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: stops[1][0],
+            type: 'categorical',
           };
         }
-        styleSpec.source.data = layer.source.data;
+        const data = layer.source.data.features || layer.source.data;
+        const filteredData = layer.property
+          ? data.filter(d => (d.properties || d)[layer.property] !== undefined)
+          : [...data];
+        const dataCopy = layer.source.data.features
+          ? {
+            type: 'FeatureCollection',
+            features: [...filteredData],
+          }
+          : [...filteredData];
+
+        styleSpec.source.data = dataCopy;
       }
     }
+
     // add filter
     if (layer.filter) {
       styleSpec.filter = layer.filter;
@@ -196,7 +209,7 @@ export default function (layer, mapConfig) {
 
     // override from layers.json
     if (layer.paint) {
-      styleSpec.paint = layer.paint;
+      styleSpec.paint = Object.assign({}, styleSpec.paint, layer.paint);
     }
     if (layer.source.minzoom) {
       styleSpec.minzoom = layer.source.minzoom;
@@ -205,7 +218,7 @@ export default function (layer, mapConfig) {
       styleSpec.maxzoom = layer.maxzoom;
     }
 
-    if (!(layer['no-outline'])) {
+    if (!layer['no-outline']) {
       styleSpec.paint['fill-outline-color'] = '#fff';
     }
 
@@ -217,10 +230,12 @@ export default function (layer, mapConfig) {
     }
 
     if (layer.source.data && !layer.paint) {
-      const layerStops = timefield ? stops[0][stops[1].length - 1] : stops[0][0];
+      const layerStops = timefield
+        ? stops[0][stops[1].length - 1]
+        : stops[0][0];
 
       styleSpec.paint['fill-color'] = {
-        property: layer.source.join[0],
+        property: layer.categories['vector-prop'] || layer.source.join[0],
         stops: layerStops,
         type: 'categorical',
         default: 'rgba(0,0,0,0)',
@@ -264,6 +279,11 @@ export default function (layer, mapConfig) {
       styleSpec.source.url = layer.source.url;
       styleSpec['source-layer'] = layer.source.layer;
     }
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
   }
 
   /*
@@ -290,14 +310,17 @@ export default function (layer, mapConfig) {
     };
 
     // add filter
-    if (layer.filter && styleSpec.filters) {
-      styleSpec.filters.base = layer.filter;
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
     }
 
     if (layer.source.type === 'geojson') {
-      if (layer.source.data.features
-        && layer.source.data.features[0]
-        && layer.source.data.features[0].geometry) {
+      if (
+        (layer.source.data && layer.source.data.type === 'Point') ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)
+      ) {
         styleSpec.source.data = layer.source.data;
       } else if (layer.properties && layer.properties.length) {
         styleSpec.source.data = {
@@ -305,7 +328,9 @@ export default function (layer, mapConfig) {
           features: layer.source.data.map((d) => {
             const propertiesMap = {};
             layer.properties.forEach((prop) => {
-              propertiesMap[prop] = isNumber(d[prop]) ? d[prop] : Number(d[prop]);
+              propertiesMap[prop] = isNumber(d[prop])
+                ? d[prop]
+                : Number(d[prop]);
             });
             return {
               type: 'Feature',
@@ -325,19 +350,87 @@ export default function (layer, mapConfig) {
 
     if (layer.categories && layer.categories.shape) {
       const iconStops = [];
-      layer.categories.type.forEach((type, index) => {
-        iconStops.push([type, layer.categories.shape[index]]);
-      });
-      styleSpec.layout['icon-image'].stops = iconStops;
+      if (layer.categories && layer.categories.type && typeof layer.layout["icon-image"] === "object") {
+        layer.categories.type.forEach((type, index) => {
+          iconStops.push([type, layer.categories.shape[index]]);
+        });
+        styleSpec.layout['icon-image'].stops = iconStops;
+      }
     }
 
-    if (layer['highlight-filter-property']
-      && (layer['highlight-layout'] || layer['highlight-paint'])) {
-      layerObj.filters.rHighlight = ['!=', layer['highlight-filter-property'], ''];
-      layerObj.filters.highlight = ['==', layer['highlight-filter-property'], ''];
+    if (
+      layer['highlight-filter-property'] &&
+      (layer['highlight-layout'] || layer['highlight-paint'])
+    ) {
+      layerObj.filters.rHighlight = [
+        '!=',
+        layer['highlight-filter-property'],
+        '',
+      ];
+      layerObj.filters.highlight = [
+        '==',
+        layer['highlight-filter-property'],
+        '',
+      ];
+    }
+  }
+
+  /*
+   * heatmap ==========================================================
+   */
+  if (layer.type === 'heatmap') {
+    styleSpec = {
+      id: layer.id,
+      type: 'heatmap',
+      source: {
+        type: layer.source.type,
+      },
+      minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
+      maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
+      paint: layer.paint ? { ...layer.paint } : {},
+    };
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
+
+    if (layer.source.type === 'geojson') {
+      if (
+        (layer.source.data && (layer.source.data.type === 'Point' || layer.source.data.type === 'FeatureCollection')) ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)
+      ) {
+        styleSpec.source.data = layer.source.data;
+      } else if (layer.properties && layer.properties.length) {
+        styleSpec.source.data = {
+          type: 'FeatureCollection',
+          features: layer.source.data.map((d) => {
+            const propertiesMap = {};
+            layer.properties.forEach((prop) => {
+              propertiesMap[prop] = isNumber(d[prop])
+                ? d[prop]
+                : Number(d[prop]);
+            });
+            return {
+              type: 'Feature',
+              properties: propertiesMap,
+              geometry: {
+                type: 'Point',
+                coordinates: [Number(d.Longitude), Number(d.Latitude)],
+              },
+            };
+          }),
+        };
+      }
+    } else {
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
     }
   }
   /*
+
    * CHART ==========================================================
    */
 
