@@ -21,6 +21,9 @@ const config = {
       },
     ],
   },
+  node: {
+    fs: 'empty'
+  },
   resolve: {
     extensions: ['.js'],
   },

@@ -90,7 +90,7 @@ export default function (layer, mapConfig, dispatch) {
       layout: {},
       paint: {
         'circle-color':
-          layer.categories.color instanceof Array && !layer.paint
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
             ? {
               property: layer.source.join[0],
               stops: timefield ? stops[0][stops[0].length - 1] : stops[0][0],
@@ -105,7 +105,7 @@ export default function (layer, mapConfig, dispatch) {
         'circle-opacity': 0.8,
         'circle-stroke-color': layer['radius-prop'] ? 'transparent' : '#fff',
         'circle-stroke-width':
-          layer.categories.color instanceof Array && !layer.paint
+          layer.categories && layer.categories.color instanceof Array && !layer.paint
             ? {
               property: layer.source.join[0],
               stops: timefield ? stops[5][stops[5].length - 1] : stops[5][0],
@@ -350,12 +350,12 @@ export default function (layer, mapConfig, dispatch) {
 
     if (layer.categories && layer.categories.shape) {
       const iconStops = [];
-      
-      layer.categories.type.forEach((type, index) => {	
-        iconStops.push([type, layer.categories.shape[index]]);
-      })
-
-      styleSpec.layout['icon-image'].stops = iconStops;
+      if (layer.categories && layer.categories.type && typeof layer.layout["icon-image"] === "object") {
+        layer.categories.type.forEach((type, index) => {
+          iconStops.push([type, layer.categories.shape[index]]);
+        });
+        styleSpec.layout['icon-image'].stops = iconStops;
+      }
     }
 
     if (
@@ -374,7 +374,63 @@ export default function (layer, mapConfig, dispatch) {
       ];
     }
   }
+
   /*
+   * heatmap ==========================================================
+   */
+  if (layer.type === 'heatmap') {
+    styleSpec = {
+      id: layer.id,
+      type: 'heatmap',
+      source: {
+        type: layer.source.type,
+      },
+      minzoom: layer.source.minzoom ? layer.source.minzoom : mapConfig.zoom,
+      maxzoom: layer.source.maxzoom ? layer.source.maxzoom : 22,
+      paint: layer.paint ? { ...layer.paint } : {},
+    };
+
+    // add filter
+    if (layer.filter) {
+      styleSpec.filter = layer.filter;
+    }
+
+    if (layer.source.type === 'geojson') {
+      if (
+        (layer.source.data && (layer.source.data.type === 'Point' || layer.source.data.type === 'FeatureCollection')) ||
+        (layer.source.data.features &&
+          layer.source.data.features[0] &&
+          layer.source.data.features[0].geometry)
+      ) {
+        styleSpec.source.data = layer.source.data;
+      } else if (layer.properties && layer.properties.length) {
+        styleSpec.source.data = {
+          type: 'FeatureCollection',
+          features: layer.source.data.map((d) => {
+            const propertiesMap = {};
+            layer.properties.forEach((prop) => {
+              propertiesMap[prop] = isNumber(d[prop])
+                ? d[prop]
+                : Number(d[prop]);
+            });
+            return {
+              type: 'Feature',
+              properties: propertiesMap,
+              geometry: {
+                type: 'Point',
+                coordinates: [Number(d.Longitude), Number(d.Latitude)],
+              },
+            };
+          }),
+        };
+      }
+    } else {
+      styleSpec.source.url = layer.source.url;
+      styleSpec['source-layer'] = layer.source.layer;
+    }
+  }
+  /*
+
    * CHART ==========================================================
    */
 
