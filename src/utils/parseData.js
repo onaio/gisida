@@ -11,7 +11,7 @@ export default function parseData(spec, datum) {
 
 
     // parse field to number
-    if (spec.field && spec.type) {
+    if (spec.field && spec.type === 'number') {
         Object.assign(datum)
 
         spec.field.forEach(field => {
@@ -133,7 +133,7 @@ export default function parseData(spec, datum) {
                     if (propSpec.join) { parseVal = parseVal.join(propSpec.join).replace(/,,/g, ','); }
                 }
                 // if select-one value matches the 'other-prop', use otherVal
-            } else if (otherVal && datumVal === propSpec['other-prop']) {
+            } else if (otherVal && datumVal === propSpec ['other-prop']) {
                 parseVal = otherVal;
             } else {
                 parseVal = propVal || datumVal;
