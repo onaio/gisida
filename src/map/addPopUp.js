@@ -4,9 +4,9 @@ import commaFormatting from './../utils/commaFormatting';
 
 /**
  *  Adds popup to the map
- * @param {''} mapId - Identified what map to show popup on
- * @param {{}} mapboxGLMap mapbox map object allows us to interact with map methods from mapbox
- * @param {() => {}} dispatch redux function that accepts an action 
+ * @param {string} mapId - Identified what map to show popup on
+ * @param {object} mapboxGLMap mapbox map object allows us to interact with map methods from mapbox
+ * @param {function} dispatch redux function that accepts an action 
  */
 
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
