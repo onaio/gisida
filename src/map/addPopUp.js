@@ -6,7 +6,7 @@ import commaFormatting from './../utils/commaFormatting';
  *  Adds popup to the map
  * @param {''} mapId - Identified what map to show popup on
  * @param {{}} mapboxGLMap mapbox map object allows us to interact with map methods from mapbox
- * @param {*} dispatch redux function that accepts an action 
+ * @param {() => {}} dispatch redux function that accepts an action 
  */
 
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
@@ -88,9 +88,6 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                             (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])) ||
                             (!layer.popup.join &&
                                 (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
-                            // const rowItem = {
-                            //     ...rowItem,
-                            // };
                             // Add header and body to popup with data from layer
                             if (rowItem[layer.popup.header]) {
                                 /**
@@ -137,7 +134,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                         `</div>`;
                                 }
                             } else {
-                                content = Mustache.render(layer.popup.body, commaFormatting(layer, (layer.popup && layer.popup.hideNulls) ? rowItem : rowItem, true));
+                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
                             }
                             break;
                         }
