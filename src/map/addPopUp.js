@@ -2,6 +2,13 @@ import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
 import commaFormatting from './../utils/commaFormatting';
 
+/**
+ *  Adds popup to the map
+ * @param {string} mapId - Identified what map to show popup on
+ * @param {object} mapboxGLMap mapbox map object allows us to interact with map methods from mapbox
+ * @param {function} dispatch redux function that accepts an action 
+ */
+
 export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     const map = mapboxGLMap;
     const popup = new mapboxgl.Popup({
@@ -32,10 +39,16 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         });
 
         // Get rendered features from active layers under mouse pointer
+        /**
+         * @param ({}) e.point - lat,long cordinates of a specific point on a map
+         * @param ({}) layers - active layers already present on the map
+         */
         const features = map.queryRenderedFeatures(e.point, {
-            layers: activeLayers.filter(i => map.getLayer(i) !== undefined),
-        }).filter(f =>
-            f.layer && layers[f.layer.id] && !layers[f.layer.id].layers && layers[f.layer.id].popup);
+            // filter out layers not found on map
+            layers: activeLayers.filter(activeLayer => map.getLayer(activeLayer) !== undefined),
+        }).filter(layer =>
+            // filter out grouped layers
+            layer.layer && layers[layer.layer.id] && !layers[layer.layer.id].layers && layers[layer.layer.id].popup);
         // Change the cursor style to pointer if features exist.
         map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
@@ -53,7 +66,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             layer = layerId && layers[layerId];
 
             if (layer && layer.type !== 'chart') {
+                // check for timeseries layer data or non-timeseries layer data
                 // define data to loop through looking for join matches
+
                 data = (layer.aggregate && layer.aggregate.timeseries) &&
                     timeseries && timeseries[layerId] && timeseries[layerId].data ? [...timeseries[layerId].data] :
                     (layer.source && layer.source.data &&
@@ -73,40 +88,33 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                             (row[layer.popup.join[0]] === feature.properties[layer.popup.join[1]])) ||
                             (!layer.popup.join &&
                                 (row[layer.source.join[1]] === feature.properties[layer.source.join[0]]))) {
-                            const datum = {
-                                ...rowItem,
-                            };
-                            if (layer.popup && layer.popup.hideNulls) {
-                                Object.keys(datum).forEach((k) => {
-                                    if (Number.isNaN(Number(datum[k])) &&
-                                        (datum[k].toLowerCase() === 'n/a' ||
-                                            datum[k] === '')) {
-                                        delete datum[k];
-                                    }
-                                });
-                            } else {
-                                const found = [];
-                                const rxp = /{{([^}]+)}/g;
-                                const str = layer.labels ? layer.labels.label : null;
-                                for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
-                                    found.push(c[1]);
-                                }
-                                // while (curMatch = rxp.exec(str)) {
-                                //   found.push(curMatch[1]);
-                                // }
-                                found.forEach(i => {
-                                    rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                                });
-                            }
                             // Add header and body to popup with data from layer
                             if (rowItem[layer.popup.header]) {
-                                // for null values
+                                /**
+                                 * ('') hideNulls - Custom flag that hides null values in data on the popup
+                                 */
                                 if (layer.popup && layer.popup.hideNulls) {
-
+                                    Object.keys(rowItem).forEach((k) => {
+                                        if (( typeof rowItem[k] === "string" && rowItem[k].toLowerCase() === 'n/a' || rowItem[k] === '' && rowItem[k] === null)) {
+                                            delete rowItem[k];
+                                        }
+                                    });
                                     content =
                                         `<div><b>${rowItem[layer.popup.header]}</b></div>` +
-                                        `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, datum, true))}</center></div>`;
+                                        `<div><center>${Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))}</center></div>`;
                                 } else {
+                                    const found = [];
+                                    const rxp = /{{([^}]+)}/g;
+                                    const str = layer.labels ? layer.labels.label : null;
+                                    for (let c = rxp.exec(str); c !== null; c = rxp.exec(str)) {
+                                        found.push(c[1]);
+                                    }
+                                    // while (curMatch = rxp.exec(str)) {
+                                    //   found.push(curMatch[1]);
+                                    // }
+                                    found.forEach(i => {
+                                        rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                                    });
                                     const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
                                     bodyProperties.forEach(val => {
                                         // Check if rowItem[val] is a string and if it has ,
@@ -126,7 +134,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                         `</div>`;
                                 }
                             } else {
-                                content = Mustache.render(layer.popup.body, commaFormatting(layer, (layer.popup && layer.popup.hideNulls) ? datum : rowItem, true));
+                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
                             }
                             break;
                         }
