@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /**
  * Uses the mapspec to clean up and parse data values
  * @param ({}) spec - this is the layerObj['data-parse'] object
@@ -8,17 +9,18 @@
 export default function parseData(spec, datum) {
     if (!datum || !spec) return null;
     let parsedDatum = {};
-
-
-    // parse field to number
-    if (spec.field && spec.type === 'number') {
-        Object.assign(datum)
-
-        spec.field.forEach(field => {
-            // eslint-disable-next-line no-param-reassign
-            datum[field] = parseInt(datum[field], 10);
+    // Parse data to number and floats respectively
+    if (Array.isArray(spec)) {
+        spec.forEach((config) => {
+            config.field.forEach(field => {
+                if (config.type === 'number') {
+                    datum[field] = parseInt(datum[field], 10);
+                } else if (config.type === 'float') {
+                    datum[field] = parseFloat(datum[field]);
+                }
+            })
         });
-        return datum;
+        return datum
     }
     // if datum is an array, recursively loop through it
     if (Array.isArray(datum)) {
@@ -133,7 +135,7 @@ export default function parseData(spec, datum) {
                     if (propSpec.join) { parseVal = parseVal.join(propSpec.join).replace(/,,/g, ','); }
                 }
                 // if select-one value matches the 'other-prop', use otherVal
-            } else if (otherVal && datumVal === propSpec ['other-prop']) {
+            } else if (otherVal && datumVal === propSpec['other-prop']) {
                 parseVal = otherVal;
             } else {
                 parseVal = propVal || datumVal;
