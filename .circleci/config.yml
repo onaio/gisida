@@ -24,15 +24,8 @@ jobs:
           command: yarn install --ignore-engines
       - run:
           name: Run eslint
-          command: npm run lint
-      - run:
-          name: Run test with coverage for the packages
-          command: yarn test --verbose --collectCoverage=true --forceExit && cp ./coverage/coverage-final.json && node ./mapCoverage.js
-      - run:
-          name: upload coverage to coveralls
-          command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-      - store_artifacts:
-          path: coverage
+          command: npm run lint 
+      - run: yarn coveralls
   publish:
     docker:
       - image: circleci/node:6.11.5

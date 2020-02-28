@@ -21,7 +21,8 @@
         "fix": "eslint src --ext=jsx --ext=js --fix",
         "lint": "eslint src --ext=jsx --ext=js",
         "test": "jest",
-        "test:coverage": "jest --coverage --coverageDirectory=coverage/"
+        "test:coverage": "jest --coverage",
+        "coveralls": "set CI=true && yarn test --runInBand --verbose --coverage=true --forceExit  && cat ./coverage/lcov.info | coveralls"
     },
     "types": "./src/types/index.d.ts",
     "husky": {
@@ -50,8 +51,7 @@
         "verbose": true,
         "testURL": "http://localhost/",
         "coverageReporters": [
-            "text",
-            "html"
+            "lcov"
         ],
         "collectCoverageFrom": [
             "**/*.{js,jsx,ts,tsx}",
