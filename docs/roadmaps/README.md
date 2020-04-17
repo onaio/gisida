@@ -3,6 +3,9 @@
 
 ## Roadmap Structure
 
+### Thematic Areas
+Each year we will define and focus on key thematic areas. Each the Thematic Area has numbered (in bold) sub-sections which issues we worked on will lie under. These should represent our defining tenants as a team and reflect the intrests of both business development and core product design/engineering.
+
 ### Quarterly Tables
 Pulling heavily from [SRE](https://github.com/onaio/playbooks/blob/master/docs/roadmaps/2020.md) and [Canopy](https://github.com/onaio/canopy/blob/master/docs/roadmaps/2020.md) roadmaps our quarterly tables pshould be structured with the columns:
 
