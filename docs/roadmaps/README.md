@@ -1,5 +1,5 @@
 # Gisida Roadmaps
-* [2020](./roadmaps/2020.md)
+* [2020](./2020.md)
 
 ## Roadmap Maintenance
 These Rodamaps are living documents and require scheduled grooming to remain accurate and reliable.
