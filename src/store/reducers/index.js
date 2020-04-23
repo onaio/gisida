@@ -6,5 +6,5 @@ export { default as LOCATIONS } from './locations';
 export { default as REGIONS } from './regions';
 export { default as STYLES } from './styles';
 export { default as SUPERSET_CONFIGS } from './superset-config';
-export { default as MAP } from './createMapReducer/createMapReducer';
+export { default as MAP } from './map/';
 export { default as AUTH } from './auth';
