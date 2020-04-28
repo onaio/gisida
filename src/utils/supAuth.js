@@ -47,15 +47,14 @@ class SupAuthZ {
   authConfig;
   endpoint = '';
 
-  defaultOauthC = defaultOauthC;
-  defaultSupAuthC = defaultSupAuthC;
-  defaultUnSupAuthZ = defaultUnSupAuthZ;
-
   // Pass in APP as config
   constructor() {
     if (this.instance) {
       return this.instance;
     }
+    this.defaultOauthC = defaultOauthC;
+    this.defaultSupAuthC = defaultSupAuthC;
+    this.defaultUnSupAuthZ = defaultUnSupAuthZ;
     this.instance = this;
   }
 
