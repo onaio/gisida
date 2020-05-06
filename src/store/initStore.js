@@ -104,6 +104,7 @@ export function loadLayers(mapId, dispatch, layers) {
 // Add config to redux store
 function addConfigToStore(store, config) {
   if (config.AUTH) store.dispatch(actions.initAuth(config.AUTH));
+  store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initApp(config.APP));
   if (config.LOC) {
     store.dispatch(actions.initLoc(config.LOC));
@@ -111,7 +112,6 @@ function addConfigToStore(store, config) {
   if (config.SUPERSET_CONFIGS) {
     store.dispatch(actions.initSuperset(config.SUPERSET_CONFIGS));
   }
-  store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
   loadLayers('map-1', store.dispatch, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
