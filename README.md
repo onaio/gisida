@@ -71,6 +71,54 @@ $ npm install gisida
 }
 ```
 
+Let's go over each of the keys in the `site-config.json` file
+
+1. `APP` : The `APP` key expects and object. Contains properties for the site settings
+
+- `mapConfig`: An object that contains keys for setting the values for the properties for
+  interacting with the map. More information about each of these properties including their defaults
+  can be found at the [Mapbox GL JS API Reference](https://docs.mapbox.com/mapbox-gl-js/api/map/)
+
+  - `container`: Your HTML element in which Mapbox GL JS will render the map
+  - `style`: The default Mapbox style to be loaded from the Mapbox API of the
+    form `mapbox://styles/:owner/:style`
+  - `center`: The initial geographical centerpoint of the map (Uses longitude, latitude coordinated order).
+  - `zoom` : The initial zoom level of the map
+
+- `accessToken` : Your Mapbox API access token
+- `appIcon` : The path to image that will be displayed as the logo on the top of the title bar
+- `appName`: The name for the app that will be displayed on the title bar
+- `appColor`: The app primary color that will be displyed most frequently across the screens such
+  as the background of the title bar, buttons
+- `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name
+- `appLoginIcon` **(Optional)** : The path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used
+- `searchBar` **(Optional)** : Accepts a boolean value. Set to `true` if you would like a search box
+  to search the layers. The search box is not enabled and not displayed by default
+- `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
+  to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
+
+2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
+   between styles
+
+3. `LAYERS` : The `LAYERS` key expects an object. The top level keys are the category names and the values
+   can be an array of layer names or an array of objects with the group name as the key and an array of
+   layers as the value. The groups can be nested
+
+```json
+  "LAYERS": {
+    "Category 1" : ["layer-1"],
+    "Category 2" : ["layer-2"],
+    "Category 3" : [
+      {
+        "Group 1": ["layer-3"]
+      },
+       {
+        "Group 2": ["layer-4"]
+      }
+    ]
+  }
+```
+
 ### 2. Import and initializing the store.
 
 ```javascript
