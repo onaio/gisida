@@ -107,7 +107,7 @@ Let's go over each of the keys in the `site-config.json` file
   }
   ```
 
-  Note: Adding the query parameter `standalone=true` loads the iframe without the navigation bar
+  **Note** : Adding the query parameter `standalone=true` loads the iframe without the navigation bar
   with the login links. This is because in cases where authentication is enabled for your app, the
   user will be logged in automically into superset
 
