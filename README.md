@@ -96,8 +96,8 @@ Let's go over each of the keys in the `site-config.json` file
   to search the layers. The search box is not enabled and not displayed by default
 - `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
   to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
-- `layerSupersetLinks` **(Optional)(Premium)** : Uses the ONA superset API to access the data for a specific
-  layer and loads it in an iframe. The key is the name of the layer, the superset API link as the value
+- `layerSupersetLinks` **(Optional) (Premium)** : Uses the ONA superset API to access the data for a specific
+  layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value
 
   e.g
 
