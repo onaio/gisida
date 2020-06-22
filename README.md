@@ -96,6 +96,20 @@ Let's go over each of the keys in the `site-config.json` file
   to search the layers. The search box is not enabled and not displayed by default
 - `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
   to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
+- `layerSupersetLinks` **(Optional)(Premium)** : Uses the ONA superset API to access the data for a specific
+  layer and loads it in an iframe. The key is the name of the layer, the superset API link as the value
+
+  e.g
+
+  ```json
+  "layerSupersetLinks": {
+    "layer-1": "https://discover.ona.io/superset/dashboard/<id>/?standalone=true"
+  }
+  ```
+
+  Note: Adding the query parameter `standalone=true` loads the iframe without the navigation bar
+  with the login links. This is because in cases where authentication is enabled for your app, the
+  user will be logged in automically into superset
 
 2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
    between styles
