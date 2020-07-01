@@ -147,7 +147,7 @@ export default function (layer, mapConfig, dispatch) {
         if (layer['is-radius-distance']) {
           // handle radius as a distance on the map
           styleSpec.paint['circle-radius'] = buildRadiusAsDistanceExpression(layer);
-        } else if (!stops && !layer.paint) {
+        } else if (styleSpec.paint && !styleSpec.paint['circle-radius'] && layerStops) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
             stops: layerStops,
