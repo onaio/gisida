@@ -115,8 +115,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                     found.forEach(i => {
                                         rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                                     });
-                                    const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
-                                    bodyProperties.forEach(val => {
+                                    const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g) && layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
+                                    bodyProperties && bodyProperties.forEach(val => {
                                         // Check if rowItem[val] is a string and if it has ,
                                         const contentArr = typeof rowItem[val.trim()] !== 'number' &&
                                             rowItem[val.trim()].includes(',') ? rowItem[val.trim()].split(',') : [];
@@ -124,17 +124,15 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                             rowItem[val] = contentArr.join(', ');
                                         }
                                     });
+                                    const bodySection = bodyProperties ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                                     content =
                                         `<div>` +
                                         `<div><b>${row[layer.popup.header]}</b></div>` +
-                                        `<div><center>${Mustache.render(
-                                            layer.popup.body,
-                                            commaFormatting(layer, rowItem, true)
-                                        )}</center></div>` +
+                                        `<div><center>${bodySection}</center></div>` +
                                         `</div>`;
                                 }
                             } else {
-                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
+                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) || '';
                             }
                             break;
                         }
@@ -158,9 +156,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             }
             if (content) break;
         }
-
         // Todo - we need to be able to render popups from just tileset data as well
         if (!content) {
+            return
             // content = Mustache.render(layer.popup.body, feature.properties);
         }
 
