@@ -27,8 +27,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         const {
             layers,
             timeseries,
+            activeLayerId
         } = currentState[mapId];
-
         // Generate list of active layers
         const activeLayers = [];
         Object.keys(layers).forEach((key) => {
@@ -61,7 +61,15 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         let layer;
         let data;
         for (let f = 0; f < features.length; f += 1) {
-            feature = features[f];
+            /** Get feature based on period for timeseries layer */
+            if (layers[activeLayerId].aggregate.timeseries) {
+                feature = features.find((feature) =>
+                    feature.properties && 
+                    feature.properties[layers[activeLayerId]
+                    .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
+            } else {
+                feature = features[f];
+            }
             layerId = feature && feature.layer && feature.layer.id;
             layer = layerId && layers[layerId];
 
