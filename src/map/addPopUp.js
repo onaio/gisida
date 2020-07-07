@@ -56,16 +56,16 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         if (!features.length) return false;
 
         // Get layer data for feature under mouse pointer
-        let feature;
         let layerId;
         let layer;
         let data;
+        let feature;
         for (let f = 0; f < features.length; f += 1) {
             /** Get feature based on period for timeseries layer */
             if (layers[activeLayerId].aggregate.timeseries) {
-                feature = features.find((feature) =>
-                    feature.properties && 
-                    feature.properties[layers[activeLayerId]
+                feature = features.find((tilesetFeature) =>
+                    tilesetFeature.properties && 
+                    tilesetFeature.properties[layers[activeLayerId]
                     .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
             } else {
                 feature = features[f];
@@ -124,14 +124,19 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                         rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                                     });
                                     const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g) && layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
-                                    bodyProperties && bodyProperties.forEach(val => {
+                                    if (bodyProperties) {
+                                      bodyProperties.forEach(val => {
                                         // Check if rowItem[val] is a string and if it has ,
-                                        const contentArr = typeof rowItem[val.trim()] !== 'number' &&
-                                            rowItem[val.trim()].includes(',') ? rowItem[val.trim()].split(',') : [];
+                                        const contentArr =
+                                          typeof rowItem[val.trim()] !== 'number' &&
+                                          rowItem[val.trim()].includes(',')
+                                            ? rowItem[val.trim()].split(',')
+                                            : [];
                                         if (contentArr.length > 1) {
-                                            rowItem[val] = contentArr.join(', ');
+                                          rowItem[val] = contentArr.join(', ');
                                         }
-                                    });
+                                      });
+                                    }
                                     const bodySection = bodyProperties ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                                     content =
                                         `<div>` +
@@ -166,7 +171,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         }
         // Todo - we need to be able to render popups from just tileset data as well
         if (!content) {
-            return
+            return false;
             // content = Mustache.render(layer.popup.body, feature.properties);
         }
 

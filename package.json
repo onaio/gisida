@@ -43,6 +43,7 @@
     "ignore": [
       "build/gisida.js",
       "build/gisida.js.map",
+      "node_modules",
       "test/*"
     ]
   },
