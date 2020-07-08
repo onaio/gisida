@@ -62,17 +62,17 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         let feature;
         for (let f = 0; f < features.length; f += 1) {
             /** Get feature based on period for timeseries layer */
-            if (layers[activeLayerId].aggregate.timeseries) {
+            if (layers[activeLayerId] && layers[activeLayerId].aggregate &&
+                layers[activeLayerId].aggregate.timeseries && features.length > 1) {
                 feature = features.find((tilesetFeature) =>
-                    tilesetFeature.properties && 
+                    tilesetFeature.properties &&
                     tilesetFeature.properties[layers[activeLayerId]
-                    .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
+                        .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
             } else {
                 feature = features[f];
             }
-            layerId = feature && feature.layer && feature.layer.id;
+            layerId = feature && feature.layer && feature.layer.id || activeLayerId;
             layer = layerId && layers[layerId];
-
             if (layer && layer.type !== 'chart') {
                 // check for timeseries layer data or non-timeseries layer data
                 // define data to loop through looking for join matches
@@ -103,7 +103,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                  */
                                 if (layer.popup && layer.popup.hideNulls) {
                                     Object.keys(rowItem).forEach((k) => {
-                                        if (( typeof rowItem[k] === "string" && rowItem[k].toLowerCase() === 'n/a' || rowItem[k] === '' && rowItem[k] === null)) {
+                                        if ((typeof rowItem[k] === "string" && rowItem[k].toLowerCase() === 'n/a' || rowItem[k] === '' && rowItem[k] === null)) {
                                             delete rowItem[k];
                                         }
                                     });
@@ -125,17 +125,17 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                     });
                                     const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g) && layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
                                     if (bodyProperties) {
-                                      bodyProperties.forEach(val => {
-                                        // Check if rowItem[val] is a string and if it has ,
-                                        const contentArr =
-                                          typeof rowItem[val.trim()] !== 'number' &&
-                                          rowItem[val.trim()].includes(',')
-                                            ? rowItem[val.trim()].split(',')
-                                            : [];
-                                        if (contentArr.length > 1) {
-                                          rowItem[val] = contentArr.join(', ');
-                                        }
-                                      });
+                                        bodyProperties.forEach(val => {
+                                            // Check if rowItem[val] is a string and if it has ,
+                                            const contentArr =
+                                                typeof rowItem[val.trim()] !== 'number' &&
+                                                    rowItem[val.trim()].includes(',')
+                                                    ? rowItem[val.trim()].split(',')
+                                                    : [];
+                                            if (contentArr.length > 1) {
+                                                rowItem[val] = contentArr.join(', ');
+                                            }
+                                        });
                                     }
                                     const bodySection = bodyProperties ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                                     content =
@@ -170,10 +170,10 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             if (content) break;
         }
         // Todo - we need to be able to render popups from just tileset data as well
-        if (!content) {
-            return false;
-            // content = Mustache.render(layer.popup.body, feature.properties);
-        }
+        // if (!content) {
+        //     return false;
+        //     // content = Mustache.render(layer.popup.body, feature.properties);
+        // }
 
         // Add popup if content exists
         if (content) {
