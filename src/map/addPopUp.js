@@ -123,7 +123,12 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                     found.forEach(i => {
                                         rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                                     });
-                                    const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g) && layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
+                                    const bodyProperties =
+                                      layer.popup.body &&
+                                      layer.popup.body.match(/{{(.*?)\}}/g) &&
+                                      layer.popup.body
+                                        .match(/{{(.*?)\}}/g)
+                                        .map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
                                     if (bodyProperties) {
                                         bodyProperties.forEach(val => {
                                             // Check if rowItem[val] is a string and if it has ,
@@ -137,15 +142,25 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                             }
                                         });
                                     }
+                                    let commaSeparatedList = ''; 
+                                    if (layer.popup['commaSeparatedListValue']) {
+                                        let listItem = rowItem[layer.popup['commaSeparatedListValue']].split(',').map((item) => {
+                                            return `<li style=text-align:left;>${item}</li>`;
+                                        });
+                                        listItem = JSON.stringify(listItem).
+                                        replace(/,/g, '').replace(/"/g, '').replace('[', '').replace(']', '');
+                                       commaSeparatedList =  `<ul class=commaSeparatedList type=circle style=margin:0px>${listItem}</ul>`;
+                                    };
                                     const bodySection = bodyProperties ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                                     content =
                                         `<div>` +
                                         `<div><b>${row[layer.popup.header]}</b></div>` +
                                         `<div><center>${bodySection}</center></div>` +
+                                        `<div><center>${commaSeparatedList}</center></div>` +
                                         `</div>`;
                                 }
                             } else {
-                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) || '';
+                                content = layer.popup.body ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                             }
                             break;
                         }
