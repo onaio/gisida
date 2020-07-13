@@ -143,8 +143,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                         });
                                     }
                                     let commaSeparatedList = ''; 
-                                    if (layer.popup['commaSeparatedListValue']) {
-                                        let listItem = rowItem[layer.popup['commaSeparatedListValue']].split(',').map((item) => {
+                                    if (layer.popup.commaSeparatedListValue) {
+                                        let listItem = rowItem[layer.popup.commaSeparatedListValue].split(',').map((item) => {
                                             return `<li style=text-align:left;>${item}</li>`;
                                         });
                                         listItem = JSON.stringify(listItem).
