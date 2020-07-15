@@ -144,7 +144,13 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                     }
                                     let commaSeparatedList = ''; 
                                     if (layer.popup.commaSeparatedListValue) {
-                                        let listItem = rowItem[layer.popup.commaSeparatedListValue].split(',').map((item) => {
+                                        let listedValues;
+                                        if (Array.isArray(rowItem[layer.popup.commaSeparatedListValue])) {
+                                            listedValues = rowItem[layer.popup.commaSeparatedListValue];
+                                        } else {
+                                            listedValues = rowItem[layer.popup.commaSeparatedListValue].split(',');
+                                        }
+                                        let listItem = listedValues.map((item) => {
                                             return `<li style=text-align:left;>${item}</li>`;
                                         });
                                         listItem = JSON.stringify(listItem).
