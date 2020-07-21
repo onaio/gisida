@@ -65,7 +65,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             if (layers[activeLayerId] && layers[activeLayerId].aggregate &&
                 layers[activeLayerId].aggregate.timeseries && features.length > 1) {
                 feature = features.find((tilesetFeature) =>
-                    tilesetFeature.properties &&
+                    tilesetFeature && tilesetFeature.properties &&
                     tilesetFeature.properties[layers[activeLayerId]
                         .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
             } else {
