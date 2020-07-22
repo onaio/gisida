@@ -149,6 +149,7 @@ class SupAuthZ {
     let Prop;
     let prop;
     let propName;
+    let dashboardProp;
     let layerName;
     let propKeys;
 
@@ -169,8 +170,14 @@ class SupAuthZ {
           // Check User Auth Prop for View specific Auth (exclude Public Views)
         } else if (Prop.indexOf('VIEW.') === 0 && user[Prop] === 'OK') {
           // Define actual View name
-          [, propName] = Prop.split('.');
-
+          [, propName, dashboardProp] = Prop.split('.');
+          // push users for various dashboards
+          if (propName === 'dashboards'){
+            if (!authConfig.VIEWS[`${propName}.${dashboardProp}`]) {
+              authConfig.VIEWS[`${propName}.${dashboardProp}`] = [];
+            }
+            authConfig.VIEWS[`${propName}.${dashboardProp}`].push(user.username);
+          }
           if (propName === 'Iframe') {
             if (!authConfig.VIEWS[propName]) {
               authConfig.VIEWS[propName] = [];
@@ -185,7 +192,6 @@ class SupAuthZ {
             // Add username to list of authorized users
             if (prop) authConfig.VIEWS[prop].push(user.username);
           }
-
           // Check User Auth Prop for Layer specific Auth (exclude Public Layers)
         } else if (Prop.indexOf('LAYER.') === 0 && user[Prop] === 'OK') {
           // Define actual Layer name
