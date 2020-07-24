@@ -22,19 +22,28 @@ An authentication XLSForm is created that adopts the following format. On the su
 
 The form should then be uploaded to a project in Ona. Use [Link a dataset as a media file to another form](https://help.ona.io/knowledge-base/how-do-i-link-a-dataset-as-a-media-file-to-another-form/) to get the data in a CSV. The CSV id is then used as the `"authConfig"` id in site-config
 
-**NOTE** 
+**NOTE**
 Users added to the form should be added to the project where the form is located as Collaborators.
 
 Utilizing a form CSV attachment containing supplementary authorization configs, the dashboard handles role-based access and permissions. This CSV shall be shared with the client's Admin account from the onasupport account, and uses the following format:
 
-|username|VIEW.Home|VIEW.Summary|LAYER.layer-id-1|
-|--------|---------| -----------|----------------|
-| user1  | OK      | null       | OK             |
-| user2  | null    | OK         | null           |
-| user3  | OK      | null       | null           |
+|username|VIEW.Home|VIEW.Iframe|VIEW.Summary|LAYER.layer-id-1|VIEW.dashboards.Nutrition-Cluster|VIEW.dashboards.CP-Dashboard|
+|:--------|:---------|:----|:-----------|:----------------|:---------|:-----|
+| user1  | OK      |OK| null       | OK             |    OK     |null|
+| user2  | null    |OK| OK         | null           |null|OK|
+| user3  | OK      |null| OK       | OK          |     null    |null|
 
-In the above table, only users1 and user3 have access to the dashboard Home page and neither have access to a Summary page, while user2 has access to ONLY the Summary page. Similarly, this format supports user level layer permissions, which can be managed by adding layers as columns, and decice whether or not a particular user has access to a layer.
+In the above table,
+User 1 has access to the Home page and the Iframes, he however does not have access to the Summary page.
+User 2 has access to the Summary page and the Iframe without the Home page.
+User 3 has access to the Home page and the Summary page without the Iframes.
+
+User 1 has access to the Nutrition dashboard while User 2 has acces to the CP dasboard.
+User 3 does not have access to any of the dashboards.
+
+Similarly, this format supports user level layer permissions, which can be managed by adding layers as columns, and decide whether or not a particular user has access to a layer.
 
 * **username** : The Ona account username for a given user.
 * **VIEW.{X}** : `X` signifies the React component responsible for the page-level view.
-* **LAYER.{Y}** : `Y` signifies the ID of the layer, usually the name of the JSON layer config file.
+* **VIEW.dasboards.{Y}** : `Y` signifies the name of the dashboard, should be _-_ separated.
+* **LAYER.{Z}** : `Z` signifies the ID of the layer, usually the name of the JSON layer config file.
