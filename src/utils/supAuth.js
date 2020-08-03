@@ -178,6 +178,13 @@ class SupAuthZ {
             }
             authConfig.VIEWS[`${propName}.${dashboardProp}`].push(user.username);
           }
+          if (propName === 'Summary') {
+            if (!authConfig.VIEWS[propName]) {
+              authConfig.VIEWS[propName] = [];
+            }
+            // Add username to list of authorized users
+            authConfig.VIEWS[propName].push(user.username);
+          }
           if (propName === 'Iframe') {
             if (!authConfig.VIEWS[propName]) {
               authConfig.VIEWS[propName] = [];
