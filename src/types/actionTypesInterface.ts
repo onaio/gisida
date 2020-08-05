@@ -20,5 +20,6 @@ export interface actionTypes {
     RECEIVE_DATA:string;
     UPDATE_TIMESERIES:string;
     TRIGGER_SPINNER:string;
+    SET_CLOSED_LEGEND: string;
 }
 

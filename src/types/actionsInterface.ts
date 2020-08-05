@@ -47,4 +47,5 @@ export interface Actions {
     locationUpdated(MapId:string):AnyAction;
     setLocation(mapId:string, loc:any):AnyAction;
     toggleMapLocation(loc:any):AnyAction;
+    setClosedLegendLayer(mapId:string, layerId: string):AnyAction;
 }
