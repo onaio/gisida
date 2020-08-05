@@ -28,6 +28,7 @@ export const TRIGGER_SPINNER = 'TRIGGER_SPINNER';
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export const RESET_FILTERED_LAYER = 'RESET_FILTERED_LAYER';
 export const TOGGLE_CATEGORIES = 'TOGGLE_CATEGORIES';
+export const SET_CLOSED_LEGEND = 'SET_CLOSED_LEGEND';
 
 // Auth action types
 export const INIT_AUTH = 'INIT_AUTH';

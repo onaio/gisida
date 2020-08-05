@@ -335,6 +335,12 @@ export const setMenuScroll = (mapId, scrollTop) => ({
   scrollTop,
 });
 
+export const setClosedLegendLayer = (mapId, layerId) => ({
+  type: types.SET_CLOSED_LEGEND,
+  mapId,
+  layerId,
+});
+
 export default {
   initApp,
   initStyles,
@@ -383,4 +389,5 @@ export default {
   loginError,
   fetchFormsError,
   logoutUser,
+  setClosedLegendLayer
 };
