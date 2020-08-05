@@ -29,6 +29,7 @@ const defaultState = {
   ],
   REGIONS: [],
   MAP: {
+    closedLegendLayerId: null,
     isRendered: false,
     isLoaded: false,
     reloadLayers: false,

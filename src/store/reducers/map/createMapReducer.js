@@ -23,6 +23,7 @@ import primaryLayerReducer from './primaryLayerReducer';
 import primarySubLayerReducer from './primarySubLayerReducer';
 import reloadLayerIdReducer from './reloadLayerIdReducer';
 import menuScrollReducer from './menuScrollReducer';
+import closedLegendReducer from './closedLegendReducer';
 
 function mapRendered(state, action) {
   return {
@@ -386,6 +387,13 @@ function triggerSpinner(state, action) {
   };
 }
 
+function setClosedLegendLayer(state, action) {
+  return {
+    ...state,
+    closedLegendLayerId: closedLegendReducer(state.closedLegendLayerId, action),
+  };
+}
+
 export function createMapReducer(mapId) {
   const initialState = defaultState.MAP;
   initialState.mapId = mapId;
@@ -463,6 +471,10 @@ export function createMapReducer(mapId) {
         }
         case types.TRIGGER_SPINNER: {
           return triggerSpinner(state, action);
+        }
+        case types.SET_CLOSED_LEGEND: {
+          console.log('set closed legend');
+          return setClosedLegendLayer(state, action);
         }
         default:
           return state;

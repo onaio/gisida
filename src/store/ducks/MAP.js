@@ -22,6 +22,7 @@ export {
   RECEIVE_DATA,
   UPDATE_TIMESERIES,
   TRIGGER_SPINNER,
+  SET_CLOSED_LEGEND,
 } from '../constants/actionTypes';
 
 export {
@@ -46,6 +47,7 @@ export {
   receiveData,
   updateTimeseries,
   triggerSpinner,
+  setClosedLegendLayer,
 } from '../actions/actions';
 export const reducerName = 'map-1';
 export default MAP;
