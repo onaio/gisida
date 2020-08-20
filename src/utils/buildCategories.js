@@ -1,6 +1,6 @@
 /**
  * Build gisida-react menu categories
- * @param {Array} LAYERS Array layers
+ * @param {Object} LAYERS Holds layers and groups
  * @param {Object} MAP Map object
  */
 export default function buildCategories(LAYERS, MAP) {
