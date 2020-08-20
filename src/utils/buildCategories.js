@@ -1,3 +1,8 @@
+/**
+ * Build gisida-react menu categories
+ * @param {Array} LAYERS Array layers
+ * @param {Object} MAP Map object
+ */
 export default function buildCategories(LAYERS, MAP) {
   if (Object.keys(LAYERS.groups).length) {
     const groupMapper = (layer, group) => {
