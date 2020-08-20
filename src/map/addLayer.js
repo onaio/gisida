@@ -59,7 +59,8 @@ export default function (layer, mapConfig, dispatch) {
     const breaks = stops[3];
     const colors = stops[4];
     const currPeriod = stops[2][stops[2].length - 1];
-    const layerData = layer.source.data.features || layer.source.data;
+    const layerData = layer.mergedData.features || layer.mergedData ||
+     layer.source.data.features || layer.source.data;
     const activeData = layerData.map(d => d.properties || d);
     let Data;
     if (timefield) {
