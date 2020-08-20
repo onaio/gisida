@@ -3,7 +3,7 @@ import { LAYERS, layerCategories } from '../fixtures/layers';
 import { MAP } from '../fixtures/mapObject';
 
 describe('buildCategories', () => {
-  test('Should return status of token expiry', () => {
+  test('Should return categories', () => {
     expect(buildCategories(LAYERS, MAP)).toEqual(layerCategories);
   });
 });
