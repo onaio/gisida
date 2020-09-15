@@ -17,7 +17,15 @@ function fetchURL(path, mimeType, callback) {
   xobj.onreadystatechange = () => {
     if (xobj.readyState === 4) {
       if (xobj.status === 200) {
-        callback(xobj.responseText);
+        let response = xobj.responseText;
+
+        try {
+          JSON.parse(response);
+        } catch (e) {
+          response = null;
+        }
+
+        callback(response);
       } else {
         callback(null);
       }
