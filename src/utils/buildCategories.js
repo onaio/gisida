@@ -7,6 +7,8 @@ export default function buildCategories(LAYERS, MAP) {
   if (Object.keys(LAYERS.groups).length) {
     const groupMapper = (layer, group) => {
       if (typeof layer === 'string') {
+        if (!MAP.layers[layer]) return undefined;
+
         const { id, category, label } = MAP.layers[layer];
         return {
           id,
