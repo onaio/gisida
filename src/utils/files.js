@@ -17,15 +17,7 @@ function fetchURL(path, mimeType, callback) {
   xobj.onreadystatechange = () => {
     if (xobj.readyState === 4) {
       if (xobj.status === 200) {
-        let response = xobj.responseText;
-
-        try {
-          JSON.parse(response);
-        } catch (e) {
-          response = null;
-        }
-
-        callback(response);
+        callback(xobj.responseText);
       } else {
         callback(null);
       }
@@ -36,7 +28,15 @@ function fetchURL(path, mimeType, callback) {
 
 export function loadJSON(path, callback, id) {
   fetchURL(path, 'application/json', response => {
-    callback(JSON.parse(response), id);
+    let stringResponse = response;
+    // Handle if response is html
+    try {
+      JSON.parse(stringResponse);
+    } catch (error) {
+      stringResponse = null;
+    }
+
+    callback(JSON.parse(stringResponse), id);
   });
 }
 
