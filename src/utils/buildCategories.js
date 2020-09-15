@@ -7,7 +7,12 @@ export default function buildCategories(LAYERS, MAP) {
   if (Object.keys(LAYERS.groups).length) {
     const groupMapper = (layer, group) => {
       if (typeof layer === 'string') {
-        return MAP.layers[layer];
+        const { id, category, label } = MAP.layers[layer];
+        return {
+          id,
+          category,
+          label,
+        };
       }
       const subGroup = {};
       Object.keys(layer).forEach(l => {
@@ -44,7 +49,12 @@ export default function buildCategories(LAYERS, MAP) {
             layers: [],
           };
         }
-        categories[category].layers.push(MAP.layers[l]);
+
+        categories[category].layers.push({
+          label: MAP.layers[l].label,
+          category: MAP.layers[l].category,
+          id: MAP.layers[l].id,
+        });
       }
     });
     categories = Object.keys(categories).map(c => categories[c]);
