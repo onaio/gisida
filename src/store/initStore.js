@@ -46,9 +46,9 @@ export function addMapLayerToStore(layerObj, mapId, store) {
   store.dispatch(actions.addLayer(mapId, layerToAdd));
 
   // load and prepare layer if visible and not loaded
-  if (layerObj.visible) {
-    store.dispatch(actions.toggleLayer(mapId, layerObj.id, true));
-    prepareLayer(mapId, layerObj, store.dispatch);
+  if (layerToAdd.visible) {
+    store.dispatch(actions.toggleLayer(mapId, layerToAdd.id, true));
+    prepareLayer(mapId, layerToAdd, store.dispatch);
   }
 }
 
@@ -65,8 +65,8 @@ export function getMapLayer(layer, mapId, store, callback) {
       layer.indexOf('http') !== -1 || layer.indexOf('/') === 0
         ? layer
         : `config/layers/${layer}.json`;
-    // load local or remote layer spec
 
+    // load local or remote layer spec
     loadJSON(path, layerObj => {
       // parse layer id from action.group for urls
       if (layerObj) {
@@ -97,16 +97,25 @@ export function getMapLayer(layer, mapId, store, callback) {
 }
 
 export function loadLayers(mapId, store, layers) {
-  const layerIds = [];
+  const layerIds = []; // lookup list for all ids that are to be added to store
 
   const addCategoriesToStore = (isLayerAdded, layer) => {
     if (!isLayerAdded) {
+      /**
+       * If layer has not been added e.g if a 404 is returned, remove the layer from
+       * the layerIds look up
+       */
       const index = layerIds.indexOf(layer);
 
       if (index > -1) {
         layerIds.splice(index, 1);
       }
     }
+
+    /**
+     * If the number of layers in layerIds lookup matches the layers added in the store, i.e
+     * we've finished adding the layers, then we can now build the categories
+     */
     if (Object.keys(store.getState()['map-1'].layers).length === layerIds.length) {
       store.dispatch(actions.buildCategories(store.getState().LAYERS, store.getState()['map-1']));
     }
