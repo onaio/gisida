@@ -53,11 +53,10 @@ describe('actions', () => {
     const groupId = 'group-id';
     const expectedAction = {
       type: types.ADD_LAYER_GROUP,
-      mapId,
       groupId,
       group,
     };
-    expect(actions.addLayerGroup(mapId, groupId, group)).toEqual(expectedAction);
+    expect(actions.addLayerGroup(groupId, group)).toEqual(expectedAction);
   });
 
   test('should create an action to change region', () => {

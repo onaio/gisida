@@ -45,9 +45,8 @@ export const addLayer = (mapId, layer) => ({
   mapId,
 });
 
-export const addLayerGroup = (mapId, groupId, group) => ({
+export const addLayerGroup = (groupId, group) => ({
   type: types.ADD_LAYER_GROUP,
-  mapId,
   groupId,
   group,
 });
