@@ -297,7 +297,7 @@ export const loginUser = token => {
   };
 };
 
-export const getUserForms = (token) => {
+export const getUserForms = token => {
   const reqConfig = {
     token,
     endpoint: 'forms',
@@ -306,7 +306,7 @@ export const getUserForms = (token) => {
   return dispatch => fetchAPIForms(reqConfig, dispatch);
 };
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = () => dispatch => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('state');
   dispatch(receiveLogout());
@@ -333,6 +333,12 @@ export const setMenuScroll = (mapId, scrollTop) => ({
   type: types.SET_MENU_SCROLL,
   mapId,
   scrollTop,
+});
+
+export const buildCategories = (groups, mapLayers) => ({
+  type: types.BUILD_CATEGORIES,
+  groups,
+  mapLayers,
 });
 
 export default {
@@ -383,4 +389,5 @@ export default {
   loginError,
   fetchFormsError,
   logoutUser,
+  buildCategories,
 };

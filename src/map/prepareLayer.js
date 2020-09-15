@@ -172,6 +172,8 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   } else if (!layerObj.labels.labelData) {
     // Load labels from CSV
     loadCSV(layerObj.labels.data, labelData => {
+      if (!labelData) return;
+
       layerObj.labels.labelData = labelData;
 
       // if no timeseries, build one set of labels
@@ -218,6 +220,8 @@ function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       : typeof sourceURL === 'object' && sourceURL !== null && sourceURL.type;
   if (fileType === 'csv') {
     loadCSV(layerObj.source.data, data => {
+      if (!data) return;
+
       let parsedData;
       if (layerObj.source.type === 'geojson') {
         parsedData = csvToGEOjson(layerObj, data);
@@ -616,7 +620,8 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (!relation) {
         mergedData = basicMerge(i, mergedData, data[i]);
       } else if (isManyToOne) {
-        const hasCustomFilter = layerObj && layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
+        const hasCustomFilter =
+          layerObj && layerObj.aggregate && layerObj.aggregate.hasCustomFilter;
 
         mergedData = manyToOneMerge(
           isVectorLayer ? i + 1 : i,

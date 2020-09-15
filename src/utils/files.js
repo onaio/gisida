@@ -1,10 +1,13 @@
 import { parse } from 'papaparse';
 
 export function parseCSV(text, config) {
-  return (parse(text, (config || {
-    header: true,
-    skipEmptyLines: true,
-  })).data);
+  return parse(
+    text,
+    config || {
+      header: true,
+      skipEmptyLines: true,
+    }
+  ).data;
 }
 
 function fetchURL(path, mimeType, callback) {
@@ -12,15 +15,19 @@ function fetchURL(path, mimeType, callback) {
   xobj.overrideMimeType(mimeType);
   xobj.open('GET', path, true);
   xobj.onreadystatechange = () => {
-    if (xobj.readyState === 4 && xobj.status === 200) {
-      callback(xobj.responseText);
+    if (xobj.readyState === 4) {
+      if (xobj.status === 200) {
+        callback(xobj.responseText);
+      } else {
+        callback(null);
+      }
     }
   };
   xobj.send(null);
 }
 
 export function loadJSON(path, callback, id) {
-  fetchURL(path, 'application/json', (response) => {
+  fetchURL(path, 'application/json', response => {
     callback(JSON.parse(response), id);
   });
 }
@@ -42,19 +49,23 @@ export async function fetchCSV(path, Init) {
   }
   return fetch(path, init)
     .then(res => res.text())
-    .then(res => parse(res, {
-      header: true,
-      skipEmptyLines: true,
-    }))
+    .then(res =>
+      parse(res, {
+        header: true,
+        skipEmptyLines: true,
+      })
+    )
     .then(res => res.data);
 }
 
 export function loadCSV(path, callback) {
-  fetchURL(path, 'text/csv', (response) => {
-    callback(parse(response, {
-      header: true,
-      skipEmptyLines: true,
-    }).data);
+  fetchURL(path, 'text/csv', response => {
+    callback(
+      parse(response, {
+        header: true,
+        skipEmptyLines: true,
+      }).data
+    );
   });
 }
 

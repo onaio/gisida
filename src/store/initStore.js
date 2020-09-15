@@ -12,6 +12,7 @@ import {
   LAYERS,
   MAP,
   AUTH,
+  CATEGORIES,
 } from './reducers';
 
 import { loadJSON } from '../utils/files';
@@ -29,74 +30,117 @@ const defaultReducers = {
   APP,
   AUTH,
   'map-1': MAP,
+  CATEGORIES,
 };
-export function loadLayers(mapId, dispatch, layers) {
-  // Check if config has list of layers and add them to store
-  if ((Array.isArray(layers) && layers.length) || Object.keys(layers).length) {
-    // helper function to handle layers from spec
-    const mapLayers = Layer => {
-      const layer = typeof Layer === 'string' ? Layer : { ...Layer };
-      // callback function for handling json repsponse
-      function addLayerToStore(responseObj) {
-        const layerObj = responseObj;
-        // parse layer id from action.group for urls
+
+/**
+ * Add map layer object to store
+ * @param {*} layerObj
+ */
+export function addMapLayerToStore(layerObj, mapId, store) {
+  const layerToAdd = {
+    ...layerObj,
+    loaded: false,
+  };
+  // add layer to MAP.layers store
+  store.dispatch(actions.addLayer(mapId, layerToAdd));
+
+  // load and prepare layer if visible and not loaded
+  if (layerObj.visible) {
+    store.dispatch(actions.toggleLayer(mapId, layerObj.id, true));
+    prepareLayer(mapId, layerObj, store.dispatch);
+  }
+}
+
+/**
+ * Get the map layer object for the given layer and add to store
+ * @param {*} layer
+ * @param {*} mapId
+ * @param {*} dispatch
+ */
+export function getMapLayer(layer, mapId, store, callback) {
+  // load json layer spec files
+  if (typeof layer === 'string') {
+    const path =
+      layer.indexOf('http') !== -1 || layer.indexOf('/') === 0
+        ? layer
+        : `config/layers/${layer}.json`;
+    // load local or remote layer spec
+
+    loadJSON(path, layerObj => {
+      // parse layer id from action.group for urls
+      if (layerObj) {
         const pathSplit = layer.split('/');
-        const layerId = pathSplit[pathSplit.length - 1];
-        layerObj.id = layerId;
-
-        // add layer to MAP.layers store
-        layerObj.loaded = false;
-        dispatch(actions.addLayer(mapId, layerObj));
-
-        // load and prepare layer if visible and not loaded
-        if (layerObj.visible && !layerObj.loaded) {
-          dispatch(actions.toggleLayer(mapId, layerObj.id, true));
-          prepareLayer(mapId, layerObj, dispatch);
-        }
+        addMapLayerToStore(
+          {
+            ...layerObj,
+            id: pathSplit[pathSplit.length - 1],
+          },
+          mapId,
+          store
+        );
+        callback(true, layer);
+      } else {
+        callback(false, layer);
       }
-
-      // load json layer spec files
-      if (typeof layer === 'string') {
-        const path =
-          layer.indexOf('http') !== -1 || layer.indexOf('/') === 0
-            ? layer
-            : `config/layers/${layer}.json`;
-        // load local or remote layer spec
-        return loadJSON(path, addLayerToStore);
-      } else if (layer instanceof Object && layer.type) {
-        // use existing layer spec object
-        layer.loaded = false;
-        dispatch(actions.addLayer(mapId, layer));
-        if (layer.visible && !layer.loaded) {
-          dispatch(actions.toggleLayer(mapId, layer.id, true));
-          prepareLayer(mapId, layer, dispatch);
-        }
-        return true;
-      }
-
-      Object.keys(layer).forEach(key => {
-        layer[key].map(mapLayers);
+    });
+  } else if (layer instanceof Object && layer.type) {
+    addMapLayerToStore(layer, mapId, store);
+    callback(true, layer.id);
+  } else {
+    Object.keys(layer).forEach(key => {
+      layer[key].forEach(l => {
+        getMapLayer(l, mapId, store, callback);
       });
+    });
+  }
+}
 
-      return true;
+export function loadLayers(mapId, store, layers) {
+  const layerIds = [];
+
+  const addCategoriesToStore = (isLayerAdded, layer) => {
+    if (!isLayerAdded) {
+      const index = layerIds.indexOf(layer);
+
+      if (index > -1) {
+        layerIds.splice(index, 1);
+      }
+    }
+    if (Object.keys(store.getState()['map-1'].layers).length === layerIds.length) {
+      store.dispatch(actions.buildCategories(store.getState().LAYERS, store.getState()['map-1']));
+    }
+  };
+
+  if (Array.isArray(layers)) {
+    // add layers to store array
+    store.dispatch(actions.addLayersList(layers));
+    // handle all layers
+    layers.forEach(layer => getMapLayer(layer, mapId, store, addCategoriesToStore));
+  } else {
+    const groupKeys = Object.keys(layers);
+    const addLayerId = layer => {
+      if (typeof layer === 'string') {
+        if (layerIds.indexOf(layer) === -1) {
+          layerIds.push(layer);
+        }
+      } else {
+        Object.keys(layer).forEach(key => {
+          layer[key].forEach(addLayerId);
+        });
+      }
     };
 
-    if (Array.isArray(layers)) {
+    // loop through all groups of layers
+    for (let g = 0; g < groupKeys.length; g += 1) {
+      // Add layer ids for current group
+      layers[groupKeys[g]].forEach(addLayerId);
       // add layers to store array
-      dispatch(actions.addLayersList(layers));
-      // handle all layers
-      layers.map(mapLayers);
-    } else {
-      const groupKeys = Object.keys(layers);
-      // loop through all groups of layers
-      for (let g = 0; g < groupKeys.length; g += 1) {
-        // add layers to store array
-        dispatch(actions.addLayersList(layers[groupKeys[g]]));
-        // add group to store object
-        dispatch(actions.addLayerGroup(mapId, groupKeys[g], layers[groupKeys[g]]));
-        // handle layers from group
-        layers[groupKeys[g]].map(mapLayers);
-      }
+      store.dispatch(actions.addLayersList(layers[groupKeys[g]]));
+      // add group to store object
+      store.dispatch(actions.addLayerGroup(mapId, groupKeys[g], layers[groupKeys[g]]));
+      // handle layers from group
+      layers[groupKeys[g]].forEach(layer => getMapLayer(layer, mapId, store, addCategoriesToStore));
     }
   }
 }
@@ -113,7 +157,7 @@ function addConfigToStore(store, config) {
   }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
-  loadLayers('map-1', store.dispatch, config.LAYERS);
+  loadLayers('map-1', store, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
