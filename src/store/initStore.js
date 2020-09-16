@@ -58,17 +58,29 @@ export function addMapLayerToStore(layerObj, mapId, dispatch) {
  * @param {*} mapId
  * @param {*} dispatch
  */
-export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp) {
+export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp, defaultLayers) {
   // load json layer spec files
   if (typeof layer === 'string') {
-    const existingLayerObj = layerObjLookUp[layer];
-
-    if (existingLayerObj) {
+    if (layerObjLookUp && layerObjLookUp[layer]) {
+      const existingLayerObj = layerObjLookUp[layer];
       /**
        * If layer obj exists in the look up, no need to perform HTTP GET call,
        * use the layer object in the lookup
        */
-      addMapLayerToStore(existingLayerObj, mapId, dispatch);
+      let isLayerVisible = false;
+
+      if (defaultLayers && defaultLayers.indexOf(layer) > -1) {
+        isLayerVisible = true;
+      }
+
+      addMapLayerToStore(
+        {
+          ...existingLayerObj,
+          visible: isLayerVisible,
+        },
+        mapId,
+        dispatch
+      );
       callback(true, layer);
     } else {
       const path =
@@ -101,13 +113,13 @@ export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp) {
   } else {
     Object.keys(layer).forEach(key => {
       layer[key].forEach(l => {
-        getMapLayer(l, mapId, dispatch, callback, layerObjLookUp);
+        getMapLayer(l, mapId, dispatch, callback, layerObjLookUp, defaultLayers);
       });
     });
   }
 }
 
-export function loadLayers(mapId, dispatch, layers, layerObjLookUp = {}, store = null) {
+export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayers, store = null) {
   const layerIds = []; // lookup list for all ids that are to be added to store
 
   const addCategoriesToStore = (isLayerAdded, layer) => {
@@ -145,7 +157,7 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp = {}, store =
 
     // handle all layers
     layers.forEach(layer =>
-      getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp)
+      getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers)
     );
   } else {
     if (mapId === 'map-1') {
@@ -177,7 +189,7 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp = {}, store =
     Object.keys(layers).forEach(key => {
       // handle layers from group
       layers[key].forEach(layer =>
-        getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp)
+        getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers)
       );
     });
   }
@@ -195,7 +207,7 @@ function addConfigToStore(store, config) {
   }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
-  loadLayers('map-1', store.dispatch, config.LAYERS, {}, store);
+  loadLayers('map-1', store.dispatch, config.LAYERS, null, null, store);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
