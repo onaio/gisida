@@ -170,7 +170,10 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
 
     // handle all layers
     layers.forEach(layer => {
-      addLayerId(layer);
+      if (mapId === 'map-1') {
+        addLayerId(layer);
+      }
+
       getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers);
     });
   } else {
