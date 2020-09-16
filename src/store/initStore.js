@@ -149,6 +149,19 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
     }
   };
 
+  // Add layer to layerId lookup
+  const addLayerId = layer => {
+    if (typeof layer === 'string') {
+      if (layerIds.indexOf(layer) === -1) {
+        layerIds.push(layer);
+      }
+    } else {
+      Object.keys(layer).forEach(key => {
+        layer[key].forEach(addLayerId);
+      });
+    }
+  };
+
   if (Array.isArray(layers)) {
     if (mapId === 'map-1') {
       // add layers to store array. Done only when initialzing map-1
@@ -156,25 +169,15 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
     }
 
     // handle all layers
-    layers.forEach(layer =>
-      getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers)
-    );
+    layers.forEach(layer => {
+      addLayerId(layer);
+      getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers);
+    });
   } else {
     if (mapId === 'map-1') {
       /** Add groups and layers list when intializing map-1 only, no
        * need to do this for other maps
        */
-      const addLayerId = layer => {
-        if (typeof layer === 'string') {
-          if (layerIds.indexOf(layer) === -1) {
-            layerIds.push(layer);
-          }
-        } else {
-          Object.keys(layer).forEach(key => {
-            layer[key].forEach(addLayerId);
-          });
-        }
-      };
 
       Object.keys(layers).forEach(key => {
         // Add layer ids for current group
