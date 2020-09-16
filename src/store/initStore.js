@@ -129,8 +129,11 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp = {}, store =
      * If the number of layers in layerIds lookup matches the layers added in the store, i.e
      * we've finished adding the layers, then we can now build the categories
      */
-    if (Object.keys(store.getState()[mapId].layers).length === layerIds.length) {
-      dispatch(actions.buildCategories(store.getState().LAYERS, store.getState()[mapId]));
+    const mapLayers = store.getState()[mapId].layers;
+
+    if (Object.keys(mapLayers).length === layerIds.length) {
+      const { groups } = store.getState().LAYERS;
+      dispatch(actions.buildCategories(groups, mapLayers));
     }
   };
 
