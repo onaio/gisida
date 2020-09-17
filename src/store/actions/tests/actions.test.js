@@ -1,6 +1,8 @@
-import * as actions from '../../../src/store/actions/actions';
-import * as types from '../../../src/store/constants/actionTypes';
-import defaultState from '../../../src/store/defaultState';
+import * as actions from '../actions';
+import * as types from '../../constants/actionTypes';
+import defaultState from '../../defaultState';
+import { LAYERS } from '../../../../test/fixtures/layers';
+import { MAP } from '../../../../test/fixtures/mapObject';
 
 const layerId = 'test-layer';
 const layer = { id: layerId };
@@ -426,5 +428,13 @@ describe('actions', () => {
       parent,
     };
     expect(actions.toggleGroups(mapId, group, index, isRefresh, parent)).toEqual(expectedAction);
+  });
+
+  it('should create an action to build categories', () => {
+    expect(actions.buildCategories(LAYERS.groups, MAP.layers)).toEqual({
+      type: types.BUILD_CATEGORIES,
+      groups: LAYERS.groups,
+      mapLayers: MAP.layers,
+    });
   });
 });
