@@ -1,10 +1,6 @@
-import { LOC } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import {
-  INIT_LOC,
-  SET_LOCATION,
-  TOGGLE_MAP_LOCATION,
-} from '../../../src/store/constants/actionTypes';
+import LOC from '../loc';
+import defaultState from '../../defaultState';
+import { INIT_LOC, SET_LOCATION, TOGGLE_MAP_LOCATION } from '../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('LOC', () => {

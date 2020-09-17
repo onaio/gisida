@@ -1,6 +1,6 @@
-import { APP } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { INIT_APP } from '../../../src/store/constants/actionTypes';
+import APP from '../app';
+import defaultState from '../../defaultState';
+import { INIT_APP } from '../../constants/actionTypes';
 
 describe('APP', () => {
   it('should return the initial state', () => {

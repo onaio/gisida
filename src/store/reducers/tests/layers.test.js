@@ -1,6 +1,6 @@
-import { LAYERS } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { ADD_LAYERS_LIST, ADD_LAYER_GROUP } from '../../../src/store/constants/actionTypes';
+import LAYERS from '../layers';
+import defaultState from '../../defaultState';
+import { ADD_LAYERS_LIST, ADD_LAYER_GROUP } from '../../constants/actionTypes';
 
 describe('LAYERS', () => {
   const stateEmpty = {};
