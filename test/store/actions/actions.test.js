@@ -416,7 +416,7 @@ describe('actions', () => {
     const group = 'group-id';
     const index = 0;
     const isRefresh = false;
-    const count = 'parent';
+    const parent = 'parent';
     const expectedAction = {
       type: types.TOGGLE_GROUPS,
       group,
