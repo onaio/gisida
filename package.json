@@ -90,8 +90,7 @@
     "redux-thunk": "^2.2.0",
     "simple-statistics": "^5.2.0",
     "uglifyjs-webpack-plugin": "1.1.5",
-    "webpack": "^4.0.0",
-    "memoize-one": "^5.1.1"
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.1.2",

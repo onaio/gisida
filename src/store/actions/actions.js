@@ -125,13 +125,13 @@ export const toggleCategories = (mapId, category, index, isRefresh) => ({
   mapId,
 });
 
-export const toggleGroups = (mapId, group, index, isRefresh, count) => ({
+export const toggleGroups = (mapId, group, index, isRefresh, parent) => ({
   type: types.TOGGLE_GROUPS,
   group,
   index,
   isRefresh,
   mapId,
-  count,
+  parent,
 });
 
 export const receiveData = (mapId, layer, timeseries) => ({

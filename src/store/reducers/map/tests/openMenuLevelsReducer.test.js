@@ -62,7 +62,7 @@ describe('openMenuLevelsReducer', () => {
       index: 0,
       isRefresh: false,
       mapId,
-      count: 0,
+      parent: 'parent-1',
     };
 
     // Case 1: State is empty
@@ -77,7 +77,7 @@ describe('openMenuLevelsReducer', () => {
     expect(openMenuLevelsReducer([], actionIndex)).toEqual([
       {
         group: 'group',
-        count: 0,
+        parent: 'parent-1',
       },
     ]);
 
@@ -97,18 +97,20 @@ describe('openMenuLevelsReducer', () => {
 
     // Case 2: State is NOT empty
     const stateOld = [
-      { group: 'group', count: 0 },
-      { group: 'group2', count: 1 },
+      { group: 'group', parent: 'parent-1' },
+      { group: 'group2', parent: 'parent-2' },
     ];
     // Case 2.1: action.isRefresh is false
     // Case 2.1.1: action.index > -1
-    expect(openMenuLevelsReducer(stateOld, action)).toEqual([{ group: 'group2', count: 1 }]);
+    expect(openMenuLevelsReducer(stateOld, action)).toEqual([
+      { group: 'group2', parent: 'parent-2' },
+    ]);
     // Case 2.1.2: action.index <= -1
     expect(openMenuLevelsReducer(stateOld, actionIndex)).toEqual([
       ...stateOld,
       {
         group: 'group',
-        count: 0,
+        parent: 'parent-1',
       },
     ]);
     // Case 2.2: action.isRefresh is true
