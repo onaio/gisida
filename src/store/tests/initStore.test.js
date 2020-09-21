@@ -111,6 +111,17 @@ describe('store/getMapLayer', () => {
       `http://example.com/${layer2}.json`,
       expect.any(Function)
     );
+    expect(store.getActions()).toEqual([
+      {
+        type: types.ADD_LAYER,
+        layer: {
+          ...layerObj2,
+          loaded: false,
+          id: `${layer2}.json`,
+        },
+        mapId,
+      },
+    ]);
 
     // layer name starts with /
     store.clearActions();
@@ -119,6 +130,17 @@ describe('store/getMapLayer', () => {
       `/config/layers/${layer2}.json`,
       expect.any(Function)
     );
+    expect(store.getActions()).toEqual([
+      {
+        type: types.ADD_LAYER,
+        layer: {
+          ...layerObj2,
+          loaded: false,
+          id: `${layer2}.json`,
+        },
+        mapId,
+      },
+    ]);
   });
 
   it('it does not add layer string to store if JSON response falsy', () => {
