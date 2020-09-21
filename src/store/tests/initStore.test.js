@@ -10,9 +10,10 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 const mapId = 'map-1';
 const prepareLayerSpy = jest.spyOn(prepareLayer, 'default').mockImplementation(() => jest.fn());
-const store = mockStore(defaultState);
 
 describe('store/addMapLayerToStore', () => {
+  const store = mockStore(defaultState);
+
   beforeEach(() => {
     store.clearActions();
     jest.clearAllMocks();
@@ -66,6 +67,7 @@ describe('store/addMapLayerToStore', () => {
 });
 
 describe('store/getMapLayer', () => {
+  const store = mockStore(defaultState);
   const layerObjLookUp = {
     [layer1]: {
       ...layerObj1,

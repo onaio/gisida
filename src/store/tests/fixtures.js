@@ -119,3 +119,18 @@ export const layerObj2 = {
 export const layerGroup = {
   'Safety Nets Cash Distribution - 2020': [layer1, layer2],
 };
+
+export const configLayers = {
+  'Group 1': [
+    {
+      'Sub group 1': [
+        {
+          'Sub sub group 1': [layer1],
+        },
+        {
+          'Sub sub group 2': [layer2],
+        },
+      ],
+    },
+  ],
+};

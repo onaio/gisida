@@ -119,7 +119,7 @@ export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp, de
   }
 }
 
-export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayers, store = null) {
+export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayers) {
   const layerIds = []; // lookup list for all ids that are to be added to store
 
   const addCategoriesToStore = (isLayerAdded, layer) => {
@@ -141,10 +141,11 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
      * If the number of layers in layerIds lookup matches the layers added in the store, i.e
      * we've finished adding the layers, then we can now build the categories
      */
-    const mapLayers = store.getState()[mapId].layers;
+    const currentState = dispatch(actions.getCurrentState());
+    const mapLayers = currentState[mapId].layers;
 
     if (Object.keys(mapLayers).length === layerIds.length) {
-      const { groups } = store.getState().LAYERS;
+      const { groups } = currentState.LAYERS;
       dispatch(actions.buildCategories(groups, mapLayers));
     }
   };
@@ -213,7 +214,7 @@ function addConfigToStore(store, config) {
   }
   store.dispatch(actions.initStyles(config.STYLES, config.APP.mapConfig));
   store.dispatch(actions.initRegions(config.REGIONS, config.APP.mapConfig));
-  loadLayers('map-1', store.dispatch, config.LAYERS, null, null, store);
+  loadLayers('map-1', store.dispatch, config.LAYERS);
   loadJSON('config/locations.json', locations => store.dispatch(actions.initLocations(locations)));
 }
 
