@@ -271,7 +271,7 @@ The application requires a `public/config/site-config.json` to initialize the Ma
 
 Let's go over each of the keys in the `site-config.json` file
 
-1. `APP` : The `APP` key expects and object. Contains properties for the site settings
+1. `APP` : The `APP` key expects and object and ontains properties for the site settings. The following are the properties supported
 
 - `mapConfig`: An object that contains keys for setting the values for the properties for
   interacting with the map. More information about each of these properties including their defaults
