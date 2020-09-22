@@ -220,6 +220,8 @@ We can also pull data from different forms and join the various form data. Here 
         },
 ```
 
+The `site-config.json` property `APP.supersetBase` should also be provided as described in the creating the config file section below
+
 <br>
 
 **Pulling Directly from Mapbox**
