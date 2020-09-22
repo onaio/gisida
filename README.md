@@ -96,8 +96,7 @@ Let's go over each of the keys in the `site-config.json` file
   to search the layers. The search box is not enabled and not displayed by default
 - `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
   to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
-- `layerSupersetLinks` **(Optional) (Premium)** : Uses the ONA superset API to access the data for a specific
-  layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value
+- `layerSupersetLinks` **(Optional, Gisida React Private)** : Uses the ONA superset API to access the data for a specific layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value. More information at the [Map View and Data View Documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md)
 
   e.g
 
@@ -110,6 +109,8 @@ Let's go over each of the keys in the `site-config.json` file
   **Note** : Adding the query parameter `standalone=true` loads the iframe without the navigation bar
   with the login links. This is because in cases where authentication is enabled for your app, the
   user will be logged in automically into superset
+
+- `hasNavBar` **(Optional, Gisida React Private)**: Set to true if the app has a navigation bar as a result of configuring the [Data View](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md) or any other feature that makes use of the [NavBar](https://github.com/onaio/gisida-react-private/tree/master/src/components/NavBar)
 
 2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
    between styles
