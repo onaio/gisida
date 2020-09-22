@@ -134,7 +134,7 @@ Let's go over each of the keys in the `site-config.json` file
   }
 ```
 
-4. `SUPERSET_CONFIGS` **(Optional Gisida React Private)**: This object holds the properties necessary to interact with superset mainly to load the iframes. The following properties for this object are available
+4. `SUPERSET_CONFIGS` **(Optional, Gisida React Private)**: This object holds the properties necessary to interact with superset mainly to load the iframes. The following properties for this object are available
 
 - `iframes`: Used to display the dashboard. The keys are the dashboard tab names and the links as the values
 
