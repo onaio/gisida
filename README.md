@@ -110,6 +110,7 @@ Let's go over each of the keys in the `site-config.json` file
   user will be logged in automically into superset
 
 - `hasNavBar` **(Optional, Gisida React Private)**: Set value to `true` if the app has a navigation bar as a result of configuring the [Data View](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md) or any other feature that makes use of the [NavBar](https://github.com/onaio/gisida-react-private/tree/master/src/components/NavBar). This property mainly helps the CSS styling to applied appropriately depending on whether the `NavBar` is present or not.
+- `supersetBase`: **(Optional, Gisida React Private)**: The base API URL for superset e.g `"supersetBase": "https://discover.ona.io/"`. This base URL will be used to load datasets from superset
 
 2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
    between styles
