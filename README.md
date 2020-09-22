@@ -31,7 +31,7 @@ $ npm install gisida
 
 ### 1.Create config file
 
-- Create a `config.json` and save it in the application's root path. An example `config.json` file is provided below:
+The application requires a `public/config/site-config.json` to initialize the Map and load `public/config/layers/*.json` configurations. Create a `public/config/site-config.json` which will hold the configurations. An example of a `site-config` configuration is given below
 
 ```json
 {
@@ -116,11 +116,12 @@ Let's go over each of the keys in the `site-config.json` file
 2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
    between styles
 
-3. `LAYERS` : The `LAYERS` key expects an object. The top level keys are the category names and the values
-   can be an array of layer names or an array of objects with the group name as the key and an array of
-   layers as the value. The groups can be nested
+3. `LAYERS` : Can be an array or an object.
+
+An object is used if the layers are grouped. The top level keys are the category names and the values can be an array of layer names or an array of objects with the group name as the key and an array of layers as the value. The groups can be nested
 
 ```json
+
   "LAYERS": {
     "Category 1" : ["layer-1"],
     "Category 2" : ["layer-2"],
@@ -128,12 +129,30 @@ Let's go over each of the keys in the `site-config.json` file
       {
         "Group 1": ["layer-3"]
       },
-       {
+      {
         "Group 2": ["layer-4"]
+      },
+      {
+        "Group 3": {
+          "Sub group 1": ["layer-5", "layer-6"]
+        }
       }
     ]
   }
 ```
+
+If the layers are not grouped, add the values as an array
+
+```json
+
+"LAYERS": [
+  "layer-1",
+  "layer-2",
+  "layer-3"
+]
+```
+
+**NOTE**: The layer names above are exactly as they are in `public/config/layers/` without the extension `.json`. Thus a layer will not be displayed if it's not in `public/config/layers/`
 
 4. `SUPERSET_CONFIGS` **(Optional, Gisida React Private)**: This object holds the properties necessary to interact with superset mainly to load the iframes. The following properties for this object are available
 
