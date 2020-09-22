@@ -35,7 +35,9 @@ const defaultReducers = {
 
 /**
  * Add map layer object to store
- * @param {*} layerObj
+ * @param {object} layerObj map layer object
+ * @param {string} mapId map id
+ * @param {Function} dispatch redux dispatch method
  */
 export function addMapLayerToStore(layerObj, mapId, dispatch) {
   const layerToAdd = {
@@ -54,9 +56,14 @@ export function addMapLayerToStore(layerObj, mapId, dispatch) {
 
 /**
  * Get the map layer object for the given layer and add to store
- * @param {*} layer
- * @param {*} mapId
- * @param {*} dispatch
+ * If the layer is a string, a fetch is made to get the map layer object
+ * @param {string|object} layer string or layer object to be added to store
+ * @param {string} mapId map id
+ * @param {Function} dispatch redux dispatch method
+ * @param {Function} callback method to be called if the method is added to store
+ * @param {object} layerObjLookUp an object to look up the layer string to get the map object. If
+ * not present, a fetch will be done
+ * @param {array} defaultLayers default layers for the map
  */
 export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp, defaultLayers) {
   // load json layer spec files
@@ -119,6 +126,14 @@ export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp, de
   }
 }
 
+/**
+ * Traverve the layers and load them into the store
+ * @param {string} mapId map Id
+ * @param {Function} dispatch redux dispatch method
+ * @param {array|object} layers layers from site config to be added
+ * @param {object} layerObjLookUp object to be used for looking up a layer string
+ * @param {array} defaultLayers the map default layers
+ */
 export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayers) {
   const layerIds = []; // lookup list for all ids that are to be added to store
 
