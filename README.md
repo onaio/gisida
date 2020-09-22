@@ -45,7 +45,7 @@ yarn add gisida gisida-react
 
 Create `public/config/layers/` folder to hold the layer specifications.
 
-Create your layer `.json` files in this folder e.g To add a layer by the name `ken-health-sites`, create `public/config/layers/ken-health-sites.json` and add the layer configuration. The below is an example of a layer configuration
+Create your layer `.json` files in this folder e.g To add a layer by the name `ken-health-sites`, create `public/config/layers/ken-health-sites.json` and add the layer configuration. Below is an example of a layer configuration
 
 ```json
 {
