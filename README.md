@@ -110,7 +110,7 @@ Let's go over each of the keys in the `site-config.json` file
   with the login links. This is because in cases where authentication is enabled for your app, the
   user will be logged in automically into superset
 
-- `hasNavBar` **(Optional, Gisida React Private)**: Set to true if the app has a navigation bar as a result of configuring the [Data View](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md) or any other feature that makes use of the [NavBar](https://github.com/onaio/gisida-react-private/tree/master/src/components/NavBar)
+- `hasNavBar` **(Optional, Gisida React Private)**: Set value to `true` if the app has a navigation bar as a result of configuring the [Data View](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md) or any other feature that makes use of the [NavBar](https://github.com/onaio/gisida-react-private/tree/master/src/components/NavBar). This property mainly helps the CSS styling to applied appropriately depending on whether the `NavBar` is present or not.
 
 2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
    between styles
@@ -131,6 +131,29 @@ Let's go over each of the keys in the `site-config.json` file
         "Group 2": ["layer-4"]
       }
     ]
+  }
+```
+
+4. `SUPERSET_CONFIGS` **(Optional Gisida React Private)**: This object holds the properties necessary to interact with superset mainly to load the iframes. The following properties for this object are available
+
+- `iframes`: Used to display the dashboard. The keys are the dashboard tab names and the links as the values
+
+```json
+ "SUPERSET_CONFIGS": {
+  "iframes": {
+    "Tab 1": "https://discover.ona.io/superset/dashboard/<id>/?standalone=true",
+    "Tab 2": "https://discover.ona.io/superset/dashboard/<id>/?standalone=true",
+  }
+}
+```
+
+**NOTE**: If query param `standalone` with the value of `true` is not added as above, the iframe loaded will contain discover navigation menu which is unnecessary. Omitting `?standalone=true` will show the discover menu
+
+- `splashPage`: Used to display the splash page as an iframe. Accepts a single key `link` whose value is the link to the dashboard
+
+```json
+ "splashPage": {
+    "link": "https://discover.ona.io/superset/dashboard/<id>/?standalone=true"
   }
 ```
 
