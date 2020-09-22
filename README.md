@@ -113,8 +113,7 @@ Let's go over each of the keys in the `site-config.json` file
 - `supersetBase`: **(Optional)**: The base API URL for superset e.g `"supersetBase": "https://discover.ona.io/"`. This base URL will be used to load datasets from superset
 - `authConfig`: **(Optional)**: The ID of the ONA form that holds the layer and view permissions for the users. Read more on how to set this permissions at [Gisida OAuth Implementation](https://github.com/onaio/gisida/blob/master/docs/OAuth.md)
 
-2. `STYLES` : All mapbox styles avalialable for the including the default style. Allows users to switch
-   between styles
+2. `STYLES` : All mapbox styles available the **including the default style** specified in `APP.mapConfig.style`. If the array is more than 1, a user can swith between styles on the map to apply the preferred style.
 
 3. `LAYERS` : Can be an array or an object.
 
