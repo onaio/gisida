@@ -96,7 +96,7 @@ Let's go over each of the keys in the `site-config.json` file
   to search the layers. The search box is not enabled and not displayed by default
 - `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
   to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
-- `layerSupersetLinks` **(Optional, Gisida React Private)** : Uses the ONA superset API to access the data for a specific layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value. More information at the [Map View and Data View Documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md)
+- `layerSupersetLinks` **(Optional, Gisida React Private)** : Uses the ONA superset API to access the data for a specific layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value. More information can be found at the [Map View and Data View Documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md)
 
   e.g
 
@@ -136,7 +136,7 @@ Let's go over each of the keys in the `site-config.json` file
 
 4. `SUPERSET_CONFIGS` **(Optional, Gisida React Private)**: This object holds the properties necessary to interact with superset mainly to load the iframes. The following properties for this object are available
 
-- `iframes`: Used to display the dashboard. The keys are the dashboard tab names and the links as the values
+- `iframes`: Used to display the dashboard. The keys are the dashboard tab names and the links as the values. More information can be found at the [How to set up a superset dashboard documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/superset-dashboard.md)
 
 ```json
  "SUPERSET_CONFIGS": {
@@ -149,7 +149,7 @@ Let's go over each of the keys in the `site-config.json` file
 
 **NOTE**: If query param `standalone` with the value of `true` is not added as above, the iframe loaded will contain discover navigation menu which is unnecessary. Omitting `?standalone=true` will show the discover menu
 
-- `splashPage`: Used to display the splash page as an iframe. Accepts a single key `link` whose value is the link to the dashboard
+- `splashPage`: Used to display the splash page as an iframe. Accepts a single key `link` whose value is the link to the dashboard. More information can be found at the [How to set up a splash page as an iframe documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/superset-splash-page.md)
 
 ```json
  "splashPage": {
