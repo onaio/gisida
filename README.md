@@ -29,7 +29,7 @@ $ npm install gisida
 
 ## Getting Started
 
-### 1.Create config file
+### 1. Create config file
 
 The application requires a `public/config/site-config.json` to initialize the Map and load `public/config/layers/*.json` configurations. Create a `public/config/site-config.json` which will hold the configurations. An example of a `site-config` configuration is given below
 
@@ -114,6 +114,28 @@ Let's go over each of the keys in the `site-config.json` file
 - `authConfig`: **(Optional)**: The ID of the ONA form that holds the layer and view permissions for the users. Read more on how to set this permissions at [Gisida OAuth Implementation](https://github.com/onaio/gisida/blob/master/docs/OAuth.md)
 
 2. `STYLES` : All mapbox styles available the **including the default style** specified in `APP.mapConfig.style`. If the array is more than 1, a user can switch between styles on the map to apply the preferred style.
+
+```json
+"STYLES": [
+  {
+    "label": "Light",
+    "style": "mapbox://styles/mapbox/light-v9"
+  },
+  {
+    "label": "Streets",
+    "style": "mapbox://styles/mapbox/streets-v9"
+  },
+  {
+    "label": "Satellite",
+    "style": "mapbox://styles/mapbox/satellite-v9"
+  }
+]
+```
+
+Each array item is an object with following properties:
+
+- `label`: Name of the style
+- `style`: Mapbox stylesheet lovation
 
 3. `LAYERS` : Can be an array or an object.
 
