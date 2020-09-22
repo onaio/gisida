@@ -48,8 +48,7 @@ $ npm install gisida
     "accessToken": "<mapbox-studio-access-token>",
     "appIcon": "/img/gisida-logo.png",
     "appName": "GISIDA EXAMPLE",
-    "appColor": "darkslategrey",
-    "layersPath": "/layers"
+    "appColor": "#000",
   },
   "STYLES": [
     {
@@ -86,12 +85,12 @@ Let's go over each of the keys in the `site-config.json` file
   - `zoom` : The initial zoom level of the map
 
 - `accessToken` : Your Mapbox API access token
-- `appIcon` : The path to image that will be displayed as the logo on the top of the title bar
+- `appIcon` : The relative path to image that will be displayed as the logo on the top of the title bar
 - `appName`: The name for the app that will be displayed on the title bar
 - `appColor`: The app primary color that will be displyed most frequently across the screens such
   as the background of the title bar, buttons
 - `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name
-- `appLoginIcon` **(Optional)** : The path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used
+- `appLoginIcon` **(Optional)** : The relative path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used
 - `searchBar` **(Optional)** : Accepts a boolean value. Set to `true` if you would like a search box
   to search the layers. The search box is not enabled and not displayed by default
 - `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
