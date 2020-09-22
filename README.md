@@ -29,7 +29,204 @@ $ npm install gisida
 
 ## Getting Started
 
-### 1. Create config file
+Using the [gisida](https://github.com/onaio/gisida) and [gisida-react](https://github.com/onaio/gisida-react) libraries to create new dashboards is as simple as installing, importing, and initializing Gisida components and stores. Doing this in a [Create React App](https://github.com/facebook/create-react-app) project is recommended.
+
+### Prerequisites
+
+You must have created a new React project
+
+### 1. Install gisida and gisida-react packages
+
+```
+yarn add gisida gisida-react
+```
+
+### 2. Add Layers
+
+Create `public/config/layers/` folder to hold the layer specifications.
+
+Create your layer `.json` files in this folder e.g To add a layer by the name `ken-health-sites`, create `public/config/layers/ken-health-sites.json` and add the layer configuration. The below is an example of a layer configuration
+
+```json
+{
+  "label": "Kenya Health Sites",
+  "source": {
+    "type": "geojson",
+    "data": "data/ken_health_sites.geojson"
+  },
+  "type": "symbol",
+  "minZoom": 0,
+  "paint": {
+    "text-color": "#000",
+    "text-halo-color": "#fff",
+    "text-halo-width": 1.3,
+    "text-halo-blur": 1
+  },
+  "layout": {
+    "text-field": "{name} ({type})",
+    "text-offset": [0, 2],
+    "icon-image": "hospital-11",
+    "icon-allow-overlap": true,
+    "text-transform": "uppercase"
+  },
+  "visible": false,
+  "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
+}
+```
+
+### Data Sources
+
+Gisida supports various data sources. These include: <br>
+**csv -** A [csv](https://en.wikipedia.org/wiki/Comma-separated_values) file can be used solely as a source without joining it with any other source as long as it has geolocations columns i.e longitude and latitude. If the fields are named differently one will need to include geo-columns property on the layer spec as shown below.
+
+```
+"geo-columns": ["longitude", "latitude"]
+```
+
+An example of such a layer
+
+```json
+{
+  "label": "Kenya Health Sites",
+  "source": {
+    "type": "geojson",
+    "featureType": "Point",
+    "data": "data/ken_health_sites.csv"
+  },
+  "geo-columns": ["longs", "lats"],
+  "type": "symbol",
+  "minZoom": 0,
+  "paint": {
+    "text-color": "#000",
+    "text-halo-color": "#fff",
+    "text-halo-width": 1.3,
+    "text-halo-blur": 1
+  },
+  "layout": {
+    "text-field": "{name} ({type})",
+    "text-offset": [0, 2],
+    "icon-image": "hospital-11",
+    "icon-allow-overlap": true,
+    "text-transform": "uppercase"
+  },
+  "visible": false,
+  "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
+}
+```
+
+We can also join the csv with a vector layer being served from mapbox. To achieve this we need to add a columns with similar data on both datasets for the join to work.
+
+```
+"join":["vectorProp","csvProp"]
+```
+
+An example of such a layer
+
+```json
+{
+  "label": "Kenya Health Sites",
+  "source": {
+    "type": "vector",
+    "layer": "province",
+    "url": "mapbox://ona.cxeuuuuu",
+    "data": "data/ken_health_sites.csv",
+    "join": ["ADM2_EN", "province1"]
+  },
+  "type": "fill",
+  "minZoom": 0,
+  "categories": {
+    "breaks": "yes",
+    "color": "Greens",
+    "clusters": 3
+  },
+  "visible": false,
+  "credit": "Kenya Health Mapping Project"
+}
+```
+
+The url points to the tileset which is joined with the csv file on basis of the two files i.e ADM2_EN and province1
+<br>
+**geojson -** We use [geojon](https://geojson.org/) format mostly to build to render geometric centres (centroids) of regions on a map but they still can be used simmilarly as csv's. An example of geojson data source in action
+
+```json
+{
+  "label": "District Labels",
+  "source": {
+    "type": "geojson",
+    "data": "data/centroids-2.geojson"
+  },
+  "type": "symbol",
+  "minzoom": 0,
+  "paint": {
+    "text-color": "#000",
+    "text-halo-color": "#fff",
+    "text-halo-width": 1.3,
+    "text-halo-blur": 1
+  },
+  "layout": {
+    "text-size": 12,
+    "text-field": "{NAME}",
+    "text-transform": "uppercase",
+    "text-offset": [0, 0]
+  },
+  "visible": false,
+  "category": "Boundaries & Labels"
+}
+```
+
+To test whether the geojson file is working and is of right format you can paste it's content [here](http://geojson.io) and check whether it renders.
+<br>
+**onadata -** Gisida supports data coming from [Ona](https://ona.io/) forms. When building layers that pull data from Ona you will have to provide the form id on the layer spec.
+
+```
+"source": {
+        "type": "geojson",
+        "data": 899
+    }
+```
+
+We can also pull data from different forms and join the various form data. Here is an example.
+
+```
+"source": {
+        "type": "geojson",
+        "data": [
+            55,
+            56,
+        ],
+        "join": [
+            "pd_number",
+            "pd_number",
+        ],
+    }
+```
+
+<br>
+
+**superset slice -** Gisida supports [superset/canopy](https://canopyinsights.com/) slices. The slice are api's that hold unique id's. The splice id property should be provided on the layer spec. Here is an example of a superset layer in action:
+
+```
+"source": {
+            "type": "vector",
+            "data": {
+            "type": "superset",
+            "slice-id": 2238},
+            "layer": "homes",
+            "url": "mapbox://cncncncnc",
+            "join": [
+                "homes",
+                "homes"
+            ]
+        },
+```
+
+<br>
+
+**Pulling Directly from Mapbox**
+
+Ensure that the data file for the layer is located in the specified source path `data/ken_health_sites.geojson or a remote url that points to the file`.
+
+### 3. Create config file
 
 The application requires a `public/config/site-config.json` to initialize the Map and load `public/config/layers/*.json` configurations. Create a `public/config/site-config.json` which will hold the configurations. An example of a `site-config` configuration is given below
 
@@ -198,215 +395,25 @@ If the layers are not grouped, add the values as an array
   }
 ```
 
-### 2. Import and initializing the store.
+### 4. Import and initialize the store
 
-```javascript
+The following example is the bare minium required for a Gisida App
+
+```js
+import { Provider } from 'react-redux';
 import { initStore } from 'gisida';
+import { App, Map, Menu } from 'gisida-react';
 
 const store = initStore();
+ReactDOM.render((
+  <Provider store={store}>
+    <App>
+      <Map mapId="map-1">
+        <Menu />
+      </Map>
+    </App>
+  </Provider>
 ```
-
-### 3. Adding Layers
-
-- The `layersPath` propery under `APP.mapConfig` is used to define the folder that contains the layers files.
-
-- The `LAYERS` propery is a list that contains the filenames of the layers that should be loaded into state.
-
-**NOTE:** The filename is added withouth the `.json` extension in the config file.
-
-An example layer file in the path `/layers/ken-health-sites.json`
-
-```json
-{
-  "label": "Kenya Health Sites",
-  "source": {
-    "type": "geojson",
-    "data": "data/ken_health_sites.geojson"
-  },
-  "type": "symbol",
-  "minZoom": 0,
-  "paint": {
-    "text-color": "#000",
-    "text-halo-color": "#fff",
-    "text-halo-width": 1.3,
-    "text-halo-blur": 1
-  },
-  "layout": {
-    "text-field": "{name} ({type})",
-    "text-offset": [0, 2],
-    "icon-image": "hospital-11",
-    "icon-allow-overlap": true,
-    "text-transform": "uppercase"
-  },
-  "visible": false,
-  "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
-}
-```
-
-## Data Sources
-
-Gisida supports various data sources. These include: <br>
-**csv -** A [csv](https://en.wikipedia.org/wiki/Comma-separated_values) file can be used solely as a source without joining it with any other source as long as it has geolocations columns i.e longitude and latitude. If the fields are named differently one will need to include geo-columns property on the layer spec as shown below.
-
-```
-"geo-columns": ["longitude", "latitude"]
-```
-
-An example of such a layer
-
-```json
-{
-  "label": "Kenya Health Sites",
-  "source": {
-    "type": "geojson",
-    "featureType": "Point",
-    "data": "data/ken_health_sites.csv"
-  },
-  "geo-columns": ["longs", "lats"],
-  "type": "symbol",
-  "minZoom": 0,
-  "paint": {
-    "text-color": "#000",
-    "text-halo-color": "#fff",
-    "text-halo-width": 1.3,
-    "text-halo-blur": 1
-  },
-  "layout": {
-    "text-field": "{name} ({type})",
-    "text-offset": [0, 2],
-    "icon-image": "hospital-11",
-    "icon-allow-overlap": true,
-    "text-transform": "uppercase"
-  },
-  "visible": false,
-  "credit": "Global Healthsites Mapping Project<br>Aug 15, 2017"
-}
-```
-
-We can also join the csv with a vector layer being served from mapbox. To achieve this we need to add a columns with simmillar data on both datasets for the join to work.
-
-```
-"join":["vectorProp","csvProp"]
-```
-
-An example of such a layer
-
-```json
-{
-  "label": "Kenya Health Sites",
-  "source": {
-    "type": "vector",
-    "layer": "province",
-    "url": "mapbox://ona.cxeuuuuu",
-    "data": "data/ken_health_sites.csv",
-    "join": ["ADM2_EN", "province1"]
-  },
-  "type": "fill",
-  "minZoom": 0,
-  "categories": {
-    "breaks": "yes",
-    "color": "Greens",
-    "clusters": 3
-  },
-  "visible": false,
-  "credit": "Kenya Health Mapping Project"
-}
-```
-
-The url points to the tileset which is joined with the csv file on basis of the two files i.e ADM2_EN and province1
-<br>
-**geojson -** We use [geojon](https://geojson.org/) format mostly to build to render geometric centres (centroids) of regions on a map but they still can be used simmilarly as csv's. An example of geojson data source in action
-
-```json
-{
-  "label": "District Labels",
-  "source": {
-    "type": "geojson",
-    "data": "data/centroids-2.geojson"
-  },
-  "type": "symbol",
-  "minzoom": 0,
-  "paint": {
-    "text-color": "#000",
-    "text-halo-color": "#fff",
-    "text-halo-width": 1.3,
-    "text-halo-blur": 1
-  },
-  "layout": {
-    "text-size": 12,
-    "text-field": "{NAME}",
-    "text-transform": "uppercase",
-    "text-offset": [0, 0]
-  },
-  "visible": false,
-  "category": "Boundaries & Labels"
-}
-```
-
-To test whether the geojson file is working and is of right format you can paste it's content [here](http://geojson.io) and check whether it renders.
-<br>
-**onadata -** Gisida supports data coming from [Ona](https://ona.io/) forms. When building layers that pull data from Ona you will have to provide the form id on the layer spec.
-
-```
-"source": {
-        "type": "geojson",
-        "data": 899
-    }
-```
-
-We can also pull data from different forms and join the various form data. Here is an example.
-
-```
-"source": {
-        "type": "geojson",
-        "data": [
-            55,
-            56,
-        ],
-        "join": [
-            "pd_number",
-            "pd_number",
-        ],
-    }
-```
-
-<br>
-
-**superset slice -** Gisida supports [superset/canopy](https://canopyinsights.com/) slices. The slice are api's that hold unique id's. The splice id property should be provided on the layer spec. Here is an example of a superset layer in action:
-
-```
-"source": {
-            "type": "vector",
-            "data": {
-            "type": "superset",
-            "slice-id": 2238},
-            "layer": "homes",
-            "url": "mapbox://cncncncnc",
-            "join": [
-                "homes",
-                "homes"
-            ]
-        },
-```
-
-<br>
-
-**Pulling Directly from Mapbox**
-
-Ensure that the data file for the layer is located in the specified source path `data/ken_health_sites.geojson or a remote url that points to the file`.
-
-### 3. Actions
-
-Gisida provides in-build functions that trigger to process and managed data in the store;
-
-- prepareLayer
-- changeStyle
-- addLabels
-- addChart
-- addLegend
-- buildTimeSeriesData
-
-TODO: add documentation for Gisida API
 
 ## Development
 
