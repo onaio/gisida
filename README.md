@@ -334,7 +334,7 @@ Let's go over each of the keys in the `site-config.json` file
 Each array item is an object with following properties:
 
 - `label`: Name of the style
-- `style`: Mapbox stylesheet lovation
+- `style`: Mapbox stylesheet location
 
 3. `LAYERS` : Can be an array or an object.
 
