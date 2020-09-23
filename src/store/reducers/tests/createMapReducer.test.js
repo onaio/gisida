@@ -1,5 +1,5 @@
-import { MAP } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
+import MAP from '../map';
+import defaultState from '../../defaultState';
 import {
   MAP_RENDERED,
   MAP_LOADED,
@@ -22,7 +22,7 @@ import {
   REQUEST_DATA,
   UPDATE_TIMESERIES,
   TRIGGER_SPINNER,
-} from '../../../src/store/constants/actionTypes';
+} from '../../constants/actionTypes';
 import { mapId, layerId, layer, timeseries, layer2, layerId2 } from './common';
 
 describe('MAP', () => {

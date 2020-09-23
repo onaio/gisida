@@ -1,7 +1,6 @@
-import { LAYERS } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { ADD_LAYERS_LIST, ADD_LAYER_GROUP } from '../../../src/store/constants/actionTypes';
-import { mapId } from './common';
+import LAYERS from '../layers';
+import defaultState from '../../defaultState';
+import { ADD_LAYERS_LIST, ADD_LAYER_GROUP } from '../../constants/actionTypes';
 
 describe('LAYERS', () => {
   const stateEmpty = {};
@@ -82,7 +81,6 @@ describe('LAYERS', () => {
     const group = ['E1', 'E2'];
     const action = {
       type: ADD_LAYER_GROUP,
-      mapId,
       groupId,
       group,
     };

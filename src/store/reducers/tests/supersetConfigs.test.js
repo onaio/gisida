@@ -1,5 +1,5 @@
-import { SUPERSET_CONFIGS } from '../../../src/store/reducers';
-import { INIT_SUPERSET } from '../../../src/store/constants/actionTypes';
+import SUPERSET_CONFIGS from '../superset-config';
+import { INIT_SUPERSET } from '../../../store/constants/actionTypes';
 
 describe('SUPERSET_CONFIGS', () => {
   it('should return the initial state', () => {

@@ -110,6 +110,7 @@
     "mapbox-gl": "^0.53.1",
     "mock-browser": "^0.92.14",
     "prettier": "^1.16.4",
+    "redux-mock-store": "^1.5.4",
     "webpack-cli": "^3.3.6"
   }
 }

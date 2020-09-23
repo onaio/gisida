@@ -6,6 +6,7 @@ import locationsReducer from './store/reducers/locations';
 import regions from './store/reducers/regions';
 import styles from './store/reducers/styles';
 import supersetConfig from './store/reducers/superset-config';
+import CATEGORIES from './store/reducers/categories';
 import MAP, { createMapReducer } from './store/reducers/map';
 
 // eslint-disable-next-line no-underscore-dangle, global-require
@@ -18,7 +19,7 @@ gisida.initStore = require('./store/initStore').default;
 gisida.loadLayers = require('./store/initStore').loadLayers;
 gisida.reducerRegistry = require('./store/reducerRegistry').default;
 
-gisida.createMapReducer = createMapReducer
+gisida.createMapReducer = createMapReducer;
 gisida.defaultReducers = {
   APP,
   filter,
@@ -29,6 +30,7 @@ gisida.defaultReducers = {
   styles,
   supersetConfig,
   'map-1': MAP,
+  CATEGORIES,
 };
 gisida.Actions = require('./store/actions/actions').default;
 gisida.prepareLayer = require('./map/prepareLayer').default;
@@ -52,7 +54,6 @@ gisida.onaAuth = require('./connectors/ona-api/auth').default;
 gisida.getData = require('./connectors/ona-api/data').default;
 gisida.aggregateFormData = require('./connectors/ona-api/aggregateFormData').default;
 gisida.parseData = require('./utils/parseData').default;
-gisida.buildCategories = require('./utils/buildCategories').default;
 
 gisida.history = require('./helpers/history').default;
 gisida.oauthURL = require('./connectors/ona-api/auth').oauthURL;

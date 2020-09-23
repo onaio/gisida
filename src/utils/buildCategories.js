@@ -3,11 +3,18 @@
  * @param {Object} LAYERS Holds layers and groups
  * @param {Object} MAP Map object
  */
-export default function buildCategories(LAYERS, MAP) {
-  if (Object.keys(LAYERS.groups).length) {
+export default function buildCategories(groups, mapLayers) {
+  if (Object.keys(groups).length) {
     const groupMapper = (layer, group) => {
       if (typeof layer === 'string') {
-        return MAP.layers[layer];
+        if (!mapLayers[layer]) return undefined;
+
+        const { id, category, label } = mapLayers[layer];
+        return {
+          id,
+          category,
+          label,
+        };
       }
       const subGroup = {};
       Object.keys(layer).forEach(l => {
@@ -22,29 +29,34 @@ export default function buildCategories(LAYERS, MAP) {
       return subGroup;
     };
     // build list of LAYERS.categories populated with layers from MAP.layers
-    return Object.keys(LAYERS.groups).map(group => {
+    return Object.keys(groups).map(group => {
       return {
         category: group,
-        layers: LAYERS.groups[group]
+        layers: groups[group]
           .map(groupObjects => groupMapper(groupObjects, group))
           .filter(l => typeof l !== 'undefined'),
       };
     });
-  } else if (Object.keys(MAP.layers).length) {
+  } else if (Object.keys(mapLayers).length) {
     let categories = {};
     let category;
 
-    Object.keys(MAP.layers).forEach(l => {
-      if (MAP.layers[l].category) {
+    Object.keys(mapLayers).forEach(l => {
+      if (mapLayers[l].category) {
         // eslint-disable-next-line prefer-destructuring
-        category = MAP.layers[l].category;
+        category = mapLayers[l].category;
         if (!categories[category]) {
           categories[category] = {
             category,
             layers: [],
           };
         }
-        categories[category].layers.push(MAP.layers[l]);
+
+        categories[category].layers.push({
+          label: mapLayers[l].label,
+          category: mapLayers[l].category,
+          id: mapLayers[l].id,
+        });
       }
     });
     categories = Object.keys(categories).map(c => categories[c]);
