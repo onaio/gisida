@@ -299,23 +299,25 @@ Let's go over each of the keys in the `site-config.json` file
       ```
   - `preserveDrawingBuffer` : whether to preserve the buffers until manually cleared or overwritten.
 
-- `accessToken` : Your Mapbox API access token
-- `apiAccessToken` : Ona data/external api access token
-- `includeNavControls` : Boolean value determines if map controls will be included
-- `removeMapScale` : Show or hide map scale
-- `showSinglePeriods` : Show timeseries element for single periods
-- `NULL_LAYER_TEXT` : Custom Text to be shown when user has no access to a layer
-- `appIcon` : The relative path to image that will be displayed as the logo on the top of the title bar
-- `appName`: The name for the app that will be displayed on the title bar
+- `accessToken` : Your Mapbox API access token.
+- `hyperLink` : Add links and description to menu items. 
+- `authConfigApiMap` : Supplemental auth api string, can either be data or metadata.
+- `apiAccessToken` : Ona data/external api access token.
+- `includeNavControls` : Boolean value determines if map controls will be included.
+- `removeMapScale` : Show or hide map scale.
+- `showSinglePeriods` : Show timeseries element for single periods.
+- `NULL_LAYER_TEXT` : Custom Text to be shown when user has no access to a layer.
+- `appIcon` : The relative path to image that will be displayed as the logo on the top of the title bar.
+- `appName`: The name for the app that will be displayed on the title bar.
 - `appColor`: The app primary color that will be displyed most frequently across the screens such
-  as the background of the title bar, buttons
-- `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name
-- `appLoginIcon` **(Optional)** : The relative path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used
+  as the background of the title bar, buttons.
+- `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name.
+- `appLoginIcon` **(Optional)** : The relative path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used.
 - `searchBar` **(Optional)** : Accepts a boolean value. Set to `true` if you would like a search box
   to search the layers. The search box is not enabled and not displayed by default
-- `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed
-  to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour
-- `layerSupersetLinks` **(Optional, Gisida React Private)** : Uses the ONA superset API to access the data for a specific layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value. More information can be found at the [Map View and Data View Documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md)
+- `mapStateToUrl` **(Optional)** : Accepts a boolean value. Controls if selected layers should be pushed.
+  to the URL so as to build a shareable URL. This is enabled by default. Set to `false` if you do not want this behaviour.
+- `layerSupersetLinks` **(Optional, Gisida React Private)** : Uses the ONA superset API to access the data for a specific layer and loads it in an iframe. Applicable where a switch between Map View and Data View is configured. The key is the name of the layer, the superset API link as the value. More information can be found at the [Map View and Data View Documentation](https://github.com/onaio/gisida-react-private/blob/master/docs/map-data-view.md).
 
   e.g
 
