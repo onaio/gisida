@@ -281,9 +281,30 @@ Let's go over each of the keys in the `site-config.json` file
   - `style`: The default Mapbox style to be loaded from the Mapbox API of the
     form `mapbox://styles/:owner/:style`
   - `center`: The initial geographical centerpoint of the map (Uses longitude, latitude coordinated order).
-  - `zoom` : The initial zoom level of the map
+  - `zoom` : The initial zoom level of the map.
+  -  `mapBounds` : Map points when exporting i.e from south west to north east.
+      e.g 
+
+      ```
+      {
+        "_sw": {
+          "lng": 22.13636132811544,
+          "lat": -0.14320447808067627
+        },
+        "_ne": {
+          "lng": 62.89563867185916,
+          "lat": 11.188804478371793
+        }
+      }
+      ```
+  - `preserveDrawingBuffer` : whether to preserve the buffers until manually cleared or overwritten.
 
 - `accessToken` : Your Mapbox API access token
+- `apiAccessToken` : Ona data/external api access token
+- `includeNavControls` : Boolean value determines if map controls will be included
+- `removeMapScale` : Show or hide map scale
+- `showSinglePeriods` : Show timeseries element for single periods
+- `NULL_LAYER_TEXT` : Custom Text to be shown when user has no access to a layer
 - `appIcon` : The relative path to image that will be displayed as the logo on the top of the title bar
 - `appName`: The name for the app that will be displayed on the title bar
 - `appColor`: The app primary color that will be displyed most frequently across the screens such
