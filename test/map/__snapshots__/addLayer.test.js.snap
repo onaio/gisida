@@ -1996,6 +1996,177 @@ Object {
         "type": "categorical",
       },
       "circle-opacity": 0.8,
+      "circle-radius": Object {
+        "default": 0,
+        "property": "osm_id",
+        "stops": Array [
+          Array [
+            "R1720119",
+            3,
+          ],
+          Array [
+            "R1720070",
+            3,
+          ],
+          Array [
+            "R1720104",
+            3,
+          ],
+          Array [
+            "R1720102",
+            3,
+          ],
+          Array [
+            "R1720098",
+            3,
+          ],
+          Array [
+            "R1720085",
+            3,
+          ],
+          Array [
+            "R1720120",
+            3,
+          ],
+          Array [
+            "R1720112",
+            3,
+          ],
+          Array [
+            "R1720113",
+            3,
+          ],
+          Array [
+            "R1720115",
+            3,
+          ],
+          Array [
+            "R1720101",
+            3,
+          ],
+          Array [
+            "R1720076",
+            3,
+          ],
+          Array [
+            "R1720079",
+            3,
+          ],
+          Array [
+            "R1720100",
+            6,
+          ],
+          Array [
+            "R1720083",
+            6,
+          ],
+          Array [
+            "R1720129",
+            6,
+          ],
+          Array [
+            "R1720106",
+            6,
+          ],
+          Array [
+            "R1720087",
+            6,
+          ],
+          Array [
+            "R1720127",
+            6,
+          ],
+          Array [
+            "R1720135",
+            6,
+          ],
+          Array [
+            "R1720091",
+            6,
+          ],
+          Array [
+            "R1720096",
+            6,
+          ],
+          Array [
+            "R1720072",
+            6,
+          ],
+          Array [
+            "R1720107",
+            6,
+          ],
+          Array [
+            "R1720090",
+            6,
+          ],
+          Array [
+            "R1720130",
+            9,
+          ],
+          Array [
+            "R1720108",
+            9,
+          ],
+          Array [
+            "R1720118",
+            9,
+          ],
+          Array [
+            "R1720095",
+            9,
+          ],
+          Array [
+            "R1720136",
+            9,
+          ],
+          Array [
+            "R1720141",
+            9,
+          ],
+          Array [
+            "R1720138",
+            9,
+          ],
+          Array [
+            "R1720117",
+            9,
+          ],
+          Array [
+            "R1720089",
+            12,
+          ],
+          Array [
+            "R1720109",
+            12,
+          ],
+          Array [
+            "R1720123",
+            12,
+          ],
+          Array [
+            "R1720124",
+            12,
+          ],
+          Array [
+            "R1720088",
+            15,
+          ],
+          Array [
+            "R1720137",
+            18,
+          ],
+          Array [
+            "R1720125",
+            18,
+          ],
+          Array [
+            "R1720074",
+            21,
+          ],
+        ],
+        "type": "categorical",
+      },
       "circle-stroke-color": "#fff",
       "circle-stroke-opacity": 1,
       "circle-stroke-width": 1,

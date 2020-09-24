@@ -1,6 +1,6 @@
-import { REGIONS } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { INIT_REGIONS, CHANGE_REGION } from '../../../src/store/constants/actionTypes';
+import REGIONS from '../regions';
+import defaultState from '../../../store/defaultState';
+import { INIT_REGIONS, CHANGE_REGION } from '../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('REGIONS', () => {

@@ -27,8 +27,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         const {
             layers,
             timeseries,
+            activeLayerId
         } = currentState[mapId];
-
         // Generate list of active layers
         const activeLayers = [];
         Object.keys(layers).forEach((key) => {
@@ -56,15 +56,23 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         if (!features.length) return false;
 
         // Get layer data for feature under mouse pointer
-        let feature;
         let layerId;
         let layer;
         let data;
+        let feature;
         for (let f = 0; f < features.length; f += 1) {
-            feature = features[f];
-            layerId = feature && feature.layer && feature.layer.id;
+            /** Get feature based on period for timeseries layer */
+            if (layers[activeLayerId] && layers[activeLayerId].aggregate &&
+                layers[activeLayerId].aggregate.timeseries && features.length > 1) {
+                feature = features.find((tilesetFeature) =>
+                    tilesetFeature && tilesetFeature.properties &&
+                    tilesetFeature.properties[layers[activeLayerId]
+                        .aggregate.timeseries.field] === timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]);
+            } else {
+                feature = features[f];
+            }
+            layerId = feature && feature.layer && feature.layer.id || activeLayerId;
             layer = layerId && layers[layerId];
-
             if (layer && layer.type !== 'chart') {
                 // check for timeseries layer data or non-timeseries layer data
                 // define data to loop through looking for join matches
@@ -95,7 +103,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                  */
                                 if (layer.popup && layer.popup.hideNulls) {
                                     Object.keys(rowItem).forEach((k) => {
-                                        if (( typeof rowItem[k] === "string" && rowItem[k].toLowerCase() === 'n/a' || rowItem[k] === '' && rowItem[k] === null)) {
+                                        if ((typeof rowItem[k] === "string" && rowItem[k].toLowerCase() === 'n/a' || rowItem[k] === '' && rowItem[k] === null)) {
                                             delete rowItem[k];
                                         }
                                     });
@@ -115,26 +123,50 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                                     found.forEach(i => {
                                         rowItem[`${i}`] = rowItem[`${i}`].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                                     });
-                                    const bodyProperties = layer.popup.body.match(/{{(.*?)\}}/g).map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
-                                    bodyProperties.forEach(val => {
-                                        // Check if rowItem[val] is a string and if it has ,
-                                        const contentArr = typeof rowItem[val.trim()] !== 'number' &&
-                                            rowItem[val.trim()].includes(',') ? rowItem[val.trim()].split(',') : [];
-                                        if (contentArr.length > 1) {
-                                            rowItem[val] = contentArr.join(', ');
+                                    const bodyProperties =
+                                      layer.popup.body &&
+                                      layer.popup.body.match(/{{(.*?)\}}/g) &&
+                                      layer.popup.body
+                                        .match(/{{(.*?)\}}/g)
+                                        .map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
+                                    if (bodyProperties) {
+                                        bodyProperties.forEach(val => {
+                                            // Check if rowItem[val] is a string and if it has ,
+                                            const contentArr =
+                                                typeof rowItem[val.trim()] !== 'number' &&
+                                                    rowItem[val.trim()].includes(',')
+                                                    ? rowItem[val.trim()].split(',')
+                                                    : [];
+                                            if (contentArr.length > 1) {
+                                                rowItem[val] = contentArr.join(', ');
+                                            }
+                                        });
+                                    }
+                                    let commaSeparatedList = ''; 
+                                    if (layer.popup.commaSeparatedListValue) {
+                                        let listedValues;
+                                        if (Array.isArray(rowItem[layer.popup.commaSeparatedListValue])) {
+                                            listedValues = rowItem[layer.popup.commaSeparatedListValue];
+                                        } else {
+                                            listedValues = rowItem[layer.popup.commaSeparatedListValue].split(',');
                                         }
-                                    });
+                                        let listItem = listedValues.map((item) => {
+                                            return `<li style=text-align:left;>${item}</li>`;
+                                        });
+                                        listItem = JSON.stringify(listItem).
+                                        replace(/,/g, '').replace(/"/g, '').replace('[', '').replace(']', '');
+                                       commaSeparatedList =  `<ul class=commaSeparatedList type=circle style=margin:0px>${listItem}</ul>`;
+                                    };
+                                    const bodySection = bodyProperties ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                                     content =
                                         `<div>` +
                                         `<div><b>${row[layer.popup.header]}</b></div>` +
-                                        `<div><center>${Mustache.render(
-                                            layer.popup.body,
-                                            commaFormatting(layer, rowItem, true)
-                                        )}</center></div>` +
+                                        `<div><center>${bodySection}</center></div>` +
+                                        `<div><center>${commaSeparatedList}</center></div>` +
                                         `</div>`;
                                 }
                             } else {
-                                content = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true));
+                                content = layer.popup.body ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true)) : '';
                             }
                             break;
                         }
@@ -158,11 +190,11 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             }
             if (content) break;
         }
-
         // Todo - we need to be able to render popups from just tileset data as well
-        if (!content) {
-            // content = Mustache.render(layer.popup.body, feature.properties);
-        }
+        // if (!content) {
+        //     return false;
+        //     // content = Mustache.render(layer.popup.body, feature.properties);
+        // }
 
         // Add popup if content exists
         if (content) {

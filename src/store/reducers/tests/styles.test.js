@@ -1,6 +1,6 @@
-import { STYLES } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { INIT_STYLES, CHANGE_STYLE } from '../../../src/store/constants/actionTypes';
+import STYLES from '../styles';
+import defaultState from '../../defaultState';
+import { INIT_STYLES, CHANGE_STYLE } from '../../constants/actionTypes';
 import { mapId } from './common';
 
 describe('STYLES', () => {

@@ -1,6 +1,6 @@
-import { FILTER } from '../../../src/store/reducers';
-import defaultState from '../../../src/store/defaultState';
-import { SAVE_FILTER_STATE, FILTERS_UPDATED } from '../../../src/store/constants/actionTypes';
+import FILTER from '../filter';
+import defaultState from '../../defaultState';
+import { SAVE_FILTER_STATE, FILTERS_UPDATED } from '../../../store/constants/actionTypes';
 import { layerId, mapId } from './common';
 
 describe('FILTER', () => {

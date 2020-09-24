@@ -78,6 +78,7 @@ const defaultState = {
     layers: [],
     groups: {},
   },
+  CATEGORIES: [],
 };
 
 export default defaultState;

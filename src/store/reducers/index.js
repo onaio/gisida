@@ -8,3 +8,4 @@ export { default as STYLES } from './styles';
 export { default as SUPERSET_CONFIGS } from './superset-config';
 export { default as MAP } from './map/';
 export { default as AUTH } from './auth';
+export { default as CATEGORIES } from './categories';
