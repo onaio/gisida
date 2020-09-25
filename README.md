@@ -271,18 +271,18 @@ The application requires a `public/config/site-config.json` to initialize the Ma
 
 Let's go over each of the keys in the `site-config.json` file
 
-1. `APP` : The `APP` key expects and object and ontains properties for the site settings. The following are the properties supported
+1. `APP` **(Required)** : The `APP` key expects and object and ontains properties for the site settings. The following are the properties supported
 
-- `mapConfig`: An object that contains keys for setting the values for the properties for
+- `mapConfig` **(Required)** : An object that contains keys for setting the values for the properties for
   interacting with the map. More information about each of these properties including their defaults
   can be found at the [Mapbox GL JS API Reference](https://docs.mapbox.com/mapbox-gl-js/api/map/)
 
-  - `container`: Your HTML element in which Mapbox GL JS will render the map
-  - `style`: The default Mapbox style to be loaded from the Mapbox API of the
+  - `container` **(Required)** : Your HTML element in which Mapbox GL JS will render the map
+  - `style` **(Required)** : The default Mapbox style(basemap) to be loaded from the Mapbox API of the
     form `mapbox://styles/:owner/:style`
-  - `center`: The initial geographical centerpoint of the map (Uses longitude, latitude coordinated order).
-  - `zoom` : The initial zoom level of the map.
-  -  `mapBounds` : Map points when exporting i.e from south west to north east.
+  - `center` **(Required)** : The initial geographical centerpoint of the map (Uses longitude, latitude coordinated order).
+  - `zoom` **(Required)** : The initial zoom level of the map.
+  - `mapBounds` **(Optional)** : Map points when exporting i.e from south west to north east.
       e.g 
 
       ```
@@ -299,17 +299,18 @@ Let's go over each of the keys in the `site-config.json` file
       ```
   - `preserveDrawingBuffer` : whether to preserve the buffers until manually cleared or overwritten.
 
-- `accessToken` : Your Mapbox API access token.
-- `hyperLink` : Add links and description to menu items. 
-- `authConfigApiMap` : Supplemental auth api string, can either be data or metadata.
-- `apiAccessToken` : Ona data/external api access token.
-- `includeNavControls` : Boolean value determines if map controls will be included.
-- `removeMapScale` : Show or hide map scale.
-- `showSinglePeriods` : Show timeseries element for single periods.
-- `NULL_LAYER_TEXT` : Custom Text to be shown when user has no access to a layer.
-- `appIcon` : The relative path to image that will be displayed as the logo on the top of the title bar.
-- `appName`: The name for the app that will be displayed on the title bar.
-- `appColor`: The app primary color that will be displyed most frequently across the screens such
+- `accessToken` **(Required)** :  Your Mapbox basemap style API access token.
+- `hyperLink` **(Optional)** : Add links and description to menu items. 
+- `authConfigApiMap` **(Optional)** : Supplemental auth api string, can either be data or metadata. Defaults to metadata 
+    e.g https://api.ona.io/api/v1/data/467840.csv or https://api.ona.io/api/v1/metadata/467840.csv
+- `apiAccessToken` **(Optional)** : Ona data/external api access token.
+- `includeNavControls` **(Optional)** : Boolean value determines if map controls will be included. Defaults to true
+- `removeMapScale` **(Optional)** : Removes map scale. Defaults to false
+- `showSinglePeriods` **(Optional)** : Show timeseries for single periods. Defaults to false
+- `NULL_LAYER_TEXT` **(Optional)** : Custom Text to be shown when user has no access to a layer. Defaults to ``` You don't have permision to view this category```
+- `appIcon` **(Optional)** : The relative path to image that will be displayed as the logo on the top of the title bar.
+- `appName` **(Optional)** : The name for the app that will be displayed on the title bar.
+- `appColor` **(Required)** : The app primary color that will be displyed most frequently across the screens such
   as the background of the title bar, buttons.
 - `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name.
 - `appLoginIcon` **(Optional)** : The relative path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used.
@@ -335,7 +336,7 @@ Let's go over each of the keys in the `site-config.json` file
 - `supersetBase`: **(Optional)**: The base API URL for superset e.g `"supersetBase": "https://discover.ona.io/"`. This base URL will be used to load datasets from superset
 - `authConfig`: **(Optional)**: The ID of the ONA form that holds the layer and view permissions for the users. Read more on how to set this permissions at [Gisida OAuth Implementation](https://github.com/onaio/gisida/blob/master/docs/OAuth.md)
 
-2. `STYLES` : All mapbox styles available the **including the default style** specified in `APP.mapConfig.style`. If the array is more than 1, a user can switch between styles on the map to apply the preferred style.
+2. `STYLES` **(Optional)** : All mapbox styles available the **including the default style** specified in `APP.mapConfig.style`. If the array is more than 1, a user can switch between styles on the map to apply the preferred style.
 
 ```json
 "STYLES": [
