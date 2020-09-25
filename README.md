@@ -297,10 +297,15 @@ Let's go over each of the keys in the `site-config.json` file
         }
       }
       ```
-  - `preserveDrawingBuffer` : whether to preserve the buffers until manually cleared or overwritten.
+  - `preserveDrawingBuffer` **(Optional)** : whether to preserve the buffers until manually cleared or overwritten.
 
+- `appColor` **(Required)** : The app primary color that will be displayed most frequently across the screens such
+  as the background of the title bar, buttons.
 - `accessToken` **(Required)** :  Your Mapbox basemap style API access token.
-- `hyperLink` **(Optional)** : Add links and description to menu items. 
+- `hyperLink` **(Optional)** : Add links and description to menu items. More info on this setting can be found [here](https://github.com/onaio/gisida-react/blob/staging/docs/features/menu-legend-links.md)
+  - `description` **(Optional)** : Add's info link on sector/ categories
+  - `link` **(Optional)** Add's link on sector/category
+  
 - `authConfigApiMap` **(Optional)** : Supplemental auth api string, can either be data or metadata. Defaults to metadata 
     e.g https://api.ona.io/api/v1/data/467840.csv or https://api.ona.io/api/v1/metadata/467840.csv
 - `apiAccessToken` **(Optional)** : Ona data/external api access token.
@@ -310,8 +315,6 @@ Let's go over each of the keys in the `site-config.json` file
 - `NULL_LAYER_TEXT` **(Optional)** : Custom Text to be shown when user has no access to a layer. Defaults to ``` You don't have permision to view this category```
 - `appIcon` **(Optional)** : The relative path to image that will be displayed as the logo on the top of the title bar.
 - `appName` **(Optional)** : The name for the app that will be displayed on the title bar.
-- `appColor` **(Required)** : The app primary color that will be displyed most frequently across the screens such
-  as the background of the title bar, buttons.
 - `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name.
 - `appLoginIcon` **(Optional)** : The relative path to the image that that will be displayed on the login form if authentication is enabled. If not provided `appIcon` will be used.
 - `searchBar` **(Optional)** : Accepts a boolean value. Set to `true` if you would like a search box
