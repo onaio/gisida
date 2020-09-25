@@ -304,7 +304,20 @@ Let's go over each of the keys in the `site-config.json` file
 - `accessToken` **(Required)** :  Your Mapbox basemap style API access token.
 - `hyperLink` **(Optional)** : Add links and description to menu items. More info on this setting can be found [here](https://github.com/onaio/gisida-react/blob/staging/docs/features/menu-legend-links.md)
   - `description` **(Optional)** : Add's info link on sector/ categories
-  - `link` **(Optional)** Add's link on sector/category
+  - `link` **(Optional)** Add's link on sector/category.
+    e.g.
+    ```
+      "hyperLink": {
+        "Boundaries": {
+          "description": "desc",
+          "link": "https://gisida.com",
+        },
+        "BRCiS II Output Indicators": {
+          "link": "https://gisida.com",
+          "description": "desc"
+        }
+      }
+    ```
   
 - `authConfigApiMap` **(Optional)** : Supplemental auth api string, can either be data or metadata. Defaults to metadata 
     e.g https://api.ona.io/api/v1/data/467840.csv or https://api.ona.io/api/v1/metadata/467840.csv
