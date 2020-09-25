@@ -1,4 +1,5 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import * as actions from './actions/actions';
 import {
@@ -261,9 +262,9 @@ export default function initStore(
   const reducer = combine(reducerRegistry.getReducers());
   let store;
   if (loadState) {
-    store = createStore(reducer, loadState(), applyMiddleware(thunk));
+    store = createStore(reducer, loadState(), composeWithDevTools(applyMiddleware(thunk)));
   } else {
-    store = createStore(reducer, applyMiddleware(thunk));
+    store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
   }
 
   // Replace the store's reducer whenever a new reducer is registered.
