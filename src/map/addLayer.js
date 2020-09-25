@@ -169,11 +169,22 @@ export default function (layer, mapConfig, dispatch) {
             type: 'categorical',
           };
         }
-        const data = layer.source.data.features || layer.source.data;
-        const filteredData = layer.property
-          ? data.filter(d => (d.properties || d)[layer.property] !== undefined)
-          : [...data];
-        const dataCopy = layer.source.data.features
+        const data =  layer.mergedData.features || layer.mergedData || 
+          layer.source.data.features || layer.source.data;
+          let filteredData;
+          if (layer.property) {
+            if (data.features) {
+              filteredData = data.features.filter(feature => 
+                (feature.properties || feature)[layer.property] !== undefined);
+            } else {
+              filteredData = data.filter(d => 
+                (d.properties || d)[layer.property] !== undefined);
+            }
+          } else {
+            filteredData = [...data];
+          }
+        const dataCopy = layer.mergedData.features ||
+           layer.mergedData || layer.source.data.features
           ? {
             type: 'FeatureCollection',
             features: [...filteredData],
@@ -463,8 +474,7 @@ export default function (layer, mapConfig, dispatch) {
   //     }
   //   }
   // }
-
+  
   layerObj.styleSpec = styleSpec;
-
   return layerObj;
 }
