@@ -70,7 +70,7 @@ export default function sortLayers(map, layers, nextLayerId) {
 
         const detailViewActive = Object.keys(layers)
             .map(d => layers[d])
-            .filter(d => d['detail-view'] && !d['level-view']);
+            .filter(d => d['detail-view'] && !d['level-view'] && !d['type']);
         if (detailViewActive.length) {
             moveLayers(detailViewActive);
         }
