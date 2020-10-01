@@ -272,7 +272,7 @@ The application requires a `public/config/site-config.json` to initialize the Ma
 Let's go over each of the keys in the `site-config.json` file
 
 1. `APP` **(Required)** : The `APP` key expects and object and ontains properties for the site settings. The following are the properties supported
-
+- `oauthclientID`:  Oauth client id, needed to get the access token from the authorization server. 
 - `mapConfig` **(Required)** : An object that contains keys for setting the values for the properties for
   interacting with the map. More information about each of these properties including their defaults
   can be found at the [Mapbox GL JS API Reference](https://docs.mapbox.com/mapbox-gl-js/api/map/)
