@@ -1,8 +1,9 @@
 import superset from '@onaio/superset-connector';
+import { hint } from '@mapbox/geojsonhint';
 import csvToGEOjson from '../map/csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
 import { loadJSON, loadCSV } from '../utils/files';
-import { generateFilterOptions } from '../utils/filters';
+import { generateFilterOptions, generateFilterOptionsPrev } from '../utils/filters';
 import parseData from './../utils/parseData';
 import {renderData} from '../map/prepareLayer'
 import { getCurrentState } from '../store/actions/actions';
@@ -16,7 +17,8 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       && sourceURL !== null
       && sourceURL.type);
     if (fileType === 'csv') {
-      loadCSV(layerObj.source.data, (data) => {
+      loadCSV(layerObj.source.data, data => {
+        if (!data) return;
         let parsedData;
         if (layerObj.source.type === 'geojson') {
           parsedData = csvToGEOjson(layerObj, data);
@@ -37,7 +39,16 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
   
         layerObj.mergedData = filteredData;
         if (layerObj.aggregate && layerObj.aggregate.filter) {
-          layerObj.filterOptions = generateFilterOptions(layerObj);
+          if (layerObj.layers) {
+            const currentState = dispatch(getCurrentState());
+            layerObj.layers.forEach(sublayer => {
+              const subLayer = currentState.MAP.layers[sublayer];
+              subLayer.filterOptions = generateFilterOptions(subLayer);
+            });
+          }
+          layerObj.filterOptions = layerObj.aggregate.filterIsPrev
+          ? generateFilterOptionsPrev(layerObj)
+          : generateFilterOptions(layerObj);
         }
   
         if (layerObj.aggregate && layerObj.aggregate.type) {
@@ -50,7 +61,7 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       const path = typeof layerObj.source.data === 'string'
         ? layerObj.source.data
         : layerObj.source.data.url;
-      loadJSON(path, (data) => {
+      loadJSON(path, data => {
         if (layerObj['data-parse']) {
           layerObj.source.data = {
             ...data,
@@ -83,7 +94,15 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
       if (layerObj.aggregate && layerObj.aggregate.filter) {
         layerObj.filterOptions = generateFilterOptions(layerObj);
       }
-      renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      const geojsonErrors = hint(sourceURL.data).filter(e => e.level !== 'message');
+
+      if (!geojsonErrors || !geojsonErrors.length) {
+        renderData(mapId, layerObj, dispatch, doUpdateTsLayer);
+      } else {
+        /** Todo:Add growl notifications */
+        // eslint-disable-next-line no-console
+        console.warn('geojson hint errors', geojsonErrors);
+      }
     }
     if (fileType === 'superset') {
       const currentState = dispatch(getCurrentState());
@@ -98,10 +117,45 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
         res => res,
       ) // pass in callback func to process response
         .then((data) => {
-          const processedData = superset.processData(data);
+          let processedData = superset.processData(data);
           let parsedData;
+          if (layerObj['data-parse']) {
+            processedData = parseData(layerObj['data-parse'], processedData);
+          }
+            /**
+           * Build custom filter
+           * The custom filter introduces an extra field 'no_of_reports'.
+           * we depend on the field building the quant chart on the filter
+           */
+          if (layerObj && layerObj.aggregate && layerObj.aggregate.hasCustomFilter) {
+            const uniqueFacilities = [
+              ...new Set(processedData.map(facility => facility.facility_id)),
+            ];
+            const reportsPerFacility = {};
+            uniqueFacilities.forEach(facility => {
+              reportsPerFacility[facility] = processedData
+                .filter(facilityData => facilityData.facility_id === facility)
+                .map(d => d.reporting_period);
+            });
+            processedData.forEach(pdata => {
+              if (
+                reportsPerFacility[pdata.facility_id] &&
+                reportsPerFacility[pdata.facility_id].length
+              ) {
+                pdata.no_of_reports = reportsPerFacility[pdata.facility_id].length;
+              } else {
+                pdata.no_of_reports = '0';
+              }
+            });
+          }
           if (layerObj.source.type === 'geojson') {
             parsedData = csvToGEOjson(layerObj, processedData);
+            if (layerObj.hideZeroVals) {
+              parsedData = {
+                type: 'FeatureCollection',
+                features: parsedData.features.filter(d => d.properties[layerObj.property] !== 0),
+              };
+            }
           } else {
             parsedData = [...processedData];
           }
@@ -109,9 +163,9 @@ export default function readData(mapId, layer, dispatch, doUpdateTsLayer) {
           layerObj.source.data = Array.isArray(parsedData)
             ? [...parsedData]
             : { ...parsedData };
-  
+          layerObj.mergedData = layerObj.source.data;
           if (layerObj.aggregate && layerObj.aggregate.type) {
-            layerObj.source.data = aggregateFormData(layerObj);
+            layerObj.source.data = aggregateFormData(layerObj, currentState.LOCATIONS);
           }
           if (layerObj.aggregate && layerObj.aggregate.filter) {
             layerObj.filterOptions = generateFilterOptions(layerObj);

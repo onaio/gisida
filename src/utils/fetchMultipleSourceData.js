@@ -72,7 +72,7 @@ export default function fetchMultipleSources(mapId, layer, dispatch) {
   
       let mergedData = isManyToOne
         ? {}
-        : (Array.isArray(data[0]) && [...data[0]]) || { ...data[0] };
+        : [].concat(...data);
   
       // Filter base data for missing join properties
       const intialFilter = (d) => {
@@ -85,13 +85,11 @@ export default function fetchMultipleSources(mapId, layer, dispatch) {
         return false;
       };
   
-      if (Array.isArray(mergedData)) {
+      if (Array.isArray(mergedData) && !layerObj['merge-locations']) {
         mergedData = mergedData.filter(d =>
-  
           d[layerObj.property] !== null).filter(intialFilter);
       } else if (Array.isArray(mergedData.features)) {
         mergedData.features = mergedData.features.filter(d =>
-  
           d[layerObj.property] !== undefined).filter(intialFilter);
       }
   
