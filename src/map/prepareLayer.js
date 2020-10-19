@@ -1,14 +1,10 @@
 
 import Mustache from 'mustache';
 import cloneDeep from 'lodash.clonedeep';
-import superset from '@onaio/superset-connector';
-import csvToGEOjson from './csvToGEOjson';
 import aggregateFormData from '../connectors/ona-api/aggregateFormData';
-import getData from '../connectors/ona-api/data';
 import { loadCSV } from '../utils/files';
-import { generateFilterOptions, processFilters, generateFilterOptionsPrev } from '../utils/filters';
+import { processFilters } from '../utils/filters';
 import { requestData, receiveData, getCurrentState } from '../store/actions/actions';
-import parseData from './../utils/parseData';
 import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
