@@ -736,6 +736,10 @@ export default function prepareLayer(
     const currentState = dispatch(getCurrentState());
 
     layerObj.layers.forEach(sublayer => {
+      // check if the grouped layers are coming from a remote source
+      if (sublayer.includes('http')) {
+        sublayer = sublayer.split('/').slice(-1).pop();
+      }
       const subLayer = currentState[mapId].layers[sublayer];
 
       if (layerObj.aggregate) {
