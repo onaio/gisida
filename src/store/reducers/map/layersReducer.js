@@ -20,7 +20,8 @@ export function toggleLayer(layersState, action) {
     },
   };
   if (layer.layers) {
-    layer.layers.forEach(subLayerId => {
+    layer.layers.forEach(layer => {
+      let subLayerId = layer;
       if (subLayerId.includes('http')) {
         subLayerId = subLayerId.split('/').slice(-1).pop();
       }
