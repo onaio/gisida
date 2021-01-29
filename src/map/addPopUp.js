@@ -134,6 +134,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                       if (popupData[property] === '0') {
                         popupData[property] = 0;
                       }
+                      return popupData;
                     });
                   }
                   content =
@@ -167,7 +168,6 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                         typeof rowItem[val.trim()] !== 'number' && rowItem[val.trim()].includes(',')
                           ? rowItem[val.trim()].split(',')
                           : [];
-                        console.log('contentArr', contentArr)
                       if (contentArr.length > 1) {
                         rowItem[val] = contentArr.join(', ');
                       }
@@ -195,7 +195,6 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   if (bodyProperties && commaFormatting(layer, rowItem, true)) {
                     bodySection = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))
                   }
-                    console.log('body section', bodySection);
                   content =
                     `<div>` +
                     `<div><b>${row[layer.popup.header]}</b></div>` +
