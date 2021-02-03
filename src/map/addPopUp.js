@@ -69,15 +69,19 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
         layers[activeLayerId] &&
         layers[activeLayerId].aggregate &&
         layers[activeLayerId].aggregate.timeseries &&
+        features.find(
+          featureObject =>
+            featureObject.properties[[layers[activeLayerId].aggregate.timeseries.field]]
+        ) &&
         features.length > 1
       ) {
-        feature = features.find(
-          tilesetFeature =>
-            tilesetFeature &&
+        feature = features.find(tilesetFeature => {
+          return (
             tilesetFeature.properties &&
             tilesetFeature.properties[layers[activeLayerId].aggregate.timeseries.field] ===
               timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]
-        );
+          );
+        });
       } else {
         feature = features[f];
       }
@@ -110,9 +114,11 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             // if row matches property
             if (
               (layer.popup.join &&
-                row[layer.popup.join[0]] === (feature.properties && feature.properties[layer.popup.join[1]])) ||
+                row[layer.popup.join[0]] ===
+                  (feature.properties && feature.properties[layer.popup.join[1]])) ||
               (!layer.popup.join &&
-                row[layer.source.join[1]] === (feature.properties && feature.properties[layer.source.join[0]]))
+                row[layer.source.join[1]] ===
+                  (feature.properties && feature.properties[layer.source.join[0]]))
             ) {
               // Add header and body to popup with data from layer
               if (rowItem[layer.popup.header]) {
@@ -191,9 +197,12 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                       .replace(']', '');
                     commaSeparatedList = `<ul class=commaSeparatedList type=circle style=margin:0px>${listItem}</ul>`;
                   }
-                  let bodySection = ''
+                  let bodySection = '';
                   if (bodyProperties && commaFormatting(layer, rowItem, true)) {
-                    bodySection = Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))
+                    bodySection = Mustache.render(
+                      layer.popup.body,
+                      commaFormatting(layer, rowItem, true)
+                    );
                   }
                   content =
                     `<div>` +
@@ -214,8 +223,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           // if no data, use feature.properties to populate popup
           // eslint-disable-next-line no-lonely-if
           const formattedData = commaFormatting(layer, feature.properties, true);
-          if (feature.properties[layer.popup.header]) {
-            content = `<div><b>${feature.properties[layer.popup.header]}</b></div>`;
+          if (feature.properties && feature.properties[layer.popup.header]) {
+            content = `<div><b>${feature.properties &&
+              feature.properties[layer.popup.header]}</b></div>`;
             if (layer.popup.body) {
               content += `<div><center>${Mustache.render(
                 layer.popup.body,
