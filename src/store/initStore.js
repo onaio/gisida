@@ -262,9 +262,9 @@ export default function initStore(
   const reducer = combine(reducerRegistry.getReducers());
   let store;
   if (loadState) {
-    store = createStore(reducer, loadState(), composeWithDevTools(applyMiddleware(thunk)));
+    store = createStore(reducer, loadState(), process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk));
   } else {
-    store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+    store = createStore(reducer, process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk));
   }
 
   // Replace the store's reducer whenever a new reducer is registered.
