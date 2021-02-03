@@ -25,10 +25,9 @@ export default function commaFormatting(layerObj, data, popup) {
       const val = Number(dataItem[`${found[i]}`]);
       /**  */
       if (Number.isInteger(val)) {
-        /** If val = 0 and map label shouldn't show zero and popup shouldn't show zeros 
-         * then return null otherwise comma format the data item and show popup
-         * This then applies for all layers with labels and showzeros is false will 
-         * configurably allow showing/hiding popups or not, using showZeros flag on the popup which will default to false
+        /**
+         * If val=0 and showzeroOnLabels if false and the call isn't made from addPopus then
+         * return null else return dataitem
          */
         if (!val && !showZerosOnLabels && !popup) {
           foundZero = true;
