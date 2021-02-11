@@ -74,21 +74,23 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
 
   // Generate Mapbox StyleSpec
   if (layerObj.fillGaps) {
+
     const data = [];
+    
     const mapCodes = [
       ...new Set(
-        (layerObj.source.data.features || layerObj.source.data).map(d => d[layerObj.source.join[1]])
+        (layerObj.source.data.features || layerObj.source.data).map(d => (d.properties || d)[layerObj.source.join[1]])
       ),
     ];
     const periods = [
-      ...new Set(layerObj.source.data.map(p => p[layerObj.aggregate.timeseries.field])),
+      ...new Set((layerObj.source.data.features || layerObj.source.data).map(p => (p.properties || p)[layerObj.aggregate.timeseries.field])),
     ];
-    const layerData = layerObj.source.data;
+    const layerData = (layerObj.source.data.features || layerObj.source.data);
     let datum;
     const tsField = layerObj.aggregate.timeseries.field;
     const periodData = {};
     for (let d = 0; d < layerData.length; d += 1) {
-      datum = layerObj.source.data[d];
+      datum = layerData[d].properties || layerData[d];
       if (!periodData[datum[tsField]]) {
         periodData[datum[tsField]] = {};
       }
@@ -129,13 +131,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId
   );
-
-  // if (timeseriesMap && timeseriesMap[layerObj.id] &&
-  //    timeseriesMap[layerObj.id].data &&
-  //     Array.isArray(timeseriesMap[layerObj.id].data) &&
-  //     timeseriesMap[layerObj.id].data.find(d => d.Phase)) {
-  //   timeseriesMap[layerObj.id] = timeseriesMap[layerObj.id].data.filter(d => d.Phase !== '');
-  // }
 
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
