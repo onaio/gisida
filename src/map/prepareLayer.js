@@ -153,7 +153,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId
   );
-  console.log('layerObj', timeseriesMap);
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
