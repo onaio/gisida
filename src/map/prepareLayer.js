@@ -114,7 +114,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     layerObj.source.data = cloneDeep(data);
     layerObj.mergedData = cloneDeep(data);
   }
-
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
   layers = { ...layers, [layerObj.id]: layerObj };
@@ -703,7 +702,8 @@ export default function prepareLayer(
     } else if (
       !Array.isArray(layerObj.source.data) &&
       typeof layerObj.source.data === 'object' &&
-      layerObj.source.data !== null
+      layerObj.source.data !== null &&
+      layerObj.source.data.type !== 'FeatureCollection'
     ) {
       // if unprocessed source config object, handle it
       // add in SUPERSET.API promise to q.defer
@@ -736,6 +736,10 @@ export default function prepareLayer(
     const currentState = dispatch(getCurrentState());
 
     layerObj.layers.forEach(sublayer => {
+      // check if the grouped layers are coming from a remote source
+      if (sublayer.includes('http')) {
+        sublayer = sublayer.split('/').slice(-1).pop();
+      }
       const subLayer = currentState[mapId].layers[sublayer];
 
       if (layerObj.aggregate) {

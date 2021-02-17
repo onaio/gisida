@@ -19,9 +19,12 @@ export function toggleLayer(layersState, action) {
       visible: action.isInit ? layer.visible : !layer.visible,
     },
   };
-
   if (layer.layers) {
-    layer.layers.forEach(subLayerId => {
+    layer.layers.forEach(groupedLayer => {
+      let subLayerId = groupedLayer;
+      if (subLayerId.includes('http')) {
+        subLayerId = subLayerId.split('/').slice(-1).pop();
+      }
       updatedLayers[subLayerId].visible = !layer.visible;
       updatedLayers[subLayerId].parent = layer.id;
     });

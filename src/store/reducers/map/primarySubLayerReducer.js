@@ -9,7 +9,11 @@ function toggleLayer(state, action) {
   let primarySubLayer = null;
 
   if (layer.layers) {
-    layer.layers.forEach(subLayerId => {
+    layer.layers.forEach(groupedLayer => {
+      let subLayerId = groupedLayer;
+      if (subLayerId.includes('http')) {
+        subLayerId = subLayerId.split('/').slice(-1).pop();
+      }
       primarySubLayer = updatedLayers[subLayerId].visible ? subLayerId : null;
     });
   }
