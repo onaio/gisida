@@ -71,17 +71,16 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   const { mapConfig } = currentState.APP;
   const { timeseries } = currentState[mapId];
   let { layers } = currentState[mapId];
-
-  // Generate Mapbox StyleSpec
+  // copy previous period data and aggregate cumulatively
   if (layerObj.fillGaps) {
-
     const data = [];
-    
+    // Base mapcode on join property
     const mapCodes = [
       ...new Set(
         (layerObj.source.data.features || layerObj.source.data).map(d => (d.properties || d)[layerObj.source.join[1]])
       ),
     ];
+    // get periods from timeseries field
     const periods = [
       ...new Set((layerObj.source.data.features || layerObj.source.data).map(p => (p.properties || p)[layerObj.aggregate.timeseries.field])),
     ];
@@ -89,6 +88,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     let datum;
     const tsField = layerObj.aggregate.timeseries.field;
     const periodData = {};
+    // Build periodData
     for (let d = 0; d < layerData.length; d += 1) {
       datum = layerData[d].properties || layerData[d];
       if (!periodData[datum[tsField]]) {
@@ -99,22 +99,44 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
 
     for (let p = 0; p < periods.length; p += 1) {
       for (let m = 0; m < mapCodes.length; m += 1) {
+        let propertyAggregatedValue;
+        // check if layer property exists on current/previous perioddata
+        if (periodData[periods[p]] && periodData[periods[p]][mapCodes[m]] && periodData[periods[p]][mapCodes[m]] && periodData[periods[p]][mapCodes[m]][layerObj.property] +  periodData[periods[p - 1]] && periodData[periods[p - 1]][mapCodes[m]] && periodData[periods[p - 1]][mapCodes[m]][layerObj.property]) {
+          propertyAggregatedValue = periodData[periods[p]][mapCodes[m]][layerObj.property] + periodData[periods[p - 1]][mapCodes[m]][layerObj.property];
+        }
+        /**
+         * condition to check if current/previous perioddata exist then push
+         * current period to data with respective property aggregation
+         */
         if (periodData[periods[p]][mapCodes[m]]) {
-          data.push(periodData[periods[p]][mapCodes[m]]);
+          data.push({
+            ...periodData[periods[p]][mapCodes[m]],
+            [tsField]: periods[p],
+            // eslint-disable-next-line no-restricted-globals
+            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p]][mapCodes[m]][layerObj.property],
+          })
+          periodData[periods[p]][mapCodes[m]] = {
+            ...periodData[periods[p]][mapCodes[m]],
+            [tsField]: periods[p],
+             // eslint-disable-next-line no-restricted-globals
+            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p]][mapCodes[m]][layerObj.property],
+          };
         } else if (p && periodData[periods[p - 1]][mapCodes[m]]) {
           data.push({
             ...periodData[periods[p - 1]][mapCodes[m]],
             [tsField]: periods[p],
           });
           periodData[periods[p]][mapCodes[m]] = {
-            ...periodData[periods[p - 1]][mapCodes[m]],
+            ...periodData[periods[p-1]][mapCodes[m]],
             [tsField]: periods[p],
+             // eslint-disable-next-line no-restricted-globals
+            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p-1]][mapCodes[m]][layerObj.property],
           };
         }
       }
     }
-    layerObj.source.data = cloneDeep(data);
-    layerObj.mergedData = cloneDeep(data);
+    layerObj.source.data = cloneDeep(csvToGEOjson(layerObj,data));
+    layerObj.mergedData = cloneDeep(csvToGEOjson(layerObj,data));
   }
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
@@ -131,7 +153,7 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId
   );
-
+  console.log('layerObj', timeseriesMap);
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
