@@ -207,7 +207,7 @@ export default function (layer, timefield, dispatch, nextIndex) {
       ? categories.color
       : (stops && stops[4]) || getColorBrewerColor(color, clusters) || color;
   const rawData =
-    layer.data ||
+  ((layer.data && layer.data.features) || layer.data) ||
     layer.source.data.features ||
     layer.source.data ||
     layer.mergedData;
@@ -278,17 +278,11 @@ export default function (layer, timefield, dispatch, nextIndex) {
     sortedData = [...rows];
   }
   const isGeoJSON =
+    (layer.data && layer.data.features) ||
     (layer.source && layer.source.data.features) ||
     (layer.layerObj &&
       layer.layerObj.source &&
       layer.layerObj.source.data.features);
-
-  // if (isGeoJSON && layer.type === 'circle') {
-  //   sortedData.sort((a, b) => a.properties[layer.property] - b.properties[layer.property]);
-  // } else if (layer.type !== 'fill') {
-  //   sortedData.sort((a, b) => a[layer.property] - b[layer.property]);
-  // }
-
   const geoJSONWithOSMKey =
     isGeoJSON &&
     ((layer && layer.source && layer.source.join && layer.source.join[1]) ||
