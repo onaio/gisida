@@ -15,6 +15,7 @@ import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
+import aggregatePeriodData from '../utils/aggregatePeriodData';
 
 /**
  * Builds labels based on label spec and layer data
@@ -73,18 +74,23 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   let { layers } = currentState[mapId];
   // copy previous period data and aggregate cumulatively
   if (layerObj.fillGaps) {
-    const data = [];
     // Base mapcode on join property
     const mapCodes = [
       ...new Set(
-        (layerObj.source.data.features || layerObj.source.data).map(d => (d.properties || d)[layerObj.source.join[1]])
+        (layerObj.source.data.features || layerObj.source.data).map(
+          d => (d.properties || d)[layerObj.source.join[1]]
+        )
       ),
     ];
     // get periods from timeseries field
     const periods = [
-      ...new Set((layerObj.source.data.features || layerObj.source.data).map(p => (p.properties || p)[layerObj.aggregate.timeseries.field])),
+      ...new Set(
+        (layerObj.source.data.features || layerObj.source.data).map(
+          p => (p.properties || p)[layerObj.aggregate.timeseries.field]
+        )
+      ),
     ];
-    const layerData = (layerObj.source.data.features || layerObj.source.data);
+    const layerData = layerObj.source.data.features || layerObj.source.data;
     let datum;
     const tsField = layerObj.aggregate.timeseries.field;
     const periodData = {};
@@ -97,46 +103,9 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
       periodData[datum[tsField]][datum[layerObj.source.join[1]]] = { ...datum };
     }
 
-    for (let p = 0; p < periods.length; p += 1) {
-      for (let m = 0; m < mapCodes.length; m += 1) {
-        let propertyAggregatedValue;
-        // check if layer property exists on current/previous perioddata
-        if (periodData[periods[p]] && periodData[periods[p]][mapCodes[m]] && periodData[periods[p]][mapCodes[m]] && periodData[periods[p]][mapCodes[m]][layerObj.property] +  periodData[periods[p - 1]] && periodData[periods[p - 1]][mapCodes[m]] && periodData[periods[p - 1]][mapCodes[m]][layerObj.property]) {
-          propertyAggregatedValue = periodData[periods[p]][mapCodes[m]][layerObj.property] + periodData[periods[p - 1]][mapCodes[m]][layerObj.property];
-        }
-        /**
-         * condition to check if current/previous perioddata exist then push
-         * current period to data with respective property aggregation
-         */
-        if (periodData[periods[p]][mapCodes[m]]) {
-          data.push({
-            ...periodData[periods[p]][mapCodes[m]],
-            [tsField]: periods[p],
-            // eslint-disable-next-line no-restricted-globals
-            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p]][mapCodes[m]][layerObj.property],
-          })
-          periodData[periods[p]][mapCodes[m]] = {
-            ...periodData[periods[p]][mapCodes[m]],
-            [tsField]: periods[p],
-             // eslint-disable-next-line no-restricted-globals
-            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p]][mapCodes[m]][layerObj.property],
-          };
-        } else if (p && periodData[periods[p - 1]][mapCodes[m]]) {
-          data.push({
-            ...periodData[periods[p - 1]][mapCodes[m]],
-            [tsField]: periods[p],
-          });
-          periodData[periods[p]][mapCodes[m]] = {
-            ...periodData[periods[p-1]][mapCodes[m]],
-            [tsField]: periods[p],
-             // eslint-disable-next-line no-restricted-globals
-            [layerObj.property]: !isNaN(propertyAggregatedValue) ? propertyAggregatedValue : periodData[periods[p-1]][mapCodes[m]][layerObj.property],
-          };
-        }
-      }
-    }
-    layerObj.source.data = cloneDeep(csvToGEOjson(layerObj,data));
-    layerObj.mergedData = cloneDeep(csvToGEOjson(layerObj,data));
+    const data = aggregatePeriodData(periodData, periods, mapCodes, layerObj.property, tsField);
+    layerObj.source.data = cloneDeep(csvToGEOjson(layerObj, data));
+    layerObj.mergedData = cloneDeep(csvToGEOjson(layerObj, data));
   }
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
@@ -754,7 +723,10 @@ export default function prepareLayer(
     layerObj.layers.forEach(sublayer => {
       // check if the grouped layers are coming from a remote source
       if (sublayer.includes('http')) {
-        sublayer = sublayer.split('/').slice(-1).pop();
+        sublayer = sublayer
+          .split('/')
+          .slice(-1)
+          .pop();
       }
       const subLayer = currentState[mapId].layers[sublayer];
 
