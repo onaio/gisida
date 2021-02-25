@@ -628,7 +628,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (layerObj.property) {
         mergedData = mergedData.filter(d => d[layerObj.property]);
       }
-      // .filter(jd => jd.reports.length);
     }
 
     // convert to geojson format if necessary
