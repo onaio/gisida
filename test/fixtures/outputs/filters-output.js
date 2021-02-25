@@ -1,79 +1,116 @@
-export const filtersOutputData = [{
-  "NU_indicators/region_label": {
-    "label": "Region",
-    "type": "vector",
-    "filterValues": {
-      "Western": 1,
-      "Eastern": 1,
-      "Coast": 1,
-      "Rift Valley": 1,
-      "Nyanza": 1
-    }
-  },
-  "NU_indicators/district_label": {
-    "label": "District",
-    "type": "vector",
-    "filterValues": {
-      "Kiambu": 1,
-      "Machakos": 1,
-      "Voi": 1,
-      "Kericho": 1,
-      "Kisumu": 1
-    }
-  },
-  "Type of site": {
-    "label": "Type of Site",
-    "type": "vector",
-    "filterValues": {
-      "Hospital": 2,
-      "Clinic": 2,
-      "Health Center": 1
-    }
-  },
-  "site_activity": {
-    "label": 'Site Activity',
-    "type": "vector",
-    "filterType": 'multi',
-    "filterValues": {
-      "OTP": 2,
-      "SC": 3,
-      "TSFP": 2,
-      "BSFP": 4,
-      "MCHN": 0,
-      "IYCF": 0,
-      "Micronutrient": 0
-    },
-  },
-  "no_of_reports": {
-    "label": 'No of Reports',
-    "type": 'vector',
-    "filterValues": { '3': 1, '4': 1, '6': 1, '7': 1, '13': 1 },
-    "quantitativeValues": [ 3, 6, 13, 4, 7 ]
-  },
-  "acronym": {
-    "label": 'Acronym',                                                                                                                                                                                  
-    "type": 'vector',                                                                                                                                                                                    
-    "filterValues": { UNICEF: 5, WVI: 5 },                                                                                                                                                               
-    "filterType": 'multi'
-  }
-}
+export const filtersOutputData = [
+
+	{
+	"NU_indicators/district_label": {
+		"filterValues": {
+		"Kericho": 1,
+		"Kiambu": 1,
+		"Kisumu": 1,
+		"Machakos": 1,
+		"Voi": 1
+		},
+		"label": "District",
+		"type": "vector"
+	},
+	"NU_indicators/region_label": {
+		"filterValues": {
+		"Coast": 1,
+		"Eastern": 1,
+		"Nyanza": 1,
+		"Rift Valley": 1,
+		"Western": 1
+		},
+		"label": "Region",
+		"type": "vector"
+	},
+	"Type of site": {
+		"filterValues": {
+		"Clinic": 2,
+		"Health Center": 1,
+		"Hospital": 2
+		},
+		"label": "Type of Site",
+		"type": "vector"
+	},
+	"acronym": {
+		"filterType": "multi",
+		"filterValues": {
+		"UNICEF": 5,
+		"WVI": 5
+		},
+		"label": "Acronym",
+		"type": "vector"
+	},
+	"no_of_reports": {
+		"filterValues": {
+		"3": 1,
+		"4": 1,
+		"6": 1,
+		"7": 1,
+		"13": 1
+		},
+		"label": "No of Reports",
+		"quantitativeValues": [
+		3,
+		6,
+		13,
+		4,
+		7
+		],
+		"type": "vector"
+	},
+	"site_activity": {
+		"filterType": "multi",
+		"filterValues": {
+		"BSFP": 4,
+		"IYCF": 0,
+		"MCHN": 0,
+		"Micronutrient": 0,
+		"OTP": 2,
+		"SC": 3,
+		"TSFP": 2
+		},
+		"label": "Site Activity",
+		"type": "vector"
+	}
+	},
+
+	{
+		"Upazila": {
+		"filterValues": {
+			"undefined": 1
+		},
+		"label": "Upazila",
+		"type": "stops"
+		},
+		"reporter/reporter_org": {
+		"filterValues": {
+			"govt": 1
+		},
+		"label": "Partner",
+		"type": "stops"
+		}
+	},
+
 ];
 
 export const processedFiltersData = [
-  {
-    "NU_indicators/region_label": "Eastern",
-    "NU_indicators/district_label": "Machakos",
-    "Type of site": "Clinic",
-    "no_of_reports": 6,
-    "site_activity": "OTP TSFP",
-    "acronym": "UNICEF,WVI"
-  },
-  {
-    "NU_indicators/region_label": "Nyanza",
-    "NU_indicators/district_label": "Kisumu",
-    "Type of site": "Clinic",
-    "no_of_reports": 7,
-    "site_activity": "TSFP BSFP",
-    "acronym": "UNICEF,WVI"
-  }
-]
+	{
+	  "NU_indicators/district_label": "Machakos",
+	  "NU_indicators/region_label": "Eastern",
+	  "Type of site": "Clinic",
+	  "acronym": "UNICEF,WVI",
+	  "no_of_reports": 6,
+	  "site_activity": "OTP TSFP"
+	},
+	{
+	  "NU_indicators/district_label": "Kisumu",
+	  "NU_indicators/region_label": "Nyanza",
+	  "Type of site": "Clinic",
+	  "acronym": "UNICEF,WVI",
+	  "no_of_reports": 7,
+	  "site_activity": "TSFP BSFP"
+	}
+  ]
+
+export default {filtersOutputData}

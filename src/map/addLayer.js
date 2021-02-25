@@ -1,7 +1,7 @@
 import generateStops from './generateStops';
 import { isNumber } from '../utils/files';
 
-function buildRadiusAsDistanceExpression(layer) {
+export function buildRadiusAsDistanceExpression(layer) {
   let distanceInMeters = ['number', ['get', layer.property]];
 
   // convert distance to meters if necessary

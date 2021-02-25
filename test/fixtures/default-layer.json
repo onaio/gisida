@@ -1,0 +1,410 @@
+{
+  "testLayer1": {
+    "label": "Proportion of pregnant women delivering in Government and private-not-for-profit (PNFP) health facilities (D/HF)",
+    "graph": {
+      "yAxis": ["phc_percap_average", "pnfp_average"],
+      "categories": "Sub_region",
+      "period": "2016/17"
+    },
+    "property": "pnfp_average",
+    "source": {
+      "type": "vector",
+      "data": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
+      "layer": "ug_subregions-6lhmic",
+      "url": "mapbox://ona.bks4zjf4",
+      "join": ["Sub_region", "Sub_region"],
+      "maxzoom": 10
+    },
+    "type": "fill",
+    "defaultType": "fill",
+    "types": {
+      "fill": {
+        "categories": {
+          "breaks": "no",
+          "color": ["#E8C2B3", "#D7816B", "#BB4637", "#AF1F21"],
+          "limit": [33, 45, 56, 300]
+        }
+      },
+      "circle": {
+        "source": {
+          "type": "geojson",
+          "data": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv",
+          "maxzoom": 7
+        },
+        "featureType": "Point",
+        "geo-columns": ["Longitude", "Latitude"],
+        "categories": {
+          "breaks": "expression",
+          "color": "#4D2B10"
+        },
+        "labels": {
+          "offset": [0, 40]
+        },
+        "paint": {
+          "circle-radius": [
+            "^",
+            ["/", ["*", ["^", ["*", ["number", ["get", "pnfp_average"]], 20], 0.87], 0.98], ["pi"]],
+            0.5
+          ]
+        }
+      }
+    },
+    "aggregate": {
+      "timeseries": {
+        "field": "FY",
+        "vField": false
+      }
+    },
+    "detail-view": {
+      "UID": "Sub_region",
+      "title": {
+        "prop": "SubRegion"
+      },
+      "basic-info": [
+        {
+          "value": {
+            "prop": "anc_average",
+            "mustache": "ANC4: {{{anc_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of pregnant women attending at least  4 antenatal care"
+        },
+        {
+          "value": {
+            "prop": "dpt3_average",
+            "mustache": "DPT3: {{{dpt3_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of children under 1 immunized with 3rd dose of DPT"
+        },
+        {
+          "value": {
+            "prop": "pnfp_average",
+            "mustache": "PNFP: {{{pnfp_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of pregnant women delivering in Government and private for Profit health facility"
+        },
+        {
+          "value": {
+            "prop": "ipt2_average",
+            "mustache": "IPT2: {{{ipt2_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of pregnant women taking 2nd dose of intermittent Preventive treatment of Malaria"
+        },
+        {
+          "value": {
+            "prop": "hiv_test_average",
+            "mustache": "HIV/test: {{{hiv_test_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of HIV testing in children born to HIV+ women"
+        },
+        {
+          "value": {
+            "prop": "latcov_average",
+            "mustache": "LATCOV: {{{latcov_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Proportion of households with latrines"
+        },
+        {
+          "value": {
+            "prop": "tb_cure_average",
+            "mustache": "TB/TSR: {{{tb_cure_average}}}%"
+          },
+          "icon": "plus health",
+          "alt": "Tuberculosis treatment success rate"
+        },
+        {
+          "value": {
+            "prop": "phc_percap_average",
+            "mustache": "Health Per Capita: {{{phc_percap_average}}} USh",
+            "toLocaleString": true
+          },
+          "icon": "usd health",
+          "alt": "Primary Health Care Release per Capita"
+        },
+        {
+          "value": {
+            "prop": "Health_Development",
+            "mustache": "Health Development: {{{Health_Development}}} USh",
+            "toLocaleString": true
+          },
+          "icon": "usd health",
+          "alt": "Primary Health Care Release: Development"
+        },
+        {
+          "value": {
+            "prop": "Health_Non-Wage",
+            "mustache": "Health Non-Wage: {{{Health_Non-Wage}}} USh",
+            "toLocaleString": true
+          },
+          "icon": "usd health",
+          "alt": "Primary Health Care Release: Non-Wage"
+        },
+        {
+          "value": {
+            "prop": "Health_Wage",
+            "mustache": "Health Wage: {{{Health_Wage}}} USh",
+            "toLocaleString": true
+          },
+          "icon": "usd health",
+          "alt": "Primary Health Care Release: Wage"
+        },
+        {
+          "value": {
+            "prop": "equity_average",
+            "mustache": "Equity: {{{equity_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Equity (i.e. mean Sub-County deviation from the district average in persons per improved water point)"
+        },
+        {
+          "value": {
+            "prop": "hw_average",
+            "mustache": "Hand Washing: {{{hw_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Hand washing coverage "
+        },
+        {
+          "value": {
+            "prop": "r_access_average",
+            "mustache": "R-Access: {{{r_access_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Access to water in rural areas"
+        },
+        {
+          "value": {
+            "prop": "r_func_average",
+            "mustache": "R-Func: {{{r_func_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Functionality of water sources in rural areas"
+        },
+        {
+          "value": {
+            "prop": "san_average",
+            "mustache": "Sanitation Score: {{{san_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Sanitation score"
+        },
+        {
+          "value": {
+            "prop": "wuc_average",
+            "mustache": "WUC: {{{wuc_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Active water user committee coverage"
+        },
+        {
+          "value": {
+            "prop": "w_wuc_average",
+            "mustache": "W-WUC: {{{w_wuc_average}}}%"
+          },
+          "icon": "tint wash",
+          "alt": "Women occupying key position on water user committees"
+        },
+        {
+          "value": {
+            "prop": "Wash_total_per_capita",
+            "mustache": "WASH Per Capita: {{{Wash_total_per_capita}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd wash",
+          "alt": "WASH Release per Capita"
+        },
+        {
+          "value": {
+            "prop": "Wash_Development",
+            "mustache": "WASH Development: {{{Wash_Development}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd wash",
+          "alt": "WASH Release: Development"
+        },
+        {
+          "value": {
+            "prop": "Wash_Non-Wage",
+            "mustache": "WASH Non-Wage: {{{Wash_Non-Wage}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd wash",
+          "alt": "WASH Release: Non-Wage"
+        },
+        {
+          "value": {
+            "prop": "Wash_Wage",
+            "mustache": "WASH Wage: {{{Wash_Wage}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd wash",
+          "alt": "WASH Release: Wage"
+        },
+        {
+          "value": {
+            "prop": "pc_average",
+            "mustache": "PC: {{{pc_average}}}%"
+          },
+          "icon": "book education",
+          "alt": "Primary School completion rate (PC)"
+        },
+        {
+          "value": {
+            "prop": "nir_average",
+            "mustache": "NIR: {{{nir_average}}}%"
+          },
+          "icon": "book education",
+          "alt": "Primary school net intake rate"
+        },
+        {
+          "value": {
+            "prop": "ple_average",
+            "mustache": "PLE: {{{ple_average}}}%"
+          },
+          "icon": "book education",
+          "alt": "Primary leaving exams (PLE) performance"
+        },
+        {
+          "value": {
+            "prop": "pcr_average",
+            "mustache": "PCR: {{{pcr_average}}}"
+          },
+          "icon": "book education",
+          "alt": "Primary School to Classroom ratio (PCR)"
+        },
+        {
+          "value": {
+            "prop": "psr_average",
+            "mustache": "PSR: {{{psr_average}}}"
+          },
+          "icon": "book education",
+          "alt": "Primary School Pupil to latrine stance ratio (PSR)"
+        },
+        {
+          "value": {
+            "prop": "ptr_average",
+            "mustache": "PTR: {{{ptr_average}}}"
+          },
+          "icon": "book education",
+          "alt": "Primary School to Teacher ratio (PTR)"
+        },
+        {
+          "value": {
+            "prop": "Education_total_per_capita",
+            "mustache": "Education Per Capita: {{{Education_total_per_capita}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd education",
+          "alt": "Education Release per Capita"
+        },
+        {
+          "value": {
+            "prop": "Education_Development",
+            "mustache": "Education Development: {{{Education_Development}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd education",
+          "alt": "Education Release: Development"
+        },
+        {
+          "value": {
+            "prop": "Education_Non-Wage",
+            "mustache": "Education Non-Wage: {{{Education_Non-Wage}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd education",
+          "alt": "Education Release: Non-Wage"
+        },
+        {
+          "value": {
+            "prop": "Education_Wage",
+            "mustache": "Education Wage: {{{Education_Wage}}} USh"
+          },
+          "toLocaleString": true,
+          "icon": "usd education",
+          "alt": "Education Release: Wage"
+        }
+      ]
+    },
+    "labels": {
+      "data": "data/ug_sub_regions_labels.csv",
+      "label": "<span class='label1'>PNFP: <b>{{pnfp_average}}%</b></span>",
+      "join": ["osm_id", "Sub_region"],
+      "coordinates": ["longitude", "latitude"],
+      "maxzoom": 7,
+      "minzoom": 1,
+      "height": 30,
+      "width": 30,
+      "offset": [0, 25]
+    },
+    "visible": false,
+    "exclusive": true,
+    "id": "atlas-health-pnfp-dhf-means",
+    "parent": "ug-atlas-health-pnfp-dhf",
+    "sector": "Health",
+    "credit": "Government of Uganda",
+    "exportLink": {
+      "label": "UG Atlas Health Data",
+      "source": {
+        "district": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgffKmrqvLylObRFuxez7GuA9q92Yepe75fHOl81RE6wCK0BdXazTDh_aYuMgBEEQM3jz8_y592GR8/pub?gid=0&single=true&output=csv",
+        "sub-region": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR88Xwu8JO98x-ULWxFh7WBEFeyNCenZdXP2dXa3821llusAR5N-HmHzEc9zbiU97Y_tXOY26RJEWhZ/pub?gid=0&single=true&output=csv"
+      },
+      "url": "https://drive.google.com/drive/folders/12EzyXkCEFADKMpVXz00wXTcMBuIP3VgA"
+    }
+  },
+
+  "testLayer2": {
+    "label": "Cumulative Number of Children Vaccinated Not Vaccinated",
+    "source": {
+      "type": "geojson",
+      "featureType": "Point",
+      "data": {
+        "type": "superset",
+        "slice-id": 2745
+      },
+      "join": ["name", "name"],
+      "minzoom": 3
+    },
+    "type": "circle",
+    "property": "cumulative_not_vac",
+    "radius-range": ["12", "15", "18", "21", "24"],
+    "categories": {
+      "breaks": "no",
+      "limit": [0, 100, 200, 300, 1000000],
+      "color": ["#525252", "#6baed6", "#4292c6", "#2171b5", "#08519c"],
+      "label": ["Null", "0-100", "100-200", "200-300", "> 300"]
+    },
+    "geo-columns": ["longitude", "latitude"],
+
+    "aggregate": {
+      "filter": ["region", "province1", "municipality1", "name"],
+      "accepted-filter-values": ["all", "all", "all", "all"],
+      "filter-label": ["Region", "Province", "Municipality/City", "Facility Name"],
+      "filter-type": ["vBool", "vBool", "vBool", "vBool"],
+      "timeseries": {
+        "field": "period",
+        "type": "cumulative"
+      }
+    },
+
+    "popup": {
+      "header": "name",
+      "body": " <p style=text-align:left;> <b>Children Not Vaccinated:</b> {{cumulative_not_vac}}<span style=float:right;>"
+    },
+    "location": {
+      "zoom": 6.702550963685252,
+      "center": {
+        "lng": 123.18284332092298,
+        "lat": 7.0467051095247655
+      }
+    },
+    "visible": false,
+    "credit": "<b>As of Current Date and Time</b>",
+    "category": "Immunization Coverage"
+  }
+}

@@ -1,4 +1,4 @@
-//file with output for testing parseData util function
+// file with output for testing parseData util function
 
 export const parseOutputSpecData = 
 [{

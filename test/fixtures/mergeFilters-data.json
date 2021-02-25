@@ -1,0 +1,108 @@
+{
+  "originalFilters": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "isFiltered": true,
+      "isOriginal": true,
+      "toggleAllOn": true,
+      "options": {
+        "BRAC": {
+          "enabled": true,
+          "count": 8
+        }
+      },
+      "isOpen": true,
+      "dataType": "ordinal",
+      "doAdvFiltering": false,
+      "queries": []
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "toggleAllOn": true,
+      "isFiltered": false,
+      "isOriginal": false,
+      "dataType": "ordinal",
+      "options": {
+        "Ukhia": {
+          "enabled": false,
+          "count": 7
+        }
+      },
+      "isOpen": false,
+      "doAdvFiltering": false,
+      "queries": []
+    }
+  },
+
+  "filteredFilters": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "toggleAllOn": true,
+      "isFiltered": false,
+      "isOriginal": true,
+      "dataType": "ordinal",
+      "options": {
+        "BRAC": {
+          "enabled": false,
+          "count": 8
+        }
+      },
+      "isOpen": false,
+      "doAdvFiltering": false,
+      "queries": []
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "toggleAllOn": true,
+      "isFiltered": false,
+      "isOriginal": true,
+      "dataType": "ordinal",
+      "options": {
+        "Ukhia": {
+          "enabled": false,
+          "count": 17
+        }
+      },
+      "isOpen": false,
+      "doAdvFiltering": false,
+      "queries": []
+    }
+  },
+
+  "clickedFilterKey": "reporter/reporter_org",
+
+  "output": {
+    "reporter/reporter_org": {
+      "label": "Partner",
+      "isFiltered": true,
+      "isOriginal": true,
+      "toggleAllOn": true,
+      "options": {
+        "BRAC": {
+          "enabled": true,
+          "count": 8
+        }
+      },
+      "isOpen": true,
+      "dataType": "ordinal",
+      "doAdvFiltering": false,
+      "queries": []
+    },
+    "Upazila": {
+      "label": "Upazila",
+      "toggleAllOn": true,
+      "isFiltered": false,
+      "isOriginal": false,
+      "dataType": "ordinal",
+      "options": {
+        "Ukhia": {
+          "enabled": false,
+          "count": 17
+        }
+      },
+      "isOpen": false,
+      "doAdvFiltering": false,
+      "queries": []
+    }
+  }
+}

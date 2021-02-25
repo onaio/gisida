@@ -1,0 +1,24 @@
+{
+  "input": {
+    "layer-1": {
+      "aggregate": {
+        "timeseries": {}
+      }
+    },
+    "layer-2": {
+      "aggregate": {
+        "timeseries": {}
+      }
+    },
+    "layer-3": {
+      "aggregate": {
+        "timeseries": {}
+      }
+    },
+    "layer-4": {
+      "aggregate": {}
+    }
+  },
+
+  "output": ["layer-1", "layer-2", "layer-3"]
+}

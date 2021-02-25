@@ -1,4 +1,4 @@
-import addLayer from '../../src/map/addLayer';
+import addLayer, {buildRadiusAsDistanceExpression} from '../../src/map/addLayer';
 import fillLayer from '../fixtures/fill-layer.json';
 import circleLayer from '../fixtures/circle-layer.json';
 import symbolLayer from '../fixtures/symbol-layer.json';
@@ -23,3 +23,10 @@ describe('addLayer', () => {
     expect(addLayer(lineLayer, mapConfig)).toMatchSnapshot('lineLayerOutput');
   });
 });
+
+describe('buildRadiusAsDistanceExpression', () => {
+  test('should create correct exponential ramp', () => {
+    const output = ["interpolate", ["exponential", 2], ["zoom"], 0, 0, 20, ["/", ["/", ["number", ["get", "dead"]], 0.075], ["cos", ["/", ["*", ["number", ["get", "latitude"]], ["pi"]], 180]]]]
+    expect(buildRadiusAsDistanceExpression(circleLayer)).toEqual(output)
+  })
+})

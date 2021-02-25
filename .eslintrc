@@ -12,7 +12,11 @@
     "sourceType": "module"
   },
   "plugins": ["prettier"],
-  "rules": {},
+  "rules": {
+    "no-param-reassign": [2, { 
+      "props": false
+  }]
+  },
   "parser": "babel-eslint",
   "globals": {
     "mapboxgl": true,
