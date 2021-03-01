@@ -15,6 +15,7 @@ import commaFormatting from './../utils/commaFormatting';
 import addLayer from './addLayer';
 import getSliderLayers from './getSliderLayers';
 import buildTimeseriesData from './buildTimeseriesData';
+import aggregatePeriodData from '../utils/aggregatePeriodData';
 
 /**
  * Builds labels based on label spec and layer data
@@ -71,48 +72,40 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
   const { mapConfig } = currentState.APP;
   const { timeseries } = currentState[mapId];
   let { layers } = currentState[mapId];
-
-  // Generate Mapbox StyleSpec
+  // copy previous period data and aggregate cumulatively
   if (layerObj.fillGaps) {
-    const data = [];
+    // Base mapcode on join property
     const mapCodes = [
       ...new Set(
-        (layerObj.source.data.features || layerObj.source.data).map(d => d[layerObj.source.join[1]])
+        (layerObj.source.data.features || layerObj.source.data).map(
+          d => (d.properties || d)[layerObj.source.join[1]]
+        )
       ),
     ];
+    // get periods from timeseries field
     const periods = [
-      ...new Set(layerObj.source.data.map(p => p[layerObj.aggregate.timeseries.field])),
+      ...new Set(
+        (layerObj.source.data.features || layerObj.source.data).map(
+          p => (p.properties || p)[layerObj.aggregate.timeseries.field]
+        )
+      ),
     ];
-    const layerData = layerObj.source.data;
+    const layerData = layerObj.source.data.features || layerObj.source.data;
     let datum;
     const tsField = layerObj.aggregate.timeseries.field;
     const periodData = {};
+    // Build periodData
     for (let d = 0; d < layerData.length; d += 1) {
-      datum = layerObj.source.data[d];
+      datum = layerData[d].properties || layerData[d];
       if (!periodData[datum[tsField]]) {
         periodData[datum[tsField]] = {};
       }
       periodData[datum[tsField]][datum[layerObj.source.join[1]]] = { ...datum };
     }
 
-    for (let p = 0; p < periods.length; p += 1) {
-      for (let m = 0; m < mapCodes.length; m += 1) {
-        if (periodData[periods[p]][mapCodes[m]]) {
-          data.push(periodData[periods[p]][mapCodes[m]]);
-        } else if (p && periodData[periods[p - 1]][mapCodes[m]]) {
-          data.push({
-            ...periodData[periods[p - 1]][mapCodes[m]],
-            [tsField]: periods[p],
-          });
-          periodData[periods[p]][mapCodes[m]] = {
-            ...periodData[periods[p - 1]][mapCodes[m]],
-            [tsField]: periods[p],
-          };
-        }
-      }
-    }
-    layerObj.source.data = cloneDeep(data);
-    layerObj.mergedData = cloneDeep(data);
+    const data = aggregatePeriodData(periodData, periods, mapCodes, layerObj.property, tsField);
+    layerObj.source.data = cloneDeep(csvToGEOjson(layerObj, data));
+    layerObj.mergedData = cloneDeep(csvToGEOjson(layerObj, data));
   }
   layerObj = addLayer(layerObj, mapConfig, dispatch);
   layerObj.visible = true;
@@ -129,14 +122,6 @@ function renderData(mapId, layer, dispatch, doUpdateTsLayer) {
     dispatch,
     mapId
   );
-
-  // if (timeseriesMap && timeseriesMap[layerObj.id] &&
-  //    timeseriesMap[layerObj.id].data &&
-  //     Array.isArray(timeseriesMap[layerObj.id].data) &&
-  //     timeseriesMap[layerObj.id].data.find(d => d.Phase)) {
-  //   timeseriesMap[layerObj.id] = timeseriesMap[layerObj.id].data.filter(d => d.Phase !== '');
-  // }
-
   if (timeseriesMap[layer.id]) {
     let mbLayer = null;
     // TODO - simplify this
@@ -643,7 +628,6 @@ function fetchMultipleSources(mapId, layer, dispatch) {
       if (layerObj.property) {
         mergedData = mergedData.filter(d => d[layerObj.property]);
       }
-      // .filter(jd => jd.reports.length);
     }
 
     // convert to geojson format if necessary
@@ -738,7 +722,10 @@ export default function prepareLayer(
     layerObj.layers.forEach(sublayer => {
       // check if the grouped layers are coming from a remote source
       if (sublayer.includes('http')) {
-        sublayer = sublayer.split('/').slice(-1).pop();
+        sublayer = sublayer
+          .split('/')
+          .slice(-1)
+          .pop();
       }
       const subLayer = currentState[mapId].layers[sublayer];
 
