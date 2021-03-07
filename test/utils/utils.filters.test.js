@@ -1,12 +1,15 @@
 import { generateFilterOptions, processFilters, filterDataByPeriod } from '../../src/utils/filters.js';
 //files to test on
-import { filtersInputObj, filterDataByPeriodInput } from '../fixtures/filters-input.js';
+import { filtersInputObj, filterDataByPeriodInput, filterLayerDataOnMultiselectSelection } from '../fixtures/filters-input.js';
 import { filtersOutputData, processedFiltersData } from '../fixtures/outputs/filters-output.js';
 
 describe('generateFilterOptions', () => {
 	test('Returns the proper filter object', () => {
 		expect(generateFilterOptions(filtersInputObj)).toEqual(filtersOutputData[0]);
 	});
+	test('Returns filter options for multiselect layers', () => {
+		expect(generateFilterOptions(filterLayerDataOnMultiselectSelection)).toEqual(filtersOutputData[1]);
+	})
 })
 
 describe('processFilters', () => {
