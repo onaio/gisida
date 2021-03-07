@@ -241,8 +241,7 @@ export function generateFilterOptions(layerData) {
         ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
           'accepted-filter-values'
         ][f];
-
-      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string') {
+      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' && layerData['data-parse'][filter] && layerData['data-parse'][filter].type !== "multiple") {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
           doPushDatum = false;
           break;
@@ -361,7 +360,6 @@ export function generateFilterOptions(layerData) {
       }
     }
   }
-
   return filterOptions;
 }
 
