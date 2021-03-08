@@ -25,3 +25,4 @@ export const SUB_FILTER = 'sub-filter';
 export const FILTER_LABEL = 'filter-label';
 export const FILTER_TYPE = 'filter-type';
 export const EXPORT = 'export';
+export const VECTOR = 'vector';
