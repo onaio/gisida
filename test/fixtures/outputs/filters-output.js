@@ -1,79 +1,188 @@
-export const filtersOutputData = [{
-  "NU_indicators/region_label": {
-    "label": "Region",
-    "type": "vector",
-    "filterValues": {
-      "Western": 1,
-      "Eastern": 1,
-      "Coast": 1,
-      "Rift Valley": 1,
-      "Nyanza": 1
-    }
-  },
-  "NU_indicators/district_label": {
-    "label": "District",
-    "type": "vector",
-    "filterValues": {
-      "Kiambu": 1,
-      "Machakos": 1,
-      "Voi": 1,
-      "Kericho": 1,
-      "Kisumu": 1
-    }
-  },
-  "Type of site": {
-    "label": "Type of Site",
-    "type": "vector",
-    "filterValues": {
-      "Hospital": 2,
-      "Clinic": 2,
-      "Health Center": 1
-    }
-  },
-  "site_activity": {
-    "label": 'Site Activity',
-    "type": "vector",
-    "filterType": 'multi',
-    "filterValues": {
-      "OTP": 2,
-      "SC": 3,
-      "TSFP": 2,
-      "BSFP": 4,
-      "MCHN": 0,
-      "IYCF": 0,
-      "Micronutrient": 0
+export const filtersOutputData = [
+  {
+    'NU_indicators/region_label': {
+      label: 'Region',
+      type: 'vector',
+      filterValues: {
+        Western: 1,
+        Eastern: 1,
+        Coast: 1,
+        'Rift Valley': 1,
+        Nyanza: 1,
+      },
+    },
+    'NU_indicators/district_label': {
+      label: 'District',
+      type: 'vector',
+      filterValues: {
+        Kiambu: 1,
+        Machakos: 1,
+        Voi: 1,
+        Kericho: 1,
+        Kisumu: 1,
+      },
+    },
+    'Type of site': {
+      label: 'Type of Site',
+      type: 'vector',
+      filterValues: {
+        Hospital: 2,
+        Clinic: 2,
+        'Health Center': 1,
+      },
+    },
+    site_activity: {
+      label: 'Site Activity',
+      type: 'vector',
+      filterType: 'multi',
+      filterValues: {
+        OTP: 2,
+        SC: 3,
+        TSFP: 2,
+        BSFP: 4,
+        MCHN: 0,
+        IYCF: 0,
+        Micronutrient: 0,
+      },
+    },
+    no_of_reports: {
+      label: 'No of Reports',
+      type: 'vector',
+      filterValues: { '3': 1, '4': 1, '6': 1, '7': 1, '13': 1 },
+      quantitativeValues: [3, 6, 13, 4, 7],
+    },
+    acronym: {
+      label: 'Acronym',
+      type: 'vector',
+      filterValues: { UNICEF: 5, WVI: 5 },
+      filterType: 'multi',
     },
   },
-  "no_of_reports": {
-    "label": 'No of Reports',
-    "type": 'vector',
-    "filterValues": { '3': 1, '4': 1, '6': 1, '7': 1, '13': 1 },
-    "quantitativeValues": [ 3, 6, 13, 4, 7 ]
+  {
+    cp_service: {
+      filterValues: {
+        'Capacity Development': 4,
+        'Child Protection': 8,
+        'Gender Based Violence (GBV)': 3,
+        Justice: 5,
+      },
+      label: 'CP Service',
+      type: 'vector',
+    },
+    district: {
+      filterValues: {
+        Berbera: 1,
+        Borama: 1,
+        Bossaso: 2,
+        Dhusamareeb: 1,
+        Galkayu: 1,
+        Gardo: 1,
+        Garowe: 2,
+        Gebiley: 1,
+        Hargeysa: 6,
+        Kahda: 2,
+        Wadajir: 2,
+      },
+      label: 'District',
+      type: 'vector',
+    },
+    month: {
+      filterValues: {
+        'August,July,June': 1,
+        'August,July,June,May': 1,
+        'August,July,June,October': 3,
+        'August,September': 2,
+        July: 1,
+        'July,June': 1,
+        June: 3,
+        May: 7,
+        September: 1,
+      },
+      label: 'Month',
+      type: 'vector',
+    },
+    partner_category: {
+      filterValues: { 'Civil Society Partners': 10, 'FMS: Puntland': 6, 'Somaliland Govt': 4 },
+      label: 'Partner Category',
+      type: 'vector',
+    },
+    partner_org: {
+      filterType: 'multi',
+      filterValues: { ' IIDA': 1, ' SWDC': 3, ' WAAPO': 5, Elman: 1, MESAF: 1, MOWDAFA: 4, MoJ: 5 },
+      label: 'Partner Organisation',
+      type: 'vector',
+    },
+    region: {
+      filterValues: {
+        Awdal: 1,
+        Bari: 3,
+        Benadir: 4,
+        Galgudud: 1,
+        Marodijeex: 7,
+        Mudug: 1,
+        Nugal: 2,
+        Sahil: 1,
+      },
+      label: 'Region',
+      type: 'vector',
+    },
+    state: {
+      filterValues: { Benadiir: 4, Galmudug: 1, Puntland: 6, Somaliland: 9 },
+      label: 'State',
+      type: 'vector',
+    },
+    subservices: {
+      filterType: 'multi',
+      filterValues: {
+        ' Child protection desk ': 1,
+        ' Community Awareness raising on CP': 1,
+        ' Community Awareness raising on CP ': 1,
+        ' Community Awareness raising on GBV (other than Communities Care) ': 1,
+        ' Family care centre ': 1,
+        ' Interim Care Centre (CAAC) ': 1,
+        ' Juvenile justice ': 2,
+        ' One Stop Centres/ Family Care Centres ': 2,
+        ' Safe houses ': 2,
+        ' Temporary shelter for UASC ': 1,
+        ' UNICEF partner office': 1,
+        ' UNICEF partner office ': 1,
+        ' Vocational Training Centre': 2,
+        ' Vocational Training Centre ': 1,
+        ' Women and girl friendly space': 1,
+        ' Womens and Children Desk at Police station': 2,
+        'Child Helpline ': 1,
+        'Child Protection Committee or Community Based Child Protection Mechanism ': 2,
+        'Child protection desk': 4,
+        "Children's court ": 2,
+        'Communities Cares ': 1,
+        'Community Awareness raising on GBV (other than Communities Care) ': 1,
+        'Safe houses': 1,
+        'Temporary shelter for UASC': 1,
+        'Universities providing social work courses': 4,
+        'Womens and Children Desk at Police station': 3,
+      },
+      label: 'CP Sub-service',
+      type: 'vector',
+    },
+    year: { filterValues: { '2020': 20 }, label: 'Year', type: 'vector' },
   },
-  "acronym": {
-    "label": 'Acronym',                                                                                                                                                                                  
-    "type": 'vector',                                                                                                                                                                                    
-    "filterValues": { UNICEF: 5, WVI: 5 },                                                                                                                                                               
-    "filterType": 'multi'
-  }
-}
 ];
 
 export const processedFiltersData = [
   {
-    "NU_indicators/region_label": "Eastern",
-    "NU_indicators/district_label": "Machakos",
-    "Type of site": "Clinic",
-    "no_of_reports": 6,
-    "site_activity": "OTP TSFP",
-    "acronym": "UNICEF,WVI"
+    'NU_indicators/region_label': 'Eastern',
+    'NU_indicators/district_label': 'Machakos',
+    'Type of site': 'Clinic',
+    no_of_reports: 6,
+    site_activity: 'OTP TSFP',
+    acronym: 'UNICEF,WVI',
   },
   {
-    "NU_indicators/region_label": "Nyanza",
-    "NU_indicators/district_label": "Kisumu",
-    "Type of site": "Clinic",
-    "no_of_reports": 7,
-    "site_activity": "TSFP BSFP",
-    "acronym": "UNICEF,WVI"
-  }
-]
+    'NU_indicators/region_label': 'Nyanza',
+    'NU_indicators/district_label': 'Kisumu',
+    'Type of site': 'Clinic',
+    no_of_reports: 7,
+    site_activity: 'TSFP BSFP',
+    acronym: 'UNICEF,WVI',
+  },
+];
