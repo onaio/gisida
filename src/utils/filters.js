@@ -1,3 +1,5 @@
+import { MULTIPLE, ACCEPTED_FILTER_VALUES, DATA_PARSE, ACCEPTED_SUB_FILTER_VALUES, MONTHS, ALL, QUANT, MULTI, SUB_FILTER, FILTER_LABEL, FILTER_TYPE, VECTOR } from "../constants";
+
 export function processFilters(layerData, filterOptions, isOr) {
   const Data =
     layerData.Data ||
@@ -18,11 +20,11 @@ export function processFilters(layerData, filterOptions, isOr) {
     return f;
   }
   const acceptedFilterValues = layerData.aggregate.filterIsPrev
-    ? layerData.aggregate['accepted-filter-values'].map(parseFilterVals)
-    : layerData.aggregate['accepted-filter-values'];
+    ? layerData.aggregate[ACCEPTED_FILTER_VALUES].map(parseFilterVals)
+    : layerData.aggregate[ACCEPTED_FILTER_VALUES];
   const acceptedSubFilterValues = layerData.aggregate.filterIsPrev
-    ? layerData.aggregate['accepted-sub-filter-values'].map(parseFilterVals)
-    : layerData.aggregate['accepted-sub-filter-values'];
+    ? layerData.aggregate[ACCEPTED_SUB_FILTER_VALUES].map(parseFilterVals)
+    : layerData.aggregate[ACCEPTED_SUB_FILTER_VALUES];
   const filters = [];
   const combinedData = [];
   let datum;
@@ -32,12 +34,12 @@ export function processFilters(layerData, filterOptions, isOr) {
     if (typeof acceptedFilterValues[f] === 'string') {
       return datum[layerData.aggregate.filter[f]] === acceptedFilterValues[f];
     } else if (
-      layerData['data-parse'] &&
-      layerData['data-parse'][layerData.aggregate.filter[f]] &&
-      layerData['data-parse'][layerData.aggregate.filter[f]].type &&
-      layerData['data-parse'][layerData.aggregate.filter[f]].type === 'multiple'
+      layerData[DATA_PARSE] &&
+      layerData[DATA_PARSE][layerData.aggregate.filter[f]] &&
+      layerData[DATA_PARSE][layerData.aggregate.filter[f]].type &&
+      layerData[DATA_PARSE][layerData.aggregate.filter[f]].type === MULTIPLE
     ) {
-      const splitBy = layerData['data-parse'][layerData.aggregate.filter[f]].split || ', ';
+      const splitBy = layerData[DATA_PARSE][layerData.aggregate.filter[f]].split || ', ';
       const vals = datum[layerData.aggregate.filter[f]].toString().split(splitBy);
       let hasMatches = false;
       for (let x = 0; x < vals.length; x += 1) {
@@ -68,8 +70,8 @@ export function processFilters(layerData, filterOptions, isOr) {
       filterVal =
         datum[layerData.aggregate.filter] && datum[layerData.aggregate.filter].trim().toLowerCase();
       subFilterVal =
-        datum[layerData.aggregate['sub-filter']] &&
-        datum[layerData.aggregate['sub-filter']].trim().toLowerCase();
+        datum[layerData.aggregate[SUB_FILTER]] &&
+        datum[layerData.aggregate[SUB_FILTER]].trim().toLowerCase();
       if (
         !acceptedFilterValues &&
         !acceptedSubFilterValues &&
@@ -99,16 +101,16 @@ export function processFilters(layerData, filterOptions, isOr) {
   } else if (layerData.aggregate.filter) {
     for (f = 0; f < layerData.aggregate.filter.length; f += 1) {
       if (
-        acceptedFilterValues[f] !== 'all' &&
-        acceptedFilterValues[f] !== 'quant' &&
-        acceptedFilterValues[f] !== 'multi'
+        acceptedFilterValues[f] !== ALL &&
+        acceptedFilterValues[f] !== QUANT &&
+        acceptedFilterValues[f] !== MULTI
       ) {
         if (acceptedFilterValues.filter(a => Array.isArray(a) && a.length).length > 1 && isOr) {
           (Data.features || Data).filter(filterProcessor).map(d => combinedData.push(d));
         } else {
           data = data.filter(filterProcessor);
         }
-      } else if (acceptedFilterValues[f] === 'quant') {
+      } else if (acceptedFilterValues[f] === QUANT) {
         // TODO - ADD SUPPORT FOR QUANT FILTERS!
       }
     }
@@ -125,8 +127,8 @@ export function processFilters(layerData, filterOptions, isOr) {
 }
 
 export function generateFilterOptionsPrev(layerData) {
-  const acceptedFilterValues = layerData.aggregate['accepted-filter-values'];
-  const acceptedSubFilterValues = layerData.aggregate['accepted-sub-filter-values'];
+  const acceptedFilterValues = layerData.aggregate[ACCEPTED_FILTER_VALUES];
+  const acceptedSubFilterValues = layerData.aggregate[ACCEPTED_SUB_FILTER_VALUES];
   const filters = [].concat(...[acceptedFilterValues, acceptedSubFilterValues]);
   return [...new Set(filters)];
 }
@@ -157,34 +159,34 @@ export function generateFilterOptions(layerData) {
     filter = layerFilter[f];
     filterLabel =
       ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-        'filter-label'
+        FILTER_LABEL
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL][
         f
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-label'][
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL][
         f
       ].length
         ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-            'filter-label'
+            FILTER_LABEL
           ][f]
         : filter;
 
     // define which type of filter it should be (vector or stops, default to vector)
     filterType =
       ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-        'filter-type'
+        FILTER_TYPE
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE][
         f
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)['filter-type'][
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE][
         f
       ].length
         ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-            'filter-type'
+            FILTER_TYPE
           ][f]
-        : 'vector';
+        : VECTOR;
 
     // define unique filter and sub-filter values on filterOptions object
     filterOptions[filter] = {
@@ -194,15 +196,15 @@ export function generateFilterOptions(layerData) {
     };
   }
 
-  const multiFilterVaulesMap = k => layerData['data-parse'][filter].key[k];
+  const multiFilterVaulesMap = k => layerData[DATA_PARSE][filter].key[k];
   const multiFilterVaulesGen = (lo, f) => {
     const uniqueVals = [];
     const splitBy =
-      (lo['data-parse'] && lo['data-parse'][f] && lo['data-parse'][f].split) ||
+      (lo[DATA_PARSE] && lo[DATA_PARSE][f] && lo[DATA_PARSE][f].split) ||
       (lo.layerObj &&
-        lo.layerObj['data-parse'] &&
-        lo.layerObj['data-parse'][f] &&
-        lo.layerObj['data-parse'][f].split) ||
+        lo.layerObj[DATA_PARSE] &&
+        lo.layerObj[DATA_PARSE][f] &&
+        lo.layerObj[DATA_PARSE][f].split) ||
       ', ';
     const sourceData = lo.data || lo.mergedData || lo.source.data.features || lo.source.data;
     if (!(sourceData.features || sourceData).length) return uniqueVals;
@@ -236,17 +238,17 @@ export function generateFilterOptions(layerData) {
       filter = layerFilter[f];
       acceptedFilterValues =
         ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-          'accepted-filter-values'
+          ACCEPTED_FILTER_VALUES
         ] &&
         ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-          'accepted-filter-values'
+          ACCEPTED_FILTER_VALUES
         ][f];
-      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' && layerData['data-parse'][filter] && layerData['data-parse'][filter].type !== "multiple") {
+      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' && layerData[DATA_PARSE][filter] && layerData[DATA_PARSE][filter].type !== MULTIPLE) {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
           doPushDatum = false;
           break;
         }
-      } else if (acceptedFilterValues === 'quant' && Number.isNaN(Number(datum[filter]))) {
+      } else if (acceptedFilterValues === QUANT && Number.isNaN(Number(datum[filter]))) {
         // check datum[filter] value against quantitative condition
         doPushDatum = false;
       }
@@ -259,14 +261,14 @@ export function generateFilterOptions(layerData) {
         filter = layerFilter[f];
         acceptedFilterValues =
           ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-            'accepted-filter-values'
+            ACCEPTED_FILTER_VALUES
           ] &&
           ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-            'accepted-filter-values'
+            ACCEPTED_FILTER_VALUES
           ][f];
 
         // If filters aren't filterd and filterType is multi
-        filterIsMultiSelect = acceptedFilterValues === 'multi';
+        filterIsMultiSelect = acceptedFilterValues === MULTI;
 
         // If filters are filtered then acceptedFilterValues is an array
         // todo - decouple filters from data-parse config
@@ -274,21 +276,21 @@ export function generateFilterOptions(layerData) {
         if (!filterIsMultiSelect && Array.isArray(acceptedFilterValues)) {
           // Check data-parse config for filter ONA select type
           filterIsMultiSelect =
-            (layerData['data-parse'] &&
-              layerData['data-parse'][filter] &&
-              layerData['data-parse'][filter].type === 'multiple') ||
+            (layerData[DATA_PARSE] &&
+              layerData[DATA_PARSE][filter] &&
+              layerData[DATA_PARSE][filter].type === MULTIPLE) ||
             (layerData.layerObj &&
-              layerData.layerObj['data-parse'] &&
-              layerData.layerObj['data-parse'][filter] &&
-              layerData.layerObj['data-parse'][filter].type === 'multiple');
+              layerData.layerObj[DATA_PARSE] &&
+              layerData.layerObj[DATA_PARSE][filter] &&
+              layerData.layerObj[DATA_PARSE][filter].type === MULTIPLE);
         }
 
-        // define if the filter is type 'multi'
+        // define if the filter is type MULTI
         if (filterOptions[filter] && filterIsMultiSelect) {
-          filterOptions[filter].filterType = 'multi';
+          filterOptions[filter].filterType = MULTI;
         }
 
-        // if filter type is 'multi'
+        // if filter type is MULTI
         if (
           filterIsMultiSelect &&
           (!filterOptions[filter].filterValues ||
@@ -296,10 +298,10 @@ export function generateFilterOptions(layerData) {
         ) {
           // add categories for filter options based on layer config data parse
           const multiFilterVaules =
-            (layerData['data-parse'] &&
-              layerData['data-parse'][filter] &&
-              layerData['data-parse'][filter].key &&
-              Object.keys(layerData['data-parse'][filter].key).map(multiFilterVaulesMap)) ||
+            (layerData[DATA_PARSE] &&
+              layerData[DATA_PARSE][filter] &&
+              layerData[DATA_PARSE][filter].key &&
+              Object.keys(layerData[DATA_PARSE][filter].key).map(multiFilterVaulesMap)) ||
             multiFilterVaulesGen(layerData, filter);
           for (let m = 0; m < multiFilterVaules.length; m += 1) {
             filterOptions[filter].filterValues[multiFilterVaules[m]] = 0;
@@ -314,7 +316,7 @@ export function generateFilterOptions(layerData) {
         ) {
           filterOptions[filter].filterValues[datum[filter]] = 0;
           if (
-            (acceptedFilterValues === 'quant' ||
+            (acceptedFilterValues === QUANT ||
               (Array.isArray(acceptedFilterValues) &&
                 !Number.isNaN(Number(acceptedFilterValues[0])))) &&
             !filterOptions[filter].quantitativeValues
@@ -328,20 +330,20 @@ export function generateFilterOptions(layerData) {
         }
 
         if (
-          acceptedFilterValues === 'quant' ||
+          acceptedFilterValues === QUANT ||
           (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0])))
         ) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {
           // handle tallying of select multiple categories
           const splitBy =
-            (layerData['data-parse'] &&
-              layerData['data-parse'][filter] &&
-              layerData['data-parse'][filter].split) ||
+            (layerData[DATA_PARSE] &&
+              layerData[DATA_PARSE][filter] &&
+              layerData[DATA_PARSE][filter].split) ||
             (layerData.layerObj &&
-              layerData.layerObj['data-parse'] &&
-              layerData.layerObj['data-parse'][filter] &&
-              layerData.layerObj['data-parse'][filter].split) ||
+              layerData.layerObj[DATA_PARSE] &&
+              layerData.layerObj[DATA_PARSE][filter] &&
+              layerData.layerObj[DATA_PARSE][filter].split) ||
             ', ';
           const selectMultipleValues =
             typeof datum[filter] === 'string'
@@ -362,28 +364,12 @@ export function generateFilterOptions(layerData) {
   }
   return filterOptions;
 }
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 export function filterDataByPeriod(layerData, periodField, period) {
   let periods = period ? [period] : layerData.map(datum => datum[periodField]);
   if (!period) periods = Array.from(new Set(periods));
 
-  if (months.indexOf(periods[0]) !== -1) {
-    periods.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+  if (MONTHS.indexOf(periods[0]) !== -1) {
+    periods.sort((a, b) => MONTHS.indexOf(a) - MONTHS.indexOf(b));
   } else if (periods[0].indexOf('/') !== -1) {
     periods.sort((a, b) => Number(a.split('/')[1]) - Number(b.split('/')[1]));
   }
