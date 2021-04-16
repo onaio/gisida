@@ -226,7 +226,7 @@ export function generateFilterOptions(layerData) {
             ? activeData[f].toString().split(splitBy)
             : [...activeData[f]];
         for (let v = 0; v < vals.length; v += 1) {
-          if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
+          if (uniqueVals.indexOf(vals[v].trim()) === -1) uniqueVals.push(vals[v].trim());
         }
       }
     }
@@ -344,7 +344,9 @@ export function generateFilterOptions(layerData) {
 
         if (
           acceptedFilterValues === QUANT ||
-          (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0])))
+          (Array.isArray(acceptedFilterValues) &&
+            !Number.isNaN(Number(acceptedFilterValues[0])) &&
+            !filterIsMultiSelect)
         ) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {
