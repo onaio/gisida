@@ -53,7 +53,10 @@ export function processFilters(layerData, filterOptions, isOr) {
       layerData[DATA_PARSE][layerData.aggregate.filter[f]].type === MULTIPLE
     ) {
       const splitBy = layerData[DATA_PARSE][layerData.aggregate.filter[f]].split || ', ';
-      const vals = datum[layerData.aggregate.filter[f]].toString().split(splitBy);
+      const vals =
+        typeof datum[layerData.aggregate.filter[f]] === 'string'
+          ? datum[layerData.aggregate.filter[f]].toString().split(splitBy)
+          : datum[layerData.aggregate.filter[f]] || [];
       let hasMatches = false;
       for (let x = 0; x < vals.length; x += 1) {
         if (acceptedFilterValues[f].includes(vals[x])) {
@@ -147,8 +150,9 @@ export function generateFilterOptionsPrev(layerData) {
 }
 
 export function generateFilterOptions(layerData) {
-  const data =
-    layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
+  let data = layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
+
+  data = processFilters(layerData);
 
   const filterOptions = {};
   let filter;
@@ -226,7 +230,7 @@ export function generateFilterOptions(layerData) {
             ? activeData[f].toString().split(splitBy)
             : [...activeData[f]];
         for (let v = 0; v < vals.length; v += 1) {
-          if (uniqueVals.indexOf(vals[v].trim()) === -1) uniqueVals.push(vals[v].trim());
+          if (uniqueVals.indexOf(vals[v]) === -1) uniqueVals.push(vals[v]);
         }
       }
     }
