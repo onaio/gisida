@@ -95,8 +95,8 @@ export default function parseData(spec, datum) {
             return propSpec.key[itemProp];
         }
         // if all else fails, simply return the itemProp
-        return itemProp;
-    };
+    return itemProp.trim();
+  };
 
     // loop through all datum properties
     for (let p = 0; p < datumProps.length; p += 1) {
