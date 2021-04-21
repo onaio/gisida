@@ -114,10 +114,16 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             // if row matches property
             if (
               (layer.popup.join &&
-                row[layer.popup.join[0]] ===
+                /* Use double equals to ensure matches when source data numbers are formatted as strings e.g
+                123" instead of 123 */
+                // eslint-disable-next-line eqeqeq
+                row[layer.popup.join[0]] ==
                   (feature.properties && feature.properties[layer.popup.join[1]])) ||
               (!layer.popup.join &&
-                row[layer.source.join[1]] ===
+                /* Use double equals to ensure matches when source data numbers are formatted as strings e.g
+                123" instead of 123 */
+                // eslint-disable-next-line eqeqeq
+                row[layer.source.join[1]] ==
                   (feature.properties && feature.properties[layer.source.join[0]]))
             ) {
               // Add header and body to popup with data from layer
