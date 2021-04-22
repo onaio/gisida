@@ -14,6 +14,7 @@ import {
   MAP,
   AUTH,
   CATEGORIES,
+  CURRENTLANGUAGE
 } from './reducers';
 
 import { loadJSON } from '../utils/files';
@@ -32,6 +33,7 @@ const defaultReducers = {
   AUTH,
   'map-1': MAP,
   CATEGORIES,
+  CURRENTLANGUAGE
 };
 
 /**
