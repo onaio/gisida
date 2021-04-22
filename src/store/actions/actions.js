@@ -340,6 +340,14 @@ export const buildCategories = (groups, mapLayers) => ({
   mapLayers,
 });
 
+export const setLanguage = (mapId, language) => {
+  return { 
+    type: types.SET_LANGUAGE,
+    language,
+    mapId
+  }
+};
+
 export default {
   initApp,
   initStyles,
@@ -389,4 +397,5 @@ export default {
   fetchFormsError,
   logoutUser,
   buildCategories,
+  setLanguage,
 };
