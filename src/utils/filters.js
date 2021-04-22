@@ -243,7 +243,8 @@ export function generateFilterOptions(layerData) {
         ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
           ACCEPTED_FILTER_VALUES
         ][f];
-      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' && layerData[DATA_PARSE][filter] && layerData[DATA_PARSE][filter].type !== MULTIPLE) {
+      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' 
+      && layerData[DATA_PARSE] && layerData[DATA_PARSE][filter] && layerData[DATA_PARSE][filter].type !== MULTIPLE) {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
           doPushDatum = false;
           break;
