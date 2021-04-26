@@ -1,9 +1,7 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
-import translationHook from '../utils/translationHook';
+import htmlTextTranslations from '../utils/htmlTextTranslations';
 import commaFormatting from './../utils/commaFormatting';
-
-const h2p = require('html2plaintext');
 
 /**
  *  Adds popup to the map
@@ -258,12 +256,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     // Add popup if content exists
     if (content) {
       /** Translate popup Values */
-      h2p(content).split(' ').forEach((popupLiteral) => {
-        // remove next line literals
-        popupLiteral.replace(/\n|\r/g, "");
-        const translatedString = translationHook(popupLiteral, languageTranslations, CURRENTLANGUAGE);
-        content = content.replace(popupLiteral, translatedString);
-      });
+      content = htmlTextTranslations(content, true, languageTranslations, CURRENTLANGUAGE)
       popup
         .setLngLat(map.unproject(e.point))
         .setHTML(content)
