@@ -80,5 +80,7 @@ gisida.localStorage = {};
 gisida.localStorage.loadState = require('./utils/localStorage').loadState;
 gisida.localStorage.saveState = require('./utils/localStorage').saveState;
 gisida.isTokenExpired = require('./utils/isTokenExpired').default;
+gisida.translationHook = require('./utils/translationHook').default;
+gisida.htmlTextTranslations = require('./utils/htmlTextTranslations').default;
 
 module.exports = gisida;

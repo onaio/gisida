@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
+import htmlTextTranslations from '../utils/htmlTextTranslations';
 import commaFormatting from './../utils/commaFormatting';
 
 /**
@@ -24,7 +25,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     popup.remove();
     // Get layers from current state
     const currentState = dispatch(getCurrentState());
-    const { layers, timeseries, activeLayerId } = currentState[mapId];
+    const { layers, timeseries, activeLayerId, } = currentState[mapId];
+    const { APP: { languageTranslations }, CURRENTLANGUAGE } = currentState;
     // Generate list of active layers
     const activeLayers = [];
     Object.keys(layers).forEach(key => {
@@ -253,6 +255,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Add popup if content exists
     if (content) {
+      /** Translate popup Values */
+      content = htmlTextTranslations(content, true, languageTranslations, CURRENTLANGUAGE)
       popup
         .setLngLat(map.unproject(e.point))
         .setHTML(content)
