@@ -14,7 +14,7 @@ import {
 } from '../constants';
 
 export function processFilters(layerData, filterOptions, isOr) {
-  const Data =
+  const Data = layerData.data || 
     layerData.Data ||
     (layerData.mergedData &&
       (Array.isArray(layerData.mergedData)
@@ -151,8 +151,8 @@ export function generateFilterOptionsPrev(layerData) {
 
 export function generateFilterOptions(layerData) {
   let data = layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
-
-  data = processFilters(layerData);
+  // override layerData for timeseries layers
+  data = processFilters(layerData.layerObj ? layerData.layerObj : layerData);
 
   const filterOptions = {};
   let filter;
