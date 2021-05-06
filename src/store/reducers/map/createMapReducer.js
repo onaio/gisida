@@ -357,7 +357,7 @@ function receiveData(state, action) {
       { showSpinner: state.showSpinner, layers: state.layers },
       action
     ),
-    doApplyFilters: layer && layer.filters && !!layer.filters.admin,
+    doApplyFilters: layer && layer.filters && (!!layer.filters.admin || !!layer.filters.tsFilter),
   };
 }
 
