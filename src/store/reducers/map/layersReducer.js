@@ -23,7 +23,10 @@ export function toggleLayer(layersState, action) {
     layer.layers.forEach(groupedLayer => {
       let subLayerId = groupedLayer;
       if (subLayerId.includes('http')) {
-        subLayerId = subLayerId.split('/').slice(-1).pop();
+        subLayerId = subLayerId
+          .split('/')
+          .slice(-1)
+          .pop();
       }
       updatedLayers[subLayerId].visible = !layer.visible;
       updatedLayers[subLayerId].parent = layer.id;
@@ -102,6 +105,7 @@ function updateTimeSeries(layersState, action) {
         filters: {
           ...layersState[layerId].filters,
           admin: timeseries[layerId].adminFilter && [...timeseries[layerId].adminFilter],
+          tsFilter: timeseries[layerId].tsFilter && [...timeseries[layerId].tsFilter],
         },
       },
     };
