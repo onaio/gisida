@@ -165,7 +165,7 @@ export default function (layer, mapConfig, dispatch) {
         } else if (!layer['radius-prop'] && stops) {
           styleSpec.paint['circle-radius'] = {
             property: layer.source.join[0],
-            stops: stops[1][0],
+            stops: timefield ? stops[1][stops[1].length - 1] :  stops[1][0], // pick stops based timeseries type
             type: 'categorical',
           };
         }
