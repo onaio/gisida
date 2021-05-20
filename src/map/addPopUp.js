@@ -256,7 +256,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
     // Add popup if content exists
     if (content) {
       /** Translate popup Values */
-      content = htmlTextTranslations(content, true, languageTranslations, CURRENTLANGUAGE)
+      content = htmlTextTranslations(content, languageTranslations, CURRENTLANGUAGE)
       popup
         .setLngLat(map.unproject(e.point))
         .setHTML(content)

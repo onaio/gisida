@@ -1,23 +1,26 @@
 import translationHook from './translationHook';
 
-const h2p = require('html2plaintext');
+const jsdom = require('jsdom');
 
-const htmlTextTranslations = (content, translateIndividualStrings, languageTranslations, CURRENTLANGUAGE) => {
-  let translateString = content;
-  if (translateIndividualStrings) {
-    h2p(translateString).split(' ').forEach((literal) => {
-      // removes new line in prep of translation
-      literal.replace(/\n|\r/g, "");
-      const translatedString = translationHook(literal, languageTranslations, CURRENTLANGUAGE);
-      translateString = translateString.replace(literal, translatedString);
-    });
-    return translateString;
+const htmlTextTranslations = (content, languageTranslations, CURRENTLANGUAGE) => {
+  const { body } = jsdom.jsdom(content);
+
+  function translateChildNodes(childNodes) {
+    const numOfChildren = childNodes.length;
+    for(let i = 0; i < numOfChildren; i += 1) {
+      const elem = childNodes[i];
+      if (elem.nodeName === '#text') {
+        elem.nodeValue = translationHook(elem.nodeValue, languageTranslations, CURRENTLANGUAGE);
+      }
+      if (elem.hasChildNodes()) {
+        translateChildNodes(elem.childNodes)
+      }
+    }
   }
-  h2p(translateString).split(/\n/).forEach((textBlock) => {
-    const translatedBlock = translationHook(textBlock, languageTranslations, CURRENTLANGUAGE);
-    translateString = translateString.replace(textBlock, translatedBlock);
-  });
-  return translateString;
+
+  translateChildNodes(body.childNodes)
+
+  return body.innerHTML;
 }
 
 export default htmlTextTranslations;
