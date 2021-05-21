@@ -2,8 +2,10 @@ import translationHook from './translationHook';
 
 const jsdom = require('jsdom');
 
+const { JSDOM } = jsdom;
+
 const htmlTextTranslations = (content, languageTranslations, CURRENTLANGUAGE) => {
-  const { body } = jsdom.jsdom(content);
+  const { body } = new JSDOM(content).window.document;
 
   function translateChildNodes(childNodes) {
     const numOfChildren = childNodes.length;
