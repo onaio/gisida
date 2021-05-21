@@ -14,9 +14,9 @@ commands:
             fi
 jobs:
   build:
-    working_directory: ~/gisida
+    working_directory: ~/project/gisida
     docker:
-      - image: circleci/node:8.8.0
+      - image: cimg/node:16.2.0
     steps:
       - checkout
       - run:
@@ -24,13 +24,13 @@ jobs:
           command: yarn install --ignore-engines
       - run:
           name: Run eslint
-          command: npm run lint
+          command: yarn lint
       - run:
           name: Run jest
-          command: npm test
+          command: yarn test
   publish:
     docker:
-      - image: circleci/node:8.0.0
+      - image: cimg/node:16.2.0
     steps:
       - early_return_for_forked_pull_requests
       - checkout
