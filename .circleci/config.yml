@@ -16,7 +16,7 @@ jobs:
   build:
     working_directory: ~/gisida
     docker:
-      - image: circleci/node:6.11.5
+      - image: circleci/node:8.8.0
     steps:
       - checkout
       - run:
