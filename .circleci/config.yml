@@ -30,7 +30,7 @@ jobs:
           command: npm test
   publish:
     docker:
-      - image: circleci/node:6.11.5
+      - image: circleci/node:8.0.0
     steps:
       - early_return_for_forked_pull_requests
       - checkout
