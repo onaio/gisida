@@ -3,15 +3,20 @@ const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const config = {
+  target: "node",
   entry: {
     main: ['./src/index.js'],
   },
   output: {
     path: path.resolve('./build/'),
     filename: 'gisida.js',
-    libraryTarget: 'umd',
+    // libraryTarget: 'umd',
+    libraryTarget: 'commonjs2',
   },
   devtool: 'cheap-module-source-map',
+  externals: {
+		canvas: "commonjs canvas"
+	},
   module: {
     rules: [
       {
