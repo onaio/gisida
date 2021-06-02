@@ -1,6 +1,7 @@
 import Mustache from 'mustache';
 import { getCurrentState } from '../store/actions/actions';
 import htmlTextTranslations from '../utils/htmlTextTranslations';
+import translationHook from '../utils/translationHook';
 import commaFormatting from './../utils/commaFormatting';
 
 /**
@@ -92,7 +93,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (layer && layer.type !== 'chart') {
         // check for timeseries layer data or non-timeseries layer data
         // define data to loop through looking for join matches
-
+        layer.popup.body = htmlTextTranslations(layer.popup.body, false, languageTranslations, CURRENTLANGUAGE)
         data =
           layer.aggregate &&
           layer.aggregate.timeseries &&
@@ -114,6 +115,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               ...feature.properties,
             };
             // if row matches property
+            const popupHeader = translationHook(rowItem[layer.popup.header]);
             if (
               (layer.popup.join &&
                 /* Use double equals to ensure matches when source data numbers are formatted as strings e.g
@@ -129,7 +131,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   (feature.properties && feature.properties[layer.source.join[0]]))
             ) {
               // Add header and body to popup with data from layer
-              if (rowItem[layer.popup.header]) {
+              if (popupHeader) {
                 /**
                  * ('') hideNulls - Custom flag that hides null values in data on the popup
                  */
@@ -152,7 +154,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                     });
                   }
                   content =
-                    `<div><b>${rowItem[layer.popup.header]}</b></div>` +
+                    `<div><b>${popupHeader}</b></div>` +
                     `<div><center>${Mustache.render(layer.popup.body, popupData)}</center></div>`;
                 } else {
                   const found = [];
@@ -214,7 +216,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   }
                   content =
                     `<div>` +
-                    `<div><b>${row[layer.popup.header]}</b></div>` +
+                    `<div><b>${popupHeader}</b></div>` +
                     `<div><center>${bodySection}</center></div>` +
                     `<div><center>${commaSeparatedList}</center></div>` +
                     `</div>`;
@@ -232,8 +234,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           // eslint-disable-next-line no-lonely-if
           const formattedData = commaFormatting(layer, feature.properties, true);
           if (feature.properties && feature.properties[layer.popup.header]) {
-            content = `<div><b>${feature.properties &&
-              feature.properties[layer.popup.header]}</b></div>`;
+            content = `<div><b>${translationHook(feature.properties[layer.popup.header])}</b></div>`;
             if (layer.popup.body) {
               content += `<div><center>${Mustache.render(
                 layer.popup.body,
@@ -255,8 +256,6 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
 
     // Add popup if content exists
     if (content) {
-      /** Translate popup Values */
-      content = htmlTextTranslations(content, true, languageTranslations, CURRENTLANGUAGE)
       popup
         .setLngLat(map.unproject(e.point))
         .setHTML(content)
