@@ -85,6 +85,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               timeseries[activeLayerId].period[timeseries[activeLayerId].temporalIndex]
           );
         });
+        if (!feature) {
+          feature = features[f];
+        }
       } else {
         feature = features[f];
       }
@@ -110,6 +113,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
             row = {
               ...(data[r].properties || data[r]),
             };
+            
             const rowItem = {
               ...row,
               ...feature.properties,
