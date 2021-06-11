@@ -93,7 +93,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
       if (layer && layer.type !== 'chart') {
         // check for timeseries layer data or non-timeseries layer data
         // define data to loop through looking for join matches
-        layer.popup.body = htmlTextTranslations(layer.popup.body, false, languageTranslations, CURRENTLANGUAGE)
+        const popupBody = htmlTextTranslations(layer.popup.body, false, languageTranslations, CURRENTLANGUAGE)
         data =
           layer.aggregate &&
           layer.aggregate.timeseries &&
@@ -114,8 +114,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
               ...row,
               ...feature.properties,
             };
-            // if row matches property
-            const popupHeader = translationHook(rowItem[layer.popup.header]);
+            const popupHeader = translationHook(rowItem[layer.popup.header], languageTranslations, CURRENTLANGUAGE);
             if (
               (layer.popup.join &&
                 /* Use double equals to ensure matches when source data numbers are formatted as strings e.g
@@ -155,7 +154,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   }
                   content =
                     `<div><b>${popupHeader}</b></div>` +
-                    `<div><center>${Mustache.render(layer.popup.body, popupData)}</center></div>`;
+                    `<div><center>${Mustache.render(popupBody, popupData)}</center></div>`;
                 } else {
                   const found = [];
                   const rxp = /{{([^}]+)}/g;
@@ -172,9 +171,9 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                   });
                   const bodyProperties =
-                    layer.popup.body &&
-                    layer.popup.body.match(/{{(.*?)\}}/g) &&
-                    layer.popup.body
+                    popupBody &&
+                    popupBody.match(/{{(.*?)\}}/g) &&
+                    popupBody
                       .match(/{{(.*?)\}}/g)
                       .map(val => val.replace(/{{?/g, '').replace(/}}?/g, ''));
                   if (bodyProperties) {
@@ -210,7 +209,7 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                   let bodySection = '';
                   if (bodyProperties && commaFormatting(layer, rowItem, true)) {
                     bodySection = Mustache.render(
-                      layer.popup.body,
+                      popupBody,
                       commaFormatting(layer, rowItem, true)
                     );
                   }
@@ -222,8 +221,8 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
                     `</div>`;
                 }
               } else {
-                content = layer.popup.body
-                  ? Mustache.render(layer.popup.body, commaFormatting(layer, rowItem, true))
+                content = popupBody
+                  ? Mustache.render(popupBody, commaFormatting(layer, rowItem, true))
                   : '';
               }
               break;
@@ -234,15 +233,15 @@ export default function addMousemoveEvent(mapId, mapboxGLMap, dispatch) {
           // eslint-disable-next-line no-lonely-if
           const formattedData = commaFormatting(layer, feature.properties, true);
           if (feature.properties && feature.properties[layer.popup.header]) {
-            content = `<div><b>${translationHook(feature.properties[layer.popup.header])}</b></div>`;
-            if (layer.popup.body) {
+            content = `<div><b>${translationHook(feature.properties[layer.popup.header], languageTranslations, CURRENTLANGUAGE)}</b></div>`;
+            if (popupBody) {
               content += `<div><center>${Mustache.render(
-                layer.popup.body,
+                popupBody,
                 formattedData
               )}</center></div>`;
             }
           } else {
-            content = Mustache.render(layer.popup.body, formattedData);
+            content = Mustache.render(popupBody, formattedData);
           }
         }
       }
