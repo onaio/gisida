@@ -13,6 +13,48 @@ Gisida uses Redux to manage layers data state.
 
 Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need to quickly build a Map Dashboard using Gisida and MapSpec layers.
 
+## Branches for various clients
+
+Having versioned releases for gisida and gisida-react would be ideal for various clients. This has not been achieved since we have clients using different braches on these repos and time allocated for support is not enough to test the compatibility with the various client setups. Merging these branches is important but before this is done listing the branches in use for the various clients will be of help.
+
+```
+client
+
+repo - branch
+```
+
+gisida-react - superset-only-auth
+service-mapping - oauth
+gisida-react-private - master
+
+### somreport
+
+- gisida - cascade-multi-and-single-selects
+- gisida-react - superset-only-auth
+- service-mapping - oauth
+- gisida-react-private - master
+
+### ingc-mozambique, gisida-yemen, idai zimbabwe
+
+- gisida - stage
+- gisida-react - stage
+- client-repo - master
+- gisida-react-private - master
+
+### irfsomalia
+
+- gisida - stage
+- gisida-react - layer-specific-style
+- irfsomalia - copy-of-feature-navbar-2
+- gisida-react-private - hacky-chart-scale-fix
+
+### gisida-cambodia
+
+- gisida - stage
+- gisida-react - translation-toggle
+- gisida-cambodia - translation-no-auth
+- gisida-react-private - master
+
 ## Installation
 
 ```
@@ -272,6 +314,7 @@ The application requires a `public/config/site-config.json` to initialize the Ma
 Let's go over each of the keys in the `site-config.json` file
 
 1. `APP` **(Required)** : The `APP` key expects and object and ontains properties for the site settings. The following are the properties supported
+
 - `mapConfig` **(Required)** : An object that contains keys for setting the values for the properties for
   interacting with the map. More information about each of these properties including their defaults
   can be found at the [Mapbox GL JS API Reference](https://docs.mapbox.com/mapbox-gl-js/api/map/)
@@ -281,28 +324,30 @@ Let's go over each of the keys in the `site-config.json` file
     form `mapbox://styles/:owner/:style`
   - `center` **(Required)** : The initial geographical centerpoint of the map (Uses longitude, latitude coordinated order).
   - `zoom` **(Required)** : The initial zoom level of the map.
-  - `oauthclientID` **(Optional)** :  Oauth client id, needed to get the access token from the authorization server. 
+  - `oauthclientID` **(Optional)** : Oauth client id, needed to get the access token from the authorization server.
   - `mapBounds` **(Optional)** : Map points when exporting i.e from south west to north east.
-      e.g 
+    e.g
 
-      ```
-      {
-        "_sw": {
-          "lng": 22.13636132811544,
-          "lat": -0.14320447808067627
-        },
-        "_ne": {
-          "lng": 62.89563867185916,
-          "lat": 11.188804478371793
-        }
+    ```
+    {
+      "_sw": {
+        "lng": 22.13636132811544,
+        "lat": -0.14320447808067627
+      },
+      "_ne": {
+        "lng": 62.89563867185916,
+        "lat": 11.188804478371793
       }
-      ```
+    }
+    ```
+
   - `preserveDrawingBuffer` **(Optional)** : whether to preserve the buffers until manually cleared or overwritten.
 
 - `appColor` **(Required)** : The app primary color that will be displayed most frequently across the screens such
   as the background of the title bar, buttons.
-- `accessToken` **(Required)** :  Your Mapbox basemap style API access token.
+- `accessToken` **(Required)** : Your Mapbox basemap style API access token.
 - `hyperLink` **(Optional)** : Add links and description to menu items. More info on this setting can be found [here](https://github.com/onaio/gisida-react/blob/staging/docs/features/menu-legend-links.md)
+
   - `description` **(Optional)** : Add's info link on sector/ categories
   - `link` **(Optional)** Add's link on sector/category.
     e.g.
@@ -318,14 +363,14 @@ Let's go over each of the keys in the `site-config.json` file
         }
       }
     ```
-  
-- `authConfigApiMap` **(Optional)** : Supplemental auth api string, can either be data or metadata. Defaults to metadata 
-    e.g https://api.ona.io/api/v1/data/467840.csv or https://api.ona.io/api/v1/metadata/467840.csv
+
+- `authConfigApiMap` **(Optional)** : Supplemental auth api string, can either be data or metadata. Defaults to metadata
+  e.g https://api.ona.io/api/v1/data/467840.csv or https://api.ona.io/api/v1/metadata/467840.csv
 - `apiAccessToken` **(Optional)** : Ona data/external api access token.
 - `includeNavControls` **(Optional)** : Boolean value determines if map controls will be included. Defaults to true
 - `removeMapScale` **(Optional)** : Removes map scale. Defaults to false
 - `showSinglePeriods` **(Optional)** : Show timeseries for single periods. Defaults to false
-- `NULL_LAYER_TEXT` **(Optional)** : Custom Text to be shown when user has no access to a layer. Defaults to ``` You don't have permision to view this category```
+- `NULL_LAYER_TEXT` **(Optional)** : Custom Text to be shown when user has no access to a layer. Defaults to `You don't have permision to view this category`
 - `appIcon` **(Optional)** : The relative path to image that will be displayed as the logo on the top of the title bar.
 - `appName` **(Optional)** : The name for the app that will be displayed on the title bar.
 - `appNameDesc` **(Optional)** : A short description of what your app is about. Displayed beneath the app name.
@@ -352,6 +397,7 @@ Let's go over each of the keys in the `site-config.json` file
 - `supersetBase`: **(Optional)**: The base API URL for superset e.g `"supersetBase": "https://discover.ona.io/"`. This base URL will be used to load datasets from superset
 - `authConfig`: **(Optional)**: The ID of the ONA form that holds the layer and view permissions for the users. Read more on how to set this permissions at [Gisida OAuth Implementation](https://github.com/onaio/gisida/blob/master/docs/OAuth.md)
 - `supersetOnlyLogin`: **(Optional)**: Boolean value that triggers login/logout components for superset(dashboard). Defaults to false
+
 2. `STYLES` **(Optional)** : All mapbox styles available the **including the default style** specified in `APP.mapConfig.style`. If the array is more than 1, a user can switch between styles on the map to apply the preferred style.
 
 ```json
