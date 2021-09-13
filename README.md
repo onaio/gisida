@@ -15,7 +15,7 @@ Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need
 
 ## Branches for various clients
 
-Having versioned releases for gisida and gisida-react would be ideal for various clients. This has not been achieved since we have clients using different braches on these repos and time allocated for support is not enough to test the compatibility with the various client setups. Merging these branches is important but before this is done listing the branches in use for the various clients will be of help.
+Having versioned releases for gisida and gisida-react would be ideal for various clients. This has not been achieved since we have clients using different braches on these repos and time allocated for support is not enough to test the compatibility with the various client setups. Below is a list of branches being used by various clients.
 
 ```
 client
