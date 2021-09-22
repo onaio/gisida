@@ -14,7 +14,7 @@ import {
   MAP,
   AUTH,
   CATEGORIES,
-  CURRENTLANGUAGE
+  CURRENTLANGUAGE,
 } from './reducers';
 
 import { loadJSON } from '../utils/files';
@@ -33,7 +33,7 @@ const defaultReducers = {
   AUTH,
   'map-1': MAP,
   CATEGORIES,
-  CURRENTLANGUAGE
+  CURRENTLANGUAGE,
 };
 
 /**
@@ -139,7 +139,6 @@ export function getMapLayer(layer, mapId, dispatch, callback, layerObjLookUp, de
  */
 export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayers) {
   const layerIds = []; // lookup list for all ids that are to be added to store
-
   const addCategoriesToStore = (isLayerAdded, layer) => {
     if (mapId !== 'map-1') return;
 
@@ -217,6 +216,18 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
         getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers)
       );
     });
+    const currentState = dispatch(actions.getCurrentState());
+    const { groups } = currentState.LAYERS;
+    let compositeLayers = [];
+    Object.keys(groups).forEach(group => {
+      compositeLayers.push(groups[group]);
+    });
+    compositeLayers = compositeLayers.flat();
+    if (compositeLayers.some((v, i) => compositeLayers.indexOf(v) < i)) {
+      const duplicateLayer = compositeLayers.find((v, i) => compositeLayers.indexOf(v) < i);
+      // eslint-disable-next-line no-alert
+      alert(`Layer ${duplicateLayer} exists more than once`);
+    }
   }
 }
 
@@ -264,9 +275,20 @@ export default function initStore(
   const reducer = combine(reducerRegistry.getReducers());
   let store;
   if (loadState) {
-    store = createStore(reducer, loadState(), process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk));
+    store = createStore(
+      reducer,
+      loadState(),
+      process.env.NODE_ENV === 'development'
+        ? composeWithDevTools(applyMiddleware(thunk))
+        : applyMiddleware(thunk)
+    );
   } else {
-    store = createStore(reducer, process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk));
+    store = createStore(
+      reducer,
+      process.env.NODE_ENV === 'development'
+        ? composeWithDevTools(applyMiddleware(thunk))
+        : applyMiddleware(thunk)
+    );
   }
 
   // Replace the store's reducer whenever a new reducer is registered.
