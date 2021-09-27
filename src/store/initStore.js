@@ -216,8 +216,12 @@ export function loadLayers(mapId, dispatch, layers, layerObjLookUp, defaultLayer
         getMapLayer(layer, mapId, dispatch, addCategoriesToStore, layerObjLookUp, defaultLayers)
       );
     });
+
     const currentState = dispatch(actions.getCurrentState());
     const { groups } = currentState.LAYERS;
+    /**
+     * Identify layers named the same and alert
+     */
     let compositeLayers = [];
     Object.keys(groups).forEach(group => {
       compositeLayers.push(groups[group]);
