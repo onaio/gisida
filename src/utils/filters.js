@@ -1,7 +1,21 @@
-import { MULTIPLE, ACCEPTED_FILTER_VALUES, DATA_PARSE, ACCEPTED_SUB_FILTER_VALUES, MONTHS, ALL, QUANT, MULTI, SUB_FILTER, FILTER_LABEL, FILTER_TYPE, VECTOR } from "../constants";
+import {
+  MULTIPLE,
+  ACCEPTED_FILTER_VALUES,
+  DATA_PARSE,
+  ACCEPTED_SUB_FILTER_VALUES,
+  MONTHS,
+  ALL,
+  QUANT,
+  MULTI,
+  SUB_FILTER,
+  FILTER_LABEL,
+  FILTER_TYPE,
+  VECTOR,
+} from '../constants';
 
 export function processFilters(layerData, filterOptions, isOr) {
   const Data =
+    layerData.data ||
     layerData.Data ||
     (layerData.mergedData &&
       (Array.isArray(layerData.mergedData)
@@ -40,7 +54,10 @@ export function processFilters(layerData, filterOptions, isOr) {
       layerData[DATA_PARSE][layerData.aggregate.filter[f]].type === MULTIPLE
     ) {
       const splitBy = layerData[DATA_PARSE][layerData.aggregate.filter[f]].split || ', ';
-      const vals = datum[layerData.aggregate.filter[f]].toString().split(splitBy);
+      const vals =
+        typeof datum[layerData.aggregate.filter[f]] === 'string'
+          ? datum[layerData.aggregate.filter[f]].toString().split(splitBy)
+          : datum[layerData.aggregate.filter[f]] || [];
       let hasMatches = false;
       for (let x = 0; x < vals.length; x += 1) {
         if (acceptedFilterValues[f].includes(vals[x])) {
@@ -134,8 +151,11 @@ export function generateFilterOptionsPrev(layerData) {
 }
 
 export function generateFilterOptions(layerData) {
-  const data =
-    layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
+  let data = layerData.data || layerData.mergedData || (layerData.source && layerData.source.data);
+  // override layerData for timeseries layers
+  if (!layerData.layerObj) {
+    data = processFilters(layerData);
+  }
 
   const filterOptions = {};
   let filter;
@@ -158,15 +178,12 @@ export function generateFilterOptions(layerData) {
     // define filter, subFilter, and filter label
     filter = layerFilter[f];
     filterLabel =
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-        FILTER_LABEL
-      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL] &&
       ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL][
         f
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL][
-        f
-      ].length
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_LABEL][f]
+        .length
         ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
             FILTER_LABEL
           ][f]
@@ -174,15 +191,12 @@ export function generateFilterOptions(layerData) {
 
     // define which type of filter it should be (vector or stops, default to vector)
     filterType =
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
-        FILTER_TYPE
-      ] &&
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE] &&
       ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE][
         f
       ] &&
-      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE][
-        f
-      ].length
+      ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[FILTER_TYPE][f]
+        .length
         ? ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
             FILTER_TYPE
           ][f]
@@ -243,8 +257,13 @@ export function generateFilterOptions(layerData) {
         ((layerData.layerObj && layerData.layerObj.aggregate) || layerData.aggregate)[
           ACCEPTED_FILTER_VALUES
         ][f];
-      if (!!acceptedFilterValues && typeof acceptedFilterValues !== 'string' 
-      && layerData[DATA_PARSE] && layerData[DATA_PARSE][filter] && layerData[DATA_PARSE][filter].type !== MULTIPLE) {
+      if (
+        !!acceptedFilterValues &&
+        typeof acceptedFilterValues !== 'string' &&
+        layerData[DATA_PARSE] &&
+        layerData[DATA_PARSE][filter] &&
+        layerData[DATA_PARSE][filter].type !== MULTIPLE
+      ) {
         if (acceptedFilterValues.indexOf(datum[filter]) === -1) {
           doPushDatum = false;
           break;
@@ -332,7 +351,9 @@ export function generateFilterOptions(layerData) {
 
         if (
           acceptedFilterValues === QUANT ||
-          (Array.isArray(acceptedFilterValues) && !Number.isNaN(Number(acceptedFilterValues[0])))
+          (Array.isArray(acceptedFilterValues) &&
+            !Number.isNaN(Number(acceptedFilterValues[0])) &&
+            !filterIsMultiSelect)
         ) {
           filterOptions[filter].quantitativeValues.push(datum[filter]);
         } else if (filterIsMultiSelect && datum[filter]) {

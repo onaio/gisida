@@ -357,7 +357,7 @@ function receiveData(state, action) {
       { showSpinner: state.showSpinner, layers: state.layers },
       action
     ),
-    doApplyFilters: layer && layer.filters && !!layer.filters.admin,
+    doApplyFilters: layer && layer.filters && (!!layer.filters.admin || !!layer.filters.tsFilter),
   };
 }
 
@@ -368,7 +368,8 @@ function updateTimeSeries(state, action) {
     ...state,
     layers: layersReducer(state.layers, action),
     timeseries: timeseriesReducer(state.timeseries, action),
-    doApplyFilters: timeseries[layerId] && !!timeseries[layerId].adminFilter,
+    doApplyFilters:
+      timeseries[layerId] && (!!timeseries[layerId].adminFilter || !!timeseries[layerId].tsFilter),
     reloadLayers: reloadLayersReducer(
       { reloadLayers: state.reloadLayers, layers: state.layers },
       action
