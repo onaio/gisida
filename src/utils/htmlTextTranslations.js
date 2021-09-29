@@ -13,7 +13,7 @@ const htmlTextTranslations = (content, translateIndividualStrings, languageTrans
     });
     return translateString;
   }
-  h2p(translateString).split(/\n/).forEach((textBlock) => {
+  h2p(translateString).split('\n').forEach((textBlock) => {
     const translatedBlock = translationHook(textBlock, languageTranslations, CURRENTLANGUAGE);
     translateString = translateString.replace(textBlock, translatedBlock);
   });
