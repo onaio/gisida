@@ -13,48 +13,6 @@ Gisida uses Redux to manage layers data state.
 
 Take a look at [gisida-react](https://github.com/onaio/gisida-react) if you need to quickly build a Map Dashboard using Gisida and MapSpec layers.
 
-## Branches for various clients
-
-Having versioned releases for gisida and gisida-react would be ideal for various clients. This has not been achieved since we have clients using different braches on these repos and time allocated for support is not enough to test the compatibility with the various client setups. Merging these branches is important but before this is done listing the branches in use for the various clients will be of help.
-
-```
-client
-
-repo - branch
-```
-
-gisida-react - superset-only-auth
-service-mapping - oauth
-gisida-react-private - master
-
-### somreport
-
-- gisida - cascade-multi-and-single-selects
-- gisida-react - superset-only-auth
-- service-mapping - oauth
-- gisida-react-private - master
-
-### ingc-mozambique, gisida-yemen, idai zimbabwe
-
-- gisida - stage
-- gisida-react - stage
-- client-repo - master
-- gisida-react-private - master
-
-### irfsomalia
-
-- gisida - stage
-- gisida-react - layer-specific-style
-- irfsomalia - copy-of-feature-navbar-2
-- gisida-react-private - hacky-chart-scale-fix
-
-### gisida-cambodia
-
-- gisida - stage
-- gisida-react - translation-toggle
-- gisida-cambodia - translation-no-auth
-- gisida-react-private - master
-
 ## Installation
 
 ```
