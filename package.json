@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.4.3",
+    "@hapi/joi": "^17.1.1",
     "@mapbox/geojsonhint": "^3.0.0",
     "@onaio/superset-connector": "^0.0.13",
     "babel-core": "v6.25.0",
